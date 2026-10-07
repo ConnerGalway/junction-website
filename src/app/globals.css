@@ -69,10 +69,10 @@
   --radius-card: 14px;
 
   /* Spacing */
-  --spacing-section: clamp(96px, 11.5vw, 168px);      /* section top/bottom */
-  --spacing-section-tight: clamp(72px, 8vw, 120px);   /* stacked sections */
+  --spacing-section: clamp(80px, 9vw, 136px);         /* section top/bottom */
+  --spacing-section-tight: clamp(64px, 7vw, 100px);   /* stacked sections */
   --spacing-gutter: clamp(20px, 4vw, 60px);           /* side gutter */
-  --spacing-card: 32px;                               /* 24px under 640px */
+  --spacing-card: 28px;                               /* 24px under 640px */
   --spacing-card-sm: 24px;
   --spacing-gap: 24px;                                /* between components */
   --spacing-stack: 36px;                              /* heading → content */
@@ -328,7 +328,7 @@
   .type-button {
     font-family: var(--font-sans);
     font-weight: 500;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 1.2;
     letter-spacing: 0;
     text-transform: none;
@@ -403,16 +403,22 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-    min-height: 52px;
-    padding: 12px 24px;
+    min-height: 48px;
+    padding: 10px 22px;
     border-radius: var(--radius-control);
     border: 1.5px solid transparent;
     font-family: var(--font-sans);
     font-weight: 500;
-    font-size: 16px;
+    font-size: 15px;
     line-height: 1.2;
     text-align: center;
     cursor: pointer;
+  }
+
+  /* Compact button for the nav CTA. */
+  .btn-sm {
+    min-height: 44px;
+    padding: 8px 18px;
   }
 
   .btn-primary {
@@ -445,8 +451,8 @@
   .field {
     display: block;
     width: 100%;
-    min-height: 52px;
-    padding: 12px 16px;
+    min-height: 48px;
+    padding: 10px 16px;
     border-radius: var(--radius-control);
     border: 1.5px solid var(--color-flint);
     background-color: var(--color-newsprint);

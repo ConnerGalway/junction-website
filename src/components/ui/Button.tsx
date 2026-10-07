@@ -6,6 +6,8 @@ type Variant = "primary" | "secondary";
 
 type CommonProps = {
   variant?: Variant;
+  /** sm = 44px min height (nav CTA). Default 48px. */
+  size?: "default" | "sm";
   className?: string;
   children: ReactNode;
 };
@@ -30,12 +32,13 @@ export function isExternal(href: string) {
  * External links open in a new tab.
  */
 export function Button(props: ButtonProps) {
-  const { variant = "primary", className, children } = props;
-  const classes = cx("btn", `btn-${variant}`, className);
+  const { variant = "primary", size = "default", className, children } = props;
+  const classes = cx("btn", `btn-${variant}`, size === "sm" && "btn-sm", className);
 
   if (props.href !== undefined) {
-    const { href, variant: _v, className: _c, children: _ch, ...rest } = props;
+    const { href, variant: _v, size: _s, className: _c, children: _ch, ...rest } = props;
     void _v;
+    void _s;
     void _c;
     void _ch;
     if (isExternal(href)) {
@@ -59,8 +62,9 @@ export function Button(props: ButtonProps) {
     );
   }
 
-  const { variant: _v, className: _c, children: _ch, type = "button", ...rest } = props;
+  const { variant: _v, size: _s, className: _c, children: _ch, type = "button", ...rest } = props;
   void _v;
+  void _s;
   void _c;
   void _ch;
   return (

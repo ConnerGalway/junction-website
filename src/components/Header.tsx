@@ -221,7 +221,9 @@ export function Header() {
               </li>
             ))}
             <li>
-              <Button href={CALENDLY_URL}>Book a 20-min call</Button>
+              <Button href={CALENDLY_URL} size="sm">
+                Book a 20-min call
+              </Button>
             </li>
           </ul>
         </nav>
