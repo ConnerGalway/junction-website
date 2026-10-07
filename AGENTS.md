@@ -7,3 +7,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Design system
+
+Read [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md) before changing any UI. Build pages from the shared components in `src/components/ui` (exported from `@/components`) and the tokens and type classes in `src/app/globals.css`: no hex/rgba values, inline font styles or pure white in pages.
