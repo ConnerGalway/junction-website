@@ -2,81 +2,299 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useId, useRef, useState } from "react";
+import type { KeyboardEvent, PointerEvent } from "react";
 import { CALENDLY_URL } from "@/lib/constants";
+import { flagshipProgram, primaryNav, programGroups } from "@/lib/navigation";
+import { Button, Dot, Wordmark, cx } from "./ui";
 
-const navLinks = [
-  { href: "/ai-accelerator", label: "AI Accelerator" },
-  { href: "/accelerator", label: "Accelerator" },
-  { href: "/custom-training", label: "Custom Training" },
-  { href: "/speaking", label: "Speaking" },
-  { href: "/work", label: "Work" },
-  { href: "/about", label: "About" },
-];
+function Chevron({ open }: { open: boolean }) {
+  return (
+    <svg
+      aria-hidden="true"
+      width="12"
+      height="12"
+      viewBox="0 0 12 12"
+      className={cx("transition-transform duration-150", open && "rotate-180")}
+    >
+      <path d="M2 4.5 6 8.5 10 4.5" fill="none" stroke="currentColor" strokeWidth="1.75" />
+    </svg>
+  );
+}
+
+/** Static content of the Programs menu (desktop dropdown). */
+function ProgramsPanel({ onNavigate }: { onNavigate: () => void }) {
+  return (
+    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)]">
+      <Link
+        href={flagshipProgram.href}
+        onClick={onNavigate}
+        className="tone-carbon group flex flex-col gap-3 rounded-card p-6"
+      >
+        <span className="type-eyebrow">{flagshipProgram.eyebrow}</span>
+        <span className="type-h3 group-hover:text-(--tone-link-hover)">
+          {flagshipProgram.title}
+        </span>
+        <span className="type-small">{flagshipProgram.description}</span>
+        <span
+          aria-hidden="true"
+          className="mt-2 flex aspect-[16/9] items-center justify-center rounded-control border-[1.5px] border-dashed border-hairline-dark text-[12px] font-medium uppercase tracking-[0.08em] text-newsprint-muted"
+        >
+          [ Dashboard preview ]
+        </span>
+      </Link>
+      <div className="flex flex-col justify-between gap-6">
+        <div className="grid grid-cols-3 gap-6">
+          {programGroups.map((group) => (
+            <div key={group.title} className="flex flex-col gap-3">
+              <p className="type-eyebrow m-0">{group.title}</p>
+              <ul className="m-0 flex list-none flex-col gap-1 p-0">
+                {group.links.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      onClick={onNavigate}
+                      className="link-plain -mx-2 block rounded-control px-2 py-2 text-[16px] leading-snug hover:bg-sage/50"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <div className="flex justify-end">
+          <Link href="/programs" onClick={onNavigate} className="link type-button">
+            See all programs →
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function Header() {
   const pathname = usePathname();
+  const [programsOpen, setProgramsOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [lastPath, setLastPath] = useState(pathname);
+  const programsRef = useRef<HTMLLIElement>(null);
+  const chevronRef = useRef<HTMLButtonElement>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const panelId = useId();
+  const mobileId = useId();
+
+  // Close menus when the route changes (adjusting state during render).
+  if (pathname !== lastPath) {
+    setLastPath(pathname);
+    setProgramsOpen(false);
+    setMobileOpen(false);
+  }
+
+  // Close the dropdown on a pointer press outside it (touch and mouse).
+  useEffect(() => {
+    if (!programsOpen) return;
+    function onPointerDown(event: globalThis.PointerEvent) {
+      if (!programsRef.current?.contains(event.target as Node)) {
+        setProgramsOpen(false);
+      }
+    }
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [programsOpen]);
+
+  useEffect(() => () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+  }, []);
+
+  function cancelClose() {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+  }
+
+  function onPointerEnter(event: PointerEvent) {
+    if (event.pointerType !== "mouse") return;
+    cancelClose();
+    setProgramsOpen(true);
+  }
+
+  function onPointerLeave(event: PointerEvent) {
+    if (event.pointerType !== "mouse") return;
+    cancelClose();
+    closeTimer.current = setTimeout(() => setProgramsOpen(false), 120);
+  }
+
+  function onProgramsKeyDown(event: KeyboardEvent) {
+    if (event.key === "Escape" && programsOpen) {
+      event.stopPropagation();
+      setProgramsOpen(false);
+      chevronRef.current?.focus();
+    }
+  }
+
+  function onProgramsBlur(event: React.FocusEvent) {
+    if (!programsRef.current?.contains(event.relatedTarget as Node | null)) {
+      setProgramsOpen(false);
+    }
+  }
+
+  function onMobileKeyDown(event: KeyboardEvent) {
+    if (event.key === "Escape" && mobileOpen) setMobileOpen(false);
+  }
+
+  const isActive = (href: string) => pathname === href;
+  const programsActive =
+    pathname === "/programs" ||
+    pathname === flagshipProgram.href ||
+    programGroups.some((g) => g.links.some((l) => l.href === pathname));
 
   return (
     <header
-      className="sticky top-0 z-50 flex items-center justify-between gap-3.5 flex-wrap bg-newsprint"
-      style={{
-        padding: "14px clamp(20px, 4vw, 48px)",
-        borderBottom: "1px solid rgba(28, 28, 26, 0.1)",
-      }}
+      className="tone-newsprint sticky top-0 z-50 border-b border-hairline px-gutter"
+      onKeyDown={onMobileKeyDown}
     >
-      <Link href="/" className="flex items-center gap-3">
-        <span
-          className="font-bebas text-carbon leading-none"
-          style={{ fontSize: "30px", letterSpacing: "0.08em", paddingTop: "3px" }}
-        >
-          JUNCTION
-        </span>
-        <span
-          className="font-light whitespace-nowrap"
-          style={{
-            fontSize: "10px",
-            lineHeight: "1.25",
-            letterSpacing: "0.06em",
-            color: "rgba(28, 28, 26, 0.72)",
-            borderLeft: "1px solid rgba(28, 28, 26, 0.2)",
-            paddingLeft: "12px",
-          }}
-        >
-          Strategy &<br />
-          Capacity Building
-        </span>
-      </Link>
+      <div className="mx-auto flex min-h-[76px] max-w-wide items-center justify-between gap-6">
+        <Link href="/" aria-label="Junction, home" className="link-plain shrink-0">
+          <Wordmark />
+        </Link>
 
-      <nav
-        className="flex items-center flex-wrap text-sm whitespace-nowrap"
-        style={{ gap: "10px 22px" }}
-      >
-        {navLinks.map((link) => {
-          const isActive = pathname === link.href;
-          return (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`transition-colors hover:text-forest ${isActive ? "font-medium" : ""}`}
-              style={
-                isActive
-                  ? { borderBottom: "2px solid #C4963A", paddingBottom: "2px" }
-                  : undefined
-              }
+        {/* Desktop navigation */}
+        <nav aria-label="Main" className="hidden lg:block">
+          <ul className="m-0 flex list-none items-center gap-7 p-0 text-[16px]">
+            <li
+              ref={programsRef}
+              className="relative"
+              onPointerEnter={onPointerEnter}
+              onPointerLeave={onPointerLeave}
+              onKeyDown={onProgramsKeyDown}
+              onBlur={onProgramsBlur}
             >
-              {link.label}
-            </Link>
-          );
-        })}
-        <a
-          href={CALENDLY_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-button bg-forest text-newsprint rounded-[3px] whitespace-nowrap transition-colors hover:bg-canopy"
-          style={{ padding: "11px 18px" }}
+              <div className="flex items-center gap-1">
+                <Link
+                  href="/programs"
+                  aria-current={pathname === "/programs" ? "page" : undefined}
+                  className={cx(
+                    "link-plain py-2",
+                    programsActive && "underline decoration-canopy decoration-2 underline-offset-[0.4em]"
+                  )}
+                >
+                  Programs
+                </Link>
+                <button
+                  ref={chevronRef}
+                  type="button"
+                  aria-expanded={programsOpen}
+                  aria-controls={panelId}
+                  aria-label="Show programs"
+                  onClick={() => setProgramsOpen((open) => !open)}
+                  className="link-plain -mr-2 inline-flex size-8 cursor-pointer items-center justify-center rounded-control border-0 bg-transparent p-0"
+                >
+                  <Chevron open={programsOpen} />
+                </button>
+              </div>
+              <div
+                id={panelId}
+                hidden={!programsOpen}
+                className="absolute right-0 top-full pt-3"
+              >
+                <div className="tone-newsprint w-[min(920px,calc(100vw-2*var(--spacing-gutter)))] rounded-card border border-hairline p-6 shadow-[0_24px_48px_-24px_rgba(28,28,26,0.35)]">
+                  <ProgramsPanel onNavigate={() => setProgramsOpen(false)} />
+                </div>
+              </div>
+            </li>
+            {primaryNav.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                  className={cx(
+                    "link-plain inline-flex items-center gap-2 py-2",
+                    isActive(item.href) &&
+                      "underline decoration-canopy decoration-2 underline-offset-[0.4em]"
+                  )}
+                >
+                  {item.label}
+                  {item.dot && <Dot />}
+                </Link>
+              </li>
+            ))}
+            <li>
+              <Button href={CALENDLY_URL}>Book a 20-min call</Button>
+            </li>
+          </ul>
+        </nav>
+
+        {/* Mobile menu toggle */}
+        <button
+          type="button"
+          aria-expanded={mobileOpen}
+          aria-controls={mobileId}
+          onClick={() => setMobileOpen((open) => !open)}
+          className="btn btn-secondary min-h-11 px-4 lg:hidden"
         >
-          Book a 20-min call
-        </a>
+          {mobileOpen ? "Close" : "Menu"}
+        </button>
+      </div>
+
+      {/* Mobile navigation */}
+      <nav
+        id={mobileId}
+        aria-label="Main"
+        hidden={!mobileOpen}
+        className="max-h-[calc(100dvh-76px)] overflow-y-auto pb-8 lg:hidden"
+      >
+        <div className="mx-auto flex max-w-wide flex-col gap-8 border-t border-hairline pt-6">
+          <div className="flex flex-col gap-5">
+            <Link href="/programs" className="link-plain type-h4">
+              Programs
+            </Link>
+            <Link
+              href={flagshipProgram.href}
+              className="tone-carbon flex flex-col gap-2 rounded-card p-5"
+            >
+              <span className="type-eyebrow">{flagshipProgram.eyebrow}</span>
+              <span className="type-h4">{flagshipProgram.title}</span>
+              <span className="type-small">{flagshipProgram.description}</span>
+            </Link>
+            {programGroups.map((group) => (
+              <div key={group.title} className="flex flex-col gap-2">
+                <p className="type-eyebrow m-0">{group.title}</p>
+                <ul className="m-0 flex list-none flex-col p-0">
+                  {group.links.map((link) => (
+                    <li key={link.href}>
+                      <Link href={link.href} className="link-plain block py-2 text-[17px]">
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+            <Link href="/programs" className="link type-button self-start">
+              See all programs →
+            </Link>
+          </div>
+          <ul className="m-0 flex list-none flex-col border-t border-hairline p-0 pt-4">
+            {primaryNav.map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                  className="link-plain inline-flex items-center gap-2 py-2.5 text-[18px]"
+                >
+                  {item.label}
+                  {item.dot && <Dot />}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <Button href={CALENDLY_URL} className="self-start">
+            Book a 20-min call
+          </Button>
+        </div>
       </nav>
     </header>
   );
