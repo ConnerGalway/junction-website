@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { CALENDLY_URL } from "@/lib/constants";
 
 const navLinks = [
-  { href: "/services", label: "Services" },
+  { href: "/ai-accelerator", label: "AI Accelerator" },
+  { href: "/accelerator", label: "Accelerator" },
+  { href: "/custom-training", label: "Custom Training" },
+  { href: "/speaking", label: "Speaking" },
   { href: "/work", label: "Work" },
-  { href: "/junctionu", label: "JunctionU" },
-  { href: "/ideas", label: "Ideas" },
   { href: "/about", label: "About" },
 ];
 
@@ -16,7 +18,7 @@ export function Header() {
 
   return (
     <header
-      className="sticky top-0 z-50 flex items-center justify-between gap-5 flex-wrap bg-newsprint"
+      className="sticky top-0 z-50 flex items-center justify-between gap-3.5 flex-wrap bg-newsprint"
       style={{
         padding: "14px clamp(20px, 4vw, 48px)",
         borderBottom: "1px solid rgba(28, 28, 26, 0.1)",
@@ -30,7 +32,7 @@ export function Header() {
           JUNCTION
         </span>
         <span
-          className="font-light"
+          className="font-light whitespace-nowrap"
           style={{
             fontSize: "10px",
             lineHeight: "1.25",
@@ -45,7 +47,10 @@ export function Header() {
         </span>
       </Link>
 
-      <nav className="flex items-center gap-6 flex-wrap text-sm">
+      <nav
+        className="flex items-center flex-wrap text-sm whitespace-nowrap"
+        style={{ gap: "10px 22px" }}
+      >
         {navLinks.map((link) => {
           const isActive = pathname === link.href;
           return (
@@ -63,13 +68,15 @@ export function Header() {
             </Link>
           );
         })}
-        <Link
-          href="#start"
+        <a
+          href={CALENDLY_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           className="text-button bg-forest text-newsprint rounded-[3px] whitespace-nowrap transition-colors hover:bg-canopy"
           style={{ padding: "11px 18px" }}
         >
-          Start a conversation
-        </Link>
+          Book a 20-min call
+        </a>
       </nav>
     </header>
   );

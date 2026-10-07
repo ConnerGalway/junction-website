@@ -1,36 +1,29 @@
 import Link from "next/link";
+import { CALENDLY_URL } from "@/lib/constants";
 
 const footerSections = [
   {
-    title: "Services",
+    title: "Programs",
     links: [
-      { label: "Marketing strategy", href: "/services" },
-      { label: "Training", href: "/services" },
-      { label: "AI training", href: "/services" },
-      { label: "Speaking", href: "/services" },
-    ],
-  },
-  {
-    title: "JunctionU",
-    links: [
-      { label: "Courses", href: "/junctionu" },
-      { label: "Tourism Talks", href: "/junctionu" },
-      { label: "For DMOs", href: "/junctionu" },
+      { label: "AI Accelerator", href: "/ai-accelerator" },
+      { label: "The Accelerator", href: "/accelerator" },
+      { label: "Custom Training", href: "/custom-training" },
+      { label: "Speaking", href: "/speaking" },
     ],
   },
   {
     title: "Company",
     links: [
       { label: "Work", href: "/work" },
-      { label: "Ideas", href: "/ideas" },
       { label: "About", href: "/about" },
+      { label: "Contact", href: "/contact" },
     ],
   },
   {
-    title: "Contact",
+    title: "Talk to us",
     links: [
+      { label: "Book a 20-min call", href: CALENDLY_URL, external: true },
       { label: "conner@wearejunction.com", href: "mailto:conner@wearejunction.com" },
-      { label: "Instagram", href: "#" },
       { label: "LinkedIn", href: "#" },
     ],
   },
@@ -46,7 +39,7 @@ export function Footer() {
         className="content-container"
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))",
           gap: "40px",
         }}
       >
@@ -92,15 +85,27 @@ export function Footer() {
             >
               {section.title}
             </span>
-            {section.links.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="transition-colors hover:text-fern"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {section.links.map((link) =>
+              "external" in link && link.external ? (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-fern"
+                >
+                  {link.label}
+                </a>
+              ) : (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="transition-colors hover:text-fern"
+                >
+                  {link.label}
+                </Link>
+              )
+            )}
           </div>
         ))}
       </div>
