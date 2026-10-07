@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Epilogue:wght@900&amp;family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&amp;family=Fraunces:ital,opsz,wght@1,9..144,900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F4F0E8;color:#1C1C1A;font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:inherit;text-decoration:none}
+a:hover{color:#1A4D2E}
+</style>
+</helmet>
+<div style="min-height:100vh;background:#F4F0E8;color:#1C1C1A;font-family:'DM Sans',sans-serif;">
+
+<header style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:14px 28px;flex-wrap:wrap;padding:14px clamp(20px,4vw,48px);background:#F4F0E8;border-bottom:1px solid rgba(28,28,26,0.1);">
+  <a href="LG Home.dc.html" style="display:flex;align-items:center;gap:12px;">
+    <span style="font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:0.08em;line-height:1;padding-top:3px;">JUNCTION</span>
+    <span style="font-size:10px;line-height:1.25;letter-spacing:0.06em;font-weight:300;color:rgba(28,28,26,0.62);border-left:1px solid rgba(28,28,26,0.2);padding-left:12px;white-space:nowrap;">Strategy &amp;<br>Capacity Building</span>
+  </a>
+  <nav style="display:flex;align-items:center;gap:10px 22px;flex-wrap:wrap;font-size:14px;white-space:nowrap;">
+    <a href="LG AI Accelerator.dc.html">AI Accelerator</a>
+    <a href="LG Accelerator.dc.html">Accelerator</a>
+    <a href="LG Custom Training.dc.html">Custom Training</a>
+    <a href="LG Speaking.dc.html">Speaking</a>
+    <a href="D1 Work.dc.html">Work</a>
+    <a href="D1 About.dc.html">About</a>
+    <a href="https://calendly.com/conner-galway/introductory-call-conner" target="_blank" style="background:#1A4D2E;color:#F4F0E8;padding:11px 18px;border-radius:3px;font-size:12px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap;" style-hover="background:#2E7D4F;color:#F4F0E8;">Book a 20-min call</a>
+  </nav>
+</header>
+
+<section data-screen-label="Hero" style="padding:clamp(48px,7vw,96px) clamp(20px,4vw,48px) clamp(48px,6vw,80px);">
+  <div style="max-width:1320px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:clamp(32px,5vw,72px);align-items:center;">
+    <div>
+      <div style="font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#8A6420;margin-bottom:22px;">Strategy &amp; capacity building</div>
+      <h1 style="font-family:'Epilogue',sans-serif;font-weight:900;font-size:clamp(48px,7.2vw,112px);line-height:0.92;letter-spacing:-0.035em;margin:0;text-wrap:balance;">Feeling stuck? Let's get your organization moving.</h1>
+      <p style="font-size:clamp(17px,1.5vw,20px);font-weight:300;line-height:1.6;color:rgba(28,28,26,0.76);max-width:46ch;margin:28px 0 36px;text-wrap:pretty;">When growth stalls, the cause is usually technology that isn't pulling its weight yet: online booking, social media, internal systems, AI. We find the bottleneck, put the right tools to work, and get your people confident running them.</p>
+      <div style="display:flex;gap:24px;align-items:center;flex-wrap:wrap;">
+        <a href="https://calendly.com/conner-galway/introductory-call-conner" target="_blank" style="background:#1A4D2E;color:#F4F0E8;padding:17px 28px;border-radius:3px;font-size:13px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;" style-hover="background:#2E7D4F;color:#F4F0E8;">Book a 20-min call</a>
+        <a href="#programs" style="font-size:15px;font-weight:500;border-bottom:2px solid #C4963A;padding-bottom:3px;white-space:nowrap;">Find your program ↓</a>
+      </div>
+    </div>
+    <sc-if value="{{ showStuckPanel }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;background:#1C1C1A;color:#F4F0E8;border-radius:4px;padding:clamp(26px,3.2vw,40px);">
+        <div style="font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#C4963A;margin-bottom:10px;">Where organizations get stuck</div>
+        <div style="border-top:1px solid rgba(244,240,232,0.2);">
+        <div style="display:grid;grid-template-columns:44px minmax(0,1fr);gap:0 4px;padding:16px 0;border-bottom:1px solid rgba(244,240,232,0.12);"><span style="font-family:'Bebas Neue',sans-serif;font-size:24px;line-height:1;color:#C4963A;">01</span><div><div style="font-size:17px;font-weight:500;margin-bottom:3px;">Online booking</div><div style="font-size:14px;font-weight:300;color:rgba(244,240,232,0.74);">Enquiries that should have been bookings</div></div></div>
+        <div style="display:grid;grid-template-columns:44px minmax(0,1fr);gap:0 4px;padding:16px 0;border-bottom:1px solid rgba(244,240,232,0.12);"><span style="font-family:'Bebas Neue',sans-serif;font-size:24px;line-height:1;color:#C4963A;">02</span><div><div style="font-size:17px;font-weight:500;margin-bottom:3px;">Website and search</div><div style="font-size:14px;font-weight:300;color:rgba(244,240,232,0.74);">Customers who can't find you, or can't find the answer</div></div></div>
+        <div style="display:grid;grid-template-columns:44px minmax(0,1fr);gap:0 4px;padding:16px 0;border-bottom:1px solid rgba(244,240,232,0.12);"><span style="font-family:'Bebas Neue',sans-serif;font-size:24px;line-height:1;color:#C4963A;">03</span><div><div style="font-size:17px;font-weight:500;margin-bottom:3px;">Social media</div><div style="font-size:14px;font-weight:300;color:rgba(244,240,232,0.74);">Posting when someone has a spare minute</div></div></div>
+        <div style="display:grid;grid-template-columns:44px minmax(0,1fr);gap:0 4px;padding:16px 0;border-bottom:1px solid rgba(244,240,232,0.12);"><span style="font-family:'Bebas Neue',sans-serif;font-size:24px;line-height:1;color:#C4963A;">04</span><div><div style="font-size:17px;font-weight:500;margin-bottom:3px;">Internal systems</div><div style="font-size:14px;font-weight:300;color:rgba(244,240,232,0.74);">The same data keyed in twice, reports built by hand</div></div></div>
+        <div style="display:grid;grid-template-columns:44px minmax(0,1fr);gap:0 4px;padding:16px 0;border-bottom:1px solid rgba(244,240,232,0.12);"><span style="font-family:'Bebas Neue',sans-serif;font-size:24px;line-height:1;color:#C4963A;">05</span><div><div style="font-size:17px;font-weight:500;margin-bottom:3px;">AI</div><div style="font-size:14px;font-weight:300;color:rgba(244,240,232,0.74);">Admin eating the week of your best people</div></div></div>
+        </div>
+        <div style="font-size:15px;line-height:1.55;margin-top:20px;"><span style="color:#7FC99A;font-weight:500;">We start with the one costing you most</span><span style="font-weight:300;color:rgba(244,240,232,0.8);">, fix it, and build from there.</span></div>
+      </div>
+    </sc-if>
+  </div>
+</section>
+
+<section style="border-top:1px solid rgba(28,28,26,0.12);border-bottom:1px solid rgba(28,28,26,0.12);padding:28px clamp(20px,4vw,48px);">
+  <div style="max-width:1320px;margin:0 auto;display:flex;align-items:center;gap:14px 40px;flex-wrap:wrap;">
+    <span style="font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:rgba(28,28,26,0.6);">Organizations we work with</span>
+    <div style="display:flex;flex-wrap:wrap;gap:10px 32px;font-size:17px;font-weight:500;color:rgba(28,28,26,0.82);">
+      <span>Twin Lions Contracting</span><span>West Coast Homes</span><span>SMR Plumbing &amp; Heating</span><span>Destination BC</span><span>Travel Alberta</span><span>Travel Maine</span><span>Visit Mississippi</span>
+    </div>
+  </div>
+</section>
+
+<section id="programs" data-screen-label="Programs" style="padding:clamp(64px,8vw,112px) clamp(20px,4vw,48px);">
+  <div style="max-width:1320px;margin:0 auto;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:20px 72px;align-items:end;margin-bottom:44px;">
+      <div>
+        <div style="font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#8A6420;margin-bottom:18px;">Four ways in</div>
+        <h2 style="font-family:'Epilogue',sans-serif;font-weight:900;font-size:clamp(36px,4.6vw,64px);line-height:0.96;letter-spacing:-0.03em;margin:0;">Find your program.</h2>
+      </div>
+      <p style="font-size:18px;font-weight:300;line-height:1.6;color:rgba(28,28,26,0.76);margin:0;max-width:48ch;">Each one ends with something your team owns: a working tool, a plan, a course, or a room full of people with next steps.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr));gap:20px;">
+      <a href="LG AI Accelerator.dc.html" style="display:flex;flex-direction:column;gap:14px;background:#FFFFFF;border-radius:4px;padding:clamp(26px,3vw,38px);border-top:4px solid #1A4D2E;" style-hover="background:#C8E8D4;color:#1C1C1A;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;"><span style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#C4963A;">01</span><span style="font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:rgba(28,28,26,0.66);">$5,000 · 30 days</span></div>
+        <h3 style="font-family:'Epilogue',sans-serif;font-weight:900;font-size:clamp(28px,2.8vw,38px);line-height:1;letter-spacing:-0.02em;margin:0;">AI Accelerator</h3>
+        <div style="font-size:15px;font-weight:500;color:#1A4D2E;">For any business losing hours to admin.</div>
+        <p style="font-size:16px;font-weight:300;line-height:1.6;color:rgba(28,28,26,0.76);margin:0;">Four sessions with your leadership team on your real work. One bottleneck automated by day 30, guaranteed.</p>
+        <span style="font-size:14px;font-weight:500;margin-top:auto;padding-top:8px;">See the AI Accelerator →</span>
+      </a>
+      <a href="LG Accelerator.dc.html" style="display:flex;flex-direction:column;gap:14px;background:#FFFFFF;border-radius:4px;padding:clamp(26px,3vw,38px);border-top:4px solid #1A4D2E;" style-hover="background:#C8E8D4;color:#1C1C1A;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;"><span style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#C4963A;">02</span><span style="font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:rgba(28,28,26,0.66);">$2,500 · 90 days</span></div>
+        <h3 style="font-family:'Epilogue',sans-serif;font-weight:900;font-size:clamp(28px,2.8vw,38px);line-height:1;letter-spacing:-0.02em;margin:0;">The Accelerator</h3>
+        <div style="font-size:15px;font-weight:500;color:#1A4D2E;">For small businesses that need a marketing plan they'll work.</div>
+        <p style="font-size:16px;font-weight:300;line-height:1.6;color:rgba(28,28,26,0.76);margin:0;">A scored digital assessment, an interactive 90-day plan, three coaching sessions and reassessments that show your progress.</p>
+        <span style="font-size:14px;font-weight:500;margin-top:auto;padding-top:8px;">See the Accelerator →</span>
+      </a>
+      <a href="LG Custom Training.dc.html" style="display:flex;flex-direction:column;gap:14px;background:#FFFFFF;border-radius:4px;padding:clamp(26px,3vw,38px);border-top:4px solid #1A4D2E;" style-hover="background:#C8E8D4;color:#1C1C1A;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;"><span style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#C4963A;">03</span><span style="font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:rgba(28,28,26,0.66);">Scoped to you</span></div>
+        <h3 style="font-family:'Epilogue',sans-serif;font-weight:900;font-size:clamp(28px,2.8vw,38px);line-height:1;letter-spacing:-0.02em;margin:0;">Custom Training</h3>
+        <div style="font-size:15px;font-weight:500;color:#1A4D2E;">For organizations training their members or their leaders.</div>
+        <p style="font-size:16px;font-weight:300;line-height:1.6;color:rgba(28,28,26,0.76);margin:0;">Courses, workshops and series built around your people, with delivery and progress reporting handled for you.</p>
+        <span style="font-size:14px;font-weight:500;margin-top:auto;padding-top:8px;">See Custom Training →</span>
+      </a>
+      <a href="LG Speaking.dc.html" style="display:flex;flex-direction:column;gap:14px;background:#FFFFFF;border-radius:4px;padding:clamp(26px,3vw,38px);border-top:4px solid #1A4D2E;" style-hover="background:#C8E8D4;color:#1C1C1A;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;"><span style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:#C4963A;">04</span><span style="font-size:12px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:rgba(28,28,26,0.66);">Keynote · Workshop · Virtual</span></div>
+        <h3 style="font-family:'Epilogue',sans-serif;font-weight:900;font-size:clamp(28px,2.8vw,38px);line-height:1;letter-spacing:-0.02em;margin:0;">Speaking</h3>
+        <div style="font-size:15px;font-weight:500;color:#1A4D2E;">For event organizers who want the room to leave with a plan.</div>
+        <p style="font-size:16px;font-weight:300;line-height:1.6;color:rgba(28,28,26,0.76);margin:0;">Keynotes and workshops on AI, marketing trends and strategy. Every talk ends with actions people can take that week.</p>
+        <span style="font-size:14px;font-weight:500;margin-top:auto;padding-top:8px;">See speaking topics →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="AI example" style="background:#1C1C1A;color:#F4F0E8;padding:clamp(64px,8vw,112px) clamp(20px,4vw,48px);">
+  <div style="max-width:1320px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:clamp(40px,5vw,80px);align-items:start;">
+    <div>
+      <div style="font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#C4963A;margin-bottom:18px;">Inside an AI Accelerator</div>
+      <h2 style="font-family:'Epilogue',sans-serif;font-weight:900;font-size:clamp(36px,4.6vw,64px);line-height:0.96;letter-spacing:-0.03em;margin:0 0 22px;">A building supplier's 30 days.</h2>
+      <p style="font-size:18px;font-weight:300;line-height:1.6;color:rgba(244,240,232,0.8);margin:0 0 32px;max-width:44ch;">A family-owned supply yard brought seven people, from the president to accounts payable. Only 65% of invoices were collected inside 30 days, and quotes took anywhere from five minutes to a day. Here's what they left with.</p>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:32px;">
+        <div style="border:1px solid rgba(244,240,232,0.18);border-radius:4px;padding:18px;"><div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(244,240,232,0.66);margin-bottom:8px;">Collected in 30 days</div><div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;"><span style="font-family:'Bebas Neue',sans-serif;font-size:40px;line-height:0.9;">65%</span><span style="color:#C4963A;">→</span><span style="font-size:12px;font-weight:500;letter-spacing:0.06em;color:rgba(244,240,232,0.6);border:1px dashed rgba(244,240,232,0.35);padding:4px 8px;border-radius:2px;">[ result ]</span></div></div>
+        <div style="border:1px solid rgba(244,240,232,0.18);border-radius:4px;padding:18px;"><div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(244,240,232,0.66);margin-bottom:8px;">Quote turnaround</div><div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;"><span style="font-family:'Bebas Neue',sans-serif;font-size:40px;line-height:0.9;">Up to 1 day</span><span style="color:#C4963A;">→</span><span style="font-size:12px;font-weight:500;letter-spacing:0.06em;color:rgba(244,240,232,0.6);border:1px dashed rgba(244,240,232,0.35);padding:4px 8px;border-radius:2px;">[ result ]</span></div></div>
+      </div>
+      <a href="LG AI Accelerator.dc.html#example" style="font-size:15px;font-weight:500;color:#7FC99A;border-bottom:2px solid #7FC99A;padding-bottom:3px;">See the full program →</a>
+    </div>
+    <div style="border-top:1px solid rgba(244,240,232,0.25);">
+      <div style="display:grid;grid-template-columns:48px 1fr;padding:22px 0;border-bottom:1px solid rgba(244,240,232,0.14);"><span style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#C4963A;">01</span><div><div style="font-size:18px;font-weight:500;margin-bottom:6px;">A collections assistant</div><div style="font-size:15px;font-weight:300;line-height:1.55;color:rgba(244,240,232,0.76);">Reads the aging report, suggests the next step for each account, and drafts reminders and call notes in the company's voice.</div></div></div>
+      <div style="display:grid;grid-template-columns:48px 1fr;padding:22px 0;border-bottom:1px solid rgba(244,240,232,0.14);"><span style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#C4963A;">02</span><div><div style="font-size:18px;font-weight:500;margin-bottom:6px;">A material list converter</div><div style="font-size:15px;font-weight:300;line-height:1.55;color:rgba(244,240,232,0.76);">Turns a photo, text or email of a handwritten list into clean line items for their ERP, and flags anything to confirm.</div></div></div>
+      <div style="display:grid;grid-template-columns:48px 1fr;padding:22px 0;border-bottom:1px solid rgba(244,240,232,0.14);"><span style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#C4963A;">03</span><div><div style="font-size:18px;font-weight:500;margin-bottom:6px;">A business brain</div><div style="font-size:15px;font-weight:300;line-height:1.55;color:rgba(244,240,232,0.76);">Price lists, account terms, policies and house style, loaded into one shared AI workspace the whole team uses.</div></div></div>
+      <div style="display:grid;grid-template-columns:48px 1fr;padding:22px 0;border-bottom:1px solid rgba(244,240,232,0.14);"><span style="font-family:'Bebas Neue',sans-serif;font-size:26px;color:#C4963A;">04</span><div><div style="font-size:18px;font-weight:500;margin-bottom:6px;">A roadmap for what's next</div><div style="font-size:15px;font-weight:300;line-height:1.55;color:rgba(244,240,232,0.76);">Takeoffs, invoice matching and system integration, prioritized for after the program.</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Proof" style="padding:clamp(64px,8vw,112px) clamp(20px,4vw,48px);">
+  <div style="max-width:1320px;margin:0 auto;">
+    <div style="font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#8A6420;margin-bottom:28px;">What clients say</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:20px;">
+      <div style="border:1.5px dashed rgba(28,28,26,0.3);border-radius:4px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;gap:24px;min-height:220px;">
+        <div style="font-size:13px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:rgba(28,28,26,0.58);">[ Testimonial + result ]</div>
+        <div style="font-size:15px;font-weight:500;">Twin Lions Contracting · AI Accelerator</div>
+      </div>
+      <div style="border:1.5px dashed rgba(28,28,26,0.3);border-radius:4px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;gap:24px;min-height:220px;">
+        <div style="font-size:13px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:rgba(28,28,26,0.58);">[ Testimonial + result ]</div>
+        <div style="font-size:15px;font-weight:500;">West Coast Homes · AI Accelerator</div>
+      </div>
+      <blockquote style="margin:0;background:#FFFFFF;border-radius:4px;padding:28px;display:flex;flex-direction:column;justify-content:space-between;gap:24px;min-height:220px;">
+        <p style="font-family:'Fraunces',serif;font-style:italic;font-weight:900;font-size:24px;line-height:1.2;margin:0;color:#1A4D2E;">"We are a stronger, smarter organization today thanks to the work we did with Junction."</p>
+        <cite style="font-style:normal;font-size:15px;font-weight:500;">Kathy Cooper, CEO, Kootenay Rockies Tourism</cite>
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="The call" style="padding:0 clamp(20px,4vw,48px) clamp(64px,8vw,112px);">
+  <div style="max-width:1320px;margin:0 auto;border-top:2px solid #1C1C1A;padding-top:44px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:36px 48px;">
+    <div>
+      <div style="font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#8A6420;margin-bottom:14px;">The first step</div>
+      <h2 style="font-family:'Epilogue',sans-serif;font-weight:900;font-size:clamp(28px,3vw,40px);line-height:1;letter-spacing:-0.025em;margin:0;">What happens on the call.</h2>
+    </div>
+    <div><div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:#C4963A;margin-bottom:8px;">01</div><div style="font-size:18px;font-weight:500;margin-bottom:6px;">Pick a time</div><p style="font-size:16px;font-weight:300;line-height:1.55;color:rgba(28,28,26,0.76);margin:0;">Twenty minutes with Conner. No prep, no forms.</p></div>
+    <div><div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:#C4963A;margin-bottom:8px;">02</div><div style="font-size:18px;font-weight:500;margin-bottom:6px;">Talk about the goal</div><p style="font-size:16px;font-weight:300;line-height:1.55;color:rgba(28,28,26,0.76);margin:0;">What you want to change, and what's in the way right now.</p></div>
+    <div><div style="font-family:'Bebas Neue',sans-serif;font-size:32px;color:#C4963A;margin-bottom:8px;">03</div><div style="font-size:18px;font-weight:500;margin-bottom:6px;">Get a straight answer</div><p style="font-size:16px;font-weight:300;line-height:1.55;color:rgba(28,28,26,0.76);margin:0;">Which program fits, what it costs, and when it could start. If none fits, we'll say so.</p></div>
+  </div>
+  <div style="max-width:1320px;margin:40px auto 0;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:20px 24px;background:#C8E8D4;border-radius:4px;">
+    <span style="font-size:16px;"><strong style="font-weight:500;">Not ready for a call?</strong> <span style="font-weight:300;">Watch a free training session and see how we teach.</span></span>
+    <a href="D1 JunctionU.dc.html" style="font-size:14px;font-weight:500;border-bottom:2px solid #1A4D2E;padding-bottom:2px;white-space:nowrap;">Watch free →</a>
+  </div>
+</section>
+
+<section id="start" data-screen-label="CTA" style="background:#1A4D2E;color:#F4F0E8;padding:clamp(80px,10vw,140px) clamp(20px,4vw,48px);">
+  <div style="max-width:1320px;margin:0 auto;">
+    <h2 style="font-family:'Epilogue',sans-serif;font-weight:900;font-size:clamp(44px,6.6vw,104px);line-height:0.92;letter-spacing:-0.035em;margin:0;max-width:15ch;">Twenty minutes. A straight answer on what fits.</h2>
+    <div style="display:flex;align-items:center;gap:28px;flex-wrap:wrap;margin-top:40px;">
+      <a href="https://calendly.com/conner-galway/introductory-call-conner" target="_blank" style="background:#F4F0E8;color:#1A4D2E;padding:17px 28px;border-radius:3px;font-size:13px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;" style-hover="background:#C8E8D4;color:#1A4D2E;">Book a 20-min call</a>
+      <a href="LG Contact.dc.html" style="font-size:15px;font-weight:500;border-bottom:2px solid #7FC99A;padding-bottom:3px;" style-hover="color:#7FC99A;">Or send us the details →</a>
+    </div>
+  </div>
+</section>
+
+<footer style="background:#1C1C1A;color:#F4F0E8;padding:64px clamp(20px,4vw,48px) 32px;">
+  <div style="max-width:1320px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:40px;">
+    <div style="display:flex;align-items:flex-start;gap:12px;"><span style="font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:0.08em;line-height:1;">JUNCTION</span><span style="font-size:10px;line-height:1.25;letter-spacing:0.06em;font-weight:300;color:rgba(244,240,232,0.6);border-left:1px solid rgba(244,240,232,0.2);padding-left:12px;margin-top:2px;">Strategy &amp;<br>Capacity Building</span></div>
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;font-weight:300;"><span style="font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#C4963A;margin-bottom:4px;">Programs</span><a href="LG AI Accelerator.dc.html">AI Accelerator</a><a href="LG Accelerator.dc.html">The Accelerator</a><a href="LG Custom Training.dc.html">Custom Training</a><a href="LG Speaking.dc.html">Speaking</a></div>
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;font-weight:300;"><span style="font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#C4963A;margin-bottom:4px;">Learn</span><a href="D1 JunctionU.dc.html">JunctionU</a><a href="D1 Ideas.dc.html">Ideas</a><a href="D1 Services.dc.html">Marketing strategy</a></div>
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;font-weight:300;"><span style="font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#C4963A;margin-bottom:4px;">Company</span><a href="D1 Work.dc.html">Work</a><a href="D1 About.dc.html">About</a><a href="LG Contact.dc.html">Contact</a></div>
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;font-weight:300;"><span style="font-size:12px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:#C4963A;margin-bottom:4px;">Talk to us</span><a href="https://calendly.com/conner-galway/introductory-call-conner" target="_blank">Book a 20-min call</a><a href="mailto:conner@wearejunction.com">conner@wearejunction.com</a><a href="#">LinkedIn</a></div>
+  </div>
+  <div style="max-width:1320px;margin:56px auto 0;padding-top:20px;border-top:1px solid rgba(244,240,232,0.12);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:13px;color:rgba(244,240,232,0.6);"><span>© Junction Consulting 2026</span><a href="#">Privacy</a></div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showStuckPanel&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return { showStuckPanel: this.props.showStuckPanel ?? true };
+  }
+}
+</script>
+</body>
+</html>
