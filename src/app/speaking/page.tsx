@@ -130,7 +130,7 @@ export default function SpeakingPage() {
       </Section>
 
       {/* About Conner */}
-      <Section tone="carbon">
+      <Section tone="forest">
         <Container className="grid items-center gap-x-20 gap-y-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))]">
           <Placeholder aspectRatio="4/5">[ photo: Conner on stage ]</Placeholder>
           <div>
@@ -148,7 +148,7 @@ export default function SpeakingPage() {
       </Section>
 
       {/* CTA */}
-      <Section id="start" tone="forest" className="scroll-mt-24">
+      <Section id="start" className="scroll-mt-24">
         <Container>
           <h2 className="type-display m-0 max-w-[15ch]">
             Got a date? Let&apos;s check it.

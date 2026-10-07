@@ -114,7 +114,7 @@ export default function CustomTrainingPage() {
       <Section flush="top">
         <Container className="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,480px),1fr))]">
           {/* DMO Card */}
-          <Card tone="carbon" className="flex flex-col gap-4">
+          <Card tone="forest" className="flex flex-col gap-4">
             <Eyebrow>For DMOs and tourism organizations</Eyebrow>
             <h2 className="type-h3 m-0">Custom courses for your operators.</h2>
             <p className="type-body m-0">

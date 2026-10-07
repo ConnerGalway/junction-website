@@ -221,7 +221,7 @@ export default function AcceleratorPage() {
       </Section>
 
       {/* Plan Demo */}
-      <Section id="plan" tone="carbon" className="scroll-mt-24">
+      <Section id="plan" tone="forest" className="scroll-mt-24">
         <Container className="grid items-center gap-[clamp(32px,5vw,80px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr))]">
           <div>
             <Eyebrow className="mb-[18px]">Try it</Eyebrow>

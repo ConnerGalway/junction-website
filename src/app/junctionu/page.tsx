@@ -78,7 +78,7 @@ export default function JunctionUPage() {
   return (
     <>
       {/* Hero */}
-      <Section tone="carbon" spacing="tight">
+      <Section tone="forest" spacing="tight">
         <Container className="grid items-end gap-x-[72px] gap-y-8 [grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))]">
           <div>
             <Eyebrow className="mb-6">JunctionU · formerly eLearningU</Eyebrow>

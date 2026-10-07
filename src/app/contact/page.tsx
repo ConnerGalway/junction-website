@@ -25,7 +25,7 @@ export default function ContactPage() {
             </p>
 
             {/* Rather just talk card */}
-            <Card tone="carbon" className="flex max-w-[460px] flex-col gap-3.5">
+            <Card tone="forest" className="flex max-w-[460px] flex-col gap-3.5">
               <h2 className="type-h3 m-0">Rather just talk?</h2>
               <p className="type-body m-0">
                 Book 20 minutes with Conner. No forms, no prep.

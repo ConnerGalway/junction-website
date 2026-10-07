@@ -270,7 +270,7 @@ export default function HomePage() {
 
             {/* Metrics */}
             <div className="mb-8 grid grid-cols-2 gap-3">
-              <div className="rounded-card border border-(--tone-hairline) p-5">
+              <div className="card p-5">
                 <p className="type-eyebrow text-muted m-0 mb-2">
                   Collected in 30 days
                 </p>
@@ -280,7 +280,7 @@ export default function HomePage() {
                   <Placeholder className="text-newsprint">[ result ]</Placeholder>
                 </div>
               </div>
-              <div className="rounded-card border border-(--tone-hairline) p-5">
+              <div className="card p-5">
                 <p className="type-eyebrow text-muted m-0 mb-2">
                   Quote turnaround
                 </p>

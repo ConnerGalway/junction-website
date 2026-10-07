@@ -4,14 +4,14 @@ import { cx } from "./cx";
 
 type CardProps<T extends ElementType> = {
   /**
-   * Default: no fill, hairline border, Newsprint shows through.
-   * carbon: a dark panel (Carbon fill) that switches its children to the
-   * Carbon tone.
+   * default: same colour as its ground, soft shadow + 3px Forest top rule.
+   * carbon / forest: a dark panel that switches its children to that tone.
+   * Neighbouring dark panels alternate (one Forest, one Carbon).
    */
-  tone?: "default" | "carbon";
+  tone?: "default" | "carbon" | "forest";
   /** Set false to control padding yourself (e.g. tables, media). */
   padded?: boolean;
-  /** Makes the whole card a link; the border turns pink on hover. */
+  /** Makes the whole card a link; its top rule turns pink on hover/focus. */
   href?: string;
   as?: T;
 } & Omit<ComponentPropsWithoutRef<T>, "as" | "href">;
@@ -25,10 +25,9 @@ export function Card<T extends ElementType = "div">({
   ...rest
 }: CardProps<T>) {
   const classes = cx(
-    "rounded-card",
-    tone === "carbon" ? "tone-carbon" : "border border-(--tone-hairline)",
+    tone === "default" ? "card" : `tone-${tone} rounded-card`,
     padded && "card-pad",
-    href && "group block hover:border-break",
+    href && "card-link group block",
     className
   );
   if (href) {

@@ -93,7 +93,7 @@ export default function AboutPage() {
           <div className="grid items-start gap-x-[72px] gap-y-8 border-t-2 border-(--tone-rule) pt-9 [grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))]">
             {/* Initials placeholder */}
             <Card
-              tone="carbon"
+              tone="forest"
               aria-hidden="true"
               className="flex max-w-[420px] items-end"
               style={{ aspectRatio: "4/5" }}

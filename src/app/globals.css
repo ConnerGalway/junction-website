@@ -77,6 +77,10 @@
   --spacing-gap: 24px;                                /* between components */
   --spacing-stack: 36px;                              /* heading → content */
 
+  /* Elevation for cards that sit on a ground of their own colour. */
+  --shadow-card: 0 1px 2px rgba(28, 28, 26, 0.06), 0 10px 28px rgba(28, 28, 26, 0.07);
+  --shadow-card-hover: 0 1px 2px rgba(28, 28, 26, 0.08), 0 14px 36px rgba(28, 28, 26, 0.11);
+
   /* Widths */
   --container-wide: 1320px;
   --container-headline: 1040px;
@@ -167,6 +171,10 @@
     --tone-btn-text: var(--color-newsprint);
     --tone-btn-hover-bg: var(--color-forest);
     --tone-btn-line: var(--color-carbon);
+    --tone-card-rule: var(--color-forest);
+    --tone-card-border: 0 solid transparent;
+    --tone-card-shadow: var(--shadow-card);
+    --tone-card-shadow-hover: var(--shadow-card-hover);
   }
 
   .tone-carbon {
@@ -187,6 +195,10 @@
     --tone-numeral: var(--color-accent-1);
     --tone-price: var(--tone-text);
     --tone-body: var(--color-newsprint-muted);
+    --tone-card-rule: var(--color-fern);
+    --tone-card-border: 1px solid var(--color-hairline-dark);
+    --tone-card-shadow: none;
+    --tone-card-shadow-hover: none;
   }
 
   /* Forest: sections and boxes. Gold numerals are 3.6:1 here (24px+ only). */
@@ -208,6 +220,10 @@
     --tone-numeral: var(--color-accent-1);
     --tone-price: var(--tone-text);
     --tone-body: var(--color-newsprint-muted);
+    --tone-card-rule: var(--color-fern);
+    --tone-card-border: 1px solid var(--color-hairline-dark);
+    --tone-card-shadow: none;
+    --tone-card-shadow-hover: none;
   }
 
   /* Sage boxes (quote cards, chips): forest text keeps AA contrast. */
@@ -480,6 +496,78 @@
   }
 
   /* ─── Surfaces ─── */
+
+  /*
+   * Default card: same colour as its ground, lifted by a soft shadow and a
+   * 3px Forest top rule (no hairline). On Carbon/Forest grounds the shadow
+   * can't show, so it gets a hairline-dark border and a Fern top rule.
+   */
+  .card {
+    border-radius: var(--radius-card);
+    background-color: var(--tone-bg);
+    border: var(--tone-card-border);
+    border-top: 3px solid var(--tone-card-rule);
+    box-shadow: var(--tone-card-shadow);
+    transition-property: border-color, box-shadow;
+    transition-duration: 0.15s;
+  }
+
+  /*
+   * Data table: Carbon header with Newsprint eyebrow labels, Sage-25 body
+   * rows with ink-soft cells and a Carbon 500 row label. Wrap it in
+   * .data-table-frame for the 14px radius (and horizontal scroll on phones).
+   */
+  .data-table-frame {
+    border-radius: var(--radius-card);
+    overflow-x: auto;
+  }
+
+  .data-table {
+    width: 100%;
+    min-width: 560px;
+    border-collapse: collapse;
+    text-align: left;
+  }
+
+  .data-table thead th {
+    background-color: var(--color-carbon);
+    color: var(--color-newsprint);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 1.4;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 16px 20px;
+    vertical-align: bottom;
+  }
+
+  .data-table tbody th,
+  .data-table tbody td {
+    background-color: var(--color-sage-25);
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.5;
+    padding: 18px 20px;
+    vertical-align: top;
+    border-top: 1px solid var(--color-hairline);
+  }
+
+  .data-table tbody td {
+    color: var(--color-ink-soft);
+    font-weight: 300;
+  }
+
+  .data-table tbody th {
+    color: var(--color-carbon);
+    font-weight: 500;
+  }
+
+  .card-link:hover,
+  .card-link:focus-visible {
+    border-top-color: var(--color-break);
+    box-shadow: var(--tone-card-shadow-hover);
+  }
   .card-pad {
     padding: var(--spacing-card-sm);
   }

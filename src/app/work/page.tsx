@@ -67,7 +67,7 @@ export default function WorkPage() {
       </Section>
 
       {/* ITBC */}
-      <Section tone="carbon" spacing="tight">
+      <Section tone="forest" spacing="tight">
         <Container className={caseGrid}>
           <div>
             <Eyebrow className="mb-4">
