@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Header, Footer } from "@/components";
 
 const beliefs = [
   {
@@ -25,8 +24,7 @@ const beliefs = [
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-newsprint text-carbon font-dm-sans">
-      <Header />
+    <>
 
       {/* Hero */}
       <section
@@ -275,8 +273,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-
-      <Footer />
-    </div>
+    </>
   );
 }

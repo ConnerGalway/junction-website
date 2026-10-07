@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Header, Footer } from "@/components";
 
 const allArticles = [
   {
@@ -66,8 +65,7 @@ export default function IdeasPage() {
       : allArticles.filter((a) => a.cat === activeFilter);
 
   return (
-    <div className="min-h-screen bg-newsprint text-carbon font-dm-sans">
-      <Header />
+    <>
 
       {/* Hero */}
       <section
@@ -260,8 +258,6 @@ export default function IdeasPage() {
           </p>
         </div>
       </section>
-
-      <Footer />
-    </div>
+    </>
   );
 }

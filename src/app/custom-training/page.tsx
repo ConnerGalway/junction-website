@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Header, Footer, Placeholder } from "@/components";
+import { Placeholder } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
 
 const clients = [
@@ -58,8 +58,7 @@ const formats = [
 
 export default function CustomTrainingPage() {
   return (
-    <div className="min-h-screen bg-newsprint text-carbon font-dm-sans">
-      <Header />
+    <>
 
       {/* Hero */}
       <section
@@ -572,8 +571,6 @@ export default function CustomTrainingPage() {
           </div>
         </div>
       </section>
-
-      <Footer />
-    </div>
+    </>
   );
 }

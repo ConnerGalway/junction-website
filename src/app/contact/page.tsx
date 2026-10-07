@@ -3,7 +3,6 @@
 import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Header } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
 
 type FormType = "ai" | "accelerator" | "training" | "speaking" | "other";
@@ -453,8 +452,7 @@ function ContactFormWrapper() {
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-newsprint text-carbon font-dm-sans">
-      <Header />
+    <>
 
       {/* Main */}
       <section
@@ -570,40 +568,6 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Simplified Footer */}
-      <footer
-        className="bg-carbon text-newsprint"
-        style={{ padding: "40px clamp(20px, 4vw, 48px)" }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "flex",
-            justifyContent: "space-between",
-            gap: "16px",
-            flexWrap: "wrap",
-            fontSize: "13px",
-            color: "rgba(244, 240, 232, 0.78)",
-          }}
-        >
-          <span>© Junction Consulting 2026</span>
-          <div className="flex gap-6 flex-wrap">
-            <Link href="/" className="hover:text-newsprint transition-colors">
-              Home
-            </Link>
-            <Link href="/work" className="hover:text-newsprint transition-colors">
-              Work
-            </Link>
-            <Link href="/about" className="hover:text-newsprint transition-colors">
-              About
-            </Link>
-            <Link href="#" className="hover:text-newsprint transition-colors">
-              Privacy
-            </Link>
-          </div>
-        </div>
-      </footer>
-    </div>
+    </>
   );
 }

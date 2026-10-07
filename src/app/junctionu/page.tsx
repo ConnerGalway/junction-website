@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Header, Footer } from "@/components";
 
 const allCourses = [
   {
@@ -82,8 +81,7 @@ export default function JunctionUPage() {
         });
 
   return (
-    <div className="min-h-screen bg-newsprint text-carbon font-dm-sans">
-      <Header />
+    <>
 
       {/* Hero */}
       <section
@@ -382,8 +380,6 @@ export default function JunctionUPage() {
           </blockquote>
         </div>
       </section>
-
-      <Footer />
-    </div>
+    </>
   );
 }

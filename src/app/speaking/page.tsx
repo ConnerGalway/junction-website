@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Header, Footer, Placeholder } from "@/components";
+import { Placeholder } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
 
 const stages = [
@@ -42,8 +42,7 @@ const formats = [
 
 export default function SpeakingPage() {
   return (
-    <div className="min-h-screen bg-newsprint text-carbon font-dm-sans">
-      <Header />
+    <>
 
       {/* Hero */}
       <section
@@ -403,8 +402,6 @@ export default function SpeakingPage() {
           </div>
         </div>
       </section>
-
-      <Footer />
-    </div>
+    </>
   );
 }

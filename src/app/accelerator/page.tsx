@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Header, Footer } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
 
 const scoreData = [
@@ -232,8 +231,7 @@ function TaskChecklist() {
 
 export default function AcceleratorPage() {
   return (
-    <div className="min-h-screen bg-newsprint text-carbon font-dm-sans">
-      <Header />
+    <>
 
       {/* Hero */}
       <section
@@ -821,8 +819,6 @@ export default function AcceleratorPage() {
           </div>
         </div>
       </section>
-
-      <Footer />
-    </div>
+    </>
   );
 }

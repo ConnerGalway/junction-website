@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Header, Footer } from "@/components";
 
 const services = [
   {
@@ -45,8 +44,7 @@ const services = [
 
 export default function ServicesPage() {
   return (
-    <div className="min-h-screen bg-newsprint text-carbon font-dm-sans">
-      <Header />
+    <>
 
       {/* Hero */}
       <section
@@ -216,8 +214,6 @@ export default function ServicesPage() {
           </div>
         </div>
       </section>
-
-      <Footer />
-    </div>
+    </>
   );
 }

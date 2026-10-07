@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Header, Footer } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
 
 const teams = ["Twin Lions Contracting", "West Coast Homes", "SMR Plumbing & Heating"];
@@ -174,8 +173,7 @@ function FAQAccordion() {
 
 export default function AIAcceleratorPage() {
   return (
-    <div className="min-h-screen bg-newsprint text-carbon font-dm-sans">
-      <Header />
+    <>
 
       {/* Hero */}
       <section
@@ -939,8 +937,6 @@ export default function AIAcceleratorPage() {
           </div>
         </div>
       </section>
-
-      <Footer />
-    </div>
+    </>
   );
 }

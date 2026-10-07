@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans, Bebas_Neue, Fraunces, Epilogue } from "next/font/google";
+import { Footer, Header, SkipLink } from "@/components";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -39,7 +40,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${dmSans.variable} ${bebasNeue.variable} ${fraunces.variable} ${epilogue.variable} antialiased`}
     >
-      <body className="min-h-screen bg-newsprint text-carbon">{children}</body>
+      <body className="flex min-h-screen flex-col bg-newsprint font-sans text-carbon">
+        <SkipLink />
+        <Header />
+        <main id="main" tabIndex={-1} className="flex-1 focus:outline-none">
+          {children}
+        </main>
+        <Footer />
+      </body>
     </html>
   );
 }
