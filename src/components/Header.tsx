@@ -6,7 +6,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import type { KeyboardEvent, PointerEvent } from "react";
 import { CALENDLY_URL } from "@/lib/constants";
 import { flagshipProgram, primaryNav, programGroups } from "@/lib/navigation";
-import { Button, Dot, Wordmark, cx } from "./ui";
+import { Button, Dot, LogoLockup, cx } from "./ui";
 
 function Chevron({ open }: { open: boolean }) {
   return (
@@ -157,13 +157,11 @@ export function Header() {
       onKeyDown={onMobileKeyDown}
     >
       <div className="relative mx-auto flex min-h-[76px] max-w-wide items-center justify-between gap-6">
-        <Link href="/" aria-label="Junction, home" className="link-plain shrink-0">
-          <Wordmark />
-        </Link>
+        <LogoLockup collapseOnSmall />
 
         {/* Desktop navigation */}
         <nav aria-label="Main" className="hidden lg:block">
-          <ul className="m-0 flex list-none items-center gap-7 p-0 text-[16px]">
+          <ul className="m-0 flex list-none items-center gap-7 p-0 text-[17px] font-normal text-carbon">
             <li
               ref={programsRef}
               onPointerEnter={onPointerEnter}

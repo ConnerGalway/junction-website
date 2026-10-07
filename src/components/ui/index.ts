@@ -13,3 +13,4 @@ export { NewsletterSignup } from "./NewsletterSignup";
 export { SkipLink } from "./SkipLink";
 export { cx } from "./cx";
 export { Wordmark } from "./Wordmark";
+export { LogoLockup } from "./LogoLockup";

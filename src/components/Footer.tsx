@@ -1,17 +1,32 @@
 import Link from "next/link";
 import { CALENDLY_URL } from "@/lib/constants";
-import { flagshipProgram, programGroups, type NavGroup } from "@/lib/navigation";
-import { Container, NewsletterSignup, Wordmark } from "./ui";
+import type { NavGroup } from "@/lib/navigation";
+import { Container, LogoLockup, NewsletterSignup } from "./ui";
 
 const footerGroups: NavGroup[] = [
   {
-    title: "Flagship",
+    title: "Programs",
     links: [
-      { label: flagshipProgram.title, href: flagshipProgram.href },
+      { label: "The Accelerator", href: "/accelerator" },
+      { label: "Offload Program (AI Accelerator)", href: "/ai-accelerator" },
+      { label: "Speaking", href: "/speaking" },
       { label: "See all programs", href: "/programs" },
     ],
   },
-  ...programGroups,
+  {
+    title: "Strategy",
+    links: [
+      { label: "Marketing strategy", href: "/programs#marketing-strategy" },
+      { label: "Destination partnerships", href: "/programs#destination-partnerships" },
+    ],
+  },
+  {
+    title: "Training",
+    links: [
+      { label: "Custom Training", href: "/custom-training" },
+      { label: "JunctionU", href: "/junctionu" },
+    ],
+  },
   {
     title: "Company",
     links: [
@@ -35,20 +50,15 @@ export function Footer() {
     <footer className="tone-carbon px-gutter pb-8 pt-section-tight">
       <Container className="flex flex-col gap-14">
         <div className="grid gap-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))]">
-          <div className="flex items-start gap-4">
-            <Wordmark className="text-[34px]" />
-            <span className="border-l border-hairline-dark pl-3 text-[11px] font-light leading-[1.3] tracking-[0.06em] text-newsprint-muted">
-              Strategy &amp;
-              <br />
-              Capacity Building
-            </span>
+          <div>
+            <LogoLockup />
           </div>
           <NewsletterSignup className="max-w-[520px]" />
         </div>
 
         <nav
           aria-label="Footer"
-          className="grid gap-10 [grid-template-columns:repeat(auto-fit,minmax(160px,1fr))]"
+          className="grid gap-10 [grid-template-columns:repeat(auto-fit,minmax(170px,1fr))]"
         >
           {footerGroups.map((group) => (
             <div key={group.title} className="flex flex-col gap-3">
