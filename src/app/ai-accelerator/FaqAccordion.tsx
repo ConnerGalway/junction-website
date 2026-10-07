@@ -26,7 +26,7 @@ export function FaqAccordion({ faqs }: { faqs: Faq[] }) {
                 className="type-h4 flex w-full cursor-pointer items-center justify-between gap-4 border-0 bg-transparent py-5 text-left text-(--tone-text)"
               >
                 <span>{faq.q}</span>
-                <span aria-hidden="true" className="type-h3 text-(--tone-stat)">
+                <span aria-hidden="true" className="type-h3 text-(--tone-numeral)">
                   {isOpen ? "−" : "+"}
                 </span>
               </button>

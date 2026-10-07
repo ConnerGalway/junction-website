@@ -107,7 +107,7 @@ export default function SpeakingPage() {
           <div className="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))]">
             {topics.map((t) => (
               <Card key={t.num} className="flex flex-col gap-3.5">
-                <span className="type-h4 text-(--tone-stat)">{t.num}</span>
+                <span className="type-numeral">{t.num}</span>
                 <h3 className="type-h3 m-0">{t.title}</h3>
                 <p className="type-body text-muted m-0">{t.description}</p>
                 <p className="type-small mt-auto mb-0 pt-2.5">{t.audience}</p>

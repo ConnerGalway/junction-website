@@ -42,8 +42,7 @@ export default function WorkPage() {
           <div>
             <Eyebrow className="mb-4">Travel Yukon · Training · 4 years</Eyebrow>
             <Stat
-              variant="everyday"
-              value="300+"
+                            value="300+"
               label="Businesses through the Go Digital program"
             />
           </div>
@@ -74,7 +73,7 @@ export default function WorkPage() {
             <Eyebrow className="mb-4">
               Indigenous Tourism BC · Accelerator · 3 months
             </Eyebrow>
-            <Stat variant="feature" value="+300%" label="Past engagement goal" />
+            <Stat value="+300%" label="Past engagement goal" />
           </div>
           <div className="flex flex-col items-start justify-end gap-7">
             <h2 className="type-h3 m-0">Accelerator across ITBC members</h2>
@@ -97,8 +96,7 @@ export default function WorkPage() {
               Ontario&apos;s Southwest · Research · 2025–26
             </Eyebrow>
             <Stat
-              variant="everyday"
-              value="2026"
+                            value="2026"
               label="Tourism strategy driven by our findings"
             />
           </div>

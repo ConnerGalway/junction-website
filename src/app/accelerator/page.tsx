@@ -151,12 +151,10 @@ export default function AcceleratorPage() {
               lives online: a week-by-week roadmap, step-by-step guides, and
               checklists that save as you go.
             </p>
-            <Stat
-              value="$2,500"
-              label="3 coaching sessions · 90-day plan"
-              valueClassName="text-[64px]"
-              className="mb-2.5 max-w-[34ch]"
-            />
+            <div className="mb-2.5">
+              <p className="type-price m-0">$2,500</p>
+              <p className="type-small m-0 mt-2">3 coaching sessions · 90-day plan</p>
+            </div>
             <p className="type-small mt-0 mb-7">
               Some industry and regional partners cover 25–100%. Ask on the call.
             </p>
@@ -175,7 +173,7 @@ export default function AcceleratorPage() {
               <span className="type-small">Sample client</span>
             </div>
             <div className="flex items-end gap-4">
-              <span className="type-stat text-(--tone-stat)">74</span>
+              <span className="type-stat text-[clamp(72px,7vw,112px)]">74</span>
               <span className="type-small pb-1.5">/ 100 overall</span>
             </div>
             <div className="flex flex-col gap-3">
@@ -211,7 +209,7 @@ export default function AcceleratorPage() {
                 key={item.num}
                 className="grid grid-cols-[56px_1fr] border-b border-hairline py-[22px]"
               >
-                <span className="type-h4 text-(--tone-stat)">{item.num}</span>
+                <span className="type-numeral">{item.num}</span>
                 <div>
                   <h3 className="type-h4 mt-0 mb-1.5">{item.title}</h3>
                   <p className="type-body text-muted m-0">{item.description}</p>
@@ -276,7 +274,7 @@ export default function AcceleratorPage() {
       <Section flush="top">
         <Container className="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))]">
           <Card tone="carbon" className="flex flex-col gap-2.5">
-            <Stat variant="feature" value="+300%" />
+            <Stat value="+300%" />
             <p className="type-h4 m-0">Past the engagement goal</p>
             <p className="type-small m-0">
               Accelerator rolled out across a provincial association&apos;s member

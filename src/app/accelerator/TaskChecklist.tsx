@@ -24,7 +24,7 @@ export function TaskChecklist({ tasks }: { tasks: Task[] }) {
   return (
     <div className="tone-newsprint card-pad rounded-card">
       <div className="mb-1.5 flex flex-wrap items-baseline justify-between gap-3">
-        <span className="type-h4 text-(--tone-stat)">Week 1 · Tracking setup</span>
+        <span className="type-h4">Week 1 · Tracking setup</span>
         <span className="type-small font-medium text-(--tone-text)" aria-live="polite">
           {doneCount} / {total}
         </span>

@@ -77,7 +77,7 @@ export default function AboutPage() {
           <div className="grid gap-x-12 gap-y-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))]">
             {beliefs.map((belief) => (
               <div key={belief.num} className="border-t border-(--tone-hairline) pt-6">
-                <p className="type-h4 m-0 mb-3.5 text-(--tone-stat)">{belief.num}</p>
+                <p className="type-numeral m-0 mb-3.5">{belief.num}</p>
                 <h3 className="type-h3 m-0 mb-3.5">{belief.title}</h3>
                 <p className="type-body text-muted m-0">{belief.description}</p>
               </div>

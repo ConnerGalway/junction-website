@@ -79,7 +79,7 @@ export function CourseCatalogue({
             <p className="type-body text-muted m-0">{course.blurb}</p>
             <div className="mt-auto flex items-baseline justify-between gap-3 border-t border-hairline pt-4">
               <span className="type-small">{course.meta}</span>
-              <span className="type-h4 text-canopy-text">{course.price}</span>
+              <span className="type-price">{course.price}</span>
             </div>
           </Card>
         ))}

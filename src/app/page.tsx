@@ -178,7 +178,7 @@ export default function HomePage() {
                   key={item.num}
                   className="grid grid-cols-[48px_minmax(0,1fr)] gap-x-1 border-b border-(--tone-hairline) py-4"
                 >
-                  <span className="type-h4 text-(--tone-stat)">{item.num}</span>
+                  <span className="type-numeral">{item.num}</span>
                   <div>
                     <p className="type-h4 m-0 mb-1">{item.title}</p>
                     <p className="type-small m-0">{item.description}</p>
@@ -227,8 +227,14 @@ export default function HomePage() {
               <Card key={program.num} href={program.href}>
                 <div className="flex h-full flex-col gap-3.5">
                   <div className="flex items-center justify-between gap-3">
-                    <span className="type-h4 text-(--tone-stat)">{program.num}</span>
-                    <span className="type-eyebrow text-muted">{program.meta}</span>
+                    <span className="type-numeral">{program.num}</span>
+                    <span
+                      className={
+                        program.meta.startsWith("$") ? "type-price" : "type-eyebrow text-muted"
+                      }
+                    >
+                      {program.meta}
+                    </span>
                   </div>
                   <h3 className="type-h3 m-0">{program.title}</h3>
                   <p className="type-small m-0 font-medium text-canopy-text">
@@ -269,8 +275,8 @@ export default function HomePage() {
                   Collected in 30 days
                 </p>
                 <div className="flex flex-wrap items-baseline gap-2.5">
-                  <span className="type-h3">65%</span>
-                  <span className="text-accent-1" aria-hidden="true">→</span>
+                  <span className="type-numeral">65%</span>
+                  <span className="text-(--tone-numeral)" aria-hidden="true">→</span>
                   <Placeholder className="text-newsprint">[ result ]</Placeholder>
                 </div>
               </div>
@@ -279,8 +285,8 @@ export default function HomePage() {
                   Quote turnaround
                 </p>
                 <div className="flex flex-wrap items-baseline gap-2.5">
-                  <span className="type-h3">Up to 1 day</span>
-                  <span className="text-accent-1" aria-hidden="true">→</span>
+                  <span className="type-numeral">Up to 1 day</span>
+                  <span className="text-(--tone-numeral)" aria-hidden="true">→</span>
                   <Placeholder className="text-newsprint">[ result ]</Placeholder>
                 </div>
               </div>
@@ -298,7 +304,7 @@ export default function HomePage() {
                 key={step.num}
                 className="grid grid-cols-[48px_1fr] border-b border-(--tone-hairline) py-6"
               >
-                <span className="type-h4 text-(--tone-stat)">{step.num}</span>
+                <span className="type-numeral">{step.num}</span>
                 <div>
                   <h3 className="type-h4 m-0 mb-1.5">{step.title}</h3>
                   <p className="type-small m-0">{step.description}</p>
@@ -349,7 +355,7 @@ export default function HomePage() {
           </div>
           {callSteps.map((step) => (
             <div key={step.num}>
-              <p className="type-h4 m-0 mb-2 text-(--tone-stat)">{step.num}</p>
+              <p className="type-numeral m-0 mb-2">{step.num}</p>
               <h3 className="type-h4 m-0 mb-1.5">{step.title}</h3>
               <p className="type-body text-muted m-0">{step.description}</p>
             </div>

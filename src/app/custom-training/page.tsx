@@ -171,7 +171,7 @@ export default function CustomTrainingPage() {
         <Container className="grid items-center gap-x-20 gap-y-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr))]">
           <div>
             <Eyebrow className="mb-4">Town of Okotoks · webinar series</Eyebrow>
-            <Stat variant="everyday" value="$900,000+" />
+            <Stat value="$900,000+" />
             <p className="type-body text-muted m-0 mt-5 max-w-[44ch]">
               In potential local spend identified for businesses ahead of 4,500
               visitors. Then we turned it into a three-part series where every
@@ -180,8 +180,7 @@ export default function CustomTrainingPage() {
           </div>
           <div className="flex flex-col gap-6">
             <Stat
-              variant="everyday"
-              value="300+"
+                            value="300+"
               label={
                 <>
                   businesses through Travel Yukon&apos;s program in four years, now
@@ -212,7 +211,7 @@ export default function CustomTrainingPage() {
           <ol className="m-0 grid list-none border-t-2 border-(--tone-rule) p-0 [grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))]">
             {formats.map((f) => (
               <li key={f.num} className="border-b border-hairline py-6 pr-6">
-                <span className="type-h4 text-(--tone-stat)">{f.num}</span>
+                <span className="type-numeral">{f.num}</span>
                 <h3 className="type-h4 m-0 my-1.5">{f.title}</h3>
                 <p className="type-small m-0">{f.description}</p>
               </li>

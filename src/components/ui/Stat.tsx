@@ -2,11 +2,6 @@ import type { ReactNode } from "react";
 import { cx } from "./cx";
 
 type StatProps = {
-  /**
-   * everyday = accent-2 number on Newsprint with a 1.5px accent-2 top rule.
-   * feature  = accent-1 number, for Carbon grounds.
-   */
-  variant?: "everyday" | "feature";
   value: ReactNode;
   label?: ReactNode;
   className?: string;
@@ -14,24 +9,15 @@ type StatProps = {
   valueClassName?: string;
 };
 
-export function Stat({ variant = "everyday", value, label, className, valueClassName }: StatProps) {
+/**
+ * Big number in Bebas Neue, gold for the current ground (accent-1-on-light
+ * on Newsprint, accent-1 on Carbon and Forest), with a body-size label below.
+ */
+export function Stat({ value, label, className, valueClassName }: StatProps) {
   return (
-    <div
-      className={cx(
-        variant === "everyday" && "border-t-[1.5px] border-accent-2 pt-4",
-        className
-      )}
-    >
-      <div
-        className={cx(
-          "type-stat",
-          variant === "everyday" ? "text-accent-2" : "text-accent-1",
-          valueClassName
-        )}
-      >
-        {value}
-      </div>
-      {label && <div className="type-small mt-3">{label}</div>}
+    <div className={className}>
+      <div className={cx("type-stat", valueClassName)}>{value}</div>
+      {label && <div className="type-body mt-2">{label}</div>}
     </div>
   );
 }

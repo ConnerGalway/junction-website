@@ -7,7 +7,6 @@ import {
   Eyebrow,
   Placeholder,
   Section,
-  Stat,
   TextLink,
 } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
@@ -167,11 +166,10 @@ export default function AIAcceleratorPage() {
               your real work. You leave with AI tools already running, and a team
               that knows how to build the next one.
             </p>
-            <Stat
-              className="mb-8"
-              value="$5,000"
-              label="per team · on site or Zoom"
-            />
+            <div className="mb-8">
+              <p className="type-price m-0">$5,000</p>
+              <p className="type-small m-0 mt-2">per team · on site or Zoom</p>
+            </div>
             <div className="flex flex-wrap items-center gap-6">
               <Button href={CALENDLY_URL}>Book a 20-min call</Button>
               <TextLink href="#example" className="whitespace-nowrap">
@@ -251,7 +249,7 @@ export default function AIAcceleratorPage() {
                 key={item.num}
                 className="grid grid-cols-[56px_1fr] border-b border-(--tone-hairline) py-[22px]"
               >
-                <span className="type-h4 text-(--tone-stat)">{item.num}</span>
+                <span className="type-numeral">{item.num}</span>
                 <div>
                   <h3 className="type-h4 m-0 mb-1.5">{item.title}</h3>
                   <p className="type-body text-muted m-0">{item.description}</p>
@@ -331,8 +329,8 @@ export default function AIAcceleratorPage() {
               <div key={m.label} className="border-t-2 border-(--tone-rule) pt-4">
                 <p className="type-small m-0 mb-2.5">{m.label}</p>
                 <div className="flex flex-wrap items-baseline gap-2.5">
-                  <span className="type-h3 text-(--tone-stat)">{m.value}</span>
-                  <span aria-hidden="true" className="text-(--tone-stat)">
+                  <span className="type-numeral">{m.value}</span>
+                  <span aria-hidden="true" className="text-(--tone-numeral)">
                     →
                   </span>
                   <Placeholder className="rounded-control! px-2! py-1!">
