@@ -1,330 +1,135 @@
-"use client";
-
-import Image from "next/image";
 import Link from "next/link";
-import { Header, Footer, useCountUp, formatStat } from "@/components";
-import { useEffect, useState } from "react";
+import { Header, Footer, Placeholder } from "@/components";
+import { CALENDLY_URL } from "@/lib/constants";
 
-// Stats component with count-up animation
-function StatStrip() {
-  const [statPros, prosRef] = useCountUp(2000);
-  const [statBiz, bizRef] = useCountUp(300);
-  const [statEng, engRef] = useCountUp(300);
-  const [statYrs, yrsRef] = useCountUp(14);
+const stuckItems = [
+  {
+    num: "01",
+    title: "Online booking",
+    description: "Enquiries that should have been bookings",
+  },
+  {
+    num: "02",
+    title: "Website and search",
+    description: "Customers who can't find you, or can't find the answer",
+  },
+  {
+    num: "03",
+    title: "Social media",
+    description: "Posting when someone has a spare minute",
+  },
+  {
+    num: "04",
+    title: "Internal systems",
+    description: "The same data keyed in twice, reports built by hand",
+  },
+  {
+    num: "05",
+    title: "AI",
+    description: "Admin eating the week of your best people",
+  },
+];
 
-  return (
-    <section
-      style={{
-        borderTop: "1px solid rgba(28, 28, 26, 0.12)",
-        borderBottom: "1px solid rgba(28, 28, 26, 0.12)",
-      }}
-    >
-      <div
-        className="content-container"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-        }}
-      >
-        <div
-          ref={prosRef}
-          style={{
-            padding: "28px clamp(20px, 3vw, 40px)",
-            borderRight: "1px solid rgba(28, 28, 26, 0.1)",
-          }}
-        >
-          <div
-            className="font-bebas text-accent"
-            style={{
-              fontSize: "clamp(48px, 5vw, 72px)",
-              lineHeight: "0.9",
-              fontVariantNumeric: "tabular-nums",
-            }}
-          >
-            {formatStat(statPros, "", "+")}
-          </div>
-          <div
-            style={{
-              fontSize: "12px",
-              fontWeight: 500,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "rgba(28, 28, 26, 0.62)",
-              marginTop: "8px",
-            }}
-          >
-            Professionals trained
-          </div>
-        </div>
+const organizations = [
+  "Twin Lions Contracting",
+  "West Coast Homes",
+  "SMR Plumbing & Heating",
+  "Destination BC",
+  "Travel Alberta",
+  "Travel Maine",
+  "Visit Mississippi",
+];
 
-        <div
-          ref={bizRef}
-          style={{
-            padding: "28px clamp(20px, 3vw, 40px)",
-            borderRight: "1px solid rgba(28, 28, 26, 0.1)",
-          }}
-        >
-          <div
-            className="font-bebas text-accent"
-            style={{
-              fontSize: "clamp(48px, 5vw, 72px)",
-              lineHeight: "0.9",
-              fontVariantNumeric: "tabular-nums",
-            }}
-          >
-            {formatStat(statBiz, "", "+")}
-          </div>
-          <div
-            style={{
-              fontSize: "12px",
-              fontWeight: 500,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "rgba(28, 28, 26, 0.62)",
-              marginTop: "8px",
-            }}
-          >
-            Yukon businesses, 4 years
-          </div>
-        </div>
+const programs = [
+  {
+    num: "01",
+    title: "AI Accelerator",
+    meta: "$5,000 · 30 days",
+    tagline: "For any business losing hours to admin.",
+    description:
+      "Four sessions with your leadership team on your real work. One bottleneck automated by day 30, guaranteed.",
+    href: "/ai-accelerator",
+    linkText: "See the AI Accelerator →",
+  },
+  {
+    num: "02",
+    title: "The Accelerator",
+    meta: "$2,500 · 90 days",
+    tagline: "For small businesses that need a marketing plan they'll work.",
+    description:
+      "A scored digital assessment, an interactive 90-day plan, three coaching sessions and reassessments that show your progress.",
+    href: "/accelerator",
+    linkText: "See the Accelerator →",
+  },
+  {
+    num: "03",
+    title: "Custom Training",
+    meta: "Scoped to you",
+    tagline: "For organizations training their members or their leaders.",
+    description:
+      "Courses, workshops and series built around your people, with delivery and progress reporting handled for you.",
+    href: "/custom-training",
+    linkText: "See Custom Training →",
+  },
+  {
+    num: "04",
+    title: "Speaking",
+    meta: "Keynote · Workshop · Virtual",
+    tagline: "For event organizers who want the room to leave with a plan.",
+    description:
+      "Keynotes and workshops on AI, marketing trends and strategy. Every talk ends with actions people can take that week.",
+    href: "/speaking",
+    linkText: "See speaking topics →",
+  },
+];
 
-        <div
-          ref={engRef}
-          style={{
-            padding: "28px clamp(20px, 3vw, 40px)",
-            borderRight: "1px solid rgba(28, 28, 26, 0.1)",
-          }}
-        >
-          <div
-            className="font-bebas text-accent"
-            style={{
-              fontSize: "clamp(48px, 5vw, 72px)",
-              lineHeight: "0.9",
-              fontVariantNumeric: "tabular-nums",
-            }}
-          >
-            {formatStat(statEng, "+", "%")}
-          </div>
-          <div
-            style={{
-              fontSize: "12px",
-              fontWeight: 500,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "rgba(28, 28, 26, 0.62)",
-              marginTop: "8px",
-            }}
-          >
-            Past ITBC engagement goals
-          </div>
-        </div>
+const aiExampleSteps = [
+  {
+    num: "01",
+    title: "A collections assistant",
+    description:
+      "Reads the aging report, suggests the next step for each account, and drafts reminders and call notes in the company's voice.",
+  },
+  {
+    num: "02",
+    title: "A material list converter",
+    description:
+      "Turns a photo, text or email of a handwritten list into clean line items for their ERP, and flags anything to confirm.",
+  },
+  {
+    num: "03",
+    title: "A business brain",
+    description:
+      "Price lists, account terms, policies and house style, loaded into one shared AI workspace the whole team uses.",
+  },
+  {
+    num: "04",
+    title: "A roadmap for what's next",
+    description:
+      "Takeoffs, invoice matching and system integration, prioritized for after the program.",
+  },
+];
 
-        <div ref={yrsRef} style={{ padding: "28px clamp(20px, 3vw, 40px)" }}>
-          <div
-            className="font-bebas text-accent"
-            style={{
-              fontSize: "clamp(48px, 5vw, 72px)",
-              lineHeight: "0.9",
-              fontVariantNumeric: "tabular-nums",
-            }}
-          >
-            {statYrs}
-          </div>
-          <div
-            style={{
-              fontSize: "12px",
-              fontWeight: 500,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "rgba(28, 28, 26, 0.62)",
-              marginTop: "8px",
-            }}
-          >
-            Years in the visitor economy
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
+const callSteps = [
+  {
+    num: "01",
+    title: "Pick a time",
+    description: "Twenty minutes with Conner. No prep, no forms.",
+  },
+  {
+    num: "02",
+    title: "Talk about the goal",
+    description: "What you want to change, and what's in the way right now.",
+  },
+  {
+    num: "03",
+    title: "Get a straight answer",
+    description:
+      "Which program fits, what it costs, and when it could start. If none fits, we'll say so.",
+  },
+];
 
-// JunctionU card with animated progress bar
-function JunctionUCard() {
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setProgress(62), 700);
-    return () => clearTimeout(timer);
-  }, []);
-
-  return (
-    <div
-      className="bg-newsprint rounded"
-      style={{
-        padding: "28px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "18px",
-        maxWidth: "520px",
-        width: "100%",
-        justifySelf: "end",
-      }}
-    >
-      <div className="flex justify-between items-center gap-3">
-        <span
-          className="font-bebas text-accent-shade"
-          style={{ fontSize: "22px", letterSpacing: "0.06em" }}
-        >
-          JU 101
-        </span>
-        <span
-          className="bg-forest text-newsprint"
-          style={{
-            fontSize: "11px",
-            fontWeight: 500,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            padding: "5px 10px 4px",
-            borderRadius: "2px",
-          }}
-        >
-          In progress
-        </span>
-      </div>
-      <div
-        className="font-epilogue"
-        style={{
-          fontWeight: 900,
-          fontSize: "28px",
-          lineHeight: "1.02",
-          letterSpacing: "-0.02em",
-        }}
-      >
-        Tourism Digital Marketing Essentials
-      </div>
-      <div style={{ fontSize: "14px", color: "rgba(28, 28, 26, 0.66)" }}>
-        8 modules · 6 hrs · Certificate
-      </div>
-      <div
-        style={{
-          borderTop: "1px solid rgba(28, 28, 26, 0.14)",
-          paddingTop: "18px",
-        }}
-      >
-        <div
-          className="flex justify-between text-sm mb-2.5"
-          style={{ marginBottom: "10px" }}
-        >
-          <span>Lesson 3 · Your Google Business Profile</span>
-          <span className="font-medium">{progress}%</span>
-        </div>
-        <div
-          style={{
-            height: "6px",
-            background: "rgba(28, 28, 26, 0.1)",
-            borderRadius: "3px",
-            overflow: "hidden",
-          }}
-        >
-          <div
-            className="bg-canopy"
-            style={{
-              height: "100%",
-              width: `${progress}%`,
-              transition: "width 1.2s cubic-bezier(0.2, 0.7, 0.2, 1)",
-            }}
-          />
-        </div>
-      </div>
-      <div className="text-forest" style={{ fontSize: "14px", fontWeight: 500 }}>
-        Continue →
-      </div>
-    </div>
-  );
-}
-
-// Case study section with animated stat
-function CaseStudySection() {
-  const [bigStat, bigRef] = useCountUp(900000);
-
-  return (
-    <section ref={bigRef} className="bg-forest text-newsprint section-padding">
-      <div
-        className="content-container two-col-grid"
-        style={{ gap: "clamp(32px, 5vw, 72px)", alignItems: "center" }}
-      >
-        <div>
-          <div
-            className="text-fern"
-            style={{
-              fontSize: "12px",
-              fontWeight: 500,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              marginBottom: "22px",
-            }}
-          >
-            Case study · Town of Okotoks
-          </div>
-          <div
-            className="font-bebas text-fern"
-            style={{
-              fontSize: "clamp(84px, 12vw, 184px)",
-              lineHeight: "0.85",
-              fontVariantNumeric: "tabular-nums",
-            }}
-          >
-            ${bigStat.toLocaleString()}+
-          </div>
-          <h2
-            className="font-epilogue"
-            style={{
-              fontWeight: 900,
-              fontSize: "clamp(28px, 3.2vw, 44px)",
-              lineHeight: 1,
-              letterSpacing: "-0.025em",
-              margin: "24px 0 18px",
-              maxWidth: "20ch",
-            }}
-          >
-            What one small town's visitors were worth.
-          </h2>
-          <p
-            style={{
-              fontSize: "18px",
-              fontWeight: 300,
-              lineHeight: 1.6,
-              color: "rgba(244, 240, 232, 0.82)",
-              margin: "0 0 32px",
-              maxWidth: "48ch",
-            }}
-          >
-            Potential local spend we identified for Okotoks businesses ahead of
-            4,500 visitors. Then we turned it into a checklist every operator
-            could act on in under an hour.
-          </p>
-          <Link
-            href="/work"
-            className="inline-block bg-newsprint text-forest rounded-[3px] text-button transition-colors hover:bg-sage"
-            style={{ padding: "15px 24px" }}
-          >
-            See the work
-          </Link>
-        </div>
-        <Image
-          src="/assets/photo-townscape.png"
-          alt="Okotoks main street"
-          width={640}
-          height={480}
-          className="w-full rounded object-cover"
-          style={{ aspectRatio: "4/3" }}
-        />
-      </div>
-    </section>
-  );
-}
-
-export default function Home() {
+export default function HomePage() {
   return (
     <div className="min-h-screen bg-newsprint text-carbon font-dm-sans">
       <Header />
@@ -333,696 +138,334 @@ export default function Home() {
       <section
         style={{
           padding:
-            "clamp(48px, 7vw, 96px) clamp(20px, 4vw, 48px) clamp(40px, 5vw, 64px)",
+            "clamp(48px, 7vw, 96px) clamp(20px, 4vw, 48px) clamp(48px, 6vw, 80px)",
         }}
       >
         <div
-          className="content-container two-col-grid"
-          style={{ gap: "clamp(32px, 5vw, 72px)", alignItems: "end" }}
+          style={{
+            maxWidth: "1320px",
+            margin: "0 auto",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 440px), 1fr))",
+            gap: "clamp(32px, 5vw, 72px)",
+            alignItems: "center",
+          }}
         >
           <div>
+            <div className="text-eyebrow text-accent-shade mb-5">
+              Strategy & capacity building
+            </div>
+            <h1
+              className="font-epilogue m-0"
+              style={{
+                fontWeight: 900,
+                fontSize: "clamp(48px, 7.2vw, 112px)",
+                lineHeight: 0.92,
+                letterSpacing: "-0.035em",
+                textWrap: "balance",
+              }}
+            >
+              Feeling stuck? Let&apos;s get your organization moving.
+            </h1>
+            <p
+              style={{
+                fontSize: "clamp(17px, 1.5vw, 20px)",
+                fontWeight: 300,
+                lineHeight: 1.6,
+                color: "rgba(28, 28, 26, 0.76)",
+                maxWidth: "46ch",
+                margin: "28px 0 36px",
+              }}
+            >
+              When growth stalls, the cause is usually technology that isn&apos;t
+              pulling its weight yet: online booking, social media, internal
+              systems, AI. We find the bottleneck, put the right tools to work,
+              and get your people confident running them.
+            </p>
+            <div className="flex gap-6 items-center flex-wrap">
+              <a
+                href={CALENDLY_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-button bg-forest text-newsprint rounded-[3px] transition-colors hover:bg-canopy"
+                style={{ padding: "17px 28px" }}
+              >
+                Book a 20-min call
+              </a>
+              <a
+                href="#programs"
+                className="font-medium whitespace-nowrap"
+                style={{
+                  fontSize: "15px",
+                  borderBottom: "2px solid #C4963A",
+                  paddingBottom: "3px",
+                }}
+              >
+                Find your program ↓
+              </a>
+            </div>
+          </div>
+
+          {/* Where organizations get stuck panel */}
+          <div
+            className="bg-carbon text-newsprint rounded"
+            style={{ padding: "clamp(26px, 3.2vw, 40px)" }}
+          >
             <div
-              className="text-accent-shade"
+              className="text-accent"
               style={{
                 fontSize: "12px",
                 fontWeight: 500,
                 letterSpacing: "0.14em",
                 textTransform: "uppercase",
-                marginBottom: "22px",
+                marginBottom: "10px",
               }}
             >
-              Destination marketing · Training · AI
+              Where organizations get stuck
             </div>
-            <h1 className="text-h1 m-0" style={{ textWrap: "balance" }}>
-              Technology should serve your goals. We make sure it does.
-            </h1>
-            <p
-              className="text-body"
-              style={{
-                color: "rgba(28, 28, 26, 0.74)",
-                maxWidth: "46ch",
-                margin: "28px 0 36px",
-                textWrap: "pretty",
-              }}
-            >
-              Junction is where organizations and technology meet. We build
-              marketing strategy for destinations, and we train the people who
-              deliver it. 2,000+ of them so far.
-            </p>
-            <div className="flex gap-6 items-center flex-wrap">
-              <Link
-                href="#start"
-                className="text-button bg-forest text-newsprint rounded-[3px] transition-colors hover:bg-canopy"
-                style={{ padding: "16px 26px" }}
-              >
-                Start a conversation
-              </Link>
-              <Link
-                href="/junctionu"
-                style={{
-                  fontSize: "15px",
-                  fontWeight: 500,
-                  borderBottom: "2px solid #C4963A",
-                  paddingBottom: "3px",
-                }}
-              >
-                Explore JunctionU →
-              </Link>
+            <div style={{ borderTop: "1px solid rgba(244, 240, 232, 0.2)" }}>
+              {stuckItems.map((item) => (
+                <div
+                  key={item.num}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "44px minmax(0, 1fr)",
+                    gap: "0 4px",
+                    padding: "16px 0",
+                    borderBottom: "1px solid rgba(244, 240, 232, 0.12)",
+                  }}
+                >
+                  <span
+                    className="font-bebas text-accent"
+                    style={{ fontSize: "24px", lineHeight: 1 }}
+                  >
+                    {item.num}
+                  </span>
+                  <div>
+                    <div
+                      style={{
+                        fontSize: "17px",
+                        fontWeight: 500,
+                        marginBottom: "3px",
+                      }}
+                    >
+                      {item.title}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "14px",
+                        fontWeight: 300,
+                        color: "rgba(244, 240, 232, 0.74)",
+                      }}
+                    >
+                      {item.description}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div style={{ fontSize: "15px", lineHeight: 1.55, marginTop: "20px" }}>
+              <span className="text-fern font-medium">
+                We start with the one costing you most
+              </span>
+              <span style={{ fontWeight: 300, color: "rgba(244, 240, 232, 0.8)" }}>
+                , fix it, and build from there.
+              </span>
             </div>
           </div>
-          <Image
-            src="/assets/photo-mountains.png"
-            alt="Mountain town at dusk"
-            width={640}
-            height={800}
-            className="w-full rounded object-cover"
-            style={{ aspectRatio: "4/5", maxHeight: "640px" }}
-          />
         </div>
       </section>
 
-      {/* Stats */}
-      <StatStrip />
-
-      {/* Client logos */}
-      <section style={{ padding: "44px clamp(20px, 4vw, 48px)" }}>
-        <div className="content-container">
-          <div
+      {/* Organizations strip */}
+      <section
+        style={{
+          borderTop: "1px solid rgba(28, 28, 26, 0.12)",
+          borderBottom: "1px solid rgba(28, 28, 26, 0.12)",
+          padding: "28px clamp(20px, 4vw, 48px)",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "1320px",
+            margin: "0 auto",
+            display: "flex",
+            alignItems: "center",
+            gap: "14px 40px",
+            flexWrap: "wrap",
+          }}
+        >
+          <span
             style={{
               fontSize: "12px",
               fontWeight: 500,
               letterSpacing: "0.14em",
               textTransform: "uppercase",
               color: "rgba(28, 28, 26, 0.6)",
-              marginBottom: "24px",
             }}
           >
-            Clients include
-          </div>
+            Organizations we work with
+          </span>
           <div
-            className="flex flex-wrap items-center"
-            style={{ gap: "32px 64px" }}
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "10px 32px",
+              fontSize: "17px",
+              fontWeight: 500,
+              color: "rgba(28, 28, 26, 0.82)",
+            }}
           >
-            <Image
-              src="/uploads/Destination BC logo.png"
-              alt="Destination British Columbia"
-              width={200}
-              height={62}
-              style={{ height: "62px", width: "auto" }}
-            />
-            <Image
-              src="/uploads/yukon logo.svg"
-              alt="Travel Yukon"
-              width={200}
-              height={56}
-              style={{ height: "56px", width: "auto" }}
-            />
-            <Image
-              src="/uploads/OSW Logo.webp"
-              alt="Ontario's Southwest"
-              width={200}
-              height={62}
-              style={{ height: "62px", width: "auto" }}
-            />
-            <Image
-              src="/uploads/kootenay rockies logo.png"
-              alt="Kootenay Rockies Tourism"
-              width={200}
-              height={72}
-              style={{ height: "72px", width: "auto" }}
-            />
-            <Image
-              src="/assets/logo-itbc.png"
-              alt="Indigenous Tourism BC"
-              width={200}
-              height={56}
-              style={{ height: "56px", width: "auto" }}
-            />
-            <Image
-              src="/assets/logo-travel-alberta.png"
-              alt="Travel Alberta"
-              width={200}
-              height={72}
-              style={{ height: "72px", width: "auto" }}
-            />
+            {organizations.map((org) => (
+              <span key={org}>{org}</span>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Services section */}
+      {/* Programs */}
       <section
-        id="services"
-        className="section-padding"
-        style={{ borderTop: "1px solid rgba(28, 28, 26, 0.12)" }}
+        id="programs"
+        style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
       >
-        <div className="content-container">
+        <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
           <div
             style={{
               display: "grid",
               gridTemplateColumns:
                 "repeat(auto-fit, minmax(min(100%, 380px), 1fr))",
-              gap: "24px 72px",
+              gap: "20px 72px",
               alignItems: "end",
-              marginBottom: "48px",
+              marginBottom: "44px",
             }}
           >
             <div>
-              <div
-                className="text-accent-shade"
+              <div className="text-eyebrow text-accent-shade mb-4">
+                Four ways in
+              </div>
+              <h2
+                className="font-epilogue m-0"
                 style={{
-                  fontSize: "12px",
-                  fontWeight: 500,
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  marginBottom: "18px",
+                  fontWeight: 900,
+                  fontSize: "clamp(36px, 4.6vw, 64px)",
+                  lineHeight: 0.96,
+                  letterSpacing: "-0.03em",
                 }}
               >
-                What we do
-              </div>
-              <h2 className="text-h2 m-0">Two ways to work with us.</h2>
+                Find your program.
+              </h2>
             </div>
             <p
               style={{
                 fontSize: "18px",
                 fontWeight: 300,
                 lineHeight: 1.6,
-                color: "rgba(28, 28, 26, 0.74)",
+                color: "rgba(28, 28, 26, 0.76)",
                 margin: 0,
                 maxWidth: "48ch",
               }}
             >
-              We only do strategy and training, so every recommendation is there
-              because it works. No websites, no ad buying, no commissions.
+              Each one ends with something your team owns: a working tool, a
+              plan, a course, or a room full of people with next steps.
             </p>
-          </div>
-
-          <div
-            className="two-col-grid"
-            style={{ borderTop: "2px solid #1C1C1A" }}
-          >
-            <Link
-              href="/services"
-              className="flex flex-col gap-4 transition-colors hover:bg-[rgba(196,150,58,0.08)]"
-              style={{
-                padding: "36px clamp(0px, 3vw, 40px) 40px 0",
-                borderBottom: "1px solid rgba(28, 28, 26, 0.15)",
-              }}
-            >
-              <div
-                className="font-bebas text-accent"
-                style={{ fontSize: "28px", letterSpacing: "0.04em" }}
-              >
-                01
-              </div>
-              <h3
-                className="font-epilogue m-0"
-                style={{
-                  fontWeight: 900,
-                  fontSize: "clamp(26px, 2.6vw, 36px)",
-                  lineHeight: 1,
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                Marketing strategy
-              </h3>
-              <p
-                style={{
-                  fontSize: "17px",
-                  fontWeight: 300,
-                  lineHeight: 1.6,
-                  color: "rgba(28, 28, 26, 0.74)",
-                  margin: 0,
-                  maxWidth: "52ch",
-                }}
-              >
-                Research-led strategy for destinations and the organizations
-                behind them, built around what actually drives visitation. Your
-                team runs it after we hand it over.
-              </p>
-              <span
-                className="text-accent-shade mt-auto"
-                style={{ fontSize: "14px", fontWeight: 500 }}
-              >
-                How we work →
-              </span>
-            </Link>
-
-            <Link
-              href="/junctionu"
-              className="flex flex-col gap-4 transition-colors hover:bg-[rgba(196,150,58,0.08)]"
-              style={{
-                padding: "36px clamp(0px, 3vw, 40px) 40px",
-                borderBottom: "1px solid rgba(28, 28, 26, 0.15)",
-                borderLeft: "1px solid rgba(28, 28, 26, 0.15)",
-              }}
-            >
-              <div
-                className="font-bebas text-accent"
-                style={{ fontSize: "28px", letterSpacing: "0.04em" }}
-              >
-                02
-              </div>
-              <h3
-                className="font-epilogue m-0"
-                style={{
-                  fontWeight: 900,
-                  fontSize: "clamp(26px, 2.6vw, 36px)",
-                  lineHeight: 1,
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                Training that sticks
-              </h3>
-              <p
-                style={{
-                  fontSize: "17px",
-                  fontWeight: 300,
-                  lineHeight: 1.6,
-                  color: "rgba(28, 28, 26, 0.74)",
-                  margin: 0,
-                  maxWidth: "52ch",
-                }}
-              >
-                Workshops, the Accelerator, AI training and the JunctionU
-                platform. Everything we teach is doable in under an hour, by the
-                person doing the work on Tuesday.
-              </p>
-              <span
-                className="text-accent-shade mt-auto"
-                style={{ fontSize: "14px", fontWeight: 500 }}
-              >
-                Explore training →
-              </span>
-            </Link>
-          </div>
-
-          {/* DMO callout */}
-          <Link
-            href="/services"
-            className="flex items-center justify-between gap-5 flex-wrap mt-8 rounded transition-colors hover:bg-[rgba(224,23,106,0.04)]"
-            style={{
-              padding: "22px 26px",
-              border: "1.5px solid #E0176A",
-            }}
-          >
-            <span style={{ fontSize: "17px" }}>
-              <strong className="font-medium">Run a destination?</strong>{" "}
-              <span
-                className="font-light"
-                style={{ color: "rgba(28, 28, 26, 0.78)" }}
-              >
-                Fund training for every operator in your region, from 25% to
-                fully covered.
-              </span>
-            </span>
-            <span
-              style={{ fontSize: "14px", fontWeight: 500, whiteSpace: "nowrap" }}
-            >
-              Destination partnerships →
-            </span>
-          </Link>
-        </div>
-      </section>
-
-      {/* Case Study */}
-      <CaseStudySection />
-
-      {/* AI Training */}
-      <section id="ai" className="section-padding">
-        <div
-          className="content-container two-col-grid"
-          style={{ gap: "clamp(32px, 5vw, 80px)", alignItems: "start" }}
-        >
-          <div>
-            <div
-              className="flex items-center gap-3"
-              style={{ marginBottom: "20px" }}
-            >
-              <span
-                className="text-accent-shade"
-                style={{
-                  fontSize: "12px",
-                  fontWeight: 500,
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                }}
-              >
-                AI training · 30 days
-              </span>
-              <span
-                className="bg-break text-white"
-                style={{
-                  fontSize: "11px",
-                  fontWeight: 500,
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  padding: "4px 9px 3px",
-                  borderRadius: "2px",
-                }}
-              >
-                New
-              </span>
-            </div>
-            <h2 className="text-h2 mb-6" style={{ textWrap: "balance" }}>
-              We automate one of your bottlenecks before day 30. Guaranteed.
-            </h2>
-            <p
-              style={{
-                fontSize: "18px",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(28, 28, 26, 0.74)",
-                margin: "0 0 32px",
-                maxWidth: "46ch",
-              }}
-            >
-              A 30-day program for marketing teams, in and beyond tourism. Your
-              team learns AI on your real work and leaves with systems already
-              running.
-            </p>
-            <Link
-              href="/services"
-              className="inline-block text-button bg-forest text-newsprint rounded-[3px] transition-colors hover:bg-canopy"
-              style={{ padding: "15px 24px" }}
-            >
-              Bring it to your team
-            </Link>
-          </div>
-
-          <div style={{ borderTop: "2px solid #1C1C1A" }}>
-            <div
-              style={{
-                fontSize: "12px",
-                fontWeight: 500,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                color: "rgba(28, 28, 26, 0.6)",
-                padding: "18px 0 6px",
-              }}
-            >
-              In the 30 days
-            </div>
-            {[
-              { num: "01", text: "4 live training sessions with your team" },
-              { num: "02", text: "A custom training dashboard" },
-              { num: "03", text: "A prompt library your team keeps" },
-              { num: "04", text: "A 90-day implementation plan" },
-              {
-                num: "05",
-                text: "At least one business bottleneck, automated",
-                bold: true,
-              },
-            ].map((item) => (
-              <div
-                key={item.num}
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "56px 1fr",
-                  alignItems: "baseline",
-                  padding: "18px 0",
-                  borderBottom: "1px solid rgba(28, 28, 26, 0.14)",
-                }}
-              >
-                <span
-                  className="font-bebas text-accent"
-                  style={{ fontSize: "26px" }}
-                >
-                  {item.num}
-                </span>
-                <span
-                  style={{
-                    fontSize: "18px",
-                    fontWeight: item.bold ? 500 : 300,
-                  }}
-                >
-                  {item.text}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Work / Receipts */}
-      <section
-        id="work"
-        style={{ padding: "0 clamp(20px, 4vw, 48px) clamp(64px, 8vw, 112px)" }}
-      >
-        <div
-          className="content-container"
-          style={{
-            borderTop: "1px solid rgba(28, 28, 26, 0.12)",
-            paddingTop: "clamp(56px, 7vw, 96px)",
-          }}
-        >
-          <div
-            className="flex items-end justify-between gap-6 flex-wrap"
-            style={{ marginBottom: "40px" }}
-          >
-            <div>
-              <div
-                className="text-accent-shade"
-                style={{
-                  fontSize: "12px",
-                  fontWeight: 500,
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  marginBottom: "18px",
-                }}
-              >
-                Work
-              </div>
-              <h2 className="text-h2 m-0">The receipts.</h2>
-            </div>
-            <Link
-              href="/work"
-              style={{
-                fontSize: "15px",
-                fontWeight: 500,
-                borderBottom: "2px solid #C4963A",
-                paddingBottom: "3px",
-              }}
-            >
-              All case studies →
-            </Link>
           </div>
 
           <div
             style={{
               display: "grid",
               gridTemplateColumns:
-                "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
+                "repeat(auto-fit, minmax(min(100%, 520px), 1fr))",
               gap: "20px",
             }}
           >
-            {[
-              {
-                stat: "300+",
-                label: "Travel Yukon · Go Digital",
-                text: "Businesses through the program in four years. Alumni now lead it.",
-              },
-              {
-                stat: "+300%",
-                label: "Indigenous Tourism BC · Accelerator",
-                text: "Past engagement goals, with bookings up inside three months.",
-              },
-              {
-                stat: "2026",
-                label: "Ontario's Southwest · Research",
-                text: "Our Traveller Insights Study drives the region's 2026 tourism strategy.",
-              },
-            ].map((card) => (
+            {programs.map((program) => (
               <Link
-                key={card.stat}
-                href="/work"
-                className="flex flex-col gap-2.5 bg-white rounded transition-colors hover:bg-sage"
-                style={{ padding: "28px" }}
+                key={program.num}
+                href={program.href}
+                className="flex flex-col gap-3.5 bg-white rounded transition-colors hover:bg-sage"
+                style={{
+                  padding: "clamp(26px, 3vw, 38px)",
+                  borderTop: "4px solid #1A4D2E",
+                }}
               >
-                <div
-                  className="font-bebas text-accent"
-                  style={{ fontSize: "72px", lineHeight: "0.9" }}
-                >
-                  {card.stat}
+                <div className="flex justify-between items-center gap-3">
+                  <span
+                    className="font-bebas text-accent"
+                    style={{ fontSize: "28px" }}
+                  >
+                    {program.num}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "12px",
+                      fontWeight: 500,
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      color: "rgba(28, 28, 26, 0.66)",
+                    }}
+                  >
+                    {program.meta}
+                  </span>
                 </div>
-                <div
+                <h3
+                  className="font-epilogue m-0"
                   style={{
-                    fontSize: "12px",
-                    fontWeight: 500,
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase",
-                    color: "rgba(28, 28, 26, 0.62)",
-                    marginTop: "6px",
+                    fontWeight: 900,
+                    fontSize: "clamp(28px, 2.8vw, 38px)",
+                    lineHeight: 1,
+                    letterSpacing: "-0.02em",
                   }}
                 >
-                  {card.label}
+                  {program.title}
+                </h3>
+                <div
+                  className="text-forest"
+                  style={{ fontSize: "15px", fontWeight: 500 }}
+                >
+                  {program.tagline}
                 </div>
                 <p
                   style={{
                     fontSize: "16px",
                     fontWeight: 300,
-                    lineHeight: 1.55,
+                    lineHeight: 1.6,
+                    color: "rgba(28, 28, 26, 0.76)",
                     margin: 0,
                   }}
                 >
-                  {card.text}
+                  {program.description}
                 </p>
+                <span
+                  style={{
+                    fontSize: "14px",
+                    fontWeight: 500,
+                    marginTop: "auto",
+                    paddingTop: "8px",
+                  }}
+                >
+                  {program.linkText}
+                </span>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* JunctionU section */}
-      <section id="junctionu" className="bg-sage section-padding">
+      {/* AI Example */}
+      <section
+        className="bg-carbon text-newsprint"
+        style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
+      >
         <div
-          className="content-container two-col-grid"
-          style={{ gap: "clamp(32px, 5vw, 80px)", alignItems: "center" }}
+          style={{
+            maxWidth: "1320px",
+            margin: "0 auto",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 440px), 1fr))",
+            gap: "clamp(40px, 5vw, 80px)",
+            alignItems: "start",
+          }}
         >
           <div>
-            <div
-              className="text-forest"
-              style={{
-                fontSize: "12px",
-                fontWeight: 500,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                marginBottom: "18px",
-              }}
-            >
-              JunctionU · formerly eLearningU
-            </div>
-            <h2 className="text-h2 mb-6" style={{ textWrap: "balance" }}>
-              Training that fits between two guest check-ins.
-            </h2>
-            <p
-              style={{
-                fontSize: "18px",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(28, 28, 26, 0.8)",
-                margin: "0 0 32px",
-                maxWidth: "46ch",
-              }}
-            >
-              Certificate courses, workshops and free Tourism Talks, built for
-              tourism professionals. A free account gets you the Talks and a
-              starter course.
-            </p>
-            <div className="flex gap-6 items-center flex-wrap">
-              <Link
-                href="/junctionu"
-                className="text-button bg-forest text-newsprint rounded-[3px] transition-colors hover:bg-carbon"
-                style={{ padding: "15px 24px" }}
-              >
-                Start free
-              </Link>
-              <Link
-                href="/junctionu"
-                style={{
-                  fontSize: "15px",
-                  fontWeight: 500,
-                  borderBottom: "2px solid #1A4D2E",
-                  paddingBottom: "3px",
-                }}
-              >
-                Browse courses →
-              </Link>
-            </div>
-          </div>
-          <JunctionUCard />
-        </div>
-      </section>
-
-      {/* Ideas section */}
-      <section id="ideas" className="section-padding">
-        <div
-          className="content-container two-col-grid"
-          style={{ gap: "clamp(40px, 5vw, 80px)", alignItems: "start" }}
-        >
-          <div>
-            <div
-              className="text-accent-shade"
-              style={{
-                fontSize: "12px",
-                fontWeight: 500,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                marginBottom: "18px",
-              }}
-            >
-              Ideas
-            </div>
-            <div style={{ borderTop: "2px solid #1C1C1A" }}>
-              {[
-                {
-                  date: "JUL 14",
-                  category: "MARKETING",
-                  title: "Maybe the algorithm isn't the problem",
-                },
-                {
-                  date: "JUL 6",
-                  category: "TRENDS",
-                  title: "The year of the creator economy",
-                },
-                {
-                  date: "JUN 8",
-                  category: "AI",
-                  title: "The four phases of AI adoption",
-                },
-              ].map((article) => (
-                <Link
-                  key={article.title}
-                  href="/ideas"
-                  className="block transition-colors hover:bg-[rgba(196,150,58,0.08)]"
-                  style={{
-                    padding: "20px 0",
-                    borderBottom: "1px solid rgba(28, 28, 26, 0.14)",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "12px",
-                      fontWeight: 500,
-                      letterSpacing: "0.1em",
-                      color: "rgba(28, 28, 26, 0.6)",
-                      marginBottom: "6px",
-                    }}
-                  >
-                    {article.date} · {article.category}
-                  </div>
-                  <div
-                    className="font-epilogue"
-                    style={{
-                      fontWeight: 900,
-                      fontSize: "24px",
-                      lineHeight: 1.1,
-                      letterSpacing: "-0.015em",
-                    }}
-                  >
-                    {article.title}
-                  </div>
-                </Link>
-              ))}
-            </div>
-            <Link
-              href="/ideas"
-              className="inline-block mt-6"
-              style={{
-                fontSize: "15px",
-                fontWeight: 500,
-                borderBottom: "2px solid #C4963A",
-                paddingBottom: "3px",
-              }}
-            >
-              All 100+ articles →
-            </Link>
-          </div>
-
-          {/* Newsletter */}
-          <div
-            className="bg-carbon text-newsprint rounded"
-            style={{ padding: "clamp(28px, 4vw, 48px)" }}
-          >
             <div
               className="text-accent"
               style={{
@@ -1033,66 +476,347 @@ export default function Home() {
                 marginBottom: "18px",
               }}
             >
-              The Brief · weekly
+              Inside an AI Accelerator
             </div>
-            <h3
+            <h2
               className="font-epilogue"
+              style={{
+                fontWeight: 900,
+                fontSize: "clamp(36px, 4.6vw, 64px)",
+                lineHeight: 0.96,
+                letterSpacing: "-0.03em",
+                margin: "0 0 22px",
+              }}
+            >
+              A building supplier&apos;s 30 days.
+            </h2>
+            <p
+              style={{
+                fontSize: "18px",
+                fontWeight: 300,
+                lineHeight: 1.6,
+                color: "rgba(244, 240, 232, 0.8)",
+                margin: "0 0 32px",
+                maxWidth: "44ch",
+              }}
+            >
+              A family-owned supply yard brought seven people, from the president
+              to accounts payable. Only 65% of invoices were collected inside 30
+              days, and quotes took anywhere from five minutes to a day. Here&apos;s
+              what they left with.
+            </p>
+
+            {/* Metrics */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                gap: "12px",
+                marginBottom: "32px",
+              }}
+            >
+              <div
+                style={{
+                  border: "1px solid rgba(244, 240, 232, 0.18)",
+                  borderRadius: "4px",
+                  padding: "18px",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "12px",
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: "rgba(244, 240, 232, 0.66)",
+                    marginBottom: "8px",
+                  }}
+                >
+                  Collected in 30 days
+                </div>
+                <div className="flex items-baseline gap-2.5 flex-wrap">
+                  <span
+                    className="font-bebas"
+                    style={{ fontSize: "40px", lineHeight: 0.9 }}
+                  >
+                    65%
+                  </span>
+                  <span className="text-accent">→</span>
+                  <Placeholder className="text-newsprint">[ result ]</Placeholder>
+                </div>
+              </div>
+              <div
+                style={{
+                  border: "1px solid rgba(244, 240, 232, 0.18)",
+                  borderRadius: "4px",
+                  padding: "18px",
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: "12px",
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: "rgba(244, 240, 232, 0.66)",
+                    marginBottom: "8px",
+                  }}
+                >
+                  Quote turnaround
+                </div>
+                <div className="flex items-baseline gap-2.5 flex-wrap">
+                  <span
+                    className="font-bebas"
+                    style={{ fontSize: "40px", lineHeight: 0.9 }}
+                  >
+                    Up to 1 day
+                  </span>
+                  <span className="text-accent">→</span>
+                  <Placeholder className="text-newsprint">[ result ]</Placeholder>
+                </div>
+              </div>
+            </div>
+
+            <Link
+              href="/ai-accelerator#example"
+              className="text-fern font-medium"
+              style={{
+                fontSize: "15px",
+                borderBottom: "2px solid #7FC99A",
+                paddingBottom: "3px",
+              }}
+            >
+              See the full program →
+            </Link>
+          </div>
+
+          {/* Steps */}
+          <div style={{ borderTop: "1px solid rgba(244, 240, 232, 0.25)" }}>
+            {aiExampleSteps.map((step) => (
+              <div
+                key={step.num}
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "48px 1fr",
+                  padding: "22px 0",
+                  borderBottom: "1px solid rgba(244, 240, 232, 0.14)",
+                }}
+              >
+                <span
+                  className="font-bebas text-accent"
+                  style={{ fontSize: "26px" }}
+                >
+                  {step.num}
+                </span>
+                <div>
+                  <div
+                    style={{
+                      fontSize: "18px",
+                      fontWeight: 500,
+                      marginBottom: "6px",
+                    }}
+                  >
+                    {step.title}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "15px",
+                      fontWeight: 300,
+                      lineHeight: 1.55,
+                      color: "rgba(244, 240, 232, 0.76)",
+                    }}
+                  >
+                    {step.description}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section
+        style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
+      >
+        <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
+          <div className="text-eyebrow text-accent-shade mb-7">
+            What clients say
+          </div>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns:
+                "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
+              gap: "20px",
+            }}
+          >
+            <div
+              className="rounded flex flex-col justify-between gap-6"
+              style={{
+                border: "1.5px dashed rgba(28, 28, 26, 0.3)",
+                padding: "28px",
+                minHeight: "220px",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "rgba(28, 28, 26, 0.58)",
+                }}
+              >
+                [ Testimonial + result ]
+              </div>
+              <div style={{ fontSize: "15px", fontWeight: 500 }}>
+                Twin Lions Contracting · AI Accelerator
+              </div>
+            </div>
+            <div
+              className="rounded flex flex-col justify-between gap-6"
+              style={{
+                border: "1.5px dashed rgba(28, 28, 26, 0.3)",
+                padding: "28px",
+                minHeight: "220px",
+              }}
+            >
+              <div
+                style={{
+                  fontSize: "13px",
+                  fontWeight: 500,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "rgba(28, 28, 26, 0.58)",
+                }}
+              >
+                [ Testimonial + result ]
+              </div>
+              <div style={{ fontSize: "15px", fontWeight: 500 }}>
+                West Coast Homes · AI Accelerator
+              </div>
+            </div>
+            <blockquote
+              className="m-0 bg-white rounded flex flex-col justify-between gap-6"
+              style={{ padding: "28px", minHeight: "220px" }}
+            >
+              <p
+                className="font-fraunces italic text-forest m-0"
+                style={{
+                  fontWeight: 900,
+                  fontSize: "24px",
+                  lineHeight: 1.2,
+                }}
+              >
+                &quot;We are a stronger, smarter organization today thanks to the work
+                we did with Junction.&quot;
+              </p>
+              <cite style={{ fontStyle: "normal", fontSize: "15px", fontWeight: 500 }}>
+                Kathy Cooper, CEO, Kootenay Rockies Tourism
+              </cite>
+            </blockquote>
+          </div>
+        </div>
+      </section>
+
+      {/* The Call */}
+      <section style={{ padding: "0 clamp(20px, 4vw, 48px) clamp(64px, 8vw, 112px)" }}>
+        <div
+          style={{
+            maxWidth: "1320px",
+            margin: "0 auto",
+            borderTop: "2px solid #1C1C1A",
+            paddingTop: "44px",
+            display: "grid",
+            gridTemplateColumns:
+              "repeat(auto-fit, minmax(min(100%, 260px), 1fr))",
+            gap: "36px 48px",
+          }}
+        >
+          <div>
+            <div className="text-eyebrow text-accent-shade mb-3.5">
+              The first step
+            </div>
+            <h2
+              className="font-epilogue m-0"
               style={{
                 fontWeight: 900,
                 fontSize: "clamp(28px, 3vw, 40px)",
                 lineHeight: 1,
                 letterSpacing: "-0.025em",
-                margin: "0 0 16px",
               }}
             >
-              Start every week knowing something your competitors don't.
-            </h3>
-            <p
-              style={{
-                fontSize: "16px",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(244, 240, 232, 0.78)",
-                margin: "0 0 28px",
-              }}
-            >
-              The award-winning newsletter for tourism marketers. Free, weekly,
-              unsubscribe anytime.
-            </p>
-            <div className="flex gap-2 flex-wrap">
-              <input
-                type="email"
-                placeholder="you@yourbusiness.com"
-                className="flex-1 rounded-[3px] font-dm-sans"
+              What happens on the call.
+            </h2>
+          </div>
+          {callSteps.map((step) => (
+            <div key={step.num}>
+              <div
+                className="font-bebas text-accent"
+                style={{ fontSize: "32px", marginBottom: "8px" }}
+              >
+                {step.num}
+              </div>
+              <div
+                style={{ fontSize: "18px", fontWeight: 500, marginBottom: "6px" }}
+              >
+                {step.title}
+              </div>
+              <p
                 style={{
-                  minWidth: "200px",
-                  padding: "14px 16px",
-                  border: "1px solid rgba(244, 240, 232, 0.3)",
-                  background: "transparent",
-                  color: "#F4F0E8",
-                  fontSize: "15px",
-                }}
-              />
-              <button
-                className="text-button bg-fern text-carbon rounded-[3px] cursor-pointer transition-colors hover:bg-sage"
-                style={{
-                  padding: "14px 22px",
-                  border: 0,
+                  fontSize: "16px",
+                  fontWeight: 300,
+                  lineHeight: 1.55,
+                  color: "rgba(28, 28, 26, 0.76)",
+                  margin: 0,
                 }}
               >
-                Subscribe
-              </button>
+                {step.description}
+              </p>
             </div>
-          </div>
+          ))}
+        </div>
+
+        {/* Not ready banner */}
+        <div
+          className="bg-sage rounded"
+          style={{
+            maxWidth: "1320px",
+            margin: "40px auto 0",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "16px",
+            flexWrap: "wrap",
+            padding: "20px 24px",
+          }}
+        >
+          <span style={{ fontSize: "16px" }}>
+            <strong style={{ fontWeight: 500 }}>Not ready for a call?</strong>{" "}
+            <span style={{ fontWeight: 300 }}>
+              Watch a free training session and see how we teach.
+            </span>
+          </span>
+          <Link
+            href="/junctionu"
+            className="font-medium whitespace-nowrap"
+            style={{
+              fontSize: "14px",
+              borderBottom: "2px solid #1A4D2E",
+              paddingBottom: "2px",
+            }}
+          >
+            Watch free →
+          </Link>
         </div>
       </section>
 
-      {/* CTA section */}
+      {/* CTA */}
       <section
         id="start"
-        className="bg-forest text-newsprint section-padding-cta"
+        className="bg-forest text-newsprint"
+        style={{ padding: "clamp(80px, 10vw, 140px) clamp(20px, 4vw, 48px)" }}
       >
-        <div className="content-container">
+        <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
           <h2
             className="font-epilogue"
             style={{
@@ -1101,33 +825,35 @@ export default function Home() {
               lineHeight: 0.92,
               letterSpacing: "-0.035em",
               margin: 0,
-              maxWidth: "16ch",
+              maxWidth: "15ch",
             }}
           >
-            Tell us the goal. We'll be straight with you about the rest.
+            Twenty minutes. A straight answer on what fits.
           </h2>
           <div
             className="flex items-center gap-7 flex-wrap"
             style={{ marginTop: "40px" }}
           >
-            <Link
-              href="#"
+            <a
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-button bg-newsprint text-forest rounded-[3px] transition-colors hover:bg-sage"
               style={{ padding: "17px 28px" }}
             >
-              Start a conversation
-            </Link>
-            <span
+              Book a 20-min call
+            </a>
+            <Link
+              href="/contact"
+              className="font-medium text-fern"
               style={{
-                fontSize: "17px",
-                fontWeight: 300,
-                color: "rgba(244, 240, 232, 0.82)",
-                maxWidth: "40ch",
+                fontSize: "15px",
+                borderBottom: "2px solid #7FC99A",
+                paddingBottom: "3px",
               }}
             >
-              A few questions, then the call books itself. Thirty minutes, no
-              pitch deck.
-            </span>
+              Or send us the details →
+            </Link>
           </div>
         </div>
       </section>
