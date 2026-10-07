@@ -30,7 +30,7 @@ const programs: Program[] = [
     description:
       "A full digital assessment, a one-to-one coaching session, and a three-page plan you can start Monday. 25–100% covered through a destination partnership.",
     href: "/accelerator",
-    price: "$2,500",
+    price: "$2,500 · 90 days",
   },
   {
     id: "offload-program",
@@ -96,43 +96,37 @@ export default function ProgramsPage() {
         </Container>
       </Section>
 
-      {/* Program list */}
+      {/* Program list: two-column rows (stacked on mobile) */}
       <Section flush="top">
         <Container as="ol" className="m-0 list-none border-t-2 border-canopy p-0">
           {programs.map((program, i) => (
             <li
               key={program.id}
               id={program.id}
-              className="grid scroll-mt-28 gap-x-12 gap-y-3 border-b border-hairline py-9 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)_minmax(0,0.5fr)]"
+              className="scroll-mt-28 border-b border-hairline"
             >
-              <div className="flex flex-col gap-3">
-                <span className="type-numeral">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h2 className="type-h3 m-0">
-                  {program.href ? (
-                    <Link href={program.href} className="link-plain">
-                      {program.title}
-                    </Link>
-                  ) : (
-                    program.title
-                  )}
-                </h2>
-                {program.isNew && (
-                  <Badge variant="filled" className="self-start">
-                    New
-                  </Badge>
-                )}
-              </div>
-              <p className="type-body m-0">{program.description}</p>
-              <p className="type-h4 m-0 text-canopy-text">{program.price}</p>
+              {/* Programs without their own page jump to the closing CTA, as on the old Services page. */}
+              <Link
+                href={program.href ?? "#start"}
+                className="row-link grid gap-x-12 gap-y-4 py-9 md:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)]"
+              >
+                <div className="flex flex-col items-start gap-3">
+                  <span className="type-numeral">{String(i + 1).padStart(2, "0")}</span>
+                  <h2 className="row-title type-h3 m-0">{program.title}</h2>
+                  {program.isNew && <Badge variant="filled">New</Badge>}
+                </div>
+                <div className="flex flex-col gap-4">
+                  <p className="type-body m-0">{program.description}</p>
+                  {program.price && <p className="type-price m-0">{program.price}</p>}
+                </div>
+              </Link>
             </li>
           ))}
         </Container>
       </Section>
 
       {/* CTA */}
-      <Section id="start" tone="forest">
+      <Section id="start" tone="forest" className="scroll-mt-24">
         <Container>
           <h2 className="type-h2 m-0 max-w-[15ch]">
             Not sure which route? That&apos;s what the call is for.
