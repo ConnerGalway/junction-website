@@ -56,7 +56,7 @@ function ContactFormFields({ initialType }: { initialType: FormType }) {
             <h2 className="type-h3 m-0">
               Thanks, {firstName}. Want to skip the back-and-forth?
             </h2>
-            <p className="type-body text-muted m-0">
+            <p className="type-body m-0">
               Conner will reply by email. If you&apos;d like to move faster, pick a
               time for a 20-minute call now.
             </p>

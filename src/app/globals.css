@@ -8,14 +8,15 @@
  * there is deliberately no white. See DESIGN_SYSTEM.md.
  *
  * Colour roles
- * - Newsprint ground (~80% of a page): text carbon, muted flint, eyebrow
- *   accent-2, links + primary buttons canopy-text, rules canopy. Sage only
- *   inside boxes (quote cards, chips), never on full-width sections.
- * - Carbon ground (~12%): text newsprint, muted newsprint-muted, eyebrows +
- *   links fern, stats accent-1, primary button newsprint fill + carbon text.
- * - Forest ground (~8%): closing CTA band only, one per page, always last.
- *   Text newsprint, eyebrow fern, primary button newsprint fill + forest
- *   text. No accent-1.
+ * - Newsprint ground (most of a page): headings carbon, body ink-soft, muted
+ *   flint, eyebrow accent-2 (copper), numerals accent-1-on-light (24px+),
+ *   prices forest, links + primary buttons canopy-text, rules canopy. Sage
+ *   only inside boxes (quote cards, chips), never on full-width sections.
+ * - Carbon and Forest grounds (sections and boxes; neighbouring dark boxes
+ *   alternate): text newsprint, muted newsprint-muted, eyebrows + links
+ *   fern, numerals accent-1, primary button newsprint fill.
+ * - Accent hierarchy: gold (accent-1 / accent-1-on-light) is primary and
+ *   used for all numerals; copper (accent-2) is secondary, eyebrows only.
  * - Every link turns pink on hover (text + underline): break-on-light on
  *   Newsprint, break-on-dark on Carbon and Forest. On Forest that is 2.9:1,
  *   an accepted exception for the hover state only.
@@ -32,9 +33,14 @@
   --color-canopy-text: #2B764A;    /* text, links, primary button on light */
   --color-fern: #7FC99A;
   --color-sage: #C8E8D4;
+  --color-sage-25: #E9EEE3;        /* table body rows */
+  --color-newsprint-hover: #EDE6DA; /* list-row hover / focus */
 
-  --color-accent-1: #C4963A;       /* burnt yellow, only on Carbon */
-  --color-accent-2: #A55527;       /* copper, text-safe on Newsprint */
+  --color-ink-soft: #3C3C39;       /* body copy on Newsprint (carbon ~85%) */
+
+  --color-accent-1: #C4963A;          /* gold, primary accent on dark grounds */
+  --color-accent-1-on-light: #A57E31; /* gold on Newsprint, 24px and up only */
+  --color-accent-2: #A55527;          /* copper, secondary: eyebrows */
 
   --color-break: #E0176A;          /* dots, outlines, underlines */
   --color-break-on-light: #CD1561; /* pink text and fills on Newsprint */
@@ -153,10 +159,9 @@
     --tone-focus: var(--color-canopy-text);
     --tone-rule: var(--color-canopy);
     --tone-hairline: var(--color-hairline);
-    --tone-stat: var(--color-accent-2);
-    --tone-numeral: var(--tone-stat);
+    --tone-numeral: var(--color-accent-1-on-light);
     --tone-price: var(--color-forest);
-    --tone-body: var(--tone-text);
+    --tone-body: var(--color-ink-soft);
     --tone-highlight: var(--color-break-on-light);
     --tone-btn-bg: var(--color-canopy-text);
     --tone-btn-text: var(--color-newsprint);
@@ -174,18 +179,17 @@
     --tone-focus: var(--color-fern);
     --tone-rule: var(--color-fern);
     --tone-hairline: var(--color-hairline-dark);
-    --tone-stat: var(--color-accent-1);
     --tone-highlight: var(--color-break-on-dark);
     --tone-btn-bg: var(--color-newsprint);
     --tone-btn-text: var(--color-carbon);
     --tone-btn-hover-bg: var(--color-sage);
     --tone-btn-line: var(--color-newsprint);
-      --tone-numeral: var(--tone-stat);
+    --tone-numeral: var(--color-accent-1);
     --tone-price: var(--tone-text);
-    --tone-body: var(--tone-text);
+    --tone-body: var(--color-newsprint-muted);
   }
 
-  /* Forest: closing CTA band only. No accent-1 here. */
+  /* Forest: sections and boxes. Gold numerals are 3.6:1 here (24px+ only). */
   .tone-forest {
     --tone-bg: var(--color-forest);
     --tone-text: var(--color-newsprint);
@@ -196,15 +200,14 @@
     --tone-focus: var(--color-fern);
     --tone-rule: var(--color-fern);
     --tone-hairline: var(--color-hairline-dark);
-    --tone-stat: var(--color-newsprint);
     --tone-highlight: var(--color-break-on-dark);
     --tone-btn-bg: var(--color-newsprint);
     --tone-btn-text: var(--color-forest);
     --tone-btn-hover-bg: var(--color-sage);
     --tone-btn-line: var(--color-newsprint);
-      --tone-numeral: var(--tone-stat);
+    --tone-numeral: var(--color-accent-1);
     --tone-price: var(--tone-text);
-    --tone-body: var(--tone-text);
+    --tone-body: var(--color-newsprint-muted);
   }
 
   /* Sage boxes (quote cards, chips): forest text keeps AA contrast. */
@@ -218,13 +221,12 @@
     --tone-focus: var(--color-forest);
     --tone-rule: var(--color-forest);
     --tone-hairline: var(--color-hairline);
-    --tone-stat: var(--color-forest);
     --tone-highlight: var(--color-break-on-light);
     --tone-btn-bg: var(--color-forest);
     --tone-btn-text: var(--color-newsprint);
     --tone-btn-hover-bg: var(--color-carbon);
     --tone-btn-line: var(--color-forest);
-      --tone-numeral: var(--tone-stat);
+    --tone-numeral: var(--color-forest);
     --tone-price: var(--tone-text);
     --tone-body: var(--tone-text);
   }
@@ -285,6 +287,7 @@
     font-size: clamp(18px, 1.5vw, 21px);
     line-height: 1.5;
     max-width: 34ch;
+    color: var(--tone-body);
   }
 
   .type-body {

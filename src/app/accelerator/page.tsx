@@ -145,7 +145,7 @@ export default function AcceleratorPage() {
             <h1 className="type-display m-0">
               A 90-day marketing plan you&apos;ll actually work.
             </h1>
-            <p className="type-lead text-muted mt-7 mb-8">
+            <p className="type-lead mt-7 mb-8">
               We score your digital marketing, build the plan with you, and
               reassess along the way so you can see the score move. The plan
               lives online: a week-by-week roadmap, step-by-step guides, and
@@ -197,7 +197,7 @@ export default function AcceleratorPage() {
             <h2 className="type-h2 mt-0 mb-6">
               A plan with your name on every task.
             </h2>
-            <p className="type-body text-muted m-0 max-w-[42ch]">
+            <p className="type-body m-0 max-w-[42ch]">
               Every task says how long it takes, who does it, and how to do it.
               If a step needs a contractor, the plan includes the brief and a
               price range.
@@ -212,7 +212,7 @@ export default function AcceleratorPage() {
                 <span className="type-numeral">{item.num}</span>
                 <div>
                   <h3 className="type-h4 mt-0 mb-1.5">{item.title}</h3>
-                  <p className="type-body text-muted m-0">{item.description}</p>
+                  <p className="type-body m-0">{item.description}</p>
                 </div>
               </div>
             ))}
@@ -228,7 +228,7 @@ export default function AcceleratorPage() {
             <h2 className="type-h2 mt-0 mb-6">
               This is what week one looks like.
             </h2>
-            <p className="type-body text-muted mt-0 mb-7 max-w-[42ch]">
+            <p className="type-body mt-0 mb-7 max-w-[42ch]">
               Tick the tasks off. In the real plan, every week works like this,
               and your coach sees your progress before each session.
             </p>
@@ -263,7 +263,7 @@ export default function AcceleratorPage() {
               <Card key={tp.label}>
                 <p className="type-eyebrow m-0">{tp.label}</p>
                 <h3 className="type-h4 mt-2.5 mb-2">{tp.title}</h3>
-                <p className="type-body text-muted m-0">{tp.description}</p>
+                <p className="type-body m-0">{tp.description}</p>
               </Card>
             ))}
           </div>
@@ -298,7 +298,7 @@ export default function AcceleratorPage() {
           {faqs.map((faq) => (
             <div key={faq.q}>
               <p className="type-h4 mt-0 mb-2">{faq.q}</p>
-              <p className="type-body text-muted m-0">{faq.a}</p>
+              <p className="type-body m-0">{faq.a}</p>
             </div>
           ))}
         </Container>

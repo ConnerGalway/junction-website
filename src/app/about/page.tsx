@@ -79,7 +79,7 @@ export default function AboutPage() {
               <div key={belief.num} className="border-t border-(--tone-hairline) pt-6">
                 <p className="type-numeral m-0 mb-3.5">{belief.num}</p>
                 <h3 className="type-h3 m-0 mb-3.5">{belief.title}</h3>
-                <p className="type-body text-muted m-0">{belief.description}</p>
+                <p className="type-body m-0">{belief.description}</p>
               </div>
             ))}
           </div>
@@ -104,7 +104,7 @@ export default function AboutPage() {
             <div>
               <h2 className="type-h2 m-0 mb-2">Conner Galway</h2>
               <Eyebrow className="mb-6">Founder &amp; Principal</Eyebrow>
-              <p className="type-body text-muted m-0 mb-7">
+              <p className="type-body m-0 mb-7">
                 Fourteen years advising destinations, operators and the
                 organizations behind them. Business in Vancouver 40 Under 40.
                 He&apos;s spoken at the Northern BC Tourism Summit, TIABC, Yukon&apos;s Go

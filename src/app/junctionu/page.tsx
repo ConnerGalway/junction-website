@@ -87,7 +87,7 @@ export default function JunctionUPage() {
             </h1>
           </div>
           <div>
-            <p className="type-lead text-muted m-0 mb-8">
+            <p className="type-lead m-0 mb-8">
               Certificate courses, workshops and free Tourism Talks, built for
               tourism professionals. Lessons run under an hour and every one
               ends in something you can do today. 2,000+ people are in.
@@ -129,7 +129,7 @@ export default function JunctionUPage() {
           <div>
             <Eyebrow className="mb-4">For DMOs</Eyebrow>
             <h2 className="type-h2 m-0 mb-5">Fund seats for your whole region.</h2>
-            <p className="type-body text-muted m-0 mb-8 max-w-[48ch]">
+            <p className="type-body m-0 mb-8 max-w-[48ch]">
               Partners cover 25% to 100% of course costs for their operators. We
               handle delivery, support and progress reporting. Travel Yukon has
               run it for four years, and 300+ businesses came through.

@@ -117,7 +117,7 @@ export default function CustomTrainingPage() {
           <Card tone="carbon" className="flex flex-col gap-4">
             <Eyebrow>For DMOs and tourism organizations</Eyebrow>
             <h2 className="type-h3 m-0">Custom courses for your operators.</h2>
-            <p className="type-body text-muted m-0">
+            <p className="type-body m-0">
               Give every business in your region training that fits their week.
               Your board gets a report showing the capacity you built.
             </p>
@@ -131,7 +131,7 @@ export default function CustomTrainingPage() {
           <Card tone="carbon" className="flex flex-col gap-4">
             <Eyebrow>For organizations training their leaders</Eyebrow>
             <h2 className="type-h3 m-0">Leadership training on AI and marketing.</h2>
-            <p className="type-body text-muted m-0">
+            <p className="type-body m-0">
               High-quality sessions for senior teams who need to make good
               decisions about AI and marketing, using your strategy and your real
               work.
@@ -172,7 +172,7 @@ export default function CustomTrainingPage() {
           <div>
             <Eyebrow className="mb-4">Town of Okotoks · webinar series</Eyebrow>
             <Stat value="$900,000+" />
-            <p className="type-body text-muted m-0 mt-5 max-w-[44ch]">
+            <p className="type-body m-0 mt-5 max-w-[44ch]">
               In potential local spend identified for businesses ahead of 4,500
               visitors. Then we turned it into a three-part series where every
               action took under an hour.

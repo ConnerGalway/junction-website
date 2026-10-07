@@ -216,7 +216,7 @@ export default function HomePage() {
               <Eyebrow className="mb-4">Four ways in</Eyebrow>
               <h2 className="type-h2 m-0">Find your program.</h2>
             </div>
-            <p className="type-body text-muted m-0">
+            <p className="type-body m-0">
               Each one ends with something your team owns: a working tool, a
               plan, a course, or a room full of people with next steps.
             </p>
@@ -240,7 +240,7 @@ export default function HomePage() {
                   <p className="type-small m-0 font-medium text-canopy-text">
                     {program.tagline}
                   </p>
-                  <p className="type-body text-muted m-0">{program.description}</p>
+                  <p className="type-body m-0">{program.description}</p>
                   <span className="link type-button mt-auto self-start pt-2 group-hover:text-break-on-light">
                     {program.linkText}
                   </span>
@@ -261,7 +261,7 @@ export default function HomePage() {
             <h2 className="type-h2 m-0 mb-6">
               A building supplier&apos;s 30 days.
             </h2>
-            <p className="type-body text-muted m-0 mb-8">
+            <p className="type-body m-0 mb-8">
               A family-owned supply yard brought seven people, from the president
               to accounts payable. Only 65% of invoices were collected inside 30
               days, and quotes took anywhere from five minutes to a day. Here&apos;s
@@ -357,7 +357,7 @@ export default function HomePage() {
             <div key={step.num}>
               <p className="type-numeral m-0 mb-2">{step.num}</p>
               <h3 className="type-h4 m-0 mb-1.5">{step.title}</h3>
-              <p className="type-body text-muted m-0">{step.description}</p>
+              <p className="type-body m-0">{step.description}</p>
             </div>
           ))}
         </Container>

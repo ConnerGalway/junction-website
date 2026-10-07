@@ -65,7 +65,7 @@ export default function SpeakingPage() {
             <h1 className="type-display m-0">
               Talks that send the room home with a plan.
             </h1>
-            <p className="type-lead text-muted mt-7 mb-9">
+            <p className="type-lead mt-7 mb-9">
               Keynotes, workshops and virtual sessions on AI, marketing trends
               and tourism strategy. Every talk ends with actions people can take
               that week.
@@ -109,7 +109,7 @@ export default function SpeakingPage() {
               <Card key={t.num} className="flex flex-col gap-3.5">
                 <span className="type-numeral">{t.num}</span>
                 <h3 className="type-h3 m-0">{t.title}</h3>
-                <p className="type-body text-muted m-0">{t.description}</p>
+                <p className="type-body m-0">{t.description}</p>
                 <p className="type-small mt-auto mb-0 pt-2.5">{t.audience}</p>
               </Card>
             ))}
@@ -136,7 +136,7 @@ export default function SpeakingPage() {
           <div>
             <Eyebrow className="mb-[18px]">Your speaker</Eyebrow>
             <h2 className="type-h2 mt-0 mb-6">Conner Galway</h2>
-            <p className="type-body text-muted mt-0 mb-7 max-w-[52ch]">
+            <p className="type-body mt-0 mb-7 max-w-[52ch]">
               Founder of Junction. Fourteen years advising organizations on
               marketing and technology, 2,000+ people trained, and a Business in
               Vancouver 40 Under 40. He writes The Brief, a weekly newsletter for
@@ -153,7 +153,7 @@ export default function SpeakingPage() {
           <h2 className="type-display m-0 max-w-[15ch]">
             Got a date? Let&apos;s check it.
           </h2>
-          <p className="type-body text-muted mt-6 mb-0 max-w-[46ch]">
+          <p className="type-body mt-6 mb-0 max-w-[46ch]">
             Send your event, date and audience. You&apos;ll hear back with availability
             and a fee for your format.
           </p>

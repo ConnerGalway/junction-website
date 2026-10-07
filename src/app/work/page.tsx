@@ -28,7 +28,7 @@ export default function WorkPage() {
             <Eyebrow className="mb-6">Work</Eyebrow>
             <h1 className="type-display m-0">Real regions. Real numbers.</h1>
           </div>
-          <p className="type-body text-muted m-0 max-w-[46ch]">
+          <p className="type-body m-0 max-w-[46ch]">
             Four engagements, told with the actual results. Each one links to
             the service that produced it. Soon you&apos;ll be able to flip through
             the deliverables too.
@@ -48,7 +48,7 @@ export default function WorkPage() {
           </div>
           <div className="flex flex-col justify-end gap-7">
             <h2 className="type-h3 m-0">Go Digital program</h2>
-            <p className="type-body text-muted m-0 max-w-[52ch]">
+            <p className="type-body m-0 max-w-[52ch]">
               A territory-wide digital capacity program, from Whitehorse to
               Dawson City. 300+ businesses came through in four years, and
               alumni now lead the program themselves.
@@ -77,7 +77,7 @@ export default function WorkPage() {
           </div>
           <div className="flex flex-col items-start justify-end gap-7">
             <h2 className="type-h3 m-0">Accelerator across ITBC members</h2>
-            <p className="type-body text-muted m-0 max-w-[52ch]">
+            <p className="type-body m-0 max-w-[52ch]">
               Assessments, one-to-one coaching and implementation plans,
               subsidised by ITBC for its member businesses. Engagement landed
               300% past goal, with bookings up across the province inside three
@@ -102,7 +102,7 @@ export default function WorkPage() {
           </div>
           <div className="flex flex-col justify-end gap-7">
             <h2 className="type-h3 m-0">Traveller Insights Study</h2>
-            <p className="type-body text-muted m-0 max-w-[52ch]">
+            <p className="type-body m-0 max-w-[52ch]">
               Region-wide research into who visits Southwest Ontario, why they
               come, and what brings them back. The findings now drive the
               region&apos;s 2026 tourism strategy.
@@ -139,7 +139,7 @@ export default function WorkPage() {
           </div>
           <div className="flex flex-col gap-5">
             <h2 className="type-h3 m-0">A region running its own playbook</h2>
-            <p className="type-body text-muted m-0 max-w-[52ch]">
+            <p className="type-body m-0 max-w-[52ch]">
               Destination marketing strategy. Marketing operations restructured
               around the activities with the most impact, with new investment
               redirected into responsible travel.
@@ -151,7 +151,7 @@ export default function WorkPage() {
       {/* Note */}
       <section className="px-gutter py-10">
         <Container>
-          <p className="type-body text-muted m-0 max-w-none">
+          <p className="type-body m-0 max-w-none">
             More case studies are on the way, including the Okotoks visitor
             economy series and its $900,000 in identified local spend.
           </p>

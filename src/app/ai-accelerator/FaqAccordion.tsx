@@ -37,7 +37,7 @@ export function FaqAccordion({ faqs }: { faqs: Faq[] }) {
               aria-labelledby={buttonId}
               hidden={!isOpen}
             >
-              <p className="type-body text-muted m-0 mb-6 max-w-[60ch]">{faq.a}</p>
+              <p className="type-body m-0 mb-6 max-w-[60ch]">{faq.a}</p>
             </div>
           </div>
         );

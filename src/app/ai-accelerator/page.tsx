@@ -161,7 +161,7 @@ export default function AIAcceleratorPage() {
             <h1 className="type-display m-0">
               We automate one of your bottlenecks in 30 days. Guaranteed.
             </h1>
-            <p className="type-lead text-muted mt-7 mb-8">
+            <p className="type-lead mt-7 mb-8">
               A hands-on program for leadership teams. Four one-hour sessions on
               your real work. You leave with AI tools already running, and a team
               that knows how to build the next one.
@@ -237,7 +237,7 @@ export default function AIAcceleratorPage() {
           <div>
             <Eyebrow className="mb-4">What you leave with</Eyebrow>
             <h2 className="type-h2 m-0 mb-6">Tools that run on Monday morning.</h2>
-            <p className="type-body text-muted m-0 max-w-[42ch]">
+            <p className="type-body m-0 max-w-[42ch]">
               Your team learns AI by building with it on the jobs that eat their
               week: quotes, collections, paperwork, admin. Plus a custom dashboard
               and prompt library you keep.
@@ -252,7 +252,7 @@ export default function AIAcceleratorPage() {
                 <span className="type-numeral">{item.num}</span>
                 <div>
                   <h3 className="type-h4 m-0 mb-1.5">{item.title}</h3>
-                  <p className="type-body text-muted m-0">{item.description}</p>
+                  <p className="type-body m-0">{item.description}</p>
                 </div>
               </div>
             ))}
@@ -293,7 +293,7 @@ export default function AIAcceleratorPage() {
               </Eyebrow>
               <h2 className="type-h2 m-0">Where they started.</h2>
             </div>
-            <p className="type-body text-muted m-0 max-w-[46ch]">
+            <p className="type-body m-0 max-w-[46ch]">
               A family-owned supplier whose president was also covering GM and CFO
               duties. His goal: &quot;Assistant capacity for me without a new hire.&quot;
             </p>
@@ -369,7 +369,7 @@ export default function AIAcceleratorPage() {
             <h2 className="type-h3 m-0 mb-[18px]">
               One bottleneck automated and working by day 30.
             </h2>
-            <p className="type-body text-muted m-0 mb-[18px]">
+            <p className="type-body m-0 mb-[18px]">
               We agree on the bottleneck together in Week 0, with a clear
               definition of &quot;working.&quot;
             </p>
@@ -395,7 +395,7 @@ export default function AIAcceleratorPage() {
           <h2 className="type-display m-0 max-w-[15ch]">
             What&apos;s eating your team&apos;s week?
           </h2>
-          <p className="type-body text-muted m-0 mt-6 max-w-[46ch]">
+          <p className="type-body m-0 mt-6 max-w-[46ch]">
             Bring it to a 20-minute call. We&apos;ll tell you whether it&apos;s a good
             first build, and what 30 days would look like.
           </p>

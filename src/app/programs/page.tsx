@@ -88,7 +88,7 @@ export default function ProgramsPage() {
             <Eyebrow className="mb-6">Services</Eyebrow>
             <h1 className="type-display m-0">We build the plan. We train the people.</h1>
           </div>
-          <p className="type-body text-muted m-0">
+          <p className="type-body m-0">
             Every engagement ends with your team holding the keys. We only do
             strategy and training, so no websites, ad buying or social
             management. Every recommendation is there because it works for you.
@@ -106,7 +106,7 @@ export default function ProgramsPage() {
               className="grid scroll-mt-28 gap-x-12 gap-y-3 border-b border-hairline py-9 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)_minmax(0,0.5fr)]"
             >
               <div className="flex flex-col gap-3">
-                <span className="type-h4 text-accent-2">
+                <span className="type-numeral">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <h2 className="type-h3 m-0">
@@ -124,7 +124,7 @@ export default function ProgramsPage() {
                   </Badge>
                 )}
               </div>
-              <p className="type-body text-muted m-0">{program.description}</p>
+              <p className="type-body m-0">{program.description}</p>
               <p className="type-h4 m-0 text-canopy-text">{program.price}</p>
             </li>
           ))}
