@@ -1,5 +1,19 @@
+import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
+import {
+  Button,
+  Card,
+  Container,
+  Eyebrow,
+  Section,
+  TextLink,
+} from "@/components";
+
+export const metadata: Metadata = {
+  title: "About",
+  description:
+    "Junction sits where organizations and technology meet, and where consulting meets training.",
+};
 
 const beliefs = [
   {
@@ -25,254 +39,95 @@ const beliefs = [
 export default function AboutPage() {
   return (
     <>
-
       {/* Hero */}
-      <section
-        style={{
-          padding:
-            "clamp(56px, 8vw, 112px) clamp(20px, 4vw, 48px) clamp(48px, 6vw, 80px)",
-        }}
-      >
-        <div className="content-container">
-          <div
-            className="text-accent-2"
-            style={{
-              fontSize: "12px",
-              fontWeight: 500,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              marginBottom: "22px",
-            }}
-          >
-            About
-          </div>
-          <h1 className="text-h1 m-0" style={{ maxWidth: "14ch" }}>
+      <Section spacing="tight">
+        <Container>
+          <Eyebrow className="mb-6">About</Eyebrow>
+          <h1 className="type-display m-0 max-w-[14ch]">
             A junction is where routes meet. So are we.
           </h1>
-          <div
-            className="two-col-grid"
-            style={{
-              gap: "32px 72px",
-              marginTop: "clamp(40px, 5vw, 64px)",
-              alignItems: "start",
-            }}
-          >
-            <Image
-              src="/assets/photo-mountains.png"
-              alt="Mountain town"
-              width={800}
-              height={533}
-              className="w-full rounded object-cover"
-              style={{ aspectRatio: "3/2" }}
-            />
-            <p
-              style={{
-                fontSize: "clamp(17px, 1.5vw, 20px)",
-                fontWeight: 300,
-                lineHeight: 1.65,
-                color: "rgba(28, 28, 26, 0.78)",
-                margin: 0,
-                maxWidth: "48ch",
-              }}
-            >
+          <div className="mt-[clamp(40px,5vw,64px)] grid items-start gap-x-[72px] gap-y-8 [grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))]">
+            <div className="overflow-hidden rounded-card">
+              <Image
+                src="/assets/photo-mountains.png"
+                alt="Mountain town"
+                width={800}
+                height={533}
+                className="w-full object-cover"
+                style={{ aspectRatio: "3/2" }}
+              />
+            </div>
+            <p className="type-lead m-0">
               Junction sits where organizations and technology meet, and where
-              consulting meets training. We've spent fourteen years in the
+              consulting meets training. We&apos;ve spent fourteen years in the
               visitor economy, helping destinations and the businesses inside
               them get measurably better at marketing. In 2026 our training
               platform, eLearningU, became JunctionU and moved under one roof.
             </p>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
       {/* Beliefs */}
-      <section
-        className="bg-carbon text-newsprint section-padding"
-      >
-        <div className="content-container">
-          <div
-            className="text-accent-1"
-            style={{
-              fontSize: "12px",
-              fontWeight: 500,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              marginBottom: "40px",
-            }}
-          >
+      <Section tone="carbon">
+        <Container>
+          <Eyebrow as="h2" className="m-0 mb-10">
             What we believe
-          </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit, minmax(min(100%, 300px), 1fr))",
-              gap: "40px 48px",
-            }}
-          >
+          </Eyebrow>
+          <div className="grid gap-x-12 gap-y-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))]">
             {beliefs.map((belief) => (
-              <div
-                key={belief.num}
-                style={{
-                  borderTop: "1px solid rgba(244, 240, 232, 0.25)",
-                  paddingTop: "24px",
-                }}
-              >
-                <div
-                  className="font-bebas text-accent-1"
-                  style={{ fontSize: "32px", marginBottom: "14px" }}
-                >
-                  {belief.num}
-                </div>
-                <h3
-                  className="font-epilogue m-0"
-                  style={{
-                    fontWeight: 900,
-                    fontSize: "clamp(24px, 2.4vw, 32px)",
-                    lineHeight: 1.04,
-                    letterSpacing: "-0.02em",
-                    marginBottom: "14px",
-                  }}
-                >
-                  {belief.title}
-                </h3>
-                <p
-                  style={{
-                    fontSize: "16px",
-                    fontWeight: 300,
-                    lineHeight: 1.6,
-                    color: "rgba(244, 240, 232, 0.78)",
-                    margin: 0,
-                  }}
-                >
-                  {belief.description}
-                </p>
+              <div key={belief.num} className="border-t border-(--tone-hairline) pt-6">
+                <p className="type-h4 m-0 mb-3.5 text-(--tone-stat)">{belief.num}</p>
+                <h3 className="type-h3 m-0 mb-3.5">{belief.title}</h3>
+                <p className="type-body text-muted m-0">{belief.description}</p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
       {/* Team */}
-      <section className="section-padding">
-        <div className="content-container">
-          <div
-            className="text-accent-2"
-            style={{
-              fontSize: "12px",
-              fontWeight: 500,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              marginBottom: "32px",
-            }}
-          >
-            Who you'll work with
-          </div>
-          <div
-            className="two-col-grid"
-            style={{
-              gap: "32px 72px",
-              alignItems: "start",
-              borderTop: "2px solid #1C1C1A",
-              paddingTop: "36px",
-            }}
-          >
+      <Section>
+        <Container>
+          <Eyebrow className="mb-8">Who you&apos;ll work with</Eyebrow>
+          <div className="grid items-start gap-x-[72px] gap-y-8 border-t-2 border-(--tone-rule) pt-9 [grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))]">
             {/* Initials placeholder */}
-            <div
-              className="bg-forest rounded flex items-end"
-              style={{
-                aspectRatio: "4/5",
-                maxWidth: "420px",
-                padding: "24px",
-              }}
+            <Card
+              tone="carbon"
+              aria-hidden="true"
+              className="flex max-w-[420px] items-end"
+              style={{ aspectRatio: "4/5" }}
             >
-              <span
-                className="font-bebas text-fern"
-                style={{ fontSize: "120px", lineHeight: "0.8" }}
-              >
-                CG
-              </span>
-            </div>
+              <span className="type-display text-fern">CG</span>
+            </Card>
 
             <div>
-              <h2 className="text-h2 m-0 mb-2">Conner Galway</h2>
-              <div
-                className="text-accent-2"
-                style={{
-                  fontSize: "12px",
-                  fontWeight: 500,
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  marginBottom: "24px",
-                }}
-              >
-                Founder & Principal
-              </div>
-              <p
-                style={{
-                  fontSize: "18px",
-                  fontWeight: 300,
-                  lineHeight: 1.65,
-                  color: "rgba(28, 28, 26, 0.78)",
-                  margin: "0 0 28px",
-                  maxWidth: "52ch",
-                }}
-              >
+              <h2 className="type-h2 m-0 mb-2">Conner Galway</h2>
+              <Eyebrow className="mb-6">Founder &amp; Principal</Eyebrow>
+              <p className="type-body text-muted m-0 mb-7">
                 Fourteen years advising destinations, operators and the
                 organizations behind them. Business in Vancouver 40 Under 40.
-                He's spoken at the Northern BC Tourism Summit, TIABC, Yukon's Go
+                He&apos;s spoken at the Northern BC Tourism Summit, TIABC, Yukon&apos;s Go
                 Digital Summit and the BC Craft Beer Conference, and writes The
                 Brief every week.
               </p>
-              <Link
-                href="/programs"
-                style={{
-                  fontSize: "15px",
-                  fontWeight: 500,
-                  borderBottom: "2px solid #C4963A",
-                  paddingBottom: "3px",
-                }}
-              >
-                Book Conner to speak →
-              </Link>
+              <TextLink href="/programs">Book Conner to speak →</TextLink>
             </div>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
       {/* CTA */}
-      <section
-        id="start"
-        className="bg-forest text-newsprint section-padding-cta"
-      >
-        <div className="content-container">
-          <h2
-            className="font-epilogue"
-            style={{
-              fontWeight: 900,
-              fontSize: "clamp(44px, 6.6vw, 104px)",
-              lineHeight: 0.92,
-              letterSpacing: "-0.035em",
-              margin: 0,
-              maxWidth: "16ch",
-            }}
-          >
-            Tell us the goal. We'll be straight with you about the rest.
+      <Section id="start" tone="forest" className="scroll-mt-24">
+        <Container>
+          <h2 className="type-display m-0 max-w-[16ch]">
+            Tell us the goal. We&apos;ll be straight with you about the rest.
           </h2>
-          <div
-            className="flex items-center gap-7 flex-wrap"
-            style={{ marginTop: "40px" }}
-          >
-            <Link
-              href="#"
-              className="text-button bg-newsprint text-forest rounded-[3px] transition-colors hover:bg-sage"
-              style={{ padding: "17px 28px" }}
-            >
-              Start a conversation
-            </Link>
+          <div className="mt-10 flex flex-wrap items-center gap-7">
+            <Button href="/contact">Start a conversation</Button>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
     </>
   );
 }

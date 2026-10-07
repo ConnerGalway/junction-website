@@ -26,7 +26,7 @@ export function Card<T extends ElementType = "div">({
 }: CardProps<T>) {
   const classes = cx(
     "rounded-card",
-    tone === "carbon" ? "tone-carbon" : "border border-hairline",
+    tone === "carbon" ? "tone-carbon" : "border border-(--tone-hairline)",
     padded && "card-pad",
     href && "group block hover:border-break",
     className

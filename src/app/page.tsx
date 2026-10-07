@@ -1,6 +1,21 @@
-import Link from "next/link";
-import { Placeholder } from "@/components";
+import type { Metadata } from "next";
+import {
+  Button,
+  Card,
+  Container,
+  Eyebrow,
+  Placeholder,
+  QuoteCard,
+  Section,
+  TextLink,
+} from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
+
+export const metadata: Metadata = {
+  title: { absolute: "Junction | Strategy & Capacity Building" },
+  description:
+    "When growth stalls, the cause is usually technology that isn't pulling its weight yet: online booking, social media, internal systems, AI.",
+};
 
 const stuckItems = [
   {
@@ -43,7 +58,7 @@ const organizations = [
 const programs = [
   {
     num: "01",
-    title: "AI Accelerator",
+    title: "Offload Program (AI Accelerator)",
     meta: "$5,000 · 30 days",
     tagline: "For any business losing hours to admin.",
     description:
@@ -132,373 +147,115 @@ const callSteps = [
 export default function HomePage() {
   return (
     <>
-
       {/* Hero */}
-      <section
-        style={{
-          padding:
-            "clamp(48px, 7vw, 96px) clamp(20px, 4vw, 48px) clamp(48px, 6vw, 80px)",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 440px), 1fr))",
-            gap: "clamp(32px, 5vw, 72px)",
-            alignItems: "center",
-          }}
-        >
+      <Section spacing="tight">
+        <Container className="grid items-center gap-[clamp(32px,5vw,72px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
           <div>
-            <div className="text-eyebrow text-accent-2 mb-5">
-              Strategy & capacity building
-            </div>
-            <h1
-              className="font-epilogue m-0"
-              style={{
-                fontWeight: 900,
-                fontSize: "clamp(48px, 7.2vw, 112px)",
-                lineHeight: 0.92,
-                letterSpacing: "-0.035em",
-                textWrap: "balance",
-              }}
-            >
+            <Eyebrow className="mb-5">Strategy &amp; capacity building</Eyebrow>
+            <h1 className="type-display m-0">
               Feeling stuck? Let&apos;s get your organization moving.
             </h1>
-            <p
-              style={{
-                fontSize: "clamp(17px, 1.5vw, 20px)",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(28, 28, 26, 0.76)",
-                maxWidth: "46ch",
-                margin: "28px 0 36px",
-              }}
-            >
+            <p className="type-lead mt-7 mb-9">
               When growth stalls, the cause is usually technology that isn&apos;t
               pulling its weight yet: online booking, social media, internal
               systems, AI. We find the bottleneck, put the right tools to work,
               and get your people confident running them.
             </p>
-            <div className="flex gap-6 items-center flex-wrap">
-              <a
-                href={CALENDLY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-button bg-forest text-newsprint rounded-[3px] transition-colors hover:bg-canopy"
-                style={{ padding: "17px 28px" }}
-              >
-                Book a 20-min call
-              </a>
-              <a
-                href="#programs"
-                className="font-medium whitespace-nowrap"
-                style={{
-                  fontSize: "15px",
-                  borderBottom: "2px solid #C4963A",
-                  paddingBottom: "3px",
-                }}
-              >
+            <div className="flex flex-wrap items-center gap-6">
+              <Button href={CALENDLY_URL}>Book a 20-min call</Button>
+              <TextLink href="#programs" className="whitespace-nowrap">
                 Find your program ↓
-              </a>
+              </TextLink>
             </div>
           </div>
 
           {/* Where organizations get stuck panel */}
-          <div
-            className="bg-carbon text-newsprint rounded"
-            style={{ padding: "clamp(26px, 3.2vw, 40px)" }}
-          >
-            <div
-              className="text-accent-1"
-              style={{
-                fontSize: "12px",
-                fontWeight: 500,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                marginBottom: "10px",
-              }}
-            >
-              Where organizations get stuck
-            </div>
-            <div style={{ borderTop: "1px solid rgba(244, 240, 232, 0.2)" }}>
+          <Card tone="carbon">
+            <Eyebrow className="mb-3">Where organizations get stuck</Eyebrow>
+            <div className="border-t border-(--tone-hairline)">
               {stuckItems.map((item) => (
                 <div
                   key={item.num}
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "44px minmax(0, 1fr)",
-                    gap: "0 4px",
-                    padding: "16px 0",
-                    borderBottom: "1px solid rgba(244, 240, 232, 0.12)",
-                  }}
+                  className="grid grid-cols-[48px_minmax(0,1fr)] gap-x-1 border-b border-(--tone-hairline) py-4"
                 >
-                  <span
-                    className="font-bebas text-accent-1"
-                    style={{ fontSize: "24px", lineHeight: 1 }}
-                  >
-                    {item.num}
-                  </span>
+                  <span className="type-h4 text-(--tone-stat)">{item.num}</span>
                   <div>
-                    <div
-                      style={{
-                        fontSize: "17px",
-                        fontWeight: 500,
-                        marginBottom: "3px",
-                      }}
-                    >
-                      {item.title}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "14px",
-                        fontWeight: 300,
-                        color: "rgba(244, 240, 232, 0.74)",
-                      }}
-                    >
-                      {item.description}
-                    </div>
+                    <p className="type-h4 m-0 mb-1">{item.title}</p>
+                    <p className="type-small m-0">{item.description}</p>
                   </div>
                 </div>
               ))}
             </div>
-            <div style={{ fontSize: "15px", lineHeight: 1.55, marginTop: "20px" }}>
-              <span className="text-fern font-medium">
+            <p className="type-small mb-0 mt-5">
+              <span className="font-medium text-fern">
                 We start with the one costing you most
               </span>
-              <span style={{ fontWeight: 300, color: "rgba(244, 240, 232, 0.8)" }}>
-                , fix it, and build from there.
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
+              , fix it, and build from there.
+            </p>
+          </Card>
+        </Container>
+      </Section>
 
       {/* Organizations strip */}
-      <section
-        style={{
-          borderTop: "1px solid rgba(28, 28, 26, 0.12)",
-          borderBottom: "1px solid rgba(28, 28, 26, 0.12)",
-          padding: "28px clamp(20px, 4vw, 48px)",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "flex",
-            alignItems: "center",
-            gap: "14px 40px",
-            flexWrap: "wrap",
-          }}
-        >
-          <span
-            style={{
-              fontSize: "12px",
-              fontWeight: 500,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "rgba(28, 28, 26, 0.72)",
-            }}
-          >
-            Organizations we work with
-          </span>
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "10px 32px",
-              fontSize: "17px",
-              fontWeight: 500,
-              color: "rgba(28, 28, 26, 0.82)",
-            }}
-          >
+      <section className="px-gutter py-7 border-y border-hairline">
+        <Container className="flex flex-wrap items-center gap-x-10 gap-y-3.5">
+          <span className="type-eyebrow text-muted">Organizations we work with</span>
+          <div className="type-button flex flex-wrap gap-x-8 gap-y-2.5">
             {organizations.map((org) => (
               <span key={org}>{org}</span>
             ))}
           </div>
-        </div>
+        </Container>
       </section>
 
       {/* Programs */}
-      <section
-        id="programs"
-        style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit, minmax(min(100%, 380px), 1fr))",
-              gap: "20px 72px",
-              alignItems: "end",
-              marginBottom: "44px",
-            }}
-          >
+      <Section id="programs" className="scroll-mt-24">
+        <Container>
+          <div className="mb-9 grid items-end gap-x-[72px] gap-y-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr))]">
             <div>
-              <div className="text-eyebrow text-accent-2 mb-4">
-                Four ways in
-              </div>
-              <h2
-                className="font-epilogue m-0"
-                style={{
-                  fontWeight: 900,
-                  fontSize: "clamp(36px, 4.6vw, 64px)",
-                  lineHeight: 0.96,
-                  letterSpacing: "-0.03em",
-                }}
-              >
-                Find your program.
-              </h2>
+              <Eyebrow className="mb-4">Four ways in</Eyebrow>
+              <h2 className="type-h2 m-0">Find your program.</h2>
             </div>
-            <p
-              style={{
-                fontSize: "18px",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(28, 28, 26, 0.76)",
-                margin: 0,
-                maxWidth: "48ch",
-              }}
-            >
+            <p className="type-body text-muted m-0">
               Each one ends with something your team owns: a working tool, a
               plan, a course, or a room full of people with next steps.
             </p>
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit, minmax(min(100%, 520px), 1fr))",
-              gap: "20px",
-            }}
-          >
+          <div className="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr))]">
             {programs.map((program) => (
-              <Link
-                key={program.num}
-                href={program.href}
-                className="flex flex-col gap-3.5 bg-newsprint rounded transition-colors hover:bg-sage"
-                style={{
-                  padding: "clamp(26px, 3vw, 38px)",
-                  borderTop: "4px solid #1A4D2E",
-                }}
-              >
-                <div className="flex justify-between items-center gap-3">
-                  <span
-                    className="font-bebas text-accent-1"
-                    style={{ fontSize: "28px" }}
-                  >
-                    {program.num}
-                  </span>
-                  <span
-                    style={{
-                      fontSize: "12px",
-                      fontWeight: 500,
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                      color: "rgba(28, 28, 26, 0.72)",
-                    }}
-                  >
-                    {program.meta}
+              <Card key={program.num} href={program.href}>
+                <div className="flex h-full flex-col gap-3.5">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="type-h4 text-(--tone-stat)">{program.num}</span>
+                    <span className="type-eyebrow text-muted">{program.meta}</span>
+                  </div>
+                  <h3 className="type-h3 m-0">{program.title}</h3>
+                  <p className="type-small m-0 font-medium text-canopy-text">
+                    {program.tagline}
+                  </p>
+                  <p className="type-body text-muted m-0">{program.description}</p>
+                  <span className="link type-button mt-auto self-start pt-2 group-hover:text-break-on-light">
+                    {program.linkText}
                   </span>
                 </div>
-                <h3
-                  className="font-epilogue m-0"
-                  style={{
-                    fontWeight: 900,
-                    fontSize: "clamp(28px, 2.8vw, 38px)",
-                    lineHeight: 1,
-                    letterSpacing: "-0.02em",
-                  }}
-                >
-                  {program.title}
-                </h3>
-                <div
-                  className="text-forest"
-                  style={{ fontSize: "15px", fontWeight: 500 }}
-                >
-                  {program.tagline}
-                </div>
-                <p
-                  style={{
-                    fontSize: "16px",
-                    fontWeight: 300,
-                    lineHeight: 1.6,
-                    color: "rgba(28, 28, 26, 0.76)",
-                    margin: 0,
-                  }}
-                >
-                  {program.description}
-                </p>
-                <span
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: 500,
-                    marginTop: "auto",
-                    paddingTop: "8px",
-                  }}
-                >
-                  {program.linkText}
-                </span>
-              </Link>
+              </Card>
             ))}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
       {/* AI Example */}
-      <section
-        className="bg-carbon text-newsprint"
-        style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 440px), 1fr))",
-            gap: "clamp(40px, 5vw, 80px)",
-            alignItems: "start",
-          }}
-        >
+      <Section tone="carbon">
+        <Container className="grid items-start gap-[clamp(40px,5vw,80px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
           <div>
-            <div
-              className="text-accent-1"
-              style={{
-                fontSize: "12px",
-                fontWeight: 500,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                marginBottom: "18px",
-              }}
-            >
-              Inside an AI Accelerator
-            </div>
-            <h2
-              className="font-epilogue"
-              style={{
-                fontWeight: 900,
-                fontSize: "clamp(36px, 4.6vw, 64px)",
-                lineHeight: 0.96,
-                letterSpacing: "-0.03em",
-                margin: "0 0 22px",
-              }}
-            >
+            <Eyebrow className="mb-5">
+              Inside an Offload Program (AI Accelerator)
+            </Eyebrow>
+            <h2 className="type-h2 m-0 mb-6">
               A building supplier&apos;s 30 days.
             </h2>
-            <p
-              style={{
-                fontSize: "18px",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(244, 240, 232, 0.8)",
-                margin: "0 0 32px",
-                maxWidth: "44ch",
-              }}
-            >
+            <p className="type-body text-muted m-0 mb-8">
               A family-owned supply yard brought seven people, from the president
               to accounts payable. Only 65% of invoices were collected inside 30
               days, and quotes took anywhere from five minutes to a day. Here&apos;s
@@ -506,356 +263,125 @@ export default function HomePage() {
             </p>
 
             {/* Metrics */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                gap: "12px",
-                marginBottom: "32px",
-              }}
-            >
-              <div
-                style={{
-                  border: "1px solid rgba(244, 240, 232, 0.18)",
-                  borderRadius: "4px",
-                  padding: "18px",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "12px",
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase",
-                    color: "rgba(244, 240, 232, 0.78)",
-                    marginBottom: "8px",
-                  }}
-                >
+            <div className="mb-8 grid grid-cols-2 gap-3">
+              <div className="rounded-card border border-(--tone-hairline) p-5">
+                <p className="type-eyebrow text-muted m-0 mb-2">
                   Collected in 30 days
-                </div>
-                <div className="flex items-baseline gap-2.5 flex-wrap">
-                  <span
-                    className="font-bebas"
-                    style={{ fontSize: "40px", lineHeight: 0.9 }}
-                  >
-                    65%
-                  </span>
-                  <span className="text-accent-1">→</span>
+                </p>
+                <div className="flex flex-wrap items-baseline gap-2.5">
+                  <span className="type-h3">65%</span>
+                  <span className="text-accent-1" aria-hidden="true">→</span>
                   <Placeholder className="text-newsprint">[ result ]</Placeholder>
                 </div>
               </div>
-              <div
-                style={{
-                  border: "1px solid rgba(244, 240, 232, 0.18)",
-                  borderRadius: "4px",
-                  padding: "18px",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "12px",
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase",
-                    color: "rgba(244, 240, 232, 0.78)",
-                    marginBottom: "8px",
-                  }}
-                >
+              <div className="rounded-card border border-(--tone-hairline) p-5">
+                <p className="type-eyebrow text-muted m-0 mb-2">
                   Quote turnaround
-                </div>
-                <div className="flex items-baseline gap-2.5 flex-wrap">
-                  <span
-                    className="font-bebas"
-                    style={{ fontSize: "40px", lineHeight: 0.9 }}
-                  >
-                    Up to 1 day
-                  </span>
-                  <span className="text-accent-1">→</span>
+                </p>
+                <div className="flex flex-wrap items-baseline gap-2.5">
+                  <span className="type-h3">Up to 1 day</span>
+                  <span className="text-accent-1" aria-hidden="true">→</span>
                   <Placeholder className="text-newsprint">[ result ]</Placeholder>
                 </div>
               </div>
             </div>
 
-            <Link
-              href="/ai-accelerator#example"
-              className="text-fern font-medium"
-              style={{
-                fontSize: "15px",
-                borderBottom: "2px solid #7FC99A",
-                paddingBottom: "3px",
-              }}
-            >
+            <TextLink href="/ai-accelerator#example">
               See the full program →
-            </Link>
+            </TextLink>
           </div>
 
           {/* Steps */}
-          <div style={{ borderTop: "1px solid rgba(244, 240, 232, 0.25)" }}>
+          <div className="border-t border-(--tone-hairline)">
             {aiExampleSteps.map((step) => (
               <div
                 key={step.num}
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "48px 1fr",
-                  padding: "22px 0",
-                  borderBottom: "1px solid rgba(244, 240, 232, 0.14)",
-                }}
+                className="grid grid-cols-[48px_1fr] border-b border-(--tone-hairline) py-6"
               >
-                <span
-                  className="font-bebas text-accent-1"
-                  style={{ fontSize: "26px" }}
-                >
-                  {step.num}
-                </span>
+                <span className="type-h4 text-(--tone-stat)">{step.num}</span>
                 <div>
-                  <div
-                    style={{
-                      fontSize: "18px",
-                      fontWeight: 500,
-                      marginBottom: "6px",
-                    }}
-                  >
-                    {step.title}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "15px",
-                      fontWeight: 300,
-                      lineHeight: 1.55,
-                      color: "rgba(244, 240, 232, 0.76)",
-                    }}
-                  >
-                    {step.description}
-                  </div>
+                  <h3 className="type-h4 m-0 mb-1.5">{step.title}</h3>
+                  <p className="type-small m-0">{step.description}</p>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
       {/* Testimonials */}
-      <section
-        style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
-          <div className="text-eyebrow text-accent-2 mb-7">
-            What clients say
-          </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
-              gap: "20px",
-            }}
-          >
-            <div
-              className="rounded flex flex-col justify-between gap-6"
-              style={{
-                border: "1.5px dashed rgba(28, 28, 26, 0.3)",
-                padding: "28px",
-                minHeight: "220px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "13px",
-                  fontWeight: 500,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  color: "rgba(28, 28, 26, 0.72)",
-                }}
-              >
-                [ Testimonial + result ]
-              </div>
-              <div style={{ fontSize: "15px", fontWeight: 500 }}>
+      <Section>
+        <Container>
+          <Eyebrow className="mb-9">What clients say</Eyebrow>
+          <div className="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))]">
+            <Placeholder className="min-h-[220px] flex-col items-start justify-between gap-6 text-left">
+              <span>[ Testimonial + result ]</span>
+              <span className="normal-case tracking-normal text-(--tone-text)">
                 Twin Lions Contracting · AI Accelerator
-              </div>
-            </div>
-            <div
-              className="rounded flex flex-col justify-between gap-6"
-              style={{
-                border: "1.5px dashed rgba(28, 28, 26, 0.3)",
-                padding: "28px",
-                minHeight: "220px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "13px",
-                  fontWeight: 500,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  color: "rgba(28, 28, 26, 0.72)",
-                }}
-              >
-                [ Testimonial + result ]
-              </div>
-              <div style={{ fontSize: "15px", fontWeight: 500 }}>
+              </span>
+            </Placeholder>
+            <Placeholder className="min-h-[220px] flex-col items-start justify-between gap-6 text-left">
+              <span>[ Testimonial + result ]</span>
+              <span className="normal-case tracking-normal text-(--tone-text)">
                 West Coast Homes · AI Accelerator
-              </div>
-            </div>
-            <blockquote
-              className="m-0 bg-newsprint rounded flex flex-col justify-between gap-6"
-              style={{ padding: "28px", minHeight: "220px" }}
-            >
-              <p
-                className="font-fraunces italic text-forest m-0"
-                style={{
-                  fontWeight: 900,
-                  fontSize: "24px",
-                  lineHeight: 1.2,
-                }}
-              >
-                &quot;We are a stronger, smarter organization today thanks to the work
-                we did with Junction.&quot;
-              </p>
-              <cite style={{ fontStyle: "normal", fontSize: "15px", fontWeight: 500 }}>
-                Kathy Cooper, CEO, Kootenay Rockies Tourism
-              </cite>
-            </blockquote>
+              </span>
+            </Placeholder>
+            <QuoteCard
+              className="flex min-h-[220px] flex-col justify-between"
+              quote={
+                <>
+                  &quot;We are a stronger, smarter organization today thanks to
+                  the work we did with Junction.&quot;
+                </>
+              }
+              caption="Kathy Cooper, CEO, Kootenay Rockies Tourism"
+            />
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
       {/* The Call */}
-      <section style={{ padding: "0 clamp(20px, 4vw, 48px) clamp(64px, 8vw, 112px)" }}>
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            borderTop: "2px solid #1C1C1A",
-            paddingTop: "44px",
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(min(100%, 260px), 1fr))",
-            gap: "36px 48px",
-          }}
-        >
+      <Section flush="top">
+        <Container className="grid gap-x-12 gap-y-9 border-t-2 border-(--tone-rule) pt-11 [grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))]">
           <div>
-            <div className="text-eyebrow text-accent-2 mb-3.5">
-              The first step
-            </div>
-            <h2
-              className="font-epilogue m-0"
-              style={{
-                fontWeight: 900,
-                fontSize: "clamp(28px, 3vw, 40px)",
-                lineHeight: 1,
-                letterSpacing: "-0.025em",
-              }}
-            >
-              What happens on the call.
-            </h2>
+            <Eyebrow className="mb-3.5">The first step</Eyebrow>
+            <h2 className="type-h3 m-0">What happens on the call.</h2>
           </div>
           {callSteps.map((step) => (
             <div key={step.num}>
-              <div
-                className="font-bebas text-accent-1"
-                style={{ fontSize: "32px", marginBottom: "8px" }}
-              >
-                {step.num}
-              </div>
-              <div
-                style={{ fontSize: "18px", fontWeight: 500, marginBottom: "6px" }}
-              >
-                {step.title}
-              </div>
-              <p
-                style={{
-                  fontSize: "16px",
-                  fontWeight: 300,
-                  lineHeight: 1.55,
-                  color: "rgba(28, 28, 26, 0.76)",
-                  margin: 0,
-                }}
-              >
-                {step.description}
-              </p>
+              <p className="type-h4 m-0 mb-2 text-(--tone-stat)">{step.num}</p>
+              <h3 className="type-h4 m-0 mb-1.5">{step.title}</h3>
+              <p className="type-body text-muted m-0">{step.description}</p>
             </div>
           ))}
-        </div>
+        </Container>
 
         {/* Not ready banner */}
-        <div
-          className="bg-sage rounded"
-          style={{
-            maxWidth: "1320px",
-            margin: "40px auto 0",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: "16px",
-            flexWrap: "wrap",
-            padding: "20px 24px",
-          }}
-        >
-          <span style={{ fontSize: "16px" }}>
-            <strong style={{ fontWeight: 500 }}>Not ready for a call?</strong>{" "}
-            <span style={{ fontWeight: 300 }}>
+        <Container className="mt-10">
+          <Card className="flex flex-wrap items-center justify-between gap-4">
+            <p className="type-body m-0">
+              <strong className="font-medium">Not ready for a call?</strong>{" "}
               Watch a free training session and see how we teach.
-            </span>
-          </span>
-          <Link
-            href="/junctionu"
-            className="font-medium whitespace-nowrap"
-            style={{
-              fontSize: "14px",
-              borderBottom: "2px solid #1A4D2E",
-              paddingBottom: "2px",
-            }}
-          >
-            Watch free →
-          </Link>
-        </div>
-      </section>
+            </p>
+            <TextLink href="/junctionu" className="whitespace-nowrap">
+              Watch free →
+            </TextLink>
+          </Card>
+        </Container>
+      </Section>
 
       {/* CTA */}
-      <section
-        id="start"
-        className="bg-forest text-newsprint"
-        style={{ padding: "clamp(80px, 10vw, 140px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
-          <h2
-            className="font-epilogue"
-            style={{
-              fontWeight: 900,
-              fontSize: "clamp(44px, 6.6vw, 104px)",
-              lineHeight: 0.92,
-              letterSpacing: "-0.035em",
-              margin: 0,
-              maxWidth: "15ch",
-            }}
-          >
+      <Section id="start" tone="forest" className="scroll-mt-24">
+        <Container>
+          <h2 className="type-display m-0 max-w-[15ch]">
             Twenty minutes. A straight answer on what fits.
           </h2>
-          <div
-            className="flex items-center gap-7 flex-wrap"
-            style={{ marginTop: "40px" }}
-          >
-            <a
-              href={CALENDLY_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-button bg-newsprint text-forest rounded-[3px] transition-colors hover:bg-sage"
-              style={{ padding: "17px 28px" }}
-            >
-              Book a 20-min call
-            </a>
-            <Link
-              href="/contact"
-              className="font-medium text-fern"
-              style={{
-                fontSize: "15px",
-                borderBottom: "2px solid #7FC99A",
-                paddingBottom: "3px",
-              }}
-            >
-              Or send us the details →
-            </Link>
+          <div className="mt-10 flex flex-wrap items-center gap-7">
+            <Button href={CALENDLY_URL}>Book a 20-min call</Button>
+            <TextLink href="/contact">Or send us the details →</TextLink>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
     </>
   );
 }
