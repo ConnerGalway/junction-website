@@ -151,8 +151,9 @@ export default function CustomTrainingPage() {
             <h2 className="type-h3 m-0">Organizations we&apos;ve trained.</h2>
             <span className="type-small">Across Canada and the US</span>
           </div>
-          <div className="overflow-hidden rounded-card">
-            <ul className="m-0 grid list-none border-t-2 border-l border-t-(--tone-rule) border-l-hairline p-0 [grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr))]">
+          <div className="card overflow-hidden">
+            {/* -mr/-mb hide the outer cell borders under the card's edge. */}
+            <ul className="-mr-px -mb-px m-0 grid list-none p-0 [grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr))]">
               {clients.map((c) => (
                 <li
                   key={c}
