@@ -24,7 +24,7 @@ const fraunces = Fraunces({
 const epilogue = Epilogue({
   variable: "--nf-epilogue",
   subsets: ["latin"],
-  weight: "900",
+  weight: ["600", "900"],
 });
 
 export const metadata: Metadata = {
