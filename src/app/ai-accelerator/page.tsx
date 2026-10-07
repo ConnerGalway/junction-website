@@ -144,7 +144,7 @@ const faqs: Faq[] = [
 ];
 
 const tableCols =
-  "[grid-template-columns:minmax(120px,0.6fr)_minmax(0,1.4fr)_minmax(0,1fr)]";
+  "[grid-template-columns:minmax(88px,0.6fr)_minmax(0,1.4fr)_minmax(0,1fr)]";
 
 export default function AIAcceleratorPage() {
   return (
@@ -304,7 +304,7 @@ export default function AIAcceleratorPage() {
           {/* Table */}
           <div className="overflow-hidden rounded-card border border-hairline">
             <div
-              className={`type-eyebrow grid gap-5 bg-carbon px-6 py-4 text-newsprint ${tableCols}`}
+              className={`type-eyebrow grid gap-3 bg-carbon px-4 py-4 text-newsprint [overflow-wrap:anywhere] sm:gap-5 sm:px-6 ${tableCols}`}
             >
               <span>Area</span>
               <span>What happened before</span>
@@ -313,7 +313,7 @@ export default function AIAcceleratorPage() {
             {exampleTableData.map((row, i) => (
               <div
                 key={i}
-                className={`type-body grid max-w-none gap-5 px-6 py-5 ${tableCols} ${
+                className={`type-body grid max-w-none gap-3 px-4 py-5 text-[15px] leading-normal [overflow-wrap:anywhere] sm:gap-5 sm:px-6 sm:text-[18px] sm:leading-[1.8] ${tableCols} ${
                   i < exampleTableData.length - 1 ? "border-b border-hairline" : ""
                 }`}
               >

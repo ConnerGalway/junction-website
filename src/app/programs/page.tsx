@@ -98,7 +98,7 @@ export default function ProgramsPage() {
             <li
               key={program.id}
               id={program.id}
-              className="grid scroll-mt-28 gap-x-12 gap-y-3 border-b border-hairline py-9 [grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))]"
+              className="grid scroll-mt-28 gap-x-12 gap-y-3 border-b border-hairline py-9 md:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)_minmax(0,0.5fr)]"
             >
               <div className="flex flex-col gap-3">
                 <span className="type-h4 text-accent-2">
@@ -120,9 +120,7 @@ export default function ProgramsPage() {
                 )}
               </div>
               <p className="type-body text-muted m-0">{program.description}</p>
-              {program.price && (
-                <p className="type-h4 m-0 text-canopy-text">{program.price}</p>
-              )}
+              <p className="type-h4 m-0 text-canopy-text">{program.price}</p>
             </li>
           ))}
         </Container>

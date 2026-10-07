@@ -71,10 +71,18 @@ export function Footer() {
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="link-plain break-words"
+                    className="link-plain"
                     {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                   >
-                    {link.label}
+                    {/* Let the email address wrap after the @, never mid-word. */}
+                    {link.label.includes("@") ? (
+                      <>
+                        {link.label.split("@")[0]}@<wbr />
+                        {link.label.split("@")[1]}
+                      </>
+                    ) : (
+                      link.label
+                    )}
                   </a>
                 </li>
               ))}
