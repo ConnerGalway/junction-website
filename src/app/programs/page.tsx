@@ -27,14 +27,16 @@ const programs: Program[] = [
   {
     id: "accelerator",
     title: "The Accelerator",
-    description: "A 90-day marketing plan you'll actually work.",
+    description:
+      "A full digital assessment, a one-to-one coaching session, and a three-page plan you can start Monday. 25–100% covered through a destination partnership.",
     href: "/accelerator",
     price: "$2,500",
   },
   {
     id: "offload-program",
     title: "Offload Program (AI Accelerator)",
-    description: "We automate one of your bottlenecks in 30 days. Guaranteed.",
+    description:
+      "The 30-day program: 4 live sessions, a custom dashboard, a prompt library, a 90-day plan, and at least one bottleneck automated before day 30. Open to teams beyond tourism.",
     href: "/ai-accelerator",
     price: "30 days",
     isNew: true,
@@ -42,13 +44,15 @@ const programs: Program[] = [
   {
     id: "custom-training",
     title: "Custom Training",
-    description: "Training built around your people.",
+    description:
+      "Workshops, webinar series and custom programs. Plain language, and every action doable in under an hour, like the Okotoks series that prepped a town for 4,500 visitors.",
     href: "/custom-training",
   },
   {
     id: "speaking",
     title: "Speaking",
-    description: "Talks that send the room home with a plan.",
+    description:
+      "Keynotes, workshops, conference sessions and virtual talks on AI, tourism innovation and marketing trends. Recent stages: Northern BC Tourism Summit, TIABC, Yukon Go Digital Summit.",
     href: "/speaking",
   },
   {
@@ -66,7 +70,8 @@ const programs: Program[] = [
   {
     id: "junctionu",
     title: "JunctionU",
-    description: "Training that fits between two guest check-ins.",
+    description:
+      "Certificate courses, workshops and free Tourism Talks, built for tourism professionals. Lessons run under an hour and every one ends in something you can do today. 2,000+ people are in.",
     href: "/junctionu",
   },
 ];
@@ -80,7 +85,7 @@ export default function ProgramsPage() {
           className="grid items-end gap-x-[72px] gap-y-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))]"
         >
           <div>
-            <Eyebrow className="mb-6">Programs</Eyebrow>
+            <Eyebrow className="mb-6">Services</Eyebrow>
             <h1 className="type-display m-0">We build the plan. We train the people.</h1>
           </div>
           <p className="type-body text-muted m-0">
