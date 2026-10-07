@@ -4,7 +4,7 @@ import { cx } from "./cx";
 export type Tone = "newsprint" | "carbon" | "forest";
 
 type SectionProps = ComponentPropsWithoutRef<"section"> & {
-  /** Ground colour. Forest is reserved for the closing CTA band. */
+  /** Ground colour. Carbon and Forest are both dark grounds; don't let two of the same touch. */
   tone?: Tone;
   /** default = clamp(96px, 11.5vw, 168px); tight = clamp(72px, 8vw, 120px). */
   spacing?: "default" | "tight";
