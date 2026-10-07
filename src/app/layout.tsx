@@ -29,7 +29,10 @@ const epilogue = Epilogue({
 });
 
 export const metadata: Metadata = {
-  title: "Junction | Strategy & Capacity Building",
+  title: {
+    default: "Junction | Strategy & Capacity Building",
+    template: "%s | Junction",
+  },
   description:
     "Junction is where organizations and technology meet. We build marketing strategy for destinations, and we train the people who deliver it.",
 };
