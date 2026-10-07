@@ -51,7 +51,7 @@ function ContactForm() {
   if (sent) {
     return (
       <div className="flex flex-col gap-4" style={{ padding: "12px 0" }}>
-        <div className="text-eyebrow text-accent-shade">Got it</div>
+        <div className="text-eyebrow text-accent-2">Got it</div>
         <div
           className="font-epilogue"
           style={{
@@ -106,7 +106,7 @@ function ContactForm() {
                 fontSize: "14px",
                 fontWeight: 500,
                 padding: "11px 16px",
-                background: selectedType === t ? "#1C1C1A" : "#FFFFFF",
+                background: selectedType === t ? "#1C1C1A" : "#F4F0E8",
                 color: selectedType === t ? "#F4F0E8" : "#1C1C1A",
                 border: `1.5px solid ${
                   selectedType === t ? "#1C1C1A" : "rgba(28, 28, 26, 0.25)"
@@ -137,7 +137,7 @@ function ContactForm() {
               padding: "13px 14px",
               border: "1px solid rgba(28, 28, 26, 0.25)",
               fontSize: "16px",
-              background: "#FFFFFF",
+              background: "#F4F0E8",
               color: "#1C1C1A",
             }}
           />
@@ -153,7 +153,7 @@ function ContactForm() {
               padding: "13px 14px",
               border: "1px solid rgba(28, 28, 26, 0.25)",
               fontSize: "16px",
-              background: "#FFFFFF",
+              background: "#F4F0E8",
               color: "#1C1C1A",
             }}
           />
@@ -170,7 +170,7 @@ function ContactForm() {
             padding: "13px 14px",
             border: "1px solid rgba(28, 28, 26, 0.25)",
             fontSize: "16px",
-            background: "#FFFFFF",
+            background: "#F4F0E8",
             color: "#1C1C1A",
           }}
         />
@@ -188,7 +188,7 @@ function ContactForm() {
                 padding: "13px 14px",
                 border: "1px solid rgba(28, 28, 26, 0.25)",
                 fontSize: "16px",
-                background: "#FFFFFF",
+                background: "#F4F0E8",
                 color: "#1C1C1A",
               }}
             >
@@ -270,7 +270,7 @@ function ContactForm() {
                 padding: "13px 14px",
                 border: "1px solid rgba(28, 28, 26, 0.25)",
                 fontSize: "16px",
-                background: "#FFFFFF",
+                background: "#F4F0E8",
                 color: "#1C1C1A",
               }}
             >
@@ -377,7 +377,7 @@ function ContactForm() {
                   padding: "13px 14px",
                   border: "1px solid rgba(28, 28, 26, 0.25)",
                   fontSize: "16px",
-                  background: "#FFFFFF",
+                  background: "#F4F0E8",
                   color: "#1C1C1A",
                 }}
               >
@@ -397,7 +397,7 @@ function ContactForm() {
                 padding: "13px 14px",
                 border: "1px solid rgba(28, 28, 26, 0.25)",
                 fontSize: "16px",
-                background: "#FFFFFF",
+                background: "#F4F0E8",
                 color: "#1C1C1A",
               }}
             >
@@ -476,7 +476,7 @@ export default function ContactPage() {
         >
           {/* Left column */}
           <div>
-            <div className="text-eyebrow text-accent-shade mb-5">
+            <div className="text-eyebrow text-accent-2 mb-5">
               Start a conversation
             </div>
             <h1
@@ -562,7 +562,7 @@ export default function ContactPage() {
 
           {/* Form */}
           <div
-            className="bg-white rounded"
+            className="bg-newsprint rounded"
             style={{ padding: "clamp(24px, 3.5vw, 44px)" }}
           >
             <ContactFormWrapper />

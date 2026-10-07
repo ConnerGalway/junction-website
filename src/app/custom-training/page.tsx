@@ -80,7 +80,7 @@ export default function CustomTrainingPage() {
           }}
         >
           <div>
-            <div className="text-eyebrow text-accent-shade mb-5">
+            <div className="text-eyebrow text-accent-2 mb-5">
               Custom training
             </div>
             <h1
@@ -225,7 +225,7 @@ export default function CustomTrainingPage() {
             style={{ padding: "clamp(28px, 3.5vw, 48px)" }}
           >
             <div
-              className="text-accent"
+              className="text-accent-1"
               style={{
                 fontSize: "12px",
                 fontWeight: 500,
@@ -281,7 +281,7 @@ export default function CustomTrainingPage() {
             </div>
             <Link
               href="/contact?type=training"
-              className="text-accent font-medium mt-auto"
+              className="text-accent-1 font-medium mt-auto"
               style={{ fontSize: "15px" }}
             >
               Scope a leadership program →
@@ -451,7 +451,7 @@ export default function CustomTrainingPage() {
         style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
       >
         <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
-          <div className="text-eyebrow text-accent-shade mb-4">Formats</div>
+          <div className="text-eyebrow text-accent-2 mb-4">Formats</div>
           <div
             style={{
               display: "grid",
@@ -469,7 +469,7 @@ export default function CustomTrainingPage() {
                 }}
               >
                 <div
-                  className="font-bebas text-accent"
+                  className="font-bebas text-accent-1"
                   style={{ fontSize: "26px" }}
                 >
                   {f.num}

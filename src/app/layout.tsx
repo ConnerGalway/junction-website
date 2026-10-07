@@ -3,26 +3,26 @@ import { DM_Sans, Bebas_Neue, Fraunces, Epilogue } from "next/font/google";
 import "./globals.css";
 
 const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+  variable: "--nf-dm-sans",
   subsets: ["latin"],
   weight: ["300", "400", "500"],
 });
 
 const bebasNeue = Bebas_Neue({
-  variable: "--font-bebas",
+  variable: "--nf-bebas",
   subsets: ["latin"],
   weight: "400",
 });
 
 const fraunces = Fraunces({
-  variable: "--font-fraunces",
+  variable: "--nf-fraunces",
   subsets: ["latin"],
   weight: "900",
   style: "italic",
 });
 
 const epilogue = Epilogue({
-  variable: "--font-epilogue",
+  variable: "--nf-epilogue",
   subsets: ["latin"],
   weight: "900",
 });

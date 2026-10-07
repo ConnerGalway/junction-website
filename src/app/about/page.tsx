@@ -37,7 +37,7 @@ export default function AboutPage() {
       >
         <div className="content-container">
           <div
-            className="text-accent-shade"
+            className="text-accent-2"
             style={{
               fontSize: "12px",
               fontWeight: 500,
@@ -93,7 +93,7 @@ export default function AboutPage() {
       >
         <div className="content-container">
           <div
-            className="text-accent"
+            className="text-accent-1"
             style={{
               fontSize: "12px",
               fontWeight: 500,
@@ -121,7 +121,7 @@ export default function AboutPage() {
                 }}
               >
                 <div
-                  className="font-bebas text-accent"
+                  className="font-bebas text-accent-1"
                   style={{ fontSize: "32px", marginBottom: "14px" }}
                 >
                   {belief.num}
@@ -159,7 +159,7 @@ export default function AboutPage() {
       <section className="section-padding">
         <div className="content-container">
           <div
-            className="text-accent-shade"
+            className="text-accent-2"
             style={{
               fontSize: "12px",
               fontWeight: 500,
@@ -199,7 +199,7 @@ export default function AboutPage() {
             <div>
               <h2 className="text-h2 m-0 mb-2">Conner Galway</h2>
               <div
-                className="text-accent-shade"
+                className="text-accent-2"
                 style={{
                   fontSize: "12px",
                   fontWeight: 500,

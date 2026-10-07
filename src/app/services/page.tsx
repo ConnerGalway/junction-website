@@ -61,7 +61,7 @@ export default function ServicesPage() {
         >
           <div>
             <div
-              className="text-accent-shade"
+              className="text-accent-2"
               style={{
                 fontSize: "12px",
                 fontWeight: 500,
@@ -115,7 +115,7 @@ export default function ServicesPage() {
                 style={{ gap: "20px" }}
               >
                 <span
-                  className="font-bebas text-accent"
+                  className="font-bebas text-accent-1"
                   style={{ fontSize: "32px" }}
                 >
                   {service.num}
@@ -133,7 +133,7 @@ export default function ServicesPage() {
                 </h2>
                 {service.isNew && (
                   <span
-                    className="bg-break text-white self-center"
+                    className="bg-break-on-light text-newsprint self-center"
                     style={{
                       fontSize: "11px",
                       fontWeight: 500,

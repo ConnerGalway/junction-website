@@ -75,7 +75,7 @@ export function Footer() {
             className="flex flex-col gap-2.5 text-sm font-light"
           >
             <span
-              className="text-accent mb-1"
+              className="text-accent-1 mb-1"
               style={{
                 fontSize: "12px",
                 fontWeight: 500,

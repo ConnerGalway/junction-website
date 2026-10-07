@@ -1,45 +1,65 @@
 @import "tailwindcss";
 
-:root {
-  /* Core colors */
+/*
+ * ─── Design tokens ────────────────────────────────────────────────────────
+ * Defined directly in @theme so Tailwind generates utilities from them
+ * (bg-carbon, text-flint, border-hairline, rounded-card, py-section, …).
+ * The default Tailwind palette is cleared: only brand colours exist, and
+ * there is deliberately no white. See DESIGN_SYSTEM.md.
+ *
+ * Colour roles
+ * - Newsprint ground (~80% of a page): text carbon, muted flint, eyebrow
+ *   accent-2, links + primary buttons canopy-text, rules canopy. Sage only
+ *   inside boxes (quote cards, chips), never on full-width sections.
+ * - Carbon ground (~12%): text newsprint, muted newsprint-muted, eyebrows +
+ *   links fern, stats accent-1, primary button newsprint fill + carbon text.
+ * - Forest ground (~8%): closing CTA band only, one per page, always last.
+ *   Text newsprint, eyebrow fern, primary button newsprint fill + forest
+ *   text. No accent-1.
+ * - Every link turns pink on hover (text + underline): break-on-light on
+ *   Newsprint, break-on-dark on Carbon and Forest. On Forest that is 2.9:1,
+ *   an accepted exception for the hover state only.
+ */
+@theme {
+  --color-*: initial;
+
   --color-carbon: #1C1C1A;
-  --color-newsprint: #F4F0E8;
+  --color-flint: #6A6862;          /* muted text on Newsprint */
+  --color-newsprint: #F4F0E8;      /* replaces white everywhere */
+
   --color-forest: #1A4D2E;
-  --color-canopy: #2E7D4F;
+  --color-canopy: #2E7D4F;         /* rules, fills (not text) */
+  --color-canopy-text: #2B764A;    /* text, links, primary button on light */
   --color-fern: #7FC99A;
   --color-sage: #C8E8D4;
-  --color-accent: #C4963A;
-  --color-accent-shade: #6B4D12; /* Darkened from #8A6420 for WCAG AA contrast */
-  --color-break: #E0176A;
-  --color-white: #FFFFFF;
 
-  /* Muted text - improved contrast */
-  --color-carbon-muted: rgba(28, 28, 26, 0.78);
-  --color-newsprint-muted: rgba(244, 240, 232, 0.85);
+  --color-accent-1: #C4963A;       /* burnt yellow, only on Carbon */
+  --color-accent-2: #A55527;       /* copper, text-safe on Newsprint */
 
-  /* Hairlines */
-  --color-hairline: rgba(28, 28, 26, 0.12);
-  --color-hairline-strong: rgba(28, 28, 26, 0.18);
+  --color-break: #E0176A;          /* dots, outlines, underlines */
+  --color-break-on-light: #CD1561; /* pink text and fills on Newsprint */
+  --color-break-on-dark: #ED5192;  /* pink text on Carbon and Forest */
+
+  --color-newsprint-muted: rgba(244, 240, 232, 0.8); /* muted text on dark */
+  --color-hairline: rgba(28, 28, 26, 0.14);
   --color-hairline-dark: rgba(244, 240, 232, 0.15);
+
+  --color-transparent: transparent;
+  --color-current: currentColor;
 }
 
 @theme inline {
-  /* Colors */
-  --color-carbon: var(--color-carbon);
-  --color-newsprint: var(--color-newsprint);
-  --color-forest: var(--color-forest);
-  --color-canopy: var(--color-canopy);
-  --color-fern: var(--color-fern);
-  --color-sage: var(--color-sage);
-  --color-accent: var(--color-accent);
-  --color-accent-shade: var(--color-accent-shade);
-  --color-break: var(--color-break);
+  /* next/font exposes --nf-* on <html>; map them to font-* utilities. */
+  --font-sans: var(--nf-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--nf-epilogue), ui-sans-serif, system-ui, sans-serif;
+  --font-quote: var(--nf-fraunces), ui-serif, Georgia, serif;
+  --font-wordmark: var(--nf-bebas), ui-sans-serif, system-ui, sans-serif;
 
-  /* Fonts */
-  --font-epilogue: var(--font-epilogue);
-  --font-dm-sans: var(--font-dm-sans);
-  --font-bebas: var(--font-bebas);
-  --font-fraunces: var(--font-fraunces);
+  /* Legacy aliases, removed once every page uses the type scale. */
+  --font-epilogue: var(--nf-epilogue), sans-serif;
+  --font-dm-sans: var(--nf-dm-sans), sans-serif;
+  --font-bebas: var(--nf-bebas), sans-serif;
+  --font-fraunces: var(--nf-fraunces), serif;
 }
 
 /*
@@ -56,7 +76,7 @@
     margin: 0;
     background: var(--color-newsprint);
     color: var(--color-carbon);
-    font-family: var(--font-dm-sans), sans-serif;
+    font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -102,7 +122,7 @@
 
 /* Responsive clamp utilities */
 .text-h1 {
-  font-family: var(--font-epilogue), sans-serif;
+  font-family: var(--font-display);
   font-weight: 900;
   font-size: clamp(48px, 7.4vw, 118px);
   line-height: 0.92;
@@ -110,7 +130,7 @@
 }
 
 .text-h2 {
-  font-family: var(--font-epilogue), sans-serif;
+  font-family: var(--font-display);
   font-weight: 900;
   font-size: clamp(36px, 4.6vw, 64px);
   line-height: 0.96;
@@ -118,7 +138,7 @@
 }
 
 .text-h3 {
-  font-family: var(--font-epilogue), sans-serif;
+  font-family: var(--font-display);
   font-weight: 900;
   font-size: clamp(24px, 2.6vw, 40px);
   line-height: 1.04;

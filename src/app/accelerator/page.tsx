@@ -150,7 +150,7 @@ function TaskChecklist() {
         style={{ marginBottom: "6px" }}
       >
         <span
-          className="font-bebas text-accent-shade"
+          className="font-bebas text-accent-2"
           style={{ fontSize: "26px", letterSpacing: "0.04em" }}
         >
           Week 1 · Tracking setup
@@ -254,7 +254,7 @@ export default function AcceleratorPage() {
           }}
         >
           <div>
-            <div className="text-eyebrow text-accent-shade mb-5">
+            <div className="text-eyebrow text-accent-2 mb-5">
               The Accelerator · 90 days · small businesses
             </div>
             <h1
@@ -333,11 +333,11 @@ export default function AcceleratorPage() {
 
           {/* Assessment Preview */}
           <div
-            className="bg-white rounded flex flex-col gap-5"
+            className="bg-newsprint rounded flex flex-col gap-5"
             style={{ padding: "clamp(24px, 3vw, 36px)" }}
           >
             <div className="flex justify-between items-center gap-3 flex-wrap">
-              <span className="text-eyebrow text-accent-shade">
+              <span className="text-eyebrow text-accent-2">
                 Your digital assessment
               </span>
               <span style={{ fontSize: "12px", color: "rgba(28, 28, 26, 0.72)" }}>
@@ -400,7 +400,7 @@ export default function AcceleratorPage() {
           }}
         >
           <div>
-            <div className="text-eyebrow text-accent-shade mb-4">
+            <div className="text-eyebrow text-accent-2 mb-4">
               What you get
             </div>
             <h2
@@ -442,7 +442,7 @@ export default function AcceleratorPage() {
                 }}
               >
                 <span
-                  className="font-bebas text-accent"
+                  className="font-bebas text-accent-1"
                   style={{ fontSize: "28px" }}
                 >
                   {item.num}
@@ -582,7 +582,7 @@ export default function AcceleratorPage() {
         style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
       >
         <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
-          <div className="text-eyebrow text-accent-shade mb-4">
+          <div className="text-eyebrow text-accent-2 mb-4">
             How the 90 days run
           </div>
           <h2
@@ -608,14 +608,14 @@ export default function AcceleratorPage() {
             {touchpoints.map((tp) => (
               <div
                 key={tp.label}
-                className="bg-white rounded-b"
+                className="bg-newsprint rounded-b"
                 style={{
                   borderTop: "4px solid #1A4D2E",
                   padding: "28px",
                 }}
               >
                 <div
-                  className="font-bebas text-accent"
+                  className="font-bebas text-accent-1"
                   style={{ fontSize: "24px", letterSpacing: "0.04em" }}
                 >
                   {tp.label}
@@ -665,7 +665,7 @@ export default function AcceleratorPage() {
             style={{ padding: "28px" }}
           >
             <div
-              className="font-bebas text-accent"
+              className="font-bebas text-accent-1"
               style={{ fontSize: "80px", lineHeight: 0.85 }}
             >
               +300%

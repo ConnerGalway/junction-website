@@ -146,7 +146,7 @@ function FAQAccordion() {
           >
             <span>{faq.q}</span>
             <span
-              className="font-bebas text-accent"
+              className="font-bebas text-accent-1"
               style={{ fontSize: "26px", lineHeight: 1 }}
             >
               {openIndex === i ? "−" : "+"}
@@ -200,11 +200,11 @@ export default function AIAcceleratorPage() {
               className="flex items-center gap-3 flex-wrap"
               style={{ marginBottom: "22px" }}
             >
-              <span className="text-eyebrow text-accent-shade">
+              <span className="text-eyebrow text-accent-2">
                 AI Accelerator · 30 days · any industry
               </span>
               <span
-                className="bg-break text-white"
+                className="bg-break-on-light text-newsprint"
                 style={{
                   fontSize: "11px",
                   fontWeight: 500,
@@ -288,7 +288,7 @@ export default function AIAcceleratorPage() {
           >
             <div className="flex justify-between items-center gap-3 flex-wrap">
               <span
-                className="text-accent"
+                className="text-accent-1"
                 style={{
                   fontSize: "12px",
                   fontWeight: 500,
@@ -443,7 +443,7 @@ export default function AIAcceleratorPage() {
           }}
         >
           <div>
-            <div className="text-eyebrow text-accent-shade mb-4">
+            <div className="text-eyebrow text-accent-2 mb-4">
               What you leave with
             </div>
             <h2
@@ -485,7 +485,7 @@ export default function AIAcceleratorPage() {
                 }}
               >
                 <span
-                  className="font-bebas text-accent"
+                  className="font-bebas text-accent-1"
                   style={{ fontSize: "28px" }}
                 >
                   {item.num}
@@ -619,7 +619,7 @@ export default function AIAcceleratorPage() {
             }}
           >
             <div>
-              <div className="text-eyebrow text-accent-shade mb-4">
+              <div className="text-eyebrow text-accent-2 mb-4">
                 Example program · building supply · 7 people
               </div>
               <h2
@@ -650,7 +650,7 @@ export default function AIAcceleratorPage() {
           </div>
 
           {/* Table */}
-          <div className="bg-white rounded overflow-hidden">
+          <div className="bg-newsprint rounded overflow-hidden">
             <div
               className="bg-carbon text-newsprint"
               style={{
@@ -735,7 +735,7 @@ export default function AIAcceleratorPage() {
                   >
                     {m.value}
                   </span>
-                  <span className="text-accent">→</span>
+                  <span className="text-accent-1">→</span>
                   <span
                     style={{
                       fontSize: "12px",
@@ -873,7 +873,7 @@ export default function AIAcceleratorPage() {
 
           {/* FAQ */}
           <div>
-            <div className="text-eyebrow text-accent-shade mb-3">Questions</div>
+            <div className="text-eyebrow text-accent-2 mb-3">Questions</div>
             <FAQAccordion />
           </div>
         </div>

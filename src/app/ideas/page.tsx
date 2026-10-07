@@ -82,7 +82,7 @@ export default function IdeasPage() {
         >
           <div>
             <div
-              className="text-accent-shade"
+              className="text-accent-2"
               style={{
                 fontSize: "12px",
                 fontWeight: 500,
@@ -102,7 +102,7 @@ export default function IdeasPage() {
             style={{ padding: "clamp(24px, 3vw, 36px)" }}
           >
             <div
-              className="text-accent"
+              className="text-accent-1"
               style={{
                 fontSize: "12px",
                 fontWeight: 500,
@@ -210,7 +210,7 @@ export default function IdeasPage() {
                 }}
               >
                 <div
-                  className="text-accent-shade"
+                  className="text-accent-2"
                   style={{
                     fontSize: "12px",
                     fontWeight: 500,

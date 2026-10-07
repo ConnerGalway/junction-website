@@ -63,7 +63,7 @@ export default function SpeakingPage() {
         >
           <div>
             <div
-              className="text-accent"
+              className="text-accent-1"
               style={{
                 fontSize: "12px",
                 fontWeight: 500,
@@ -167,7 +167,7 @@ export default function SpeakingPage() {
         style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
       >
         <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
-          <div className="text-eyebrow text-accent-shade mb-4">Topics</div>
+          <div className="text-eyebrow text-accent-2 mb-4">Topics</div>
           <h2
             className="font-epilogue"
             style={{
@@ -191,14 +191,14 @@ export default function SpeakingPage() {
             {topics.map((t) => (
               <div
                 key={t.num}
-                className="bg-white rounded flex flex-col gap-3.5"
+                className="bg-newsprint rounded flex flex-col gap-3.5"
                 style={{
                   padding: "clamp(26px, 3vw, 36px)",
                   borderTop: "4px solid #1A4D2E",
                 }}
               >
                 <span
-                  className="font-bebas text-accent"
+                  className="font-bebas text-accent-1"
                   style={{ fontSize: "30px" }}
                 >
                   {t.num}

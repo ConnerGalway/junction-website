@@ -66,7 +66,7 @@ const filters = ["All", "Certificates", "Workshops", "Free"];
 const tagStyles: Record<string, { bg: string; fg: string }> = {
   Certificate: { bg: "#1A4D2E", fg: "#F4F0E8" },
   Workshop: { bg: "#C8E8D4", fg: "#1A4D2E" },
-  Free: { bg: "#E0176A", fg: "#FFFFFF" },
+  Free: { bg: "#E0176A", fg: "#F4F0E8" },
 };
 
 export default function JunctionUPage() {
@@ -171,7 +171,7 @@ export default function JunctionUPage() {
           >
             <div>
               <div
-                className="text-accent-shade"
+                className="text-accent-2"
                 style={{
                   fontSize: "12px",
                   fontWeight: 500,
@@ -224,12 +224,12 @@ export default function JunctionUPage() {
               <Link
                 key={course.code}
                 href="#"
-                className="flex flex-col bg-white rounded transition-colors hover:bg-sage"
+                className="flex flex-col bg-newsprint rounded transition-colors hover:bg-sage"
                 style={{ padding: "26px", minHeight: "280px", gap: "14px" }}
               >
                 <div className="flex justify-between items-center gap-3">
                   <span
-                    className="font-bebas text-accent-shade"
+                    className="font-bebas text-accent-2"
                     style={{ fontSize: "22px", letterSpacing: "0.06em" }}
                   >
                     {course.code}

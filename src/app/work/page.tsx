@@ -19,7 +19,7 @@ export default function WorkPage() {
         >
           <div>
             <div
-              className="text-accent-shade"
+              className="text-accent-2"
               style={{
                 fontSize: "12px",
                 fontWeight: 500,
@@ -58,7 +58,7 @@ export default function WorkPage() {
         >
           <div>
             <div
-              className="text-accent-shade"
+              className="text-accent-2"
               style={{
                 fontSize: "12px",
                 fontWeight: 500,
@@ -70,7 +70,7 @@ export default function WorkPage() {
               Travel Yukon · Training · 4 years
             </div>
             <div
-              className="font-bebas text-accent"
+              className="font-bebas text-accent-1"
               style={{
                 fontSize: "clamp(96px, 13vw, 200px)",
                 lineHeight: "0.85",
@@ -238,7 +238,7 @@ export default function WorkPage() {
         >
           <div>
             <div
-              className="text-accent-shade"
+              className="text-accent-2"
               style={{
                 fontSize: "12px",
                 fontWeight: 500,
@@ -250,7 +250,7 @@ export default function WorkPage() {
               Ontario's Southwest · Research · 2025–26
             </div>
             <div
-              className="font-bebas text-accent"
+              className="font-bebas text-accent-1"
               style={{
                 fontSize: "clamp(96px, 13vw, 200px)",
                 lineHeight: "0.85",
@@ -339,7 +339,7 @@ export default function WorkPage() {
         >
           <div>
             <div
-              className="text-accent"
+              className="text-accent-1"
               style={{
                 fontSize: "12px",
                 fontWeight: 500,

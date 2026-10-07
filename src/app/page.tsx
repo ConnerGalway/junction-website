@@ -152,7 +152,7 @@ export default function HomePage() {
           }}
         >
           <div>
-            <div className="text-eyebrow text-accent-shade mb-5">
+            <div className="text-eyebrow text-accent-2 mb-5">
               Strategy & capacity building
             </div>
             <h1
@@ -212,7 +212,7 @@ export default function HomePage() {
             style={{ padding: "clamp(26px, 3.2vw, 40px)" }}
           >
             <div
-              className="text-accent"
+              className="text-accent-1"
               style={{
                 fontSize: "12px",
                 fontWeight: 500,
@@ -236,7 +236,7 @@ export default function HomePage() {
                   }}
                 >
                   <span
-                    className="font-bebas text-accent"
+                    className="font-bebas text-accent-1"
                     style={{ fontSize: "24px", lineHeight: 1 }}
                   >
                     {item.num}
@@ -339,7 +339,7 @@ export default function HomePage() {
             }}
           >
             <div>
-              <div className="text-eyebrow text-accent-shade mb-4">
+              <div className="text-eyebrow text-accent-2 mb-4">
                 Four ways in
               </div>
               <h2
@@ -381,7 +381,7 @@ export default function HomePage() {
               <Link
                 key={program.num}
                 href={program.href}
-                className="flex flex-col gap-3.5 bg-white rounded transition-colors hover:bg-sage"
+                className="flex flex-col gap-3.5 bg-newsprint rounded transition-colors hover:bg-sage"
                 style={{
                   padding: "clamp(26px, 3vw, 38px)",
                   borderTop: "4px solid #1A4D2E",
@@ -389,7 +389,7 @@ export default function HomePage() {
               >
                 <div className="flex justify-between items-center gap-3">
                   <span
-                    className="font-bebas text-accent"
+                    className="font-bebas text-accent-1"
                     style={{ fontSize: "28px" }}
                   >
                     {program.num}
@@ -467,7 +467,7 @@ export default function HomePage() {
         >
           <div>
             <div
-              className="text-accent"
+              className="text-accent-1"
               style={{
                 fontSize: "12px",
                 fontWeight: 500,
@@ -540,7 +540,7 @@ export default function HomePage() {
                   >
                     65%
                   </span>
-                  <span className="text-accent">→</span>
+                  <span className="text-accent-1">→</span>
                   <Placeholder className="text-newsprint">[ result ]</Placeholder>
                 </div>
               </div>
@@ -569,7 +569,7 @@ export default function HomePage() {
                   >
                     Up to 1 day
                   </span>
-                  <span className="text-accent">→</span>
+                  <span className="text-accent-1">→</span>
                   <Placeholder className="text-newsprint">[ result ]</Placeholder>
                 </div>
               </div>
@@ -601,7 +601,7 @@ export default function HomePage() {
                 }}
               >
                 <span
-                  className="font-bebas text-accent"
+                  className="font-bebas text-accent-1"
                   style={{ fontSize: "26px" }}
                 >
                   {step.num}
@@ -638,7 +638,7 @@ export default function HomePage() {
         style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
       >
         <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
-          <div className="text-eyebrow text-accent-shade mb-7">
+          <div className="text-eyebrow text-accent-2 mb-7">
             What clients say
           </div>
           <div
@@ -696,7 +696,7 @@ export default function HomePage() {
               </div>
             </div>
             <blockquote
-              className="m-0 bg-white rounded flex flex-col justify-between gap-6"
+              className="m-0 bg-newsprint rounded flex flex-col justify-between gap-6"
               style={{ padding: "28px", minHeight: "220px" }}
             >
               <p
@@ -733,7 +733,7 @@ export default function HomePage() {
           }}
         >
           <div>
-            <div className="text-eyebrow text-accent-shade mb-3.5">
+            <div className="text-eyebrow text-accent-2 mb-3.5">
               The first step
             </div>
             <h2
@@ -751,7 +751,7 @@ export default function HomePage() {
           {callSteps.map((step) => (
             <div key={step.num}>
               <div
-                className="font-bebas text-accent"
+                className="font-bebas text-accent-1"
                 style={{ fontSize: "32px", marginBottom: "8px" }}
               >
                 {step.num}
