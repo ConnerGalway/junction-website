@@ -9,18 +9,18 @@
   --color-fern: #7FC99A;
   --color-sage: #C8E8D4;
   --color-accent: #C4963A;
-  --color-accent-shade: #8A6420;
+  --color-accent-shade: #6B4D12; /* Darkened from #8A6420 for WCAG AA contrast */
   --color-break: #E0176A;
   --color-white: #FFFFFF;
 
-  /* Muted text */
-  --color-carbon-muted: rgba(28, 28, 26, 0.74);
-  --color-newsprint-muted: rgba(244, 240, 232, 0.78);
+  /* Muted text - improved contrast */
+  --color-carbon-muted: rgba(28, 28, 26, 0.78);
+  --color-newsprint-muted: rgba(244, 240, 232, 0.85);
 
   /* Hairlines */
   --color-hairline: rgba(28, 28, 26, 0.12);
-  --color-hairline-strong: rgba(28, 28, 26, 0.15);
-  --color-hairline-dark: rgba(244, 240, 232, 0.12);
+  --color-hairline-strong: rgba(28, 28, 26, 0.18);
+  --color-hairline-dark: rgba(244, 240, 232, 0.15);
 }
 
 @theme inline {
@@ -58,6 +58,57 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+/* Focus states for accessibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-forest);
+  outline-offset: 2px;
+}
+
+/* Remove default outline and use custom */
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-forest);
+  outline-offset: 2px;
+}
+
+/* Smooth transitions for interactive elements */
+a,
+button {
+  transition: all 0.15s ease-out;
+}
+
+/* Button active state - subtle press effect */
+button:active:not(:disabled),
+a.text-button:active {
+  transform: translateY(1px);
+}
+
+/* Input focus enhancement */
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--color-forest) !important;
+  box-shadow: 0 0 0 3px rgba(26, 77, 46, 0.12);
+}
+
+/* Placeholder styling */
+::placeholder {
+  color: rgba(28, 28, 26, 0.45);
+}
+
+/* Selection styling */
+::selection {
+  background: var(--color-sage);
+  color: var(--color-carbon);
 }
 
 /* Responsive clamp utilities */

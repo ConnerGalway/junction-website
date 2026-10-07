@@ -37,7 +37,7 @@ export function Header() {
             fontSize: "10px",
             lineHeight: "1.25",
             letterSpacing: "0.06em",
-            color: "rgba(28, 28, 26, 0.62)",
+            color: "rgba(28, 28, 26, 0.72)",
             borderLeft: "1px solid rgba(28, 28, 26, 0.2)",
             paddingLeft: "12px",
           }}

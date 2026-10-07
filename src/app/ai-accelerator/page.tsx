@@ -299,7 +299,7 @@ export default function AIAcceleratorPage() {
                 Your program dashboard
               </span>
               <span
-                style={{ fontSize: "13px", color: "rgba(244, 240, 232, 0.7)" }}
+                style={{ fontSize: "13px", color: "rgba(244, 240, 232, 0.78)" }}
               >
                 3 of 4 sessions done
               </span>
@@ -340,7 +340,7 @@ export default function AIAcceleratorPage() {
                   <span
                     style={{
                       fontSize: "12px",
-                      color: "rgba(244, 240, 232, 0.6)",
+                      color: "rgba(244, 240, 232, 0.78)",
                     }}
                   >
                     {item.status}
@@ -406,7 +406,7 @@ export default function AIAcceleratorPage() {
               fontWeight: 500,
               letterSpacing: "0.14em",
               textTransform: "uppercase",
-              color: "rgba(28, 28, 26, 0.6)",
+              color: "rgba(28, 28, 26, 0.72)",
             }}
           >
             Teams who&apos;ve been through it
@@ -740,7 +740,7 @@ export default function AIAcceleratorPage() {
                     style={{
                       fontSize: "12px",
                       fontWeight: 500,
-                      color: "rgba(28, 28, 26, 0.6)",
+                      color: "rgba(28, 28, 26, 0.72)",
                       border: "1.5px dashed rgba(28, 28, 26, 0.3)",
                       padding: "4px 8px",
                       borderRadius: "2px",
@@ -785,7 +785,7 @@ export default function AIAcceleratorPage() {
                   fontWeight: 500,
                   letterSpacing: "0.08em",
                   textTransform: "uppercase",
-                  color: "rgba(28, 28, 26, 0.58)",
+                  color: "rgba(28, 28, 26, 0.72)",
                 }}
               >
                 [ Testimonial + result ]
@@ -860,7 +860,7 @@ export default function AIAcceleratorPage() {
                 fontSize: "13px",
                 fontWeight: 500,
                 letterSpacing: "0.06em",
-                color: "rgba(28, 28, 26, 0.6)",
+                color: "rgba(28, 28, 26, 0.72)",
                 border: "1.5px dashed rgba(28, 28, 26, 0.3)",
                 padding: "12px 14px",
                 borderRadius: "3px",

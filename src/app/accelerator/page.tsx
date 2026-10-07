@@ -212,7 +212,7 @@ function TaskChecklist() {
             >
               {task.label}
             </span>
-            <span style={{ fontSize: "13px", color: "rgba(28, 28, 26, 0.66)" }}>
+            <span style={{ fontSize: "13px", color: "rgba(28, 28, 26, 0.72)" }}>
               {task.meta}
             </span>
           </span>
@@ -340,7 +340,7 @@ export default function AcceleratorPage() {
               <span className="text-eyebrow text-accent-shade">
                 Your digital assessment
               </span>
-              <span style={{ fontSize: "12px", color: "rgba(28, 28, 26, 0.6)" }}>
+              <span style={{ fontSize: "12px", color: "rgba(28, 28, 26, 0.72)" }}>
                 Sample client
               </span>
             </div>
@@ -700,7 +700,7 @@ export default function AcceleratorPage() {
                 fontWeight: 500,
                 letterSpacing: "0.08em",
                 textTransform: "uppercase",
-                color: "rgba(28, 28, 26, 0.58)",
+                color: "rgba(28, 28, 26, 0.72)",
               }}
             >
               [ Score change from a recent client, e.g. 58 → 81 ]
@@ -723,7 +723,7 @@ export default function AcceleratorPage() {
                 fontWeight: 500,
                 letterSpacing: "0.08em",
                 textTransform: "uppercase",
-                color: "rgba(28, 28, 26, 0.58)",
+                color: "rgba(28, 28, 26, 0.72)",
               }}
             >
               [ Testimonial ]

@@ -310,7 +310,7 @@ export default function CustomTrainingPage() {
             >
               Organizations we&apos;ve trained.
             </h2>
-            <span style={{ fontSize: "14px", color: "rgba(28, 28, 26, 0.7)" }}>
+            <span style={{ fontSize: "14px", color: "rgba(28, 28, 26, 0.76)" }}>
               Across Canada and the US
             </span>
           </div>

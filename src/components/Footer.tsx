@@ -57,7 +57,7 @@ export function Footer() {
               fontSize: "10px",
               lineHeight: "1.25",
               letterSpacing: "0.06em",
-              color: "rgba(244, 240, 232, 0.6)",
+              color: "rgba(244, 240, 232, 0.78)",
               borderLeft: "1px solid rgba(244, 240, 232, 0.2)",
               paddingLeft: "12px",
               marginTop: "2px",
@@ -117,7 +117,7 @@ export function Footer() {
           marginTop: "56px",
           paddingTop: "20px",
           borderTop: "1px solid rgba(244, 240, 232, 0.12)",
-          color: "rgba(244, 240, 232, 0.6)",
+          color: "rgba(244, 240, 232, 0.78)",
         }}
       >
         <span>© Junction Consulting 2026</span>

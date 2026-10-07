@@ -546,7 +546,7 @@ export default function ContactPage() {
               style={{
                 marginTop: "24px",
                 fontSize: "15px",
-                color: "rgba(28, 28, 26, 0.72)",
+                color: "rgba(28, 28, 26, 0.76)",
               }}
             >
               Or email{" "}
@@ -584,7 +584,7 @@ export default function ContactPage() {
             gap: "16px",
             flexWrap: "wrap",
             fontSize: "13px",
-            color: "rgba(244, 240, 232, 0.7)",
+            color: "rgba(244, 240, 232, 0.78)",
           }}
         >
           <span>© Junction Consulting 2026</span>

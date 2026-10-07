@@ -149,7 +149,7 @@ export default function SpeakingPage() {
               fontWeight: 500,
               letterSpacing: "0.14em",
               textTransform: "uppercase",
-              color: "rgba(244, 240, 232, 0.6)",
+              color: "rgba(244, 240, 232, 0.78)",
             }}
           >
             Recent stages
@@ -228,7 +228,7 @@ export default function SpeakingPage() {
                 <div
                   style={{
                     fontSize: "13px",
-                    color: "rgba(28, 28, 26, 0.66)",
+                    color: "rgba(28, 28, 26, 0.72)",
                     marginTop: "auto",
                     paddingTop: "10px",
                   }}

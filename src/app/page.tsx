@@ -300,7 +300,7 @@ export default function HomePage() {
               fontWeight: 500,
               letterSpacing: "0.14em",
               textTransform: "uppercase",
-              color: "rgba(28, 28, 26, 0.6)",
+              color: "rgba(28, 28, 26, 0.72)",
             }}
           >
             Organizations we work with
@@ -400,7 +400,7 @@ export default function HomePage() {
                       fontWeight: 500,
                       letterSpacing: "0.1em",
                       textTransform: "uppercase",
-                      color: "rgba(28, 28, 26, 0.66)",
+                      color: "rgba(28, 28, 26, 0.72)",
                     }}
                   >
                     {program.meta}
@@ -527,7 +527,7 @@ export default function HomePage() {
                     fontSize: "12px",
                     letterSpacing: "0.1em",
                     textTransform: "uppercase",
-                    color: "rgba(244, 240, 232, 0.66)",
+                    color: "rgba(244, 240, 232, 0.78)",
                     marginBottom: "8px",
                   }}
                 >
@@ -556,7 +556,7 @@ export default function HomePage() {
                     fontSize: "12px",
                     letterSpacing: "0.1em",
                     textTransform: "uppercase",
-                    color: "rgba(244, 240, 232, 0.66)",
+                    color: "rgba(244, 240, 232, 0.78)",
                     marginBottom: "8px",
                   }}
                 >
@@ -663,7 +663,7 @@ export default function HomePage() {
                   fontWeight: 500,
                   letterSpacing: "0.08em",
                   textTransform: "uppercase",
-                  color: "rgba(28, 28, 26, 0.58)",
+                  color: "rgba(28, 28, 26, 0.72)",
                 }}
               >
                 [ Testimonial + result ]
@@ -686,7 +686,7 @@ export default function HomePage() {
                   fontWeight: 500,
                   letterSpacing: "0.08em",
                   textTransform: "uppercase",
-                  color: "rgba(28, 28, 26, 0.58)",
+                  color: "rgba(28, 28, 26, 0.72)",
                 }}
               >
                 [ Testimonial + result ]
