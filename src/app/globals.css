@@ -513,6 +513,36 @@
   }
 
   /*
+   * Clickable list rows (articles, programs): on hover or keyboard focus the
+   * whole row gets the newsprint-hover fill (radius 10) and its .row-title
+   * turns break-on-light. The negative inline margin gives the highlight
+   * breathing room while the row's text stays aligned with the page.
+   */
+  .row-link {
+    display: block;
+    border-radius: var(--radius-control);
+    margin-inline: -16px;
+    padding-inline: 16px;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+  }
+
+  .row-link:hover,
+  .row-link:focus-visible {
+    background-color: var(--color-newsprint-hover);
+  }
+
+  .row-link .row-title {
+    transition-property: color;
+    transition-duration: 0.15s;
+  }
+
+  .row-link:hover .row-title,
+  .row-link:focus-visible .row-title {
+    color: var(--color-break-on-light);
+  }
+
+  /*
    * Data table: Carbon header with Newsprint eyebrow labels, Sage-25 body
    * rows with ink-soft cells and a Carbon 500 row label. Wrap it in
    * .data-table-frame for the 14px radius (and horizontal scroll on phones).

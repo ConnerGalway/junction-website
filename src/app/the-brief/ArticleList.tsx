@@ -45,12 +45,12 @@ export function ArticleList({ articles, filters }: { articles: Article[]; filter
             {/* TODO: link each article once the archive is live. */}
             <a
               href="#"
-              className="group grid items-baseline gap-x-12 gap-y-2 py-7 [grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))]"
+              className="row-link grid items-baseline gap-x-12 gap-y-2 py-7 [grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))]"
             >
               <span className="type-eyebrow">
                 {article.date} · {article.cat}
               </span>
-              <h2 className="type-h3 m-0 group-hover:text-break-on-light">{article.title}</h2>
+              <h2 className="row-title type-h3 m-0">{article.title}</h2>
               <span className="type-small text-[16px]">{article.teaser}</span>
             </a>
           </li>
