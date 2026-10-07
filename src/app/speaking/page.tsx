@@ -1,6 +1,20 @@
-import Link from "next/link";
-import { Placeholder } from "@/components";
+import type { Metadata } from "next";
+import {
+  Button,
+  Card,
+  Container,
+  Eyebrow,
+  Placeholder,
+  Section,
+  TextLink,
+} from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
+
+export const metadata: Metadata = {
+  title: "Speaking",
+  description:
+    "Keynotes, workshops and virtual sessions on AI, marketing trends and tourism strategy.",
+};
 
 const stages = [
   "Northern BC Tourism Summit",
@@ -43,365 +57,114 @@ const formats = [
 export default function SpeakingPage() {
   return (
     <>
-
       {/* Hero */}
-      <section
-        className="bg-carbon text-newsprint"
-        style={{ padding: "clamp(48px, 7vw, 96px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(min(100%, 440px), 1fr))",
-            gap: "clamp(32px, 5vw, 72px)",
-            alignItems: "center",
-          }}
-        >
+      <Section tone="carbon" spacing="tight">
+        <Container className="grid items-center gap-[clamp(32px,5vw,72px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
           <div>
-            <div
-              className="text-accent-1"
-              style={{
-                fontSize: "12px",
-                fontWeight: 500,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                marginBottom: "22px",
-              }}
-            >
-              Speaking · Conner Galway
-            </div>
-            <h1
-              className="font-epilogue m-0"
-              style={{
-                fontWeight: 900,
-                fontSize: "clamp(46px, 6.8vw, 104px)",
-                lineHeight: 0.92,
-                letterSpacing: "-0.035em",
-                textWrap: "balance",
-              }}
-            >
+            <Eyebrow className="mb-[22px]">Speaking · Conner Galway</Eyebrow>
+            <h1 className="type-display m-0">
               Talks that send the room home with a plan.
             </h1>
-            <p
-              style={{
-                fontSize: "clamp(17px, 1.5vw, 20px)",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(244, 240, 232, 0.82)",
-                maxWidth: "46ch",
-                margin: "28px 0 36px",
-              }}
-            >
+            <p className="type-lead text-muted mt-7 mb-9">
               Keynotes, workshops and virtual sessions on AI, marketing trends
               and tourism strategy. Every talk ends with actions people can take
               that week.
             </p>
-            <div className="flex gap-6 items-center flex-wrap">
-              <Link
-                href="/contact?type=speaking"
-                className="text-button bg-newsprint text-carbon rounded-[3px] transition-colors hover:bg-sage"
-                style={{ padding: "17px 28px" }}
-              >
+            <div className="flex flex-wrap items-center gap-6">
+              <Button href="/contact?type=speaking">
                 Check availability for your date
-              </Link>
-              <a
-                href={CALENDLY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-medium whitespace-nowrap"
-                style={{
-                  fontSize: "15px",
-                  borderBottom: "2px solid #C4963A",
-                  paddingBottom: "3px",
-                }}
-              >
+              </Button>
+              <TextLink href={CALENDLY_URL} className="whitespace-nowrap">
                 Book a 20-min call →
-              </a>
+              </TextLink>
             </div>
           </div>
 
           {/* Video placeholder */}
-          <Placeholder className="text-newsprint" aspectRatio="16/9">
+          <Placeholder aspectRatio="16/9">
             [ video: 60-second speaker reel ]
           </Placeholder>
-        </div>
+        </Container>
 
         {/* Recent stages */}
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "56px auto 0",
-            paddingTop: "24px",
-            borderTop: "1px solid rgba(244, 240, 232, 0.15)",
-            display: "flex",
-            gap: "12px 36px",
-            flexWrap: "wrap",
-            alignItems: "center",
-          }}
-        >
-          <span
-            style={{
-              fontSize: "12px",
-              fontWeight: 500,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "rgba(244, 240, 232, 0.78)",
-            }}
-          >
-            Recent stages
-          </span>
+        <Container className="mt-14 flex flex-wrap items-center gap-x-9 gap-y-3 border-t border-hairline-dark pt-6">
+          <Eyebrow as="span">Recent stages</Eyebrow>
           {stages.map((s) => (
-            <span key={s} style={{ fontSize: "16px", fontWeight: 500 }}>
+            <span key={s} className="type-body font-medium">
               {s}
             </span>
           ))}
-        </div>
-      </section>
+        </Container>
+      </Section>
 
       {/* Topics */}
-      <section
-        style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
-          <div className="text-eyebrow text-accent-2 mb-4">Topics</div>
-          <h2
-            className="font-epilogue"
-            style={{
-              fontWeight: 900,
-              fontSize: "clamp(36px, 4.6vw, 64px)",
-              lineHeight: 0.96,
-              letterSpacing: "-0.03em",
-              margin: "0 0 44px",
-            }}
-          >
+      <Section>
+        <Container>
+          <Eyebrow className="mb-4">Topics</Eyebrow>
+          <h2 className="type-h2 mt-0 mb-9">
             Three talks, tailored to your room.
           </h2>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
-              gap: "20px",
-            }}
-          >
+          <div className="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))]">
             {topics.map((t) => (
-              <div
-                key={t.num}
-                className="bg-newsprint rounded flex flex-col gap-3.5"
-                style={{
-                  padding: "clamp(26px, 3vw, 36px)",
-                  borderTop: "4px solid #1A4D2E",
-                }}
-              >
-                <span
-                  className="font-bebas text-accent-1"
-                  style={{ fontSize: "30px" }}
-                >
-                  {t.num}
-                </span>
-                <h3
-                  className="font-epilogue m-0"
-                  style={{
-                    fontWeight: 900,
-                    fontSize: "clamp(24px, 2.4vw, 32px)",
-                    lineHeight: 1.04,
-                    letterSpacing: "-0.02em",
-                  }}
-                >
-                  {t.title}
-                </h3>
-                <p
-                  style={{
-                    fontSize: "16px",
-                    fontWeight: 300,
-                    lineHeight: 1.6,
-                    color: "rgba(28, 28, 26, 0.76)",
-                    margin: 0,
-                  }}
-                >
-                  {t.description}
-                </p>
-                <div
-                  style={{
-                    fontSize: "13px",
-                    color: "rgba(28, 28, 26, 0.72)",
-                    marginTop: "auto",
-                    paddingTop: "10px",
-                  }}
-                >
-                  {t.audience}
-                </div>
-              </div>
+              <Card key={t.num} className="flex flex-col gap-3.5">
+                <span className="type-h4 text-(--tone-stat)">{t.num}</span>
+                <h3 className="type-h3 m-0">{t.title}</h3>
+                <p className="type-body text-muted m-0">{t.description}</p>
+                <p className="type-small mt-auto mb-0 pt-2.5">{t.audience}</p>
+              </Card>
             ))}
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
       {/* Formats */}
-      <section
-        style={{ padding: "0 clamp(20px, 4vw, 48px) clamp(64px, 8vw, 112px)" }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(min(100%, 220px), 1fr))",
-            borderTop: "2px solid #1C1C1A",
-          }}
-        >
+      <Section flush="top">
+        <Container className="grid border-t-2 border-(--tone-rule) [grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))]">
           {formats.map((f) => (
-            <div
-              key={f.title}
-              style={{
-                padding: "24px 24px 24px 0",
-                borderBottom: "1px solid rgba(28, 28, 26, 0.14)",
-              }}
-            >
-              <div style={{ fontSize: "19px", fontWeight: 500, marginBottom: "6px" }}>
-                {f.title}
-              </div>
-              <div
-                style={{
-                  fontSize: "15px",
-                  fontWeight: 300,
-                  color: "rgba(28, 28, 26, 0.76)",
-                }}
-              >
-                {f.description}
-              </div>
+            <div key={f.title} className="border-b border-hairline py-6 pr-6">
+              <p className="type-h4 mt-0 mb-1.5">{f.title}</p>
+              <p className="type-small m-0">{f.description}</p>
             </div>
           ))}
-        </div>
-      </section>
+        </Container>
+      </Section>
 
       {/* About Conner */}
-      <section
-        className="bg-forest text-newsprint"
-        style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(min(100%, 340px), 1fr))",
-            gap: "40px 80px",
-            alignItems: "center",
-          }}
-        >
-          <Placeholder className="text-newsprint" aspectRatio="4/5">
-            [ photo: Conner on stage ]
-          </Placeholder>
+      <Section tone="carbon">
+        <Container className="grid items-center gap-x-20 gap-y-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))]">
+          <Placeholder aspectRatio="4/5">[ photo: Conner on stage ]</Placeholder>
           <div>
-            <div
-              className="text-fern"
-              style={{
-                fontSize: "12px",
-                fontWeight: 500,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                marginBottom: "18px",
-              }}
-            >
-              Your speaker
-            </div>
-            <h2
-              className="font-epilogue"
-              style={{
-                fontWeight: 900,
-                fontSize: "clamp(36px, 4.6vw, 64px)",
-                lineHeight: 0.96,
-                letterSpacing: "-0.03em",
-                margin: "0 0 22px",
-              }}
-            >
-              Conner Galway
-            </h2>
-            <p
-              style={{
-                fontSize: "18px",
-                fontWeight: 300,
-                lineHeight: 1.65,
-                color: "rgba(244, 240, 232, 0.86)",
-                margin: "0 0 28px",
-                maxWidth: "52ch",
-              }}
-            >
+            <Eyebrow className="mb-[18px]">Your speaker</Eyebrow>
+            <h2 className="type-h2 mt-0 mb-6">Conner Galway</h2>
+            <p className="type-body text-muted mt-0 mb-7 max-w-[52ch]">
               Founder of Junction. Fourteen years advising organizations on
               marketing and technology, 2,000+ people trained, and a Business in
               Vancouver 40 Under 40. He writes The Brief, a weekly newsletter for
               marketers, and he still runs the programs he talks about.
             </p>
-            <Placeholder className="text-newsprint">
-              [ Event organizer testimonial ]
-            </Placeholder>
+            <Placeholder>[ Event organizer testimonial ]</Placeholder>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
       {/* CTA */}
-      <section
-        id="start"
-        style={{ padding: "clamp(80px, 10vw, 140px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
-          <h2
-            className="font-epilogue"
-            style={{
-              fontWeight: 900,
-              fontSize: "clamp(44px, 6.6vw, 104px)",
-              lineHeight: 0.92,
-              letterSpacing: "-0.035em",
-              margin: 0,
-              maxWidth: "15ch",
-            }}
-          >
+      <Section id="start" tone="forest" className="scroll-mt-24">
+        <Container>
+          <h2 className="type-display m-0 max-w-[15ch]">
             Got a date? Let&apos;s check it.
           </h2>
-          <p
-            style={{
-              fontSize: "18px",
-              fontWeight: 300,
-              lineHeight: 1.6,
-              color: "rgba(28, 28, 26, 0.76)",
-              margin: "24px 0 0",
-              maxWidth: "46ch",
-            }}
-          >
+          <p className="type-body text-muted mt-6 mb-0 max-w-[46ch]">
             Send your event, date and audience. You&apos;ll hear back with availability
             and a fee for your format.
           </p>
-          <div
-            className="flex items-center gap-7 flex-wrap"
-            style={{ marginTop: "36px" }}
-          >
-            <Link
-              href="/contact?type=speaking"
-              className="text-button bg-forest text-newsprint rounded-[3px] transition-colors hover:bg-canopy"
-              style={{ padding: "17px 28px" }}
-            >
-              Check availability
-            </Link>
-            <a
-              href="mailto:conner@wearejunction.com"
-              className="font-medium"
-              style={{
-                fontSize: "15px",
-                borderBottom: "2px solid #C4963A",
-                paddingBottom: "3px",
-              }}
-            >
+          <div className="mt-9 flex flex-wrap items-center gap-7">
+            <Button href="/contact?type=speaking">Check availability</Button>
+            <TextLink href="mailto:conner@wearejunction.com">
               conner@wearejunction.com
-            </a>
+            </TextLink>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
     </>
   );
 }
