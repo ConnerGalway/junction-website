@@ -225,7 +225,7 @@ export default function AboutPage() {
                 Brief every week.
               </p>
               <Link
-                href="/services"
+                href="/programs"
                 style={{
                   fontSize: "15px",
                   fontWeight: 500,

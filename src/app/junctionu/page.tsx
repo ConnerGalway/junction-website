@@ -344,7 +344,7 @@ export default function JunctionUPage() {
               run it for four years, and 300+ businesses came through.
             </p>
             <Link
-              href="/services"
+              href="/programs"
               className="inline-block text-button bg-forest text-newsprint rounded-[3px] transition-colors hover:bg-carbon"
               style={{ padding: "15px 24px" }}
             >

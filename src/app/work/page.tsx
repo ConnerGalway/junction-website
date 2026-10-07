@@ -212,7 +212,7 @@ export default function WorkPage() {
               months.
             </p>
             <Link
-              href="/services"
+              href="/programs"
               className="text-fern"
               style={{ fontSize: "15px", fontWeight: 500 }}
             >
