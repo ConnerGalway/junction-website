@@ -12,12 +12,12 @@ function Chevron({ open }: { open: boolean }) {
   return (
     <svg
       aria-hidden="true"
-      width="12"
-      height="12"
-      viewBox="0 0 12 12"
+      width="14"
+      height="14"
+      viewBox="0 0 14 14"
       className={cx("transition-transform duration-150", open && "rotate-180")}
     >
-      <path d="M2 4.5 6 8.5 10 4.5" fill="none" stroke="currentColor" strokeWidth="1.75" />
+      <path d="M3 5.5 7 9.5 11 5.5" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -156,7 +156,7 @@ export function Header() {
       className="tone-newsprint sticky top-0 z-50 border-b border-hairline px-gutter"
       onKeyDown={onMobileKeyDown}
     >
-      <div className="mx-auto flex min-h-[76px] max-w-wide items-center justify-between gap-6">
+      <div className="relative mx-auto flex min-h-[76px] max-w-wide items-center justify-between gap-6">
         <Link href="/" aria-label="Junction, home" className="link-plain shrink-0">
           <Wordmark />
         </Link>
@@ -166,7 +166,6 @@ export function Header() {
           <ul className="m-0 flex list-none items-center gap-7 p-0 text-[16px]">
             <li
               ref={programsRef}
-              className="relative"
               onPointerEnter={onPointerEnter}
               onPointerLeave={onPointerLeave}
               onKeyDown={onProgramsKeyDown}
@@ -198,9 +197,9 @@ export function Header() {
               <div
                 id={panelId}
                 hidden={!programsOpen}
-                className="absolute right-0 top-full pt-3"
+                className="absolute right-0 top-full pt-2"
               >
-                <div className="tone-newsprint w-[min(920px,calc(100vw-2*var(--spacing-gutter)))] rounded-card border border-hairline p-6 shadow-[0_24px_48px_-24px_rgba(28,28,26,0.35)]">
+                <div className="tone-newsprint w-[min(920px,calc(100vw-2*var(--spacing-gutter)))] rounded-card border border-hairline p-6 shadow-[0_24px_48px_-24px_color-mix(in_srgb,var(--color-carbon)_35%,transparent)]">
                   <ProgramsPanel onNavigate={() => setProgramsOpen(false)} />
                 </div>
               </div>

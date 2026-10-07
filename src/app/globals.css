@@ -54,12 +54,6 @@
   --font-display: var(--nf-epilogue), ui-sans-serif, system-ui, sans-serif;
   --font-quote: var(--nf-fraunces), ui-serif, Georgia, serif;
   --font-wordmark: var(--nf-bebas), ui-sans-serif, system-ui, sans-serif;
-
-  /* Legacy aliases, removed once every page uses the type scale. */
-  --font-epilogue: var(--nf-epilogue), sans-serif;
-  --font-dm-sans: var(--nf-dm-sans), sans-serif;
-  --font-bebas: var(--nf-bebas), sans-serif;
-  --font-fraunces: var(--nf-fraunces), serif;
 }
 
 @theme {
@@ -126,13 +120,12 @@
     transition-timing-function: ease-out;
   }
 
-  button:active:not(:disabled),
-  a.text-button:active {
+  button:active:not(:disabled) {
     transform: translateY(1px);
   }
 
   ::placeholder {
-    color: rgba(28, 28, 26, 0.45);
+    color: var(--color-flint);
   }
 
   ::selection {
@@ -472,76 +465,4 @@
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
   }
-}
-
-/* ─── LEGACY: removed once every page uses the type scale ─── */
-/* Responsive clamp utilities */
-.text-h1 {
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: clamp(48px, 7.4vw, 118px);
-  line-height: 0.92;
-  letter-spacing: -0.035em;
-}
-
-.text-h2 {
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: clamp(36px, 4.6vw, 64px);
-  line-height: 0.96;
-  letter-spacing: -0.03em;
-}
-
-.text-h3 {
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: clamp(24px, 2.6vw, 40px);
-  line-height: 1.04;
-  letter-spacing: -0.02em;
-}
-
-.text-body {
-  font-size: clamp(17px, 1.5vw, 20px);
-  font-weight: 300;
-  line-height: 1.6;
-}
-
-.text-eyebrow {
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.text-button {
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-/* Section padding */
-.section-padding {
-  padding: clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px);
-}
-
-.section-padding-cta {
-  padding: clamp(80px, 10vw, 140px) clamp(20px, 4vw, 48px);
-}
-
-.side-padding {
-  padding-left: clamp(20px, 4vw, 48px);
-  padding-right: clamp(20px, 4vw, 48px);
-}
-
-/* Content container */
-.content-container {
-  max-width: 1320px;
-  margin: 0 auto;
-}
-
-/* Two column grid */
-.two-col-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
 }
