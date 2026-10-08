@@ -185,15 +185,17 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* Organizations strip */}
-      <section className="px-gutter py-7 border-y border-hairline">
-        <Container className="flex flex-col gap-4 md:flex-row md:items-center md:gap-10">
-          <span className="type-eyebrow text-muted shrink-0">Organizations we work with</span>
+      {/* Organizations strip: logos fade out behind the label */}
+      <section className="px-gutter py-8">
+        <Container className="flex flex-col gap-4 md:flex-row md:items-center md:gap-0">
+          <span className="shrink-0 text-[15px] font-medium text-flint md:pr-2">
+            Organizations we work with
+          </span>
           <LogoWall
             variant="marquee"
             logos={homeLogos}
             label="Organizations we work with"
-            className="min-w-0 flex-1"
+            className="min-w-0 flex-1 [-webkit-mask-image:linear-gradient(to_right,transparent,black_16%,black_94%,transparent)] [mask-image:linear-gradient(to_right,transparent,black_16%,black_94%,transparent)]"
           />
         </Container>
       </section>
