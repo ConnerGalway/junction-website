@@ -79,6 +79,7 @@ export function Header() {
   const [programsOpen, setProgramsOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [lastPath, setLastPath] = useState(pathname);
+  const [scrolled, setScrolled] = useState(false);
   const programsRef = useRef<HTMLLIElement>(null);
   const chevronRef = useRef<HTMLButtonElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -103,6 +104,21 @@ export function Header() {
     document.addEventListener("pointerdown", onPointerDown);
     return () => document.removeEventListener("pointerdown", onPointerDown);
   }, [programsOpen]);
+
+  // Seamless at the top; compact + frosted once the page has scrolled.
+  useEffect(() => {
+    let frame = 0;
+    function onScroll() {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => setScrolled(window.scrollY > 8));
+    }
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
 
   useEffect(() => () => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
@@ -153,10 +169,20 @@ export function Header() {
 
   return (
     <header
-      className="tone-newsprint sticky top-0 z-50 border-b border-hairline px-gutter"
+      className={cx(
+        "tone-newsprint sticky top-0 z-50 px-gutter transition-[background-color,box-shadow] duration-200",
+        scrolled && !mobileOpen
+          ? "bg-newsprint/92 shadow-[0_6px_24px_-12px_color-mix(in_srgb,var(--color-carbon)_25%,transparent)] backdrop-blur-md"
+          : "bg-newsprint"
+      )}
       onKeyDown={onMobileKeyDown}
     >
-      <div className="relative mx-auto flex min-h-[76px] max-w-wide items-center justify-between gap-6">
+      <div
+        className={cx(
+          "relative mx-auto flex max-w-wide items-center justify-between gap-6 transition-[min-height] duration-200",
+          scrolled ? "min-h-16" : "min-h-[84px]"
+        )}
+      >
         <LogoLockup collapseOnSmall />
 
         {/* Desktop navigation */}
@@ -245,7 +271,7 @@ export function Header() {
         hidden={!mobileOpen}
         className="max-h-[calc(100dvh-76px)] overflow-y-auto pb-8 lg:hidden"
       >
-        <div className="mx-auto flex max-w-wide flex-col gap-8 border-t border-hairline pt-6">
+        <div className="mx-auto flex max-w-wide flex-col gap-8 pt-6">
           <div className="flex flex-col gap-5">
             <Link href="/programs" className="link-plain type-h4">
               Programs
