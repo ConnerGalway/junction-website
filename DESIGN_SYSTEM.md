@@ -41,6 +41,8 @@ Defined directly in `@theme`, so each token generates `bg-*`, `text-*`, `border-
 | `newsprint-muted` | `rgba(244,240,232,.8)` | Body and muted text on dark grounds |
 | `hairline` | `rgba(28,28,26,.14)` | 1px separators on light |
 | `hairline-dark` | `rgba(244,240,232,.15)` | 1px separators on dark |
+| `logo-on-light` | `rgba(28,28,26,.6)` | One-colour logos on Newsprint |
+| `logo-on-dark` | `rgba(244,240,232,.7)` | One-colour logos on Carbon and Forest |
 
 Contrast on the intended ground:
 
@@ -205,8 +207,24 @@ Controls:
 | `Wordmark` | `JUNCTION_` in Bebas with a Canopy underscore. The underscore is part of the logo. |
 | `LogoLockup` | Wordmark, a 1px divider (20% of the text colour, 34px tall) and the tagline "Strategy & / Capacity Building" (DM Sans 400, 14px, muted, .04em). Links to `/`. With `collapseOnSmall`, the divider and tagline are dropped under 420px. |
 | `SkipLink` | Rendered once by the root layout |
+| `LogoWall` | `logos`, `label`, and `variant="marquee" \| "row" \| "grid"`. See below. |
 
 Toggle pills are `<button aria-pressed>` elements inside a labelled `role="group"`. FAQ toggles use `aria-expanded` and `aria-controls`.
+
+## Logo walls
+
+`<LogoWall>` shows organization logos in **one colour**: each logo is drawn through a CSS mask filled with the tone's logo colour (`logo-on-light` or `logo-on-dark`), so every logo matches whatever its original colours were.
+
+- **Accessible names:** each logo is `role="img"` with the organization's name.
+- **Data:** the logo files live in `public/logos/`, with their sources in `public/logos/SOURCES.md`. The data lives in `src/lib/logos.ts`: `name`, `src`, `ratio` (width/height) and an optional `scale` override to tune a logo by eye.
+- **Missing files:** an organization without a file shows its name in DM Sans 500, in the same colour.
+- **Optical sizing:** logos sit in a 48px slot (36px on mobile), scaled by aspect ratio so wide wordmarks and square badges carry the same weight.
+- **Hover:** hovering the wall dims every logo to 50% except the one under the cursor (opacity only, 200ms).
+- **Variants:**
+  - `marquee`: one row with a 40s seamless loop and faded edges. It pauses on hover and keyboard focus, and becomes a static wrapped row under `prefers-reduced-motion`. It uses CSS animation only.
+  - `row`: static and evenly spaced, wrapping on small screens.
+  - `grid`: 7 columns on desktop, 4 on tablet and 3 on mobile, with no tiles or borders.
+- **Event names** (such as "Recent stages") stay text: DM Sans 500 names separated by small Flint dots.
 
 ## Navigation and footer
 
