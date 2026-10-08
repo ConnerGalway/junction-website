@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import {
   Button,
+  Callout,
   Card,
   Container,
   Eyebrow,
@@ -199,6 +200,33 @@ export default function HomePage() {
           />
         </Container>
       </section>
+
+      {/* Where organizations get stuck */}
+      <Section>
+        <Container>
+          <h2 className="type-h2 m-0">Where organizations get stuck.</h2>
+          <p className="type-lead m-0 mt-4">
+            Usually, it&apos;s technology that isn&apos;t pulling its weight yet.
+          </p>
+          <ol className="mt-9 mb-0 grid list-none gap-x-8 gap-y-10 border-t-2 border-(--tone-rule) p-0 pt-9 sm:grid-cols-2 lg:grid-cols-5">
+            {stuckItems.map((item) => (
+              <li key={item.num}>
+                <span className="type-numeral">{item.num}</span>
+                <h3 className="type-h4 mt-3 mb-2">{item.title}</h3>
+                <p className="type-body m-0">{item.description}</p>
+              </li>
+            ))}
+          </ol>
+          <Callout className="mt-12 flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
+            <p className="type-body m-0 font-medium">
+              We start with the one costing you most, fix it, and build from there.
+            </p>
+            <TextLink href="#programs" className="whitespace-nowrap">
+              Find your program →
+            </TextLink>
+          </Callout>
+        </Container>
+      </Section>
 
       {/* Programs */}
       <Section id="programs" className="scroll-mt-24">
