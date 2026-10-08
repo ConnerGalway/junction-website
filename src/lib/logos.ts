@@ -12,9 +12,13 @@ export type Logo = {
 };
 
 const logo = {
-  twinLions: { name: "Twin Lions Contracting" },
+  twinLions: {
+    name: "Twin Lions Contracting",
+    src: "/logos/twin-lions-contracting.png",
+    ratio: 4.882,
+  },
   westCoastHomes: { name: "West Coast Homes" },
-  smr: { name: "SMR Plumbing & Heating" },
+  smr: { name: "SMR Plumbing & Heating", src: "/logos/smr-plumbing-heating.png", ratio: 2.202 },
   destinationBC: {
     name: "Destination BC",
     src: "/logos/destination-bc.png",
@@ -23,26 +27,48 @@ const logo = {
   },
   travelAlberta: { name: "Travel Alberta", src: "/logos/travel-alberta.png", ratio: 2.239 },
   travelYukon: { name: "Travel Yukon", src: "/logos/travel-yukon.svg", ratio: 1.963 },
-  travelMaine: { name: "Travel Maine" },
-  visitMississippi: { name: "Visit Mississippi" },
-  oregonDestination: { name: "Oregon Destination Association" },
+  travelMaine: { name: "Travel Maine", src: "/logos/travel-maine.png", ratio: 2.464, scale: 0.85 },
+  visitMississippi: {
+    name: "Visit Mississippi",
+    src: "/logos/visit-mississippi.png",
+    ratio: 2.47,
+    scale: 1.1,
+  },
+  oregonDestination: {
+    name: "Oregon Destination Association",
+    src: "/logos/oregon-destination-association.png",
+    ratio: 2.706,
+    scale: 1.1,
+  },
   ontariosSouthwest: {
     name: "Southwest Ontario Tourism Corporation",
     src: "/logos/ontarios-southwest.png",
-    ratio: 3.087,
+    ratio: 3.129,
     scale: 1.1,
   },
+  // The uploaded northern-bc-tourism.png is a solid circular badge: in one
+  // colour it renders as a plain disc, so it stays as text for now.
   northernBC: { name: "Northern BC Tourism" },
-  fourVI: { name: "4VI" },
+  fourVI: { name: "4VI", src: "/logos/4vi.png", ratio: 2.549, scale: 0.8 },
   kootenayRockies: {
     name: "Kootenay Rockies Tourism",
     src: "/logos/kootenay-rockies-tourism.png",
     ratio: 1.109,
   },
-  tourismRedDeer: { name: "Tourism Red Deer" },
-  tourismGolden: { name: "Tourism Golden" },
-  southCanadianRockies: { name: "South Canadian Rockies Tourism" },
-  okotoks: { name: "Town of Okotoks" },
+  tourismRedDeer: {
+    name: "Tourism Red Deer",
+    src: "/logos/tourism-red-deer.png",
+    ratio: 3.762,
+    scale: 0.9,
+  },
+  tourismGolden: { name: "Tourism Golden", src: "/logos/tourism-golden.png", ratio: 2.536 },
+  southCanadianRockies: {
+    name: "South Canadian Rockies Tourism",
+    src: "/logos/south-canadian-rockies-tourism.png",
+    ratio: 0.755,
+    scale: 1.1,
+  },
+  okotoks: { name: "Town of Okotoks", src: "/logos/town-of-okotoks.png", ratio: 3.453 },
 } satisfies Record<string, Logo>;
 
 /** Home page: "Organizations we work with". */
