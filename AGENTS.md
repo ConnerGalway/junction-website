@@ -11,3 +11,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 ## Design system
 
 Read [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md) before changing any UI. Build pages from the shared components in `src/components/ui` (exported from `@/components`) and the tokens and type classes in `src/app/globals.css`: no hex/rgba values, inline font styles or pure white in pages.
+
+## Workflow rules
+
+- If a prompt conflicts with DESIGN_SYSTEM.md, stop and ask before building. Don't silently follow either one.
