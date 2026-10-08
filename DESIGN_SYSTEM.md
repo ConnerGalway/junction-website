@@ -43,6 +43,7 @@ Defined directly in `@theme`, so each token generates `bg-*`, `text-*`, `border-
 | `hairline-dark` | `rgba(244,240,232,.15)` | 1px separators on dark |
 | `logo-on-light` | `rgba(28,28,26,.6)` | One-colour logos on Newsprint |
 | `logo-on-dark` | `rgba(244,240,232,.7)` | One-colour logos on Carbon and Forest |
+| `logo-text-on-light` | `rgba(28,28,26,.64)` | Text stand-ins in a logo wall on Newsprint (4.9:1; 60% would be 4.3:1, below AA for text) |
 
 Contrast on the intended ground:
 
@@ -217,7 +218,7 @@ Toggle pills are `<button aria-pressed>` elements inside a labelled `role="group
 
 - **Accessible names:** each logo is `role="img"` with the organization's name.
 - **Data:** the logo files live in `public/logos/`, with their sources in `public/logos/SOURCES.md`. The data lives in `src/lib/logos.ts`: `name`, `src`, `ratio` (width/height) and an optional `scale` override to tune a logo by eye.
-- **Missing files:** an organization without a file shows its name in DM Sans 500, in the same colour.
+- **Missing files:** an organization without a file shows its name in DM Sans 500, in the same colour. On Newsprint the text is slightly darker (64% Carbon) so it passes AA.
 - **Optical sizing:** logos sit in a 48px slot (36px on mobile), scaled by aspect ratio so wide wordmarks and square badges carry the same weight.
 - **Hover:** hovering the wall dims every logo to 50% except the one under the cursor (opacity only, 200ms).
 - **Variants:**

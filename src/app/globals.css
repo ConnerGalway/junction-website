@@ -51,6 +51,7 @@
   --color-hairline-dark: rgba(244, 240, 232, 0.15);
   --color-logo-on-light: rgba(28, 28, 26, 0.6);    /* one-colour logos on Newsprint */
   --color-logo-on-dark: rgba(244, 240, 232, 0.7);  /* one-colour logos on Carbon/Forest */
+  --color-logo-text-on-light: rgba(28, 28, 26, 0.64); /* text fallback in a wall: 4.9:1, AA */
 
   --color-transparent: transparent;
   --color-current: currentColor;
@@ -174,6 +175,7 @@
     --tone-btn-hover-bg: var(--color-forest);
     --tone-btn-line: var(--color-carbon);
     --tone-logo: var(--color-logo-on-light);
+    --tone-logo-text: var(--color-logo-text-on-light);
     --tone-card-rule: var(--color-forest);
     --tone-card-border: 0 solid transparent;
     --tone-card-shadow: var(--shadow-card);
@@ -199,6 +201,7 @@
     --tone-price: var(--tone-text);
     --tone-body: var(--color-newsprint-muted);
     --tone-logo: var(--color-logo-on-dark);
+    --tone-logo-text: var(--color-logo-on-dark);
     --tone-card-rule: var(--color-fern);
     --tone-card-border: 1px solid var(--color-hairline-dark);
     --tone-card-shadow: none;
@@ -225,6 +228,7 @@
     --tone-price: var(--tone-text);
     --tone-body: var(--color-newsprint-muted);
     --tone-logo: var(--color-logo-on-dark);
+    --tone-logo-text: var(--color-logo-on-dark);
     --tone-card-rule: var(--color-fern);
     --tone-card-border: 1px solid var(--color-hairline-dark);
     --tone-card-shadow: none;
@@ -668,7 +672,10 @@
     mask: var(--logo) center / contain no-repeat;
   }
 
+  /* Text stand-in for a missing logo: a touch darker on Newsprint so it
+     passes AA as text (logo marks only need 3:1). */
   .logo-text {
+    color: var(--tone-logo-text);
     font-family: var(--font-sans);
     font-weight: 500;
     font-size: 15px;
