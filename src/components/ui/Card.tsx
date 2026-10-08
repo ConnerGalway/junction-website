@@ -15,13 +15,18 @@ type CardProps<T extends ElementType> = {
   /** Makes the whole card a link: 2px pink outline on hover/focus. Put no
    *  buttons or other links inside a linked card. */
   href?: string;
+  /** For linked cards, e.g. target="_blank" with rel="noopener noreferrer". */
+  target?: string;
+  rel?: string;
   as?: T;
-} & Omit<ComponentPropsWithoutRef<T>, "as" | "href">;
+} & Omit<ComponentPropsWithoutRef<T>, "as" | "href" | "target" | "rel">;
 
 export function Card<T extends ElementType = "div">({
   tone = "default",
   padded = true,
   href,
+  target,
+  rel,
   as,
   className,
   ...rest
@@ -33,7 +38,10 @@ export function Card<T extends ElementType = "div">({
     className
   );
   if (href) {
-    return <Link href={href} className={classes} {...rest} />;
+    if (/^https?:\/\//.test(href)) {
+      return <a href={href} target={target} rel={rel} className={classes} {...rest} />;
+    }
+    return <Link href={href} target={target} rel={rel} className={classes} {...rest} />;
   }
   const Tag: ElementType = as ?? "div";
   return <Tag className={classes} {...rest} />;

@@ -118,6 +118,9 @@ const caseStats = [
   { value: "Up to 1 day", label: "Quote turnaround" },
 ];
 
+const TRAINING_PLAYLIST_URL =
+  "https://youtube.com/playlist?list=PLUvaA_x2Z8df8djNodScqE1XZTFz8a16f";
+
 const callSteps = [
   {
     num: "01",
@@ -327,32 +330,44 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* The Call */}
-      <Section flush="top">
-        <Container className="grid gap-x-12 gap-y-9 border-t-2 border-(--tone-rule) pt-11 [grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))]">
+      {/* What happens on the call */}
+      <Section>
+        <Container className="grid items-start gap-x-16 gap-y-12 border-t-2 border-(--tone-rule) pt-12 lg:grid-cols-[minmax(0,1fr)_300px]">
           <div>
-            <Eyebrow className="mb-3.5">The first step</Eyebrow>
-            <h2 className="type-h3 m-0">What happens on the call.</h2>
+            <h2 className="type-h2 m-0 mb-10">What happens on the call.</h2>
+            <ol className="m-0 grid list-none gap-x-10 gap-y-9 p-0 md:grid-cols-3">
+              {callSteps.map((step, i) => (
+                <li key={step.num}>
+                  <div className="mb-3 flex items-center gap-4">
+                    <span className="type-numeral">{step.num}</span>
+                    {i === 0 && <AvatarSlot label="Conner Galway" />}
+                  </div>
+                  <h3 className="type-h4 m-0 mb-1.5">{step.title}</h3>
+                  <p className="type-body m-0">{step.description}</p>
+                </li>
+              ))}
+            </ol>
           </div>
-          {callSteps.map((step) => (
-            <div key={step.num}>
-              <p className="type-numeral m-0 mb-2">{step.num}</p>
-              <h3 className="type-h4 m-0 mb-1.5">{step.title}</h3>
-              <p className="type-body m-0">{step.description}</p>
-            </div>
-          ))}
-        </Container>
 
-        {/* Not ready banner */}
-        <Container className="mt-10">
-          <Card className="flex flex-wrap items-center justify-between gap-4">
-            <p className="type-body m-0">
-              <strong className="font-medium">Not ready for a call?</strong>{" "}
+          {/* Not ready for a call: free training sessions on YouTube */}
+          <Card
+            tone="carbon"
+            href={TRAINING_PLAYLIST_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Not ready for a call? Watch a free training session (opens YouTube in a new tab)"
+            className="flex flex-col gap-4"
+          >
+            <div className="relative flex aspect-video w-full items-center justify-center rounded-control border-[1.5px] border-dashed border-hairline-dark">
+              <svg aria-hidden="true" width="40" height="40" viewBox="0 0 40 40" className="text-newsprint">
+                <circle cx="20" cy="20" r="19" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                <path d="M16 13.5v13l11-6.5z" fill="currentColor" />
+              </svg>
+            </div>
+            <p className="type-body m-0 text-newsprint">
+              <span className="font-medium text-fern">Not ready for a call?</span>{" "}
               Watch a free training session and see how we teach.
             </p>
-            <TextLink href="/junctionu" className="whitespace-nowrap">
-              Watch free →
-            </TextLink>
           </Card>
         </Container>
       </Section>
