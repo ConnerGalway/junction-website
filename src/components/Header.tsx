@@ -31,7 +31,7 @@ function ProgramsPanel({ onNavigate }: { onNavigate: () => void }) {
         onClick={onNavigate}
         className="tone-carbon group flex flex-col gap-3 rounded-card p-6"
       >
-        <span className="type-eyebrow">{flagshipProgram.eyebrow}</span>
+        <span className="type-price text-[28px]">{flagshipProgram.meta}</span>
         <span className="type-h3 group-hover:text-(--tone-link-hover)">
           {flagshipProgram.title}
         </span>
@@ -280,7 +280,7 @@ export function Header() {
               href={flagshipProgram.href}
               className="tone-carbon flex flex-col gap-2 rounded-card p-5"
             >
-              <span className="type-eyebrow">{flagshipProgram.eyebrow}</span>
+              <span className="type-price text-[28px]">{flagshipProgram.meta}</span>
               <span className="type-h4">{flagshipProgram.title}</span>
               <span className="type-small">{flagshipProgram.description}</span>
             </Link>

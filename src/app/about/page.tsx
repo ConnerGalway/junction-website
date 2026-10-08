@@ -70,9 +70,7 @@ export default function AboutPage() {
       {/* Beliefs */}
       <Section tone="carbon">
         <Container>
-          <Eyebrow as="h2" className="m-0 mb-10">
-            What we believe
-          </Eyebrow>
+          <h2 className="type-h2 m-0 mb-10">What we believe</h2>
           <div className="grid gap-x-12 gap-y-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))]">
             {beliefs.map((belief) => (
               <div key={belief.num} className="border-t border-(--tone-hairline) pt-6">

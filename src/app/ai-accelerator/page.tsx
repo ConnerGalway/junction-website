@@ -162,6 +162,7 @@ export default function AIAcceleratorPage() {
               your real work. You leave with AI tools already running, and a team
               that knows how to build the next one.
             </p>
+            <p className="type-price m-0 mb-6">30 days · any industry</p>
             <div className="mb-8">
               <p className="type-price m-0">$5,000</p>
               <p className="type-small m-0 mt-2">per team · on site or Zoom</p>
@@ -375,9 +376,7 @@ export default function AIAcceleratorPage() {
 
           {/* FAQ */}
           <div>
-            <Eyebrow as="h2" className="m-0 mb-3">
-              Questions
-            </Eyebrow>
+            <h2 className="type-h2 m-0 mb-6">Questions</h2>
             <FaqAccordion faqs={faqs} />
           </div>
         </Container>

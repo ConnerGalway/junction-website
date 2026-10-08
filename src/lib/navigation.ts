@@ -3,7 +3,8 @@ export type NavGroup = { title: string; links: NavLink[] };
 
 /** Flagship program, shown as the feature card in the Programs menu. */
 export const flagshipProgram = {
-  eyebrow: "Flagship · 90 days",
+  /** Shown as a price line (Bebas, 60%). */
+  meta: "90 days",
   title: "The Accelerator",
   description: "A 90-day marketing plan you'll actually work.",
   href: "/accelerator",

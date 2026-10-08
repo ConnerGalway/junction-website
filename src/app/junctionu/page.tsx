@@ -90,6 +90,7 @@ export default function JunctionUPage() {
               tourism professionals. Lessons run under an hour and every one
               ends in something you can do today. 2,000+ people are in.
             </p>
+            <p className="type-small m-0 -mt-5 mb-8">Formerly eLearningU</p>
             <div className="flex flex-wrap items-center gap-6">
               <Button href="#catalogue">Start free</Button>
               <TextLink href="#catalogue">Browse the catalogue →</TextLink>

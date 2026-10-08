@@ -178,9 +178,7 @@ export default function CustomTrainingPage() {
       {/* Formats */}
       <Section>
         <Container>
-          <Eyebrow as="h2" className="m-0 mb-4">
-            Formats
-          </Eyebrow>
+          <h2 className="type-h2 m-0 mb-9">Formats</h2>
           <ol className="m-0 grid list-none border-t-2 border-(--tone-rule) p-0 [grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))]">
             {formats.map((f) => (
               <li key={f.num} className="border-b border-hairline py-6 pr-6">

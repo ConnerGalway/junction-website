@@ -148,6 +148,7 @@ export default function AcceleratorPage() {
               lives online: a week-by-week roadmap, step-by-step guides, and
               checklists that save as you go.
             </p>
+            <p className="type-price m-0 mb-6">90 days · small businesses</p>
             <div className="mb-2.5">
               <p className="type-price m-0">$2,500</p>
               <p className="type-small m-0 mt-2">3 coaching sessions · 90-day plan</p>

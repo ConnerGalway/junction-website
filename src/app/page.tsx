@@ -310,7 +310,6 @@ export default function HomePage() {
                 the work we did with Junction.&quot;
               </>
             }
-            media={<AvatarSlot label="Kathy Cooper" />}
             caption="Kathy Cooper, CEO, Kootenay Rockies Tourism"
           />
           <div className="flex flex-col gap-6">

@@ -1,6 +1,9 @@
 import { cx } from "./cx";
 
-/** Small round placeholder for a headshot that hasn't been supplied yet. */
+/**
+ * Small round placeholder for a Junction team member's photo. Faces rule:
+ * the only faces on the site are the Junction team's (never clients).
+ */
 export function AvatarSlot({ label, className }: { label: string; className?: string }) {
   return (
     <span

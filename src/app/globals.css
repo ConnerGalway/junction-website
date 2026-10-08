@@ -194,7 +194,7 @@
     --tone-link: var(--color-fern);
     --tone-link-hover: var(--color-break-on-dark);
     --tone-focus: var(--color-fern);
-    --tone-rule: var(--color-canopy);
+    --tone-rule: var(--color-fern); /* dividers on dark grounds are Fern */
     --tone-hairline: var(--color-hairline-dark);
     --tone-highlight: var(--color-break-on-dark);
     --tone-btn-bg: var(--color-newsprint);
@@ -221,7 +221,7 @@
     --tone-link: var(--color-fern);
     --tone-link-hover: var(--color-break-on-dark); /* 2.9:1, hover-only exception */
     --tone-focus: var(--color-fern);
-    --tone-rule: var(--color-canopy);
+    --tone-rule: var(--color-fern); /* dividers on dark grounds are Fern */
     --tone-hairline: var(--color-hairline-dark);
     --tone-highlight: var(--color-break-on-dark);
     --tone-btn-bg: var(--color-newsprint);

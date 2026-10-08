@@ -97,7 +97,7 @@ Read them in a page with classes such as `text-(--tone-numeral)` or `border-(--t
 | Eyebrow | accent-2 (copper) | fern | fern |
 | Numerals | accent-1-on-light | accent-1 | newsprint (no accent-1 on Forest) |
 | Prices and durations | price-on-light (Carbon 60%) | price-on-dark (Newsprint 60%) | price-on-dark (Newsprint 60%) |
-| Section dividers | 2px canopy | 2px canopy | 2px canopy |
+| Section dividers | 2px canopy | 2px fern | 2px fern |
 | Links | canopy-text | fern | fern |
 | Link hover | break-on-light | break-on-dark | break-on-dark (see the exception below) |
 | Primary button | canopy-text fill, newsprint text | newsprint fill, carbon text | newsprint fill, forest text |
@@ -113,7 +113,7 @@ Other ground rules:
   - **Callouts** (`<Callout>`): sage-25 background with Forest text and Forest links (8.3:1).
   - **Quote cards** (`<QuoteCard>`): Sage background, also with Forest text.
 - **Avoid canopy-text links on Sage**, because they're only 4.2:1 there. Links inside callouts and sage boxes are Forest.
-- **Section dividers:** one weight everywhere, a 2px Canopy line (`border-t-2 border-(--tone-rule)`). On Forest it is faint (1.9:1); it's decorative.
+- **Section dividers:** one weight everywhere, 2px (`border-t-2 border-(--tone-rule)`). Canopy on Newsprint, Fern on Carbon and Forest.
 
 ### Accent hierarchy
 
@@ -131,7 +131,15 @@ Pink appears only on things you can click. Non-clickable elements never get a pi
 
 ### Eyebrows are for meta labels only
 
-Use `<Eyebrow>` only for meta labels: case-study meta ("Travel Yukon · Training · 4 years"), dates, categories, roles. **Never put an eyebrow above a section or page heading.** A label that names a card or box (for example the Custom Training audience cards) may stay, and so may mock-UI labels inside product mockups.
+Use `<Eyebrow>` only for meta labels: case-study meta ("Travel Yukon · Training · 4 years"), dates, categories, roles. **Never put an eyebrow above a section or page heading.**
+
+- **Card and box labels are meta labels and stay:** the Custom Training audience cards, "The guarantee" and "The Brief · weekly". Mock-UI labels inside product mockups also stay.
+- **Section headings are always real headings** (`<h2 className="type-h2">`), never eyebrow-styled. Examples: "Questions", "What we believe", "Formats".
+- **Hero meta without eyebrows:** put durations and audiences under the lead as a price line (`type-price`, for example "90 days · small businesses"). Put other facts in a small muted caption (`type-small`, for example "Formerly eLearningU", "100+ articles").
+
+### Faces
+
+The only faces on the site are the Junction team's. Testimonials and quote cards never carry a headshot. `AvatarSlot` (the round photo placeholder) is only for team members, such as Conner on step 01 of "What happens on the call".
 
 ### Links turn pink on hover
 
@@ -221,9 +229,9 @@ Controls:
 | `Eyebrow` | Meta labels only (never above a heading). Tone eyebrow colour. `variant="highlight"` adds a break dot and pink text. |
 | `Stat` | `value` and `label`. A Bebas number with the label below in body size, and no rule. Gold on Newsprint and Carbon, Newsprint on Forest. |
 | `Card` | See Surfaces. `tone`, `href` and `padded`. |
-| `QuoteCard` | Sage fill, radius 14, `type-quote` with a Forest caption. Optional `media` slot for a small round headshot. |
+| `QuoteCard` | Sage fill, radius 14, `type-quote` with a Forest caption. No headshots (faces rule). |
 | `Callout` | sage-25 box, radius 14, Forest text and links. For a short highlighted statement. |
-| `AvatarSlot` | Small round dashed placeholder for a headshot that hasn't been supplied yet. |
+| `AvatarSlot` | Small round dashed placeholder for a Junction team member's photo (never a client's). |
 | `Badge` | `outline` (2px break border, pink text, dot) or `filled` (break-on-light fill). Radius 10. |
 | `Chip` | `sage` (sage fill, Forest text), `outline` (1.5px Forest) or `fern-outline` (1.5px Fern border and text, for dark grounds). Radius 10. |
 | `Input`, `Select`, `Textarea` | Always labelled. 48px, with a Flint border and a canopy-text focus. |
@@ -271,6 +279,7 @@ Toggle pills are `<button aria-pressed>` elements inside a labelled `role="group
   - **Seamless at the top of the page:** no border and no shadow. Once the page scrolls, the header gets slightly more compact, with Newsprint at about 92% opacity, a light backdrop blur and a soft shadow.
   - Programs links to `/programs`. Hover or the chevron opens the static dropdown, with `aria-expanded`; Escape and an outside tap close it.
   - The Brief has a break dot.
+  - The dropdown's Accelerator card shows "90 days" as a price line (Bebas, Newsprint 60%), not an eyebrow.
   - The Calendly CTA is 44px.
   - The groups live in `src/lib/navigation.ts`.
 - **Footer** (on Carbon):
