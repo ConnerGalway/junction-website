@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import {
   Button,
   Container,
-  Eyebrow,
   QuoteCard,
   Section,
   TextLink,
@@ -81,7 +80,6 @@ export default function JunctionUPage() {
       <Section tone="forest" spacing="tight">
         <Container className="grid items-end gap-x-[72px] gap-y-8 [grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))]">
           <div>
-            <Eyebrow className="mb-6">JunctionU · formerly eLearningU</Eyebrow>
             <h1 className="type-display m-0">
               Training that fits between two guest check-ins.
             </h1>
@@ -111,7 +109,6 @@ export default function JunctionUPage() {
             filters={filters}
             heading={
               <div>
-                <Eyebrow className="mb-4">The catalogue</Eyebrow>
                 <h2 className="type-h2 m-0">Pick a course.</h2>
               </div>
             }
@@ -127,7 +124,6 @@ export default function JunctionUPage() {
       <Section>
         <Container className="grid items-center gap-x-20 gap-y-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr))]">
           <div>
-            <Eyebrow className="mb-4">For DMOs</Eyebrow>
             <h2 className="type-h2 m-0 mb-5">Fund seats for your whole region.</h2>
             <p className="type-body m-0 mb-8 max-w-[48ch]">
               Partners cover 25% to 100% of course costs for their operators. We

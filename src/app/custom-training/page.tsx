@@ -76,7 +76,6 @@ export default function CustomTrainingPage() {
       <Section spacing="tight">
         <Container className="grid items-end gap-x-[72px] gap-y-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
           <div>
-            <Eyebrow className="mb-6">Custom training</Eyebrow>
             <h1 className="type-display m-0">Training built around your people.</h1>
           </div>
           <div>

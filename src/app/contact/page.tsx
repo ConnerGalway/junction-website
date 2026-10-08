@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Button, Card, Container, Eyebrow, Section, TextLink } from "@/components";
+import { Button, Card, Container, Section, TextLink } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
 import { ContactForm } from "./ContactForm";
 
@@ -17,7 +17,6 @@ export default function ContactPage() {
         <Container className="grid items-start gap-[clamp(40px,5vw,80px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr))]">
           {/* Left column */}
           <div>
-            <Eyebrow className="mb-6">Start a conversation</Eyebrow>
             <h1 className="type-display m-0">Tell us what you&apos;re after.</h1>
             <p className="type-lead m-0 mt-7 mb-10">
               Pick a program and answer a few questions. Conner reads every one

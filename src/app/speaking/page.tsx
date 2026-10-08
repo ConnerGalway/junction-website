@@ -61,7 +61,6 @@ export default function SpeakingPage() {
       <Section tone="carbon" spacing="tight">
         <Container className="grid items-center gap-[clamp(32px,5vw,72px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
           <div>
-            <Eyebrow className="mb-[22px]">Speaking · Conner Galway</Eyebrow>
             <h1 className="type-display m-0">
               Talks that send the room home with a plan.
             </h1>
@@ -87,7 +86,7 @@ export default function SpeakingPage() {
         </Container>
 
         {/* Recent stages */}
-        <Container className="mt-14 flex flex-wrap items-center gap-x-9 gap-y-3 border-t border-hairline-dark pt-6">
+        <Container className="mt-14 flex flex-wrap items-center gap-x-9 gap-y-3 border-t-2 border-(--tone-rule) pt-6">
           <Eyebrow as="span">Recent stages</Eyebrow>
           <ul className="m-0 flex list-none flex-wrap items-center gap-x-4 gap-y-3 p-0">
             {stages.map((s, i) => (
@@ -105,7 +104,6 @@ export default function SpeakingPage() {
       {/* Topics */}
       <Section>
         <Container>
-          <Eyebrow className="mb-4">Topics</Eyebrow>
           <h2 className="type-h2 mt-0 mb-9">
             Three talks, tailored to your room.
           </h2>
@@ -139,7 +137,6 @@ export default function SpeakingPage() {
         <Container className="grid items-center gap-x-20 gap-y-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))]">
           <Placeholder aspectRatio="4/5">[ photo: Conner on stage ]</Placeholder>
           <div>
-            <Eyebrow className="mb-[18px]">Your speaker</Eyebrow>
             <h2 className="type-h2 mt-0 mb-6">Conner Galway</h2>
             <p className="type-body mt-0 mb-7 max-w-[52ch]">
               Founder of Junction. Fourteen years advising organizations on

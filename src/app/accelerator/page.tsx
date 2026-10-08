@@ -139,9 +139,6 @@ export default function AcceleratorPage() {
       <Section spacing="tight">
         <Container className="grid items-center gap-[clamp(32px,5vw,72px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
           <div>
-            <Eyebrow className="mb-5">
-              The Accelerator · 90 days · small businesses
-            </Eyebrow>
             <h1 className="type-display m-0">
               A 90-day marketing plan you&apos;ll actually work.
             </h1>
@@ -181,7 +178,7 @@ export default function AcceleratorPage() {
                 <ScoreBar key={s.label} label={s.label} value={s.value} />
               ))}
             </div>
-            <p className="tone-sage type-small m-0 rounded-card px-4 py-3.5">
+            <p className="tone-callout type-small m-0 rounded-card px-4 py-3.5">
               <strong className="font-medium">Next step · Week 1:</strong>{" "}
               clean up your analytics before spending anything on ads.
             </p>
@@ -190,10 +187,9 @@ export default function AcceleratorPage() {
       </Section>
 
       {/* What you get */}
-      <Section className="border-t border-hairline">
+      <Section className="border-t-2 border-canopy">
         <Container className="grid items-start gap-[clamp(32px,5vw,80px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr))]">
           <div>
-            <Eyebrow className="mb-4">What you get</Eyebrow>
             <h2 className="type-h2 mt-0 mb-6">
               A plan with your name on every task.
             </h2>
@@ -224,7 +220,6 @@ export default function AcceleratorPage() {
       <Section id="plan" tone="forest" className="scroll-mt-24">
         <Container className="grid items-center gap-[clamp(32px,5vw,80px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr))]">
           <div>
-            <Eyebrow className="mb-[18px]">Try it</Eyebrow>
             <h2 className="type-h2 mt-0 mb-6">
               This is what week one looks like.
             </h2>
@@ -254,7 +249,6 @@ export default function AcceleratorPage() {
       {/* Touchpoints */}
       <Section>
         <Container>
-          <Eyebrow className="mb-4">How the 90 days run</Eyebrow>
           <h2 className="type-h2 mt-0 mb-9">
             Three touchpoints. One score that moves.
           </h2>

@@ -7,11 +7,13 @@ type CardProps<T extends ElementType> = {
    * default: same colour as its ground, soft shadow + 3px Forest top rule.
    * carbon / forest: a dark panel that switches its children to that tone.
    * Neighbouring dark panels alternate (one Forest, one Carbon).
+   * newsprint: a light panel on a dark ground (no shadow, no top rule).
    */
-  tone?: "default" | "carbon" | "forest";
+  tone?: "default" | "carbon" | "forest" | "newsprint";
   /** Set false to control padding yourself (e.g. tables, media). */
   padded?: boolean;
-  /** Makes the whole card a link; its top rule turns pink on hover/focus. */
+  /** Makes the whole card a link: 2px pink outline on hover/focus. Put no
+   *  buttons or other links inside a linked card. */
   href?: string;
   as?: T;
 } & Omit<ComponentPropsWithoutRef<T>, "as" | "href">;

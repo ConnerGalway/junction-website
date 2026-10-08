@@ -25,7 +25,6 @@ export default function WorkPage() {
       <Section spacing="tight">
         <Container className="grid items-end gap-x-[72px] gap-y-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))]">
           <div>
-            <Eyebrow className="mb-6">Work</Eyebrow>
             <h1 className="type-display m-0">Real regions. Real numbers.</h1>
           </div>
           <p className="type-body m-0 max-w-[46ch]">

@@ -67,7 +67,6 @@ export default function TheBriefPage() {
       <Section spacing="tight">
         <Container className="grid items-end gap-x-[72px] gap-y-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))]">
           <div>
-            <Eyebrow className="mb-6">Ideas · 100+ articles</Eyebrow>
             <h1 className="type-display m-0">Thinking you can use by Friday.</h1>
           </div>
 

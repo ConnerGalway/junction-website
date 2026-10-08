@@ -52,6 +52,8 @@
   --color-logo-on-light: rgba(28, 28, 26, 0.6);    /* one-colour logos on Newsprint */
   --color-logo-on-dark: rgba(244, 240, 232, 0.7);  /* one-colour logos on Carbon/Forest */
   --color-logo-text-on-light: rgba(28, 28, 26, 0.64); /* text fallback in a wall: 4.9:1, AA */
+  --color-price-on-light: rgba(28, 28, 26, 0.6);    /* Bebas price/duration lines on Newsprint */
+  --color-price-on-dark: rgba(244, 240, 232, 0.6);  /* Bebas price/duration lines on Carbon/Forest */
 
   --color-transparent: transparent;
   --color-current: currentColor;
@@ -167,7 +169,7 @@
     --tone-rule: var(--color-canopy);
     --tone-hairline: var(--color-hairline);
     --tone-numeral: var(--color-accent-1-on-light);
-    --tone-price: var(--color-forest);
+    --tone-price: var(--color-price-on-light);
     --tone-body: var(--color-ink-soft);
     --tone-highlight: var(--color-break-on-light);
     --tone-btn-bg: var(--color-canopy-text);
@@ -190,7 +192,7 @@
     --tone-link: var(--color-fern);
     --tone-link-hover: var(--color-break-on-dark);
     --tone-focus: var(--color-fern);
-    --tone-rule: var(--color-fern);
+    --tone-rule: var(--color-canopy);
     --tone-hairline: var(--color-hairline-dark);
     --tone-highlight: var(--color-break-on-dark);
     --tone-btn-bg: var(--color-newsprint);
@@ -198,7 +200,7 @@
     --tone-btn-hover-bg: var(--color-sage);
     --tone-btn-line: var(--color-newsprint);
     --tone-numeral: var(--color-accent-1);
-    --tone-price: var(--tone-text);
+    --tone-price: var(--color-price-on-dark);
     --tone-body: var(--color-newsprint-muted);
     --tone-logo: var(--color-logo-on-dark);
     --tone-logo-text: var(--color-logo-on-dark);
@@ -208,7 +210,7 @@
     --tone-card-shadow-hover: none;
   }
 
-  /* Forest: sections and boxes. Gold numerals are 3.6:1 here (24px+ only). */
+  /* Forest: sections and boxes. Numerals are Newsprint here (no accent-1). */
   .tone-forest {
     --tone-bg: var(--color-forest);
     --tone-text: var(--color-newsprint);
@@ -217,15 +219,15 @@
     --tone-link: var(--color-fern);
     --tone-link-hover: var(--color-break-on-dark); /* 2.9:1, hover-only exception */
     --tone-focus: var(--color-fern);
-    --tone-rule: var(--color-fern);
+    --tone-rule: var(--color-canopy);
     --tone-hairline: var(--color-hairline-dark);
     --tone-highlight: var(--color-break-on-dark);
     --tone-btn-bg: var(--color-newsprint);
     --tone-btn-text: var(--color-forest);
     --tone-btn-hover-bg: var(--color-sage);
     --tone-btn-line: var(--color-newsprint);
-    --tone-numeral: var(--color-accent-1);
-    --tone-price: var(--tone-text);
+    --tone-numeral: var(--color-newsprint); /* accent-1 is not used on Forest; revisit if accents change */
+    --tone-price: var(--color-price-on-dark);
     --tone-body: var(--color-newsprint-muted);
     --tone-logo: var(--color-logo-on-dark);
     --tone-logo-text: var(--color-logo-on-dark);
@@ -252,14 +254,31 @@
     --tone-btn-hover-bg: var(--color-carbon);
     --tone-btn-line: var(--color-forest);
     --tone-numeral: var(--color-forest);
-    --tone-price: var(--tone-text);
+    --tone-price: var(--color-forest);
     --tone-body: var(--tone-text);
+  }
+
+  /* Sage callouts: sage-25 box with Forest text. */
+  .tone-callout {
+    --tone-bg: var(--color-sage-25);
+    --tone-text: var(--color-forest);
+    --tone-muted: var(--color-forest);
+    --tone-body: var(--color-forest);
+    --tone-eyebrow: var(--color-forest);
+    --tone-link: var(--color-forest);
+    --tone-link-hover: var(--color-break-on-light);
+    --tone-focus: var(--color-forest);
+    --tone-rule: var(--color-canopy);
+    --tone-hairline: var(--color-hairline);
+    --tone-numeral: var(--color-forest);
+    --tone-price: var(--color-forest);
   }
 
   .tone-newsprint,
   .tone-carbon,
   .tone-forest,
-  .tone-sage {
+  .tone-sage,
+  .tone-callout {
     background-color: var(--tone-bg);
     color: var(--tone-text);
   }
@@ -602,10 +621,19 @@
     font-weight: 500;
   }
 
+  /* Pink means clickable: the whole card is the link and gets a 2px
+     break outline (offset 4px) on hover and keyboard focus. */
+  .card-link {
+    outline: 2px solid transparent;
+    outline-offset: 4px;
+    transition-property: outline-color, border-color, box-shadow;
+    transition-duration: 0.15s;
+  }
+
   .card-link:hover,
   .card-link:focus-visible {
-    border-top-color: var(--color-break);
-    box-shadow: var(--tone-card-shadow-hover);
+    outline: 2px solid var(--color-break);
+    outline-offset: 4px;
   }
   .card-pad {
     padding: var(--spacing-card-sm);

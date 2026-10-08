@@ -75,7 +75,7 @@ export function CourseCatalogue({
               <span className="type-eyebrow">{course.code}</span>
               <KindTag kind={course.kind} />
             </div>
-            <h3 className="type-h3 m-0 group-hover:text-break-on-light">{course.title}</h3>
+            <h3 className="type-h3 m-0">{course.title}</h3>
             <p className="type-body m-0">{course.blurb}</p>
             <div className="mt-auto flex items-baseline justify-between gap-3 border-t border-hairline pt-4">
               <span className="type-small">{course.meta}</span>

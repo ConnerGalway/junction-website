@@ -2,7 +2,7 @@
 
 import { Suspense, useId, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Button, Eyebrow, Input, Select, Textarea, cx } from "@/components";
+import { Button, Input, Select, Textarea, cx } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
 
 type FormType = "ai" | "accelerator" | "training" | "speaking" | "other";
@@ -52,7 +52,6 @@ function ContactFormFields({ initialType }: { initialType: FormType }) {
       <div role="status" aria-live="polite">
         {sent && (
           <div className="flex flex-col gap-4 py-3">
-            <Eyebrow>Got it</Eyebrow>
             <h2 className="type-h3 m-0">
               Thanks, {firstName}. Want to skip the back-and-forth?
             </h2>

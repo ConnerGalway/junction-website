@@ -151,12 +151,9 @@ export default function AIAcceleratorPage() {
       <Section spacing="tight">
         <Container className="grid items-center gap-[clamp(32px,5vw,72px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
           <div>
-            <div className="mb-6 flex flex-wrap items-center gap-3">
-              <Eyebrow as="span">
-                Offload Program (AI Accelerator) · 30 days · any industry
-              </Eyebrow>
-              <Badge variant="filled">New</Badge>
-            </div>
+            <Badge variant="filled" className="mb-6">
+              New
+            </Badge>
             <h1 className="type-display m-0">
               We automate one of your bottlenecks in 30 days. Guaranteed.
             </h1>
@@ -219,7 +216,7 @@ export default function AIAcceleratorPage() {
       </Section>
 
       {/* Teams strip */}
-      <section className="border-y border-hairline px-gutter py-7">
+      <section className="px-gutter py-7">
         <Container className="flex flex-col gap-4 md:flex-row md:items-center md:gap-10">
           <span className="type-eyebrow text-muted shrink-0">Teams who&apos;ve been through it</span>
           <LogoWall
@@ -235,7 +232,6 @@ export default function AIAcceleratorPage() {
       <Section>
         <Container className="grid items-start gap-[clamp(32px,5vw,80px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr))]">
           <div>
-            <Eyebrow className="mb-4">What you leave with</Eyebrow>
             <h2 className="type-h2 m-0 mb-6">Tools that run on Monday morning.</h2>
             <p className="type-body m-0 max-w-[42ch]">
               Your team learns AI by building with it on the jobs that eat their
@@ -263,7 +259,6 @@ export default function AIAcceleratorPage() {
       {/* 30 Days */}
       <Section tone="forest">
         <Container>
-          <Eyebrow className="mb-6">How the 30 days run</Eyebrow>
           <h2 className="type-h2 m-0 mb-9 max-w-[18ch]">
             Four one-hour sessions. One a week.
           </h2>

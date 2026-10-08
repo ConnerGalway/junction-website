@@ -42,7 +42,6 @@ export default function AboutPage() {
       {/* Hero */}
       <Section spacing="tight">
         <Container>
-          <Eyebrow className="mb-6">About</Eyebrow>
           <h1 className="type-display m-0 max-w-[14ch]">
             A junction is where routes meet. So are we.
           </h1>
@@ -89,7 +88,6 @@ export default function AboutPage() {
       {/* Team */}
       <Section>
         <Container>
-          <Eyebrow className="mb-8">Who you&apos;ll work with</Eyebrow>
           <div className="grid items-start gap-x-[72px] gap-y-8 border-t-2 border-(--tone-rule) pt-9 [grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))]">
             {/* Initials placeholder */}
             <Card
