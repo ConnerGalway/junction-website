@@ -14,6 +14,7 @@ import {
 } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
 import { homeLogos } from "@/lib/logos";
+import { ProgramOrbit, type OrbitProgram } from "./ProgramOrbit";
 
 export const metadata: Metadata = {
   title: { absolute: "Junction | Strategy & Capacity Building" },
@@ -49,46 +50,35 @@ const stuckItems = [
   },
 ];
 
-const programs = [
+/** Find your program: same order as the Programs submenu. */
+const programs: OrbitProgram[] = [
   {
-    num: "01",
-    title: "Offload Program (AI Accelerator)",
-    meta: "$5,000 · 30 days",
-    tagline: "For any business losing hours to admin.",
-    description:
-      "Four sessions with your leadership team on your real work. One bottleneck automated by day 30, guaranteed.",
-    href: "/ai-accelerator",
-    linkText: "See the AI Accelerator →",
-  },
-  {
-    num: "02",
     title: "The Accelerator",
-    meta: "$2,500 · 90 days",
-    tagline: "For small businesses that need a marketing plan they'll work.",
-    description:
-      "A scored digital assessment, an interactive 90-day plan, three coaching sessions and reassessments that show your progress.",
+    description: "For small businesses that need a marketing plan they'll work.",
+    price: "$2,500 · 90 days",
     href: "/accelerator",
-    linkText: "See the Accelerator →",
+    media: "Accelerator dashboard",
   },
   {
-    num: "03",
-    title: "Custom Training",
-    meta: "Scoped to you",
-    tagline: "For organizations training their members or their leaders.",
-    description:
-      "Courses, workshops and series built around your people, with delivery and progress reporting handled for you.",
-    href: "/custom-training",
-    linkText: "See Custom Training →",
+    title: "Offload Program (AI Accelerator)",
+    description: "For any business losing hours to admin.",
+    price: "$5,000 · 30 days",
+    href: "/ai-accelerator",
+    media: "Offload Program mockup",
   },
   {
-    num: "04",
     title: "Speaking",
-    meta: "Keynote · Workshop · Virtual",
-    tagline: "For event organizers who want the room to leave with a plan.",
-    description:
-      "Keynotes and workshops on AI, marketing trends and strategy. Every talk ends with actions people can take that week.",
+    description: "For event organizers who want the room to leave with a plan.",
+    price: "Keynote · Workshop · Virtual",
     href: "/speaking",
-    linkText: "See speaking topics →",
+    media: "Speaking photo",
+  },
+  {
+    title: "Custom Training",
+    description: "For organizations training their members or their leaders.",
+    price: "Scoped to you",
+    href: "/custom-training",
+    media: "Custom Training photo",
   },
 ];
 
@@ -146,7 +136,7 @@ export default function HomePage() {
         {/* Accelerator dashboard (placeholder): very light, fades out to the left behind the headline */}
         <div
           aria-hidden="true"
-          className="fade-out-left pointer-events-none absolute inset-y-0 right-0 hidden w-[64%] md:block"
+          className="fade-out-left pointer-events-none absolute inset-y-0 right-0 hidden w-[64%] lg:block"
         >
           <div className="absolute inset-y-[10%] right-[-6%] left-0 rounded-card bg-newsprint-hover">
             <Placeholder className="absolute right-[14%] bottom-8 border-0 p-0">
@@ -156,11 +146,12 @@ export default function HomePage() {
         </div>
 
         <Container className="relative flex min-h-[clamp(560px,82vh,780px)] flex-col justify-center py-section-tight">
-          <div className="max-w-[640px]">
-            <h1 className="type-display m-0 max-w-[13ch]">
+          <div>
+            {/* 10.3em holds the headline to three lines at display size */}
+            <h1 className="type-display m-0 max-w-[10.3em]">
               Feeling stuck? Let&apos;s get your organization moving.
             </h1>
-            <p className="type-lead mt-7 mb-10">
+            <p className="type-lead mt-7 mb-10 max-w-[40ch]">
               We find the bottleneck, put the right tools to work, and get your
               people confident running them.
             </p>
@@ -173,12 +164,12 @@ export default function HomePage() {
           </div>
 
           {/* Floating team photo (static for now; scroll drift comes with the motion pass) */}
-          <div className="relative mt-14 ml-auto h-[240px] w-[200px] -rotate-[1.5deg] overflow-hidden rounded-card shadow-card md:absolute md:top-1/2 md:right-[6%] md:mt-0 md:h-[360px] md:w-[300px] md:-translate-y-1/2">
+          <div className="relative mt-14 ml-auto h-[240px] w-[200px] -rotate-[1.5deg] overflow-hidden rounded-card shadow-card lg:absolute lg:top-1/2 lg:right-[4%] lg:mt-0 lg:h-[264px] lg:w-[220px] lg:-translate-y-1/2 xl:right-[1%] xl:h-[360px] xl:w-[300px]">
             <Image
               src="/images/home-hero-team.jpg"
               alt="The Junction team working around a table"
               fill
-              sizes="(min-width: 768px) 300px, 200px"
+              sizes="(min-width: 1280px) 300px, (min-width: 1024px) 220px, 200px"
               priority
               className="object-cover"
             />
@@ -228,46 +219,18 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* Programs */}
-      <Section id="programs" className="scroll-mt-24">
+      {/* Find your program: orbit carousel */}
+      <Section id="programs" tone="carbon" className="scroll-mt-24 overflow-hidden">
         <Container>
-          <div className="mb-9 grid items-end gap-x-[72px] gap-y-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr))]">
-            <div>
-              <Eyebrow className="mb-4">Four ways in</Eyebrow>
-              <h2 className="type-h2 m-0">Find your program.</h2>
-            </div>
-            <p className="type-body m-0">
-              Each one ends with something your team owns: a working tool, a
-              plan, a course, or a room full of people with next steps.
-            </p>
-          </div>
-
-          <div className="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr))]">
-            {programs.map((program) => (
-              <Card key={program.num} href={program.href}>
-                <div className="flex h-full flex-col gap-3.5">
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="type-numeral">{program.num}</span>
-                    <span
-                      className={
-                        program.meta.startsWith("$") ? "type-price" : "type-eyebrow text-muted"
-                      }
-                    >
-                      {program.meta}
-                    </span>
-                  </div>
-                  <h3 className="type-h3 m-0">{program.title}</h3>
-                  <p className="type-small m-0 font-medium text-canopy-text">
-                    {program.tagline}
-                  </p>
-                  <p className="type-body m-0">{program.description}</p>
-                  <span className="link type-button mt-auto self-start pt-2 group-hover:text-break-on-light">
-                    {program.linkText}
-                  </span>
-                </div>
-              </Card>
-            ))}
-          </div>
+          <ProgramOrbit
+            programs={programs}
+            headingId="programs-heading"
+            heading={
+              <h2 id="programs-heading" className="type-h2 m-0">
+                Find your program.
+              </h2>
+            }
+          />
         </Container>
       </Section>
 
