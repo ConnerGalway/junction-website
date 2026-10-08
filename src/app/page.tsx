@@ -4,11 +4,13 @@ import {
   Button,
   Callout,
   Card,
+  Chip,
   Container,
   Eyebrow,
   Placeholder,
   QuoteCard,
   Section,
+  Stat,
   TextLink,
   LogoWall,
 } from "@/components";
@@ -107,6 +109,12 @@ const aiExampleSteps = [
     description:
       "Takeoffs, invoice matching and system integration, prioritized for after the program.",
   },
+];
+
+/** Existing metrics from the AI example; results to come. */
+const caseStats = [
+  { value: "65%", label: "Collected in 30 days" },
+  { value: "Up to 1 day", label: "Quote turnaround" },
 ];
 
 const callSteps = [
@@ -234,67 +242,56 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* AI Example */}
-      <Section tone="carbon">
-        <Container className="grid items-start gap-[clamp(40px,5vw,80px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
-          <div>
-            <Eyebrow className="mb-5">
-              Inside an Offload Program (AI Accelerator)
-            </Eyebrow>
-            <h2 className="type-h2 m-0 mb-6">
-              A building supplier&apos;s 30 days.
-            </h2>
-            <p className="type-body m-0 mb-8">
-              A family-owned supply yard brought seven people, from the president
-              to accounts payable. Only 65% of invoices were collected inside 30
-              days, and quotes took anywhere from five minutes to a day. Here&apos;s
-              what they left with.
-            </p>
-
-            {/* Metrics */}
-            <div className="mb-8 grid grid-cols-2 gap-3">
-              <div className="card p-5">
-                <p className="type-eyebrow text-muted m-0 mb-2">
-                  Collected in 30 days
-                </p>
-                <div className="flex flex-wrap items-baseline gap-2.5">
-                  <span className="type-numeral">65%</span>
-                  <span className="text-(--tone-numeral)" aria-hidden="true">→</span>
-                  <Placeholder className="text-newsprint">[ result ]</Placeholder>
-                </div>
+      {/* Case study */}
+      <Section tone="forest">
+        <Container>
+          <div className="grid items-start gap-x-20 gap-y-14 [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
+            <div>
+              <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2">
+                <Chip variant="fern-outline">Case study</Chip>
+                <Eyebrow as="span">Offload Program · Building supply · 7 people</Eyebrow>
               </div>
-              <div className="card p-5">
-                <p className="type-eyebrow text-muted m-0 mb-2">
-                  Quote turnaround
-                </p>
-                <div className="flex flex-wrap items-baseline gap-2.5">
-                  <span className="type-numeral">Up to 1 day</span>
-                  <span className="text-(--tone-numeral)" aria-hidden="true">→</span>
-                  <Placeholder className="text-newsprint">[ result ]</Placeholder>
-                </div>
+              <h2 className="type-h2 m-0 mb-6">A building supplier&apos;s 30 days.</h2>
+              <p className="type-body m-0 mb-12">
+                A family-owned supply yard brought seven people, from the president
+                to accounts payable. Only 65% of invoices were collected inside 30
+                days, and quotes took anywhere from five minutes to a day. Here&apos;s
+                what they left with.
+              </p>
+
+              <div className="grid gap-x-10 gap-y-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))]">
+                {caseStats.map((stat) => (
+                  <div key={stat.label}>
+                    <Stat
+                      value={stat.value}
+                      label={stat.label}
+                      valueClassName="text-[clamp(64px,6vw,96px)]"
+                    />
+                    <Placeholder className="mt-4 w-fit px-3 py-1.5">[ result ]</Placeholder>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <TextLink href="/ai-accelerator#example">
-              See the full program →
-            </TextLink>
+            <div>
+              <Placeholder aspectRatio="16/10" className="mb-10">
+                [ Animated demo: handwritten list → clean line items ]
+              </Placeholder>
+              <ul className="m-0 grid list-none gap-x-8 gap-y-8 p-0 sm:grid-cols-2">
+                {aiExampleSteps.map((step) => (
+                  <li key={step.num}>
+                    <span className="type-numeral">{step.num}</span>
+                    <h3 className="type-h4 mt-3 mb-1.5">{step.title}</h3>
+                    <p className="type-small m-0">{step.description}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
-          {/* Steps */}
-          <div className="border-t border-(--tone-hairline)">
-            {aiExampleSteps.map((step) => (
-              <div
-                key={step.num}
-                className="grid grid-cols-[48px_1fr] border-b border-(--tone-hairline) py-6"
-              >
-                <span className="type-numeral">{step.num}</span>
-                <div>
-                  <h3 className="type-h4 m-0 mb-1.5">{step.title}</h3>
-                  <p className="type-small m-0">{step.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <TextLink href="/ai-accelerator" className="mt-14 inline-block">
+            See the Offload Program →
+          </TextLink>
         </Container>
       </Section>
 
