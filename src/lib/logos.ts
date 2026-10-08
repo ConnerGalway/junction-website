@@ -16,6 +16,7 @@ const logo = {
     name: "Twin Lions Contracting",
     src: "/logos/twin-lions-contracting.png",
     ratio: 4.882,
+    scale: 1.15,
   },
   westCoastHomes: { name: "West Coast Homes" },
   smr: { name: "SMR Plumbing & Heating", src: "/logos/smr-plumbing-heating.png", ratio: 2.202 },
@@ -44,16 +45,19 @@ const logo = {
     name: "Southwest Ontario Tourism Corporation",
     src: "/logos/ontarios-southwest.png",
     ratio: 3.129,
-    scale: 1.1,
+    scale: 1.15,
   },
-  // The uploaded northern-bc-tourism.png is a solid circular badge: in one
-  // colour it renders as a plain disc, so it stays as text for now.
-  northernBC: { name: "Northern BC Tourism" },
+  northernBC: {
+    name: "Northern BC Tourism",
+    src: "/logos/northern-bc-tourism.png",
+    ratio: 1,
+  },
   fourVI: { name: "4VI", src: "/logos/4vi.png", ratio: 2.549, scale: 0.8 },
   kootenayRockies: {
     name: "Kootenay Rockies Tourism",
     src: "/logos/kootenay-rockies-tourism.png",
     ratio: 1.109,
+    scale: 1.1,
   },
   tourismRedDeer: {
     name: "Tourism Red Deer",
