@@ -84,6 +84,8 @@
 
   /* Elevation for cards that sit on a ground of their own colour. */
   --shadow-card: 0 1px 2px rgba(28, 28, 26, 0.06), 0 10px 28px rgba(28, 28, 26, 0.07);
+  --shadow-orbit: 0 30px 70px rgba(0, 0, 0, 0.45);   /* front card of the program orbit */
+  --ease-orbit: cubic-bezier(0.22, 1, 0.36, 1);
   --shadow-card-hover: 0 1px 2px rgba(28, 28, 26, 0.08), 0 14px 36px rgba(28, 28, 26, 0.11);
 
   /* Widths */
@@ -808,6 +810,66 @@
 
     .logo-wall-marquee .logo-wall-list[aria-hidden] {
       display: none;
+    }
+  }
+
+  /*
+   * ─── Program orbit ───
+   * Front card: no transform, soft shadow, the only one with the pink
+   * outline. Side cards sit back (translateZ -160px), angle 14° inward and
+   * are darkened by a 72% Carbon overlay. All others hide behind the front.
+   */
+  .orbit-stage {
+    perspective: 1800px;
+  }
+
+  .orbit-card {
+    z-index: 1;
+    opacity: 0;
+    transition-property: transform, opacity, box-shadow, outline-color;
+    transition-duration: 700ms;
+    transition-timing-function: var(--ease-orbit);
+    backface-visibility: hidden;
+  }
+
+  .orbit-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: var(--color-carbon);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 700ms var(--ease-orbit);
+  }
+
+  .orbit-card[data-slot="front"] {
+    z-index: 3;
+    opacity: 1;
+    box-shadow: var(--shadow-orbit);
+  }
+
+  .orbit-card[data-slot="prev"],
+  .orbit-card[data-slot="next"] {
+    z-index: 2;
+    opacity: 1;
+    cursor: pointer;
+  }
+
+  .orbit-card[data-slot="prev"]::after,
+  .orbit-card[data-slot="next"]::after {
+    opacity: 0.72;
+  }
+
+  .orbit-card:not([data-slot="front"]):hover,
+  .orbit-card:not([data-slot="front"]):focus-visible {
+    outline-color: transparent;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .orbit-card,
+    .orbit-card::after {
+      transition: none !important;
     }
   }
 

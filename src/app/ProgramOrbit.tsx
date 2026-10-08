@@ -15,9 +15,17 @@ export type OrbitProgram = {
   media: string;
 };
 
+/** Minimum time between two steps, so every input moves exactly one stop. */
+const STEP_LOCK_MS = 520;
+/** Horizontal wheel/trackpad distance that counts as one step. */
+const WHEEL_STEP_PX = 40;
+/** Touch or drag distance that counts as one step. */
+const DRAG_STEP_PX = 50;
+
 /**
- * Where a card sits relative to the active one: 0 = front, ±1 = beside it,
- * further away = behind the front card. Works for any number of cards.
+ * Where a card sits relative to the active one: 0 = front, -1 = previous,
+ * 1 = next, anything else = hidden behind the front card. Works for any
+ * number of programs.
  */
 function offsetOf(index: number, active: number, count: number) {
   let d = (index - active) % count;
@@ -26,22 +34,22 @@ function offsetOf(index: number, active: number, count: number) {
   return d;
 }
 
-function placement(d: number, count: number) {
-  const abs = Math.abs(d);
-  if (abs === 0) return { x: 0, y: 0, scale: 1, rotate: 0, opacity: 1, z: 30 };
-  if (abs === 1) return { x: d * 82, y: 0, scale: 0.78, rotate: -d * 30, opacity: 0.9, z: 20 };
-  // Behind the front card: the one directly opposite sits centred, others
-  // slightly to their side. Anything further than two stops is hidden.
-  const opposite = count % 2 === 0 && abs === count / 2;
-  return {
-    x: opposite ? 0 : Math.sign(d) * 30,
-    y: -32,
-    scale: 0.6,
-    rotate: 0,
-    opacity: abs === 2 ? 0.3 : 0,
-    z: 10 - abs,
-  };
+type Slot = "front" | "prev" | "next" | "hidden";
+
+function slotOf(d: number): Slot {
+  if (d === 0) return "front";
+  if (d === -1) return "prev";
+  if (d === 1) return "next";
+  return "hidden";
 }
+
+/** Transforms per slot. The front card has none at all, so its text stays crisp. */
+const slotTransform: Record<Slot, string> = {
+  front: "none",
+  prev: "translateX(-68%) translateZ(-160px) rotateY(14deg)",
+  next: "translateX(68%) translateZ(-160px) rotateY(-14deg)",
+  hidden: "translateZ(-420px) scale(0.7)",
+};
 
 export function ProgramOrbit({
   programs,
@@ -55,40 +63,61 @@ export function ProgramOrbit({
 }) {
   const count = programs.length;
   const [active, setActive] = useState(0);
-  const wheelLock = useRef(0);
-  const swipeStart = useRef<number | null>(null);
+  const lockUntil = useRef(0);
+  const wheelAccum = useRef(0);
+  const wheelReset = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const drag = useRef<{ x: number; moved: boolean } | null>(null);
+  const suppressClick = useRef(false);
   const liveId = useId();
 
-  const go = (step: number) => setActive((a) => (a + step + count) % count);
+  /** Move to an index, at most one change per STEP_LOCK_MS. */
+  function moveTo(next: (current: number) => number) {
+    const now = performance.now();
+    if (now < lockUntil.current) return;
+    lockUntil.current = now + STEP_LOCK_MS;
+    setActive((a) => (next(a) + count) % count);
+  }
+  const step = (dir: 1 | -1) => moveTo((a) => a + dir);
 
   function onKeyDown(event: KeyboardEvent) {
     if (event.key === "ArrowRight") {
       event.preventDefault();
-      go(1);
+      step(1);
     } else if (event.key === "ArrowLeft") {
       event.preventDefault();
-      go(-1);
+      step(-1);
     }
   }
 
-  // Horizontal trackpad / wheel: one stop per gesture.
+  // Horizontal wheel / trackpad: accumulate deltaX, step once past the
+  // threshold; mostly-vertical scrolls are ignored.
   function onWheel(event: WheelEvent) {
-    if (Math.abs(event.deltaX) <= Math.abs(event.deltaY) || Math.abs(event.deltaX) < 12) return;
-    const now = performance.now();
-    if (now < wheelLock.current) return;
-    wheelLock.current = now + 650;
-    go(event.deltaX > 0 ? 1 : -1);
+    if (Math.abs(event.deltaY) >= Math.abs(event.deltaX)) return;
+    wheelAccum.current += event.deltaX;
+    if (wheelReset.current) clearTimeout(wheelReset.current);
+    wheelReset.current = setTimeout(() => (wheelAccum.current = 0), 180);
+    if (Math.abs(wheelAccum.current) >= WHEEL_STEP_PX) {
+      step(wheelAccum.current > 0 ? 1 : -1);
+      wheelAccum.current = 0;
+    }
   }
 
-  // Touch swipe: one stop per swipe.
+  // Touch / drag: one step once the pointer has travelled DRAG_STEP_PX.
   function onPointerDown(event: PointerEvent) {
-    if (event.pointerType !== "mouse") swipeStart.current = event.clientX;
+    drag.current = { x: event.clientX, moved: false };
   }
-  function onPointerUp(event: PointerEvent) {
-    if (swipeStart.current === null) return;
-    const dx = event.clientX - swipeStart.current;
-    swipeStart.current = null;
-    if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
+  function onPointerMove(event: PointerEvent) {
+    const d = drag.current;
+    if (!d || d.moved) return;
+    const dx = event.clientX - d.x;
+    if (Math.abs(dx) >= DRAG_STEP_PX) {
+      d.moved = true;
+      suppressClick.current = true;
+      step(dx < 0 ? 1 : -1);
+    }
+  }
+  function endDrag() {
+    drag.current = null;
   }
 
   return (
@@ -103,55 +132,58 @@ export function ProgramOrbit({
       <div className="mb-10 flex items-end justify-between gap-6">
         {heading}
         <div className="flex shrink-0 gap-3">
-          <OrbitArrow direction="prev" onClick={() => go(-1)} />
-          <OrbitArrow direction="next" onClick={() => go(1)} />
+          <OrbitArrow direction="prev" onClick={() => step(-1)} />
+          <OrbitArrow direction="next" onClick={() => step(1)} />
         </div>
       </div>
+
       <p id={liveId} aria-live="polite" className="sr-only">
         {`${programs[active].title}, ${active + 1} of ${count}`}
       </p>
 
       {/* Stage */}
       <div
-        className="relative h-[480px] touch-pan-y [perspective:1600px] md:h-[520px]"
+        className="orbit-stage relative h-[480px] touch-pan-y select-none md:h-[520px]"
         onWheel={onWheel}
         onPointerDown={onPointerDown}
-        onPointerUp={onPointerUp}
-        onPointerCancel={() => (swipeStart.current = null)}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        onPointerLeave={endDrag}
+        onClickCapture={(event) => {
+          // A drag that stepped the carousel shouldn't also click a card.
+          if (suppressClick.current) {
+            event.preventDefault();
+            event.stopPropagation();
+            suppressClick.current = false;
+          }
+        }}
       >
         {programs.map((program, i) => {
-          const d = offsetOf(i, active, count);
-          const p = placement(d, count);
-          const isActive = d === 0;
-          const hidden = p.opacity === 0;
-          const style = {
-            transform: `translateX(-50%) translate(${p.x}%, ${p.y}%) scale(${p.scale}) rotateY(${p.rotate}deg)`,
-            opacity: p.opacity,
-            zIndex: p.z,
-          } as CSSProperties;
+          const slot = slotOf(offsetOf(i, active, count));
+          const isFront = slot === "front";
           return (
             <Card
               key={program.href}
               tone="newsprint"
               padded={false}
               href={program.href}
-              tabIndex={hidden ? -1 : undefined}
-              aria-hidden={hidden || undefined}
-              aria-label={isActive ? undefined : `${program.title}: show this program`}
-              onFocus={() => !isActive && setActive(i)}
+              tabIndex={isFront ? undefined : -1}
+              aria-hidden={isFront ? undefined : true}
+              draggable={false}
               onClick={(event: MouseEvent) => {
-                // A side card first comes to the front; the front card navigates.
-                if (!isActive) {
+                // Side cards only come to the centre; only the front card navigates.
+                if (!isFront) {
                   event.preventDefault();
-                  setActive(i);
+                  if (slot === "prev") step(-1);
+                  else if (slot === "next") step(1);
                 }
               }}
-              style={style}
+              style={{ transform: slotTransform[slot] } as CSSProperties}
+              data-slot={slot}
               className={cx(
-                "absolute top-0 left-1/2 flex h-[460px] w-[min(400px,86vw)] flex-col overflow-hidden transition-[transform,opacity] duration-[600ms] ease-[cubic-bezier(.22,.61,.36,1)] motion-reduce:transition-none md:h-[500px] md:w-[420px]",
-                d === -1 && "fade-out-left",
-                d === 1 && "fade-out-right",
-                !isActive && "max-md:invisible max-md:opacity-0"
+                "orbit-card absolute top-0 left-1/2 -ml-[min(220px,39vw)] flex h-[460px] w-[min(440px,78vw)] flex-col overflow-hidden md:h-[500px]",
+                !isFront && "max-md:invisible"
               )}
             >
               <div className="p-3 pb-0">
@@ -176,7 +208,7 @@ export function ProgramOrbit({
               key={program.href}
               type="button"
               aria-current={isActive ? "true" : undefined}
-              onClick={() => setActive(i)}
+              onClick={() => moveTo(() => i)}
               className={cx(
                 "cursor-pointer border-0 bg-transparent px-0 py-1.5 text-[16px] font-medium underline-offset-[10px] hover:text-break-on-dark",
                 isActive

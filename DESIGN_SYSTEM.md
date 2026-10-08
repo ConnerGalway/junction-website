@@ -236,6 +236,18 @@ Controls:
 
 Toggle pills are `<button aria-pressed>` elements inside a labelled `role="group"`. FAQ toggles use `aria-expanded` and `aria-controls`.
 
+## Program orbit (homepage "Find your program")
+
+`src/app/ProgramOrbit.tsx`, styled by `.orbit-stage` / `.orbit-card` in globals.css. It's data-driven: adding a program adds a stop.
+
+- **Stage:** perspective 1800px. Cards are `min(440px, 78vw)` wide.
+- **Front card:** no transform, full opacity and a soft shadow (`--shadow-orbit`, `0 30px 70px rgba(0,0,0,.45)`). It's the only card with the pink outline on hover and focus, the only tabbable card, and the only one that navigates on click.
+- **Side cards** (previous and next): `translateX(∓68%) translateZ(-160px) rotateY(±14°)`, angled gently inward. They're darkened by a 72% Carbon overlay (`::after`), with no gradient masks. Clicking one brings it to the centre; it never navigates. Side cards are `aria-hidden` and not focusable.
+- **All other cards:** hidden behind the front card (`opacity 0`, `translateZ(-420px) scale(.7)`). Nothing peeks out.
+- **Motion:** transform, opacity, shadow and the overlay transition over 700ms with `cubic-bezier(.22,1,.36,1)` (`--ease-orbit`). With `prefers-reduced-motion` there are no transitions.
+- **Input:** one stop per input, with a 520ms lock between steps. Inputs are the arrow buttons, the stop labels, the ← → keys, horizontal wheel or trackpad (accumulated `deltaX`, one step past 40px; mostly-vertical scrolls are ignored) and touch or drag (one step past 50px).
+- **Mobile:** one card at a time, with the same stops and swipe.
+
 ## Logo walls
 
 `<LogoWall>` shows organization logos in **one colour**: each logo is drawn through a CSS mask filled with the tone's logo colour (`logo-on-light` or `logo-on-dark`), so every logo matches whatever its original colours were.
