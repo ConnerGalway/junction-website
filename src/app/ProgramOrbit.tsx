@@ -181,7 +181,7 @@ export function ProgramOrbit({
                 "cursor-pointer border-0 bg-transparent px-0 py-1.5 text-[16px] font-medium underline-offset-[10px] hover:text-break-on-dark",
                 isActive
                   ? "text-newsprint underline decoration-fern decoration-2"
-                  : "text-newsprint/60"
+                  : "text-price-on-dark"
               )}
             >
               {program.title}

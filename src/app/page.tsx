@@ -208,7 +208,7 @@ export default function HomePage() {
       <Section>
         <Container>
           <h2 className="type-h2 m-0">Where organizations get stuck.</h2>
-          <p className="type-lead m-0 mt-4">
+          <p className="type-lead m-0 mt-4 max-w-[44ch]">
             Usually, it&apos;s technology that isn&apos;t pulling its weight yet.
           </p>
           <ol className="mt-9 mb-0 grid list-none gap-x-8 gap-y-10 border-t-2 border-(--tone-rule) p-0 pt-9 sm:grid-cols-2 lg:grid-cols-5">
@@ -263,13 +263,13 @@ export default function HomePage() {
                 what they left with.
               </p>
 
-              <div className="grid gap-x-10 gap-y-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))]">
+              <div className="flex flex-wrap gap-x-14 gap-y-10">
                 {caseStats.map((stat) => (
                   <div key={stat.label}>
                     <Stat
                       value={stat.value}
                       label={stat.label}
-                      valueClassName="text-[clamp(64px,6vw,96px)]"
+                      valueClassName="whitespace-nowrap text-[clamp(64px,6vw,88px)]"
                     />
                     <Placeholder className="mt-4 w-fit px-3 py-1.5">[ result ]</Placeholder>
                   </div>
