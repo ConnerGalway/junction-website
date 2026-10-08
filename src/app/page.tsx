@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import {
   Button,
   Card,
@@ -140,18 +141,27 @@ export default function HomePage() {
   return (
     <>
       {/* Hero */}
-      <Section spacing="tight">
-        <Container className="grid items-center gap-[clamp(32px,5vw,72px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
-          <div>
-            <Eyebrow className="mb-5">Strategy &amp; capacity building</Eyebrow>
-            <h1 className="type-display m-0">
+      <section className="relative overflow-hidden px-gutter">
+        {/* Accelerator dashboard (placeholder): very light, fades out to the left behind the headline */}
+        <div
+          aria-hidden="true"
+          className="fade-out-left pointer-events-none absolute inset-y-0 right-0 hidden w-[64%] md:block"
+        >
+          <div className="absolute inset-y-[10%] right-[-6%] left-0 rounded-card bg-newsprint-hover">
+            <Placeholder className="absolute right-[14%] bottom-8 border-0 p-0">
+              [ Accelerator dashboard ]
+            </Placeholder>
+          </div>
+        </div>
+
+        <Container className="relative flex min-h-[clamp(560px,82vh,780px)] flex-col justify-center py-section-tight">
+          <div className="max-w-[640px]">
+            <h1 className="type-display m-0 max-w-[13ch]">
               Feeling stuck? Let&apos;s get your organization moving.
             </h1>
-            <p className="type-lead mt-7 mb-9">
-              When growth stalls, the cause is usually technology that isn&apos;t
-              pulling its weight yet: online booking, social media, internal
-              systems, AI. We find the bottleneck, put the right tools to work,
-              and get your people confident running them.
+            <p className="type-lead mt-7 mb-10">
+              We find the bottleneck, put the right tools to work, and get your
+              people confident running them.
             </p>
             <div className="flex flex-wrap items-center gap-6">
               <Button href={CALENDLY_URL}>Book a 20-min call</Button>
@@ -161,32 +171,19 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Where organizations get stuck panel */}
-          <Card tone="carbon">
-            <Eyebrow className="mb-3">Where organizations get stuck</Eyebrow>
-            <div className="border-t border-(--tone-hairline)">
-              {stuckItems.map((item) => (
-                <div
-                  key={item.num}
-                  className="grid grid-cols-[48px_minmax(0,1fr)] gap-x-1 border-b border-(--tone-hairline) py-4"
-                >
-                  <span className="type-numeral">{item.num}</span>
-                  <div>
-                    <p className="type-h4 m-0 mb-1">{item.title}</p>
-                    <p className="type-small m-0">{item.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <p className="type-small mb-0 mt-5">
-              <span className="font-medium text-fern">
-                We start with the one costing you most
-              </span>
-              , fix it, and build from there.
-            </p>
-          </Card>
+          {/* Floating team photo (static for now; scroll drift comes with the motion pass) */}
+          <div className="relative mt-14 ml-auto h-[240px] w-[200px] -rotate-[1.5deg] overflow-hidden rounded-card shadow-card md:absolute md:top-1/2 md:right-[6%] md:mt-0 md:h-[360px] md:w-[300px] md:-translate-y-1/2">
+            <Image
+              src="/images/home-hero-team.jpg"
+              alt="The Junction team working around a table"
+              fill
+              sizes="(min-width: 768px) 300px, 200px"
+              priority
+              className="object-cover"
+            />
+          </div>
         </Container>
-      </Section>
+      </section>
 
       {/* Organizations strip */}
       <section className="px-gutter py-7 border-y border-hairline">

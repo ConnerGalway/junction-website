@@ -811,6 +811,17 @@
     }
   }
 
+  /* Edge fades (mask): content fades out toward the named edge. */
+  .fade-out-left {
+    -webkit-mask-image: linear-gradient(to left, #000 45%, transparent);
+    mask-image: linear-gradient(to left, #000 45%, transparent);
+  }
+
+  .fade-out-right {
+    -webkit-mask-image: linear-gradient(to right, #000 45%, transparent);
+    mask-image: linear-gradient(to right, #000 45%, transparent);
+  }
+
   .sr-only-focusable:not(:focus) {
     position: absolute;
     width: 1px;
