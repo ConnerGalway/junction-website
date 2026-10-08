@@ -8,8 +8,10 @@ import {
   Placeholder,
   Section,
   TextLink,
+  LogoWall,
 } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
+import { teamLogos } from "@/lib/logos";
 import { FaqAccordion, type Faq } from "./FaqAccordion";
 
 export const metadata: Metadata = {
@@ -218,13 +220,14 @@ export default function AIAcceleratorPage() {
 
       {/* Teams strip */}
       <section className="border-y border-hairline px-gutter py-7">
-        <Container className="flex flex-wrap items-center gap-x-8 gap-y-3">
-          <span className="type-eyebrow text-muted">Teams who&apos;ve been through it</span>
-          <div className="type-button flex flex-wrap gap-x-8 gap-y-2.5">
-            {teams.map((team) => (
-              <span key={team}>{team}</span>
-            ))}
-          </div>
+        <Container className="flex flex-col gap-4 md:flex-row md:items-center md:gap-10">
+          <span className="type-eyebrow text-muted shrink-0">Teams who&apos;ve been through it</span>
+          <LogoWall
+            variant="row"
+            logos={teamLogos}
+            label="Teams who've been through it"
+            className="min-w-0 flex-1"
+          />
         </Container>
       </section>
 

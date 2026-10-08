@@ -89,11 +89,16 @@ export default function SpeakingPage() {
         {/* Recent stages */}
         <Container className="mt-14 flex flex-wrap items-center gap-x-9 gap-y-3 border-t border-hairline-dark pt-6">
           <Eyebrow as="span">Recent stages</Eyebrow>
-          {stages.map((s) => (
-            <span key={s} className="type-body font-medium">
-              {s}
-            </span>
-          ))}
+          <ul className="m-0 flex list-none flex-wrap items-center gap-x-4 gap-y-3 p-0">
+            {stages.map((s, i) => (
+              <li key={s} className="flex items-center gap-4">
+                {i > 0 && (
+                  <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-flint" />
+                )}
+                <span className="font-sans text-[17px] font-medium">{s}</span>
+              </li>
+            ))}
+          </ul>
         </Container>
       </Section>
 

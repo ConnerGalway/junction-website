@@ -9,31 +9,16 @@ import {
   Section,
   Stat,
   TextLink,
+  LogoWall,
 } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
+import { clientLogos } from "@/lib/logos";
 
 export const metadata: Metadata = {
   title: "Custom Training",
   description:
     "Custom courses for the operators in your region, and programs for the leaders in your organization. We design it, deliver it, and report on what changed.",
 };
-
-const clients = [
-  "Destination BC",
-  "Travel Alberta",
-  "Travel Yukon",
-  "Travel Maine",
-  "Visit Mississippi",
-  "Ontario Destination Association",
-  "Southwest Ontario Tourism Corporation",
-  "Northern BC Tourism",
-  "4VI",
-  "Kootenay Rockies Tourism",
-  "Tourism Red Deer",
-  "Tourism Golden",
-  "South Canadian Rockies Tourism",
-  "Town of Okotoks",
-];
 
 const dmoFeatures = [
   "Courses on JunctionU, branded for your region",
@@ -151,19 +136,7 @@ export default function CustomTrainingPage() {
             <h2 className="type-h3 m-0">Organizations we&apos;ve trained.</h2>
             <span className="type-small">Across Canada and the US</span>
           </div>
-          <div className="card overflow-hidden">
-            {/* -mr/-mb hide the outer cell borders under the card's edge. */}
-            <ul className="-mr-px -mb-px m-0 grid list-none p-0 [grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr))]">
-              {clients.map((c) => (
-                <li
-                  key={c}
-                  className="border-r border-b border-hairline px-5 py-[22px] text-[17px] font-medium"
-                >
-                  {c}
-                </li>
-              ))}
-            </ul>
-          </div>
+          <LogoWall variant="grid" logos={clientLogos} label="Organizations we've trained" />
         </Container>
       </Section>
 

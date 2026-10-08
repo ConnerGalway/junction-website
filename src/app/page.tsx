@@ -8,8 +8,10 @@ import {
   QuoteCard,
   Section,
   TextLink,
+  LogoWall,
 } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
+import { homeLogos } from "@/lib/logos";
 
 export const metadata: Metadata = {
   title: { absolute: "Junction | Strategy & Capacity Building" },
@@ -43,16 +45,6 @@ const stuckItems = [
     title: "AI",
     description: "Admin eating the week of your best people",
   },
-];
-
-const organizations = [
-  "Twin Lions Contracting",
-  "West Coast Homes",
-  "SMR Plumbing & Heating",
-  "Destination BC",
-  "Travel Alberta",
-  "Travel Maine",
-  "Visit Mississippi",
 ];
 
 const programs = [
@@ -198,13 +190,14 @@ export default function HomePage() {
 
       {/* Organizations strip */}
       <section className="px-gutter py-7 border-y border-hairline">
-        <Container className="flex flex-wrap items-center gap-x-10 gap-y-3.5">
-          <span className="type-eyebrow text-muted">Organizations we work with</span>
-          <div className="type-button flex flex-wrap gap-x-8 gap-y-2.5">
-            {organizations.map((org) => (
-              <span key={org}>{org}</span>
-            ))}
-          </div>
+        <Container className="flex flex-col gap-4 md:flex-row md:items-center md:gap-10">
+          <span className="type-eyebrow text-muted shrink-0">Organizations we work with</span>
+          <LogoWall
+            variant="marquee"
+            logos={homeLogos}
+            label="Organizations we work with"
+            className="min-w-0 flex-1"
+          />
         </Container>
       </section>
 
