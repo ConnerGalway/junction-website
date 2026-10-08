@@ -74,6 +74,10 @@ function ProgramsPanel({ onNavigate }: { onNavigate: () => void }) {
   );
 }
 
+/** Scroll positions for the compact header (hysteresis band 16–48px). */
+const COMPACT_ENTER_Y = 48;
+const COMPACT_EXIT_Y = 16;
+
 export function Header() {
   const pathname = usePathname();
   const [programsOpen, setProgramsOpen] = useState(false);
@@ -106,11 +110,21 @@ export function Header() {
   }, [programsOpen]);
 
   // Seamless at the top; compact + frosted once the page has scrolled.
+  // Hysteresis: go compact past 48px, expand again only under 16px, and
+  // keep the current state in between. The header is fixed over a spacer
+  // that never changes size, so the shrink can't move the page content.
   useEffect(() => {
     let frame = 0;
+    let ticking = false;
+    function update() {
+      ticking = false;
+      const y = window.scrollY;
+      setScrolled((compact) => (compact ? y >= COMPACT_EXIT_Y : y > COMPACT_ENTER_Y));
+    }
     function onScroll() {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => setScrolled(window.scrollY > 8));
+      if (ticking) return;
+      ticking = true;
+      frame = requestAnimationFrame(update);
     }
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -168,159 +182,163 @@ export function Header() {
     programGroups.some((g) => g.links.some((l) => l.href === pathname));
 
   return (
-    <header
-      className={cx(
-        "tone-newsprint sticky top-0 z-50 px-gutter transition-[background-color,box-shadow] duration-200",
-        scrolled && !mobileOpen
-          ? "bg-newsprint/92 shadow-[0_6px_24px_-12px_color-mix(in_srgb,var(--color-carbon)_25%,transparent)] backdrop-blur-md"
-          : "bg-newsprint"
-      )}
-      onKeyDown={onMobileKeyDown}
-    >
-      <div
+    <>
+      {/* Holds the header's expanded height in the page flow; never resizes. */}
+      <div aria-hidden="true" className="h-[84px]" />
+      <header
         className={cx(
-          "relative mx-auto flex max-w-wide items-center justify-between gap-6 transition-[min-height] duration-200",
-          scrolled ? "min-h-16" : "min-h-[84px]"
+          "tone-newsprint fixed inset-x-0 top-0 z-50 px-gutter transition-[background-color,box-shadow] duration-200",
+          scrolled && !mobileOpen
+            ? "bg-newsprint/92 shadow-[0_6px_24px_-12px_color-mix(in_srgb,var(--color-carbon)_25%,transparent)] backdrop-blur-md"
+            : "bg-newsprint"
         )}
+        onKeyDown={onMobileKeyDown}
       >
-        <LogoLockup collapseOnSmall />
-
-        {/* Desktop navigation */}
-        <nav aria-label="Main" className="hidden lg:block">
-          <ul className="m-0 flex list-none items-center gap-7 p-0 text-[17px] font-normal text-carbon">
-            <li
-              ref={programsRef}
-              onPointerEnter={onPointerEnter}
-              onPointerLeave={onPointerLeave}
-              onKeyDown={onProgramsKeyDown}
-              onBlur={onProgramsBlur}
-            >
-              <div className="flex items-center gap-1">
-                <Link
-                  href="/programs"
-                  aria-current={pathname === "/programs" ? "page" : undefined}
-                  className={cx(
-                    "link-plain py-2",
-                    programsActive && "underline decoration-canopy decoration-2 underline-offset-[0.4em]"
-                  )}
-                >
-                  Programs
-                </Link>
-                <button
-                  ref={chevronRef}
-                  type="button"
-                  aria-expanded={programsOpen}
-                  aria-controls={panelId}
-                  aria-label="Show programs"
-                  onClick={() => setProgramsOpen((open) => !open)}
-                  className="link-plain -mr-2 inline-flex size-8 cursor-pointer items-center justify-center rounded-control border-0 bg-transparent p-0"
-                >
-                  <Chevron open={programsOpen} />
-                </button>
-              </div>
-              <div
-                id={panelId}
-                hidden={!programsOpen}
-                className="absolute right-0 top-full pt-2"
-              >
-                <div className="tone-newsprint w-[min(920px,calc(100vw-2*var(--spacing-gutter)))] rounded-card border border-hairline p-6 shadow-[0_24px_48px_-24px_color-mix(in_srgb,var(--color-carbon)_35%,transparent)]">
-                  <ProgramsPanel onNavigate={() => setProgramsOpen(false)} />
-                </div>
-              </div>
-            </li>
-            {primaryNav.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  aria-current={isActive(item.href) ? "page" : undefined}
-                  className={cx(
-                    "link-plain inline-flex items-center gap-2 py-2",
-                    isActive(item.href) &&
-                      "underline decoration-canopy decoration-2 underline-offset-[0.4em]"
-                  )}
-                >
-                  {item.label}
-                  {item.dot && <Dot />}
-                </Link>
-              </li>
-            ))}
-            <li>
-              <Button href={CALENDLY_URL} size="sm">
-                Book a 20-min call
-              </Button>
-            </li>
-          </ul>
-        </nav>
-
-        {/* Mobile menu toggle */}
-        <button
-          type="button"
-          aria-expanded={mobileOpen}
-          aria-controls={mobileId}
-          onClick={() => setMobileOpen((open) => !open)}
-          className="btn btn-secondary min-h-11 px-4 lg:hidden"
+        <div
+          className={cx(
+            "relative mx-auto flex max-w-wide items-center justify-between gap-6 transition-[min-height] duration-200",
+            scrolled ? "min-h-16" : "min-h-[84px]"
+          )}
         >
-          {mobileOpen ? "Close" : "Menu"}
-        </button>
-      </div>
+          <LogoLockup collapseOnSmall />
 
-      {/* Mobile navigation */}
-      <nav
-        id={mobileId}
-        aria-label="Main"
-        hidden={!mobileOpen}
-        className="max-h-[calc(100dvh-76px)] overflow-y-auto pb-8 lg:hidden"
-      >
-        <div className="mx-auto flex max-w-wide flex-col gap-8 pt-6">
-          <div className="flex flex-col gap-5">
-            <Link href="/programs" className="link-plain type-h4">
-              Programs
-            </Link>
-            <Link
-              href={flagshipProgram.href}
-              className="tone-carbon flex flex-col gap-2 rounded-card p-5"
-            >
-              <span className="type-price text-[28px]">{flagshipProgram.meta}</span>
-              <span className="type-h4">{flagshipProgram.title}</span>
-              <span className="type-small">{flagshipProgram.description}</span>
-            </Link>
-            {programGroups.map((group) => (
-              <div key={group.title} className="flex flex-col gap-2">
-                <p className="type-eyebrow m-0">{group.title}</p>
-                <ul className="m-0 flex list-none flex-col p-0">
-                  {group.links.map((link) => (
-                    <li key={link.href}>
-                      <Link href={link.href} className="link-plain block py-2 text-[17px]">
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-            <Link href="/programs" className="link type-button self-start">
-              See all programs →
-            </Link>
-          </div>
-          <ul className="m-0 flex list-none flex-col border-t border-hairline p-0 pt-4">
-            {primaryNav.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  aria-current={isActive(item.href) ? "page" : undefined}
-                  className="link-plain inline-flex items-center gap-2 py-2.5 text-[18px]"
+          {/* Desktop navigation */}
+          <nav aria-label="Main" className="hidden lg:block">
+            <ul className="m-0 flex list-none items-center gap-7 p-0 text-[17px] font-normal text-carbon">
+              <li
+                ref={programsRef}
+                onPointerEnter={onPointerEnter}
+                onPointerLeave={onPointerLeave}
+                onKeyDown={onProgramsKeyDown}
+                onBlur={onProgramsBlur}
+              >
+                <div className="flex items-center gap-1">
+                  <Link
+                    href="/programs"
+                    aria-current={pathname === "/programs" ? "page" : undefined}
+                    className={cx(
+                      "link-plain py-2",
+                      programsActive && "underline decoration-canopy decoration-2 underline-offset-[0.4em]"
+                    )}
+                  >
+                    Programs
+                  </Link>
+                  <button
+                    ref={chevronRef}
+                    type="button"
+                    aria-expanded={programsOpen}
+                    aria-controls={panelId}
+                    aria-label="Show programs"
+                    onClick={() => setProgramsOpen((open) => !open)}
+                    className="link-plain -mr-2 inline-flex size-8 cursor-pointer items-center justify-center rounded-control border-0 bg-transparent p-0"
+                  >
+                    <Chevron open={programsOpen} />
+                  </button>
+                </div>
+                <div
+                  id={panelId}
+                  hidden={!programsOpen}
+                  className="absolute right-0 top-full pt-2"
                 >
-                  {item.label}
-                  {item.dot && <Dot />}
-                </Link>
+                  <div className="tone-newsprint w-[min(920px,calc(100vw-2*var(--spacing-gutter)))] rounded-card border border-hairline p-6 shadow-[0_24px_48px_-24px_color-mix(in_srgb,var(--color-carbon)_35%,transparent)]">
+                    <ProgramsPanel onNavigate={() => setProgramsOpen(false)} />
+                  </div>
+                </div>
               </li>
-            ))}
-          </ul>
-          <Button href={CALENDLY_URL} className="self-start">
-            Book a 20-min call
-          </Button>
+              {primaryNav.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    aria-current={isActive(item.href) ? "page" : undefined}
+                    className={cx(
+                      "link-plain inline-flex items-center gap-2 py-2",
+                      isActive(item.href) &&
+                        "underline decoration-canopy decoration-2 underline-offset-[0.4em]"
+                    )}
+                  >
+                    {item.label}
+                    {item.dot && <Dot />}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Button href={CALENDLY_URL} size="sm">
+                  Book a 20-min call
+                </Button>
+              </li>
+            </ul>
+          </nav>
+
+          {/* Mobile menu toggle */}
+          <button
+            type="button"
+            aria-expanded={mobileOpen}
+            aria-controls={mobileId}
+            onClick={() => setMobileOpen((open) => !open)}
+            className="btn btn-secondary min-h-11 px-4 lg:hidden"
+          >
+            {mobileOpen ? "Close" : "Menu"}
+          </button>
         </div>
-      </nav>
-    </header>
+
+        {/* Mobile navigation */}
+        <nav
+          id={mobileId}
+          aria-label="Main"
+          hidden={!mobileOpen}
+          className="max-h-[calc(100dvh-76px)] overflow-y-auto pb-8 lg:hidden"
+        >
+          <div className="mx-auto flex max-w-wide flex-col gap-8 pt-6">
+            <div className="flex flex-col gap-5">
+              <Link href="/programs" className="link-plain type-h4">
+                Programs
+              </Link>
+              <Link
+                href={flagshipProgram.href}
+                className="tone-carbon flex flex-col gap-2 rounded-card p-5"
+              >
+                <span className="type-price text-[28px]">{flagshipProgram.meta}</span>
+                <span className="type-h4">{flagshipProgram.title}</span>
+                <span className="type-small">{flagshipProgram.description}</span>
+              </Link>
+              {programGroups.map((group) => (
+                <div key={group.title} className="flex flex-col gap-2">
+                  <p className="type-eyebrow m-0">{group.title}</p>
+                  <ul className="m-0 flex list-none flex-col p-0">
+                    {group.links.map((link) => (
+                      <li key={link.href}>
+                        <Link href={link.href} className="link-plain block py-2 text-[17px]">
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+              <Link href="/programs" className="link type-button self-start">
+                See all programs →
+              </Link>
+            </div>
+            <ul className="m-0 flex list-none flex-col border-t border-hairline p-0 pt-4">
+              {primaryNav.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    aria-current={isActive(item.href) ? "page" : undefined}
+                    className="link-plain inline-flex items-center gap-2 py-2.5 text-[18px]"
+                  >
+                    {item.label}
+                    {item.dot && <Dot />}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <Button href={CALENDLY_URL} className="self-start">
+              Book a 20-min call
+            </Button>
+          </div>
+        </nav>
+      </header>
+    </>
   );
 }

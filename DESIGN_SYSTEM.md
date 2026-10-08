@@ -289,7 +289,9 @@ The hero has three layers, bottom to top:
 
 - **Header:**
   - The `LogoLockup` sits on the left. Links are DM Sans 400, 17px, Carbon.
-  - **Seamless at the top of the page:** no border and no shadow. Once the page scrolls, the header gets slightly more compact, with Newsprint at about 92% opacity, a light backdrop blur and a soft shadow.
+  - **Seamless at the top of the page:** no border and no shadow. Once the page scrolls, the header gets slightly more compact (84px → 64px), with Newsprint at about 92% opacity, a light backdrop blur and a soft shadow.
+  - **No jumping:** the header is `position: fixed`, over an 84px spacer in the page flow that never changes size, so the shrink can't move the page content.
+  - **Hysteresis:** the header switches to compact when `scrollY > 48px`, and back to expanded only when `scrollY < 16px`; between the two it keeps its state. Scroll position is read in a passive listener throttled with `requestAnimationFrame`.
   - Programs links to `/programs`. Hover or the chevron opens the static dropdown, with `aria-expanded`; Escape and an outside tap close it.
   - The Brief has a break dot.
   - The dropdown's Accelerator card shows "90 days" as a price line (Bebas, Newsprint 60%), not an eyebrow.
