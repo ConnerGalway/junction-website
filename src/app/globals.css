@@ -49,6 +49,8 @@
   --color-newsprint-muted: rgba(244, 240, 232, 0.8); /* muted text on dark */
   --color-hairline: rgba(28, 28, 26, 0.14);
   --color-hairline-dark: rgba(244, 240, 232, 0.15);
+  --color-logo-on-light: rgba(28, 28, 26, 0.6);    /* one-colour logos on Newsprint */
+  --color-logo-on-dark: rgba(244, 240, 232, 0.7);  /* one-colour logos on Carbon/Forest */
 
   --color-transparent: transparent;
   --color-current: currentColor;
@@ -171,6 +173,7 @@
     --tone-btn-text: var(--color-newsprint);
     --tone-btn-hover-bg: var(--color-forest);
     --tone-btn-line: var(--color-carbon);
+    --tone-logo: var(--color-logo-on-light);
     --tone-card-rule: var(--color-forest);
     --tone-card-border: 0 solid transparent;
     --tone-card-shadow: var(--shadow-card);
@@ -195,6 +198,7 @@
     --tone-numeral: var(--color-accent-1);
     --tone-price: var(--tone-text);
     --tone-body: var(--color-newsprint-muted);
+    --tone-logo: var(--color-logo-on-dark);
     --tone-card-rule: var(--color-fern);
     --tone-card-border: 1px solid var(--color-hairline-dark);
     --tone-card-shadow: none;
@@ -220,6 +224,7 @@
     --tone-numeral: var(--color-accent-1);
     --tone-price: var(--tone-text);
     --tone-body: var(--color-newsprint-muted);
+    --tone-logo: var(--color-logo-on-dark);
     --tone-card-rule: var(--color-fern);
     --tone-card-border: 1px solid var(--color-hairline-dark);
     --tone-card-shadow: none;
@@ -605,6 +610,169 @@
   @media (min-width: 640px) {
     .card-pad {
       padding: var(--spacing-card);
+    }
+  }
+
+  /*
+   * ─── Logo wall ───
+   * Logos are drawn through a CSS mask in one colour (the tone's logo
+   * colour). They sit in a fixed-height slot (36px, 48px from 768px) and
+   * --opt scales each by its aspect ratio so wide and square marks weigh
+   * the same. Hovering the wall dims every logo but the one under the
+   * cursor (opacity only, 200ms).
+   */
+  .logo-wall {
+    --slot: 36px;
+    --logo-gap: 40px;
+    color: var(--tone-logo);
+  }
+
+  @media (min-width: 768px) {
+    .logo-wall {
+      --slot: 48px;
+      --logo-gap: 56px;
+    }
+  }
+
+  .logo-wall-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .logo-wall-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--slot);
+    transition: opacity 0.2s ease-out;
+  }
+
+  @media (hover: hover) {
+    .logo-wall-list:hover .logo-wall-item {
+      opacity: 0.5;
+    }
+
+    .logo-wall-list .logo-wall-item:hover {
+      opacity: 1;
+    }
+  }
+
+  .logo-mark {
+    display: block;
+    flex: none;
+    height: calc(var(--slot) * var(--opt));
+    width: calc(var(--slot) * var(--opt) * var(--ratio));
+    background-color: currentColor;
+    -webkit-mask: var(--logo) center / contain no-repeat;
+    mask: var(--logo) center / contain no-repeat;
+  }
+
+  .logo-text {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .logo-text {
+      font-size: 17px;
+    }
+  }
+
+  /* row: static, evenly spaced, wrapping on small screens */
+  .logo-wall-row .logo-wall-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 20px var(--logo-gap);
+  }
+
+  /* grid: 3 / 4 / 7 columns, generous gaps, no tiles */
+  .logo-wall-grid .logo-wall-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 40px 24px;
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .logo-wall-grid .logo-wall-list {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 48px 40px;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .logo-wall-grid .logo-wall-list {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+  }
+
+  /* marquee: one row, ~40s per seamless loop, edges fade out */
+  .logo-wall-marquee {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  }
+
+  .logo-wall-marquee:focus-visible {
+    outline-offset: 4px;
+  }
+
+  .logo-marquee-track {
+    display: flex;
+    width: max-content;
+    animation: logo-marquee 40s linear infinite;
+  }
+
+  .logo-wall-marquee:hover .logo-marquee-track,
+  .logo-wall-marquee:focus-within .logo-marquee-track {
+    animation-play-state: paused;
+  }
+
+  .logo-wall-marquee .logo-wall-list {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--logo-gap);
+    padding-inline-end: var(--logo-gap);
+  }
+
+  .logo-wall-marquee .logo-text {
+    white-space: nowrap;
+  }
+
+  @keyframes logo-marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logo-wall-marquee {
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+
+    .logo-marquee-track {
+      width: auto;
+      animation: none !important;
+    }
+
+    .logo-wall-marquee .logo-wall-list {
+      flex: 1;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      row-gap: 20px;
+      padding-inline-end: 0;
+    }
+
+    .logo-wall-marquee .logo-wall-list[aria-hidden] {
+      display: none;
     }
   }
 
