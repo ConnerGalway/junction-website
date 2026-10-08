@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import {
+  AvatarSlot,
   Button,
   Callout,
   Card,
@@ -296,32 +297,32 @@ export default function HomePage() {
       </Section>
 
       {/* Testimonials */}
-      <Section>
-        <Container>
-          <Eyebrow className="mb-9">What clients say</Eyebrow>
-          <div className="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))]">
-            <Placeholder className="min-h-[220px] flex-col items-start justify-between gap-6 text-left">
+      <Section aria-label="What clients say">
+        <Container className="grid gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+          <QuoteCard
+            className="flex min-h-[340px] flex-col justify-between"
+            quote={
+              <>
+                &quot;We are a stronger, smarter organization today thanks to
+                the work we did with Junction.&quot;
+              </>
+            }
+            media={<AvatarSlot label="Kathy Cooper" />}
+            caption="Kathy Cooper, CEO, Kootenay Rockies Tourism"
+          />
+          <div className="flex flex-col gap-6">
+            <Placeholder className="min-h-[158px] flex-1 flex-col items-start justify-between gap-6 text-left">
               <span>[ Testimonial + result ]</span>
               <span className="normal-case tracking-normal text-(--tone-text)">
                 Twin Lions Contracting · AI Accelerator
               </span>
             </Placeholder>
-            <Placeholder className="min-h-[220px] flex-col items-start justify-between gap-6 text-left">
+            <Placeholder className="min-h-[158px] flex-1 flex-col items-start justify-between gap-6 text-left">
               <span>[ Testimonial + result ]</span>
               <span className="normal-case tracking-normal text-(--tone-text)">
                 West Coast Homes · AI Accelerator
               </span>
             </Placeholder>
-            <QuoteCard
-              className="flex min-h-[220px] flex-col justify-between"
-              quote={
-                <>
-                  &quot;We are a stronger, smarter organization today thanks to
-                  the work we did with Junction.&quot;
-                </>
-              }
-              caption="Kathy Cooper, CEO, Kootenay Rockies Tourism"
-            />
           </div>
         </Container>
       </Section>
