@@ -144,49 +144,56 @@ export default function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden px-gutter">
-        {/* Accelerator dashboard (placeholder): very light, fades out to the left behind the headline */}
-        <div
-          aria-hidden="true"
-          className="fade-out-left pointer-events-none absolute inset-y-0 right-0 hidden w-[64%] lg:block"
-        >
-          <div className="absolute inset-y-[10%] right-[-6%] left-0 rounded-card bg-newsprint-hover">
-            <Placeholder className="absolute right-[14%] bottom-8 border-0 p-0">
+      <section className="relative overflow-hidden pb-section-tight">
+        <div className="relative pt-[clamp(72px,9vw,128px)]">
+          {/*
+            Accelerator dashboard (placeholder) — the hero's bottom layer. Starts
+            40% in, a small gap below the nav, bleeds off the right edge and ends
+            at the bottom of the CTA row. Its left side fades into the page so the
+            headline can overlap it; the photo floats on top. Hidden below 1024px.
+          */}
+          <div
+            aria-hidden="true"
+            className="hero-dashboard absolute top-4 right-0 bottom-0 left-[40%] hidden rounded-l-card bg-newsprint-hover lg:block"
+          >
+            <span className="absolute inset-x-0 top-8 flex justify-center pl-[30%] text-[13px] font-medium tracking-[0.08em] text-flint uppercase">
               [ Accelerator dashboard ]
-            </Placeholder>
+            </span>
+          </div>
+
+          <div className="px-gutter">
+            <Container className="relative">
+              <div>
+                {/* 10.3em holds the headline to three lines at display size */}
+                <h1 className="type-display m-0 max-w-[10.3em]">
+                  Feeling stuck? Let&apos;s get your organization moving.
+                </h1>
+                <p className="type-lead mt-7 mb-10 max-w-[40ch]">
+                  We find the bottleneck, put the right tools to work, and get your
+                  people confident running them.
+                </p>
+                <div className="flex flex-wrap items-center gap-6">
+                  <Button href={CALENDLY_URL}>Book a 20-min call</Button>
+                  <TextLink href="#programs" className="whitespace-nowrap">
+                    Find your program ↓
+                  </TextLink>
+                </div>
+              </div>
+
+              {/* Floating team photo (static for now; scroll drift comes with the motion pass) */}
+              <div className="relative mt-14 ml-auto h-[240px] w-[200px] -rotate-[1.5deg] overflow-hidden rounded-card shadow-card lg:absolute lg:top-1/2 lg:right-[4%] lg:mt-0 lg:h-[264px] lg:w-[220px] lg:-translate-y-1/2 xl:right-[1%] xl:h-[360px] xl:w-[300px]">
+                <Image
+                  src="/images/home-hero-team.jpg"
+                  alt="The Junction team working around a table"
+                  fill
+                  sizes="(min-width: 1280px) 300px, (min-width: 1024px) 220px, 200px"
+                  priority
+                  className="object-cover"
+                />
+              </div>
+            </Container>
           </div>
         </div>
-
-        <Container className="relative flex min-h-[clamp(560px,82vh,780px)] flex-col justify-center py-section-tight">
-          <div>
-            {/* 10.3em holds the headline to three lines at display size */}
-            <h1 className="type-display m-0 max-w-[10.3em]">
-              Feeling stuck? Let&apos;s get your organization moving.
-            </h1>
-            <p className="type-lead mt-7 mb-10 max-w-[40ch]">
-              We find the bottleneck, put the right tools to work, and get your
-              people confident running them.
-            </p>
-            <div className="flex flex-wrap items-center gap-6">
-              <Button href={CALENDLY_URL}>Book a 20-min call</Button>
-              <TextLink href="#programs" className="whitespace-nowrap">
-                Find your program ↓
-              </TextLink>
-            </div>
-          </div>
-
-          {/* Floating team photo (static for now; scroll drift comes with the motion pass) */}
-          <div className="relative mt-14 ml-auto h-[240px] w-[200px] -rotate-[1.5deg] overflow-hidden rounded-card shadow-card lg:absolute lg:top-1/2 lg:right-[4%] lg:mt-0 lg:h-[264px] lg:w-[220px] lg:-translate-y-1/2 xl:right-[1%] xl:h-[360px] xl:w-[300px]">
-            <Image
-              src="/images/home-hero-team.jpg"
-              alt="The Junction team working around a table"
-              fill
-              sizes="(min-width: 1280px) 300px, (min-width: 1024px) 220px, 200px"
-              priority
-              className="object-cover"
-            />
-          </div>
-        </Container>
       </section>
 
       {/* Organizations strip: logos fade out behind the label */}

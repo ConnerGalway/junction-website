@@ -244,6 +244,19 @@ Controls:
 
 Toggle pills are `<button aria-pressed>` elements inside a labelled `role="group"`. FAQ toggles use `aria-expanded` and `aria-controls`.
 
+## Homepage hero
+
+The hero has three layers, bottom to top:
+
+1. **Dashboard area** (`.hero-dashboard`, a placeholder for now). One large newsprint-hover block that:
+   - starts 40% from the left, 16px below the nav, and bleeds off the right edge of the viewport;
+   - ends at the bottom of the CTA row;
+   - has radius 14 on its left corners and a gradient fade to transparent on its left side, so it melts into the page under the headline;
+   - shows its label in the visible right part, clear of the photo, with no dashed border;
+   - is hidden below 1024px.
+2. **Headline, lead and CTAs**, overlapping the dashboard's faded left side.
+3. **Team photo**, floating over the dashboard's right part (radius 14, soft shadow, -1.5°).
+
 ## Program orbit (homepage "Find your program")
 
 `src/app/ProgramOrbit.tsx`, styled by `.orbit-stage` / `.orbit-card` in globals.css. It's data-driven: adding a program adds a stop.
