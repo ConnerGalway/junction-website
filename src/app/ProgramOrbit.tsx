@@ -57,7 +57,7 @@ export function ProgramOrbit({
   headingId,
 }: {
   programs: OrbitProgram[];
-  /** The section heading, shown top left with the arrows top right. */
+  /** The section heading, shown above the stage. */
   heading: ReactNode;
   headingId: string;
 }) {
@@ -129,13 +129,7 @@ export function ProgramOrbit({
       onKeyDown={onKeyDown}
       className="rounded-card focus-visible:outline-offset-8"
     >
-      <div className="mb-10 flex items-end justify-between gap-6">
-        {heading}
-        <div className="flex shrink-0 gap-3">
-          <OrbitArrow direction="prev" onClick={() => step(-1)} />
-          <OrbitArrow direction="next" onClick={() => step(1)} />
-        </div>
-      </div>
+      <div className="mb-10">{heading}</div>
 
       <p id={liveId} aria-live="polite" className="sr-only">
         {`${programs[active].title}, ${active + 1} of ${count}`}
@@ -199,42 +193,54 @@ export function ProgramOrbit({
         })}
       </div>
 
-      {/* Stops */}
-      <div className="mt-8 flex flex-wrap justify-center gap-x-8 gap-y-3" role="group" aria-label="Programs">
-        {programs.map((program, i) => {
-          const isActive = i === active;
-          return (
-            <button
-              key={program.href}
-              type="button"
-              aria-current={isActive ? "true" : undefined}
-              onClick={() => moveTo(() => i)}
-              className={cx(
-                "cursor-pointer border-0 bg-transparent px-0 py-1.5 text-[16px] font-medium underline-offset-[10px] hover:text-break-on-dark",
-                isActive
-                  ? "text-newsprint underline decoration-fern decoration-2"
-                  : "text-price-on-dark"
-              )}
-            >
-              {program.title}
-            </button>
-          );
-        })}
+      {/* Stops, with the previous / next arrows at either end */}
+      <div className="mt-8 flex items-center justify-center gap-3">
+        <OrbitArrow direction="prev" onClick={() => step(-1)} />
+        <div className="flex flex-wrap justify-center gap-x-8 gap-y-3" role="group" aria-label="Programs">
+          {programs.map((program, i) => {
+            const isActive = i === active;
+            return (
+              <button
+                key={program.href}
+                type="button"
+                aria-current={isActive ? "true" : undefined}
+                onClick={() => moveTo(() => i)}
+                className={cx(
+                  "cursor-pointer border-0 bg-transparent px-0 py-1.5 text-[16px] font-medium underline-offset-[10px] hover:text-break-on-dark",
+                  isActive
+                    ? "text-newsprint underline decoration-fern decoration-2"
+                    : "text-price-on-dark"
+                )}
+              >
+                {program.title}
+              </button>
+            );
+          })}
+        </div>
+        <OrbitArrow direction="next" onClick={() => step(1)} />
       </div>
     </div>
   );
 }
 
-/** Previous / next arrow button. */
+/** Previous / next arrow: a thin chevron with no box. Pink on hover and focus. */
 function OrbitArrow({ direction, onClick }: { direction: "prev" | "next"; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-label={direction === "prev" ? "Previous program" : "Next program"}
-      className="btn btn-secondary size-12 min-h-0 p-0"
+      className="inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-control border-0 bg-transparent p-0 text-newsprint/70 transition-colors duration-150 ease-out hover:text-break-on-dark focus-visible:text-break-on-dark"
     >
-      <span aria-hidden="true">{direction === "prev" ? "←" : "→"}</span>
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path
+          d={direction === "prev" ? "M12.5 4 6.5 10l6 6" : "M7.5 4l6 6-6 6"}
+          stroke="currentColor"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
     </button>
   );
 }
