@@ -981,14 +981,18 @@
   }
 
   /*
-   * KitCarousel (Offload "What you leave with"): a scroll-snap track. The
-   * spotlight card's artifact is taller (280 vs 220px) and at full
-   * opacity with a 2px Canopy line above its label; the others sit at 50%
-   * (an approved exception to the 75% rule). 400ms soft ease.
+   * KitCarousel (Offload "What you leave with"): a scroll-snap track of
+   * slots that ALL have the same fixed size at all times, so the snap
+   * centre never moves (no layout animation). The spotlight is transform
+   * and opacity only: its artifact box scales up 1.15 from the bottom
+   * centre inside a zone that already reserves the scaled height; its
+   * label keeps its size and gains a 2px Canopy line. Side cards sit at
+   * 50% (an approved exception to the 75% rule). 400ms soft ease.
    */
   .kit-track {
+    --kit-w: min(320px, 78vw);
     scrollbar-width: none;
-    padding-inline: calc(50% - min(160px, 39vw));
+    padding-inline: calc(50% - var(--kit-w) / 2);
   }
 
   .kit-track::-webkit-scrollbar {
@@ -996,6 +1000,8 @@
   }
 
   .kit-card {
+    width: var(--kit-w);
+    scroll-snap-align: center;
     scroll-snap-stop: always;
     opacity: 0.5;
     transition: opacity 0.4s var(--ease-orbit);
@@ -1005,14 +1011,24 @@
     opacity: 1;
   }
 
+  /* Reserves the scaled height (220 × 1.15); the box sits at its bottom. */
+  .kit-zone {
+    position: relative;
+    height: 253px;
+  }
+
   .kit-artifact {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
     height: 220px;
     overflow: hidden;
-    transition: height 0.4s var(--ease-orbit);
+    transform-origin: 50% 100%;
+    transition: transform 0.4s var(--ease-orbit);
   }
 
   .kit-card[data-active] .kit-artifact {
-    height: 280px;
+    transform: scale(1.15);
   }
 
   .kit-label {

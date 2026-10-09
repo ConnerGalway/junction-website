@@ -54,9 +54,11 @@ export function BrainArtifact() {
 
 export function MainBuildArtifact() {
   return (
-    <div className="tone-carbon flex h-full flex-col gap-3 rounded-control px-5 py-4">
-      <p className="type-eyebrow m-0">Main build · Quote generator</p>
-      <p className="m-0 text-[13px] leading-snug text-newsprint-muted">
+    <div className="tone-carbon flex h-full flex-col gap-2 rounded-control px-4 py-3">
+      <p className="m-0 text-[11px] font-medium tracking-[0.1em] whitespace-nowrap text-fern uppercase">
+        Main build · Quote generator
+      </p>
+      <p className="m-0 text-[12px] leading-snug text-newsprint-muted">
         &ldquo;Re-stain two cabin decks, about 400 sq ft&rdquo;
       </p>
       <ul className="m-0 list-none p-0">
@@ -64,7 +66,7 @@ export function MainBuildArtifact() {
           ["Deck stain, 4 gal", "$212.00"],
           ["Labour, 1.5 days", "$1,020.00"],
         ].map(([label, price]) => (
-          <li key={label} className="flex items-baseline justify-between border-b border-hairline-dark py-1.5 text-[13px] text-newsprint">
+          <li key={label} className="flex items-baseline justify-between border-b border-hairline-dark py-1 text-[13px] text-newsprint">
             <span>{label}</span>
             <span className="font-wordmark text-[20px] leading-none text-price-on-dark">{price}</span>
           </li>

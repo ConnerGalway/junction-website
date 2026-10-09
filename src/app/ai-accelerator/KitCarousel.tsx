@@ -64,33 +64,39 @@ export function KitCarousel({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // The spotlight follows native scrolling (touch, trackpad, scroll snap).
+  // The spotlight follows native scrolling (touch, trackpad, scroll snap),
+  // but only once scrolling has settled: "scrollend", or a short debounce
+  // where it isn't supported. Never mid-scroll, so it can't fight the snap.
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
-    let frame = 0;
-    function onScroll() {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        const t = trackRef.current;
-        if (!t) return;
-        const centre = t.scrollLeft + t.clientWidth / 2;
-        let best = 0;
-        let bestDist = Infinity;
-        cardRefs.current.forEach((card, i) => {
-          if (!card) return;
-          const d = Math.abs(card.offsetLeft + card.offsetWidth / 2 - centre);
-          if (d < bestDist) {
-            bestDist = d;
-            best = i;
-          }
-        });
-        setActive(best);
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    function settle() {
+      const t = trackRef.current;
+      if (!t) return;
+      const centre = t.scrollLeft + t.clientWidth / 2;
+      let best = 0;
+      let bestDist = Infinity;
+      cardRefs.current.forEach((card, i) => {
+        if (!card) return;
+        const d = Math.abs(card.offsetLeft + card.offsetWidth / 2 - centre);
+        if (d < bestDist) {
+          bestDist = d;
+          best = i;
+        }
       });
+      setActive(best);
     }
-    track.addEventListener("scroll", onScroll, { passive: true });
+    const hasScrollEnd = "onscrollend" in window;
+    function onScroll() {
+      clearTimeout(timer);
+      timer = setTimeout(settle, 150);
+    }
+    if (hasScrollEnd) track.addEventListener("scrollend", settle);
+    else track.addEventListener("scroll", onScroll, { passive: true });
     return () => {
-      cancelAnimationFrame(frame);
+      clearTimeout(timer);
+      track.removeEventListener("scrollend", settle);
       track.removeEventListener("scroll", onScroll);
     };
   }, []);
@@ -139,7 +145,7 @@ export function KitCarousel({
 
       <div
         ref={trackRef}
-        className="kit-track relative flex snap-x snap-mandatory items-start gap-6 overflow-x-auto overscroll-x-contain py-2 select-none"
+        className="kit-track relative flex snap-x snap-mandatory items-start gap-8 overflow-x-auto overscroll-x-contain py-2 select-none"
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={endDrag}
@@ -165,10 +171,10 @@ export function KitCarousel({
               onClick={() => {
                 if (!isActive) goTo(i);
               }}
-              className={cx("kit-card w-[min(320px,78vw)] shrink-0 snap-center", !isActive && "cursor-pointer")}
+              className={cx("kit-card shrink-0", !isActive && "cursor-pointer")}
             >
-              <div aria-hidden="true" className="kit-artifact rounded-card bg-newsprint-hover p-5">
-                {item.artifact}
+              <div aria-hidden="true" className="kit-zone">
+                <div className="kit-artifact rounded-card bg-newsprint-hover p-4">{item.artifact}</div>
               </div>
               <div className="kit-label mt-5 border-t-2 pt-4">
                 <span className="type-numeral block text-[40px]">{item.num}</span>
