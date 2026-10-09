@@ -174,7 +174,7 @@ The type classes live in `@layer components`, so a colour utility can still over
 
 | Class | Size | Line height | Use |
 |---|---|---|---|
-| `type-stat` | clamp(96px, 13vw, 200px) | .85 | Big stats. Use `<Stat>`, which has no rule and a body-size label below. |
+| `type-stat` | clamp(96px, 13vw, 200px) | .85 | Big stats. Use `<Stat>`, which has no rule and a body-size label below, and always fits its container (see Components). |
 | `type-numeral` | clamp(40px, 3.4vw, 48px) | .9 | Index numbers (01, 02…) in lists and cards |
 | `type-price` | 40px | 1 | Prices and durations ("$2,500 · 90 days", "30 days"). Carbon 60% on light, Newsprint 60% on dark. In a program hero the price may be set larger (`type-price text-[56px]`) with the duration and audience beside it at 28px; both keep the 60% colour. |
 
@@ -190,6 +190,7 @@ Use real heading elements in order: h1, then h2, then h3, with no skipped levels
 | `py-section-tight` | clamp(64px, 7vw, 100px) | Stacked sections that belong together, and heroes |
 | `px-gutter` | clamp(20px, 4vw, 60px) | Side gutter (applied by `Section`) |
 | `card-pad` | 28px (24px under 640px) | Card padding (applied by `Card`) |
+| `card-pad-sm` | 20px | Compact padding for small cards (`<Card padded="sm">`), such as the homepage video card |
 | `gap-6` | 24px | Gap between components |
 | `mt-9` / `mb-9` | 36px | Heading to content |
 | `max-w-wide` / `-headline` / `-body` | 1320 / 1040 / 680px | Containers |
@@ -211,9 +212,10 @@ Controls:
   - Linked cards (`href`) get the 2px break-pink outline (offset 4px) on hover and focus. Nothing inside them is a button or another link.
 - **Dark panels:** `<Card tone="carbon">` and `<Card tone="forest">`. Neighbouring dark panels alternate.
 - **Light panels on dark grounds:** `<Card tone="newsprint">`, a Newsprint box with radius 14, no shadow and no top line (for example the homepage program cards on Carbon).
+- **Swappable images:** some images are meant to be replaced on GitHub by uploading a file with the same name, such as the homepage video card cover, `public/images/tourism-talks-cover.png` (16:9). Reference them by that exact path, fill the slot with `object-fit: cover`, and never hardcode their pixel size.
 - **Photos:** never get an outline or the 3px top line. A floating photo may have a soft shadow (`shadow-card`) and radius 14. **Photos are dark, so they never overlap headline text:** when space runs out, the photo shrinks or moves into the flow instead.
-- **Dimmed rows** (`.dim-row`): rows that sit at 50% and come to full opacity on hover and keyboard focus (200ms), such as the Accelerator steps. Pointer devices only: on touch (`hover: none`) they stay at full opacity. Make each row focusable (`tabIndex={0}`) so keyboard users can bring it forward.
-- **Ghost numerals:** a big Bebas numeral (about 240px) in a card's top-right corner, clipped by the card, Carbon at 6% (Newsprint at 7% on Carbon), `aria-hidden`. Used on the Accelerator touchpoint cards.
+- **Dimmed rows** (`.dim-row`): rows that sit at 75% and come to full opacity on hover and keyboard focus (200ms). 75% keeps body text above AA (ink-soft at 75% is about Flint, 4.9:1); don't dim text further, such as the Accelerator steps. Pointer devices only: on touch (`hover: none`) they stay at full opacity. Make each row focusable (`tabIndex={0}`) so keyboard users can bring it forward.
+- **Ghost numerals:** a big Bebas numeral fully inside a card's top-right corner, 16px from the top and right edges and about 70% of the card's height (it scales with the card). Never cropped. Carbon at 6% (Newsprint at 7% on Carbon), behind the text, `aria-hidden`. Drawn as an SVG whose viewBox is the digit's ink box, so its height is the numeral's height. Used on the Accelerator touchpoint cards.
 - **Edge fades:** `.fade-out-left`, `.fade-out-right` and `.fade-out-bottom` (mask). Give a faded element enough padding to keep its shadow inside the mask.
 - **Tables:** use a real `<table className="data-table">` inside `<div className="data-table-frame">`.
   - Header row: Carbon, with Newsprint eyebrow-style labels.
@@ -233,8 +235,8 @@ Controls:
 | `Button` | `variant="primary" \| "secondary"` and `size="default" \| "sm"`. Renders a `Link`, an `<a>` (external links open in a new tab) or a `<button>`. Every "Book a 20-min call" button uses `CALENDLY_URL`. |
 | `TextLink` | Underlined; colour from the tone, with a pink hover on text and underline. |
 | `Eyebrow` | Meta labels only (never above a heading). Tone eyebrow colour. `variant="highlight"` adds a break dot and pink text. |
-| `Stat` | `value` and `label`. A Bebas number with the label below in body size, and no rule. Gold on Newsprint and Carbon, Newsprint on Forest. |
-| `Card` | See Surfaces. `tone`, `href` and `padded`. |
+| `Stat` | `value`, `label` and `maxSize`. A Bebas number with the label below in body size, and no rule. Gold on Newsprint and Carbon, Newsprint on Forest. **It always fits:** as large as `maxSize` (default the `type-stat` clamp) but never wider than its container, via a container query and the value's width from Bebas glyph widths. Set a smaller size with `maxSize`, never a `text-*` class. |
+| `Card` | See Surfaces. `tone`, `href` and `padded` (`true`, `"sm"` for 20px compact padding, or `false`). |
 | `QuoteCard` | Sage fill, radius 14, `type-quote` with a Forest caption. No headshots (faces rule). |
 | `Callout` | sage-25 box, radius 14, Forest text and links. For a short highlighted statement. |
 | `Badge` | `outline` (2px break border, pink text, dot) or `filled` (break-on-light fill). Radius 10. The outline badge is the one non-clickable pink element (see Pink means clickable). |
@@ -313,6 +315,7 @@ Toggle pills are `<button aria-pressed>` elements inside a labelled `role="group
 - **It's the product's UI, not the site's:** its own small type sizes and layout, drawn at its design size (1280×760) and scaled to its container's width with a CSS transform. Colours, fonts and radii map to site tokens (`.dp-*` in globals.css). As a product mock-up it keeps the product's own colour coding (gold and copper grades and metrics, Bebas metric values) and its own subtle hovers, never the site's pink.
 - **Display only:** the sidebar and the tactic tabs switch views; nothing navigates, nothing saves, and the checkboxes aren't interactive.
 - **Accessible:** a region labelled "Interactive Accelerator dashboard preview, example business"; `tablist`/`tab`/`tabpanel` roles with arrow keys (↑ ↓ in the sidebar, ← → in the tactic tabs).
+- **Thumbnail** (`<DashboardPreview variant="thumbnail" />`): the Dashboard screen only, scaled to fill its container's width, top-aligned, with the bottom faded out (`.fade-out-bottom`). Not interactive at all: `inert`, `aria-hidden` and no pointer events; the card around it carries the accessible name and the link. Put it in a slot with its own size, radius and `overflow: hidden`. Used in the Accelerator card of the Programs dropdown (16:9, radius 10) and on The Accelerator card in the homepage orbit (16:10, radius 14).
 
 ## Logo walls
 
