@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import {
+  Badge,
   Button,
+  Chip,
   Card,
   Container,
   Placeholder,
@@ -11,6 +13,7 @@ import {
 } from "@/components";
 import { DashboardPreview } from "@/components/DashboardPreview";
 import { CALENDLY_URL } from "@/lib/constants";
+import { QuickScore } from "./QuickScore";
 import { TaskChecklist, type Task } from "./TaskChecklist";
 import { VideoPlayer } from "./VideoPlayer";
 
@@ -51,6 +54,16 @@ const deliverables = [
     description:
       "We re-score your marketing so you can see exactly what moved, and show it to your partners or your board.",
   },
+];
+
+/** The six areas the assessment scores (chips on step 01). */
+const scoredAreas = [
+  "Website",
+  "Reviews",
+  "Booking",
+  "Social",
+  "Customer experience",
+  "Local visibility",
 ];
 
 const taskData: Task[] = [
@@ -165,32 +178,50 @@ export default function AcceleratorPage() {
         </Container>
       </Section>
 
-      {/* What you get */}
-      <Section className="border-t-2 border-canopy">
-        <Container className="grid items-start gap-[clamp(32px,5vw,80px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr))]">
+      {/* Steps + quick score */}
+      <Section id="quick-score" className="scroll-mt-24">
+        <Container className="grid items-start gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,560px)]">
           <div>
-            <h2 className="type-h2 mt-0 mb-6">
-              A plan with your name on every task.
-            </h2>
+            <h2 className="type-h2 m-0 mb-6">A plan with your name on every task.</h2>
             <p className="type-body m-0 max-w-[42ch]">
               Every task says how long it takes, who does it, and how to do it.
               If a step needs a contractor, the plan includes the brief and a
               price range.
             </p>
+            <ol className="m-0 mt-9 list-none border-t-2 border-(--tone-rule) p-0">
+              {deliverables.map((item, i) => (
+                // Focusable so keyboard users can bring a dimmed row forward.
+                <li
+                  key={item.num}
+                  tabIndex={0}
+                  className="dim-row grid grid-cols-[64px_minmax(0,1fr)] border-b border-hairline py-6"
+                >
+                  <span className="type-numeral">{item.num}</span>
+                  <div>
+                    <h3 className="type-h4 mt-0 mb-1.5">{item.title}</h3>
+                    <p className="type-body m-0">{item.description}</p>
+                    {i === 0 && (
+                      <ul className="m-0 mt-4 flex list-none flex-wrap gap-2 p-0" aria-label="Areas scored">
+                        {scoredAreas.map((area) => (
+                          <li key={area}>
+                            <Chip>{area}</Chip>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ol>
           </div>
-          <div className="border-t-2 border-(--tone-rule)">
-            {deliverables.map((item) => (
-              <div
-                key={item.num}
-                className="grid grid-cols-[56px_1fr] border-b border-hairline py-[22px]"
-              >
-                <span className="type-numeral">{item.num}</span>
-                <div>
-                  <h3 className="type-h4 mt-0 mb-1.5">{item.title}</h3>
-                  <p className="type-body m-0">{item.description}</p>
-                </div>
-              </div>
-            ))}
+
+          {/* Sticky while the steps scroll past */}
+          <div className="lg:sticky lg:top-24">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+              <h3 className="type-h4 m-0">Get your free quick score</h3>
+              <Badge>Quick check · a general snapshot</Badge>
+            </div>
+            <QuickScore />
           </div>
         </Container>
       </Section>

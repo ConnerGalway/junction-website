@@ -875,6 +875,24 @@
     }
   }
 
+  /*
+   * Rows that sit back at 50% and come forward on hover or keyboard focus
+   * (200ms). Pointer devices only: on touch (hover: none) every row stays
+   * at full opacity.
+   */
+  @media (hover: hover) {
+    .dim-row {
+      opacity: 0.5;
+      transition: opacity 0.2s ease-out;
+    }
+
+    .dim-row:hover,
+    .dim-row:focus-visible,
+    .dim-row:focus-within {
+      opacity: 1;
+    }
+  }
+
   /* Edge fades (mask): content fades out toward the named edge. */
   .fade-out-left {
     -webkit-mask-image: linear-gradient(to left, #000 45%, transparent);
