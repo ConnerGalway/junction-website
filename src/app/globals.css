@@ -917,6 +917,50 @@
   }
 
   /*
+   * KitCarousel (Offload "What you leave with"): a scroll-snap track. The
+   * spotlight card's artifact is taller (280 vs 220px) and at full
+   * opacity with a 2px Canopy line above its label; the others sit at 50%
+   * (an approved exception to the 75% rule). 400ms soft ease.
+   */
+  .kit-track {
+    scrollbar-width: none;
+    padding-inline: calc(50% - min(160px, 39vw));
+  }
+
+  .kit-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .kit-card {
+    scroll-snap-stop: always;
+    opacity: 0.5;
+    transition: opacity 0.4s var(--ease-orbit);
+  }
+
+  .kit-card[data-active] {
+    opacity: 1;
+  }
+
+  .kit-artifact {
+    height: 220px;
+    overflow: hidden;
+    transition: height 0.4s var(--ease-orbit);
+  }
+
+  .kit-card[data-active] .kit-artifact {
+    height: 280px;
+  }
+
+  .kit-label {
+    border-top-color: transparent;
+    transition: border-color 0.4s var(--ease-orbit);
+  }
+
+  .kit-card[data-active] .kit-label {
+    border-top-color: var(--color-canopy);
+  }
+
+  /*
    * Questions accordion (<Accordion>): the answer opens with a 250ms height
    * animation (grid rows 0fr → 1fr). Collapsed answers are hidden from
    * focus and assistive tech (visibility switches after the close).

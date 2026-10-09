@@ -13,6 +13,14 @@ import {
 } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
 import { teamLogos } from "@/lib/logos";
+import {
+  BrainArtifact,
+  MainBuildArtifact,
+  PolicyArtifact,
+  RoadmapArtifact,
+  SecondBuildArtifact,
+} from "./KitArtifacts";
+import { KitCarousel, type KitItem } from "./KitCarousel";
 import { OffloadHeroVisual } from "./OffloadHeroVisual";
 
 export const metadata: Metadata = {
@@ -55,6 +63,16 @@ const deliverables = [
       "The next opportunities to automate, ranked by time saved, so momentum doesn't stop on day 31.",
   },
 ];
+
+const artifacts = [
+  <PolicyArtifact key="1" />,
+  <BrainArtifact key="2" />,
+  <MainBuildArtifact key="3" />,
+  <SecondBuildArtifact key="4" />,
+  <RoadmapArtifact key="5" />,
+];
+
+const kitItems: KitItem[] = deliverables.map((d, i) => ({ ...d, artifact: artifacts[i] }));
 
 const weeks = [
   {
@@ -203,31 +221,17 @@ export default function AIAcceleratorPage() {
         </Container>
       </section>
 
-      {/* Deliverables */}
-      <Section>
-        <Container className="grid items-start gap-[clamp(32px,5vw,80px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr))]">
-          <div>
-            <h2 className="type-h2 m-0 mb-6">Tools that run on Monday morning.</h2>
-            <p className="type-body m-0 max-w-[42ch]">
-              Your team learns AI by building with it on the jobs that eat their
-              week: quotes, collections, paperwork, admin. Plus a custom dashboard
-              and prompt library you keep.
+      {/* What you leave with */}
+      <Section className="overflow-hidden">
+        <Container>
+          <div className="mb-12 grid items-end gap-x-16 gap-y-5 lg:grid-cols-2">
+            <h2 className="type-h2 m-0">What you leave with.</h2>
+            <p className="type-body m-0 max-w-[46ch]">
+              Everything is yours on day 30: the accounts, the tools, the prompts
+              and the plan.
             </p>
           </div>
-          <div className="border-t-2 border-(--tone-rule)">
-            {deliverables.map((item) => (
-              <div
-                key={item.num}
-                className="grid grid-cols-[56px_1fr] border-b border-(--tone-hairline) py-[22px]"
-              >
-                <span className="type-numeral">{item.num}</span>
-                <div>
-                  <h3 className="type-h4 m-0 mb-1.5">{item.title}</h3>
-                  <p className="type-body m-0">{item.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <KitCarousel items={kitItems} label="What you leave with" initial={2} />
         </Container>
       </Section>
 

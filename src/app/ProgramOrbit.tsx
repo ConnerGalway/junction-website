@@ -2,7 +2,7 @@
 
 import { useId, useRef, useState } from "react";
 import type { CSSProperties, KeyboardEvent, MouseEvent, PointerEvent, ReactNode, WheelEvent } from "react";
-import { Card, Placeholder, cx } from "@/components";
+import { Card, ChevronButton, Placeholder, cx } from "@/components";
 import { DashboardPreview } from "@/components/DashboardPreview";
 
 export type OrbitProgram = {
@@ -232,24 +232,12 @@ export function ProgramOrbit({
   );
 }
 
-/** Previous / next arrow: a thin chevron with no box. Pink on hover and focus. */
 function OrbitArrow({ direction, onClick }: { direction: "prev" | "next"; onClick: () => void }) {
   return (
-    <button
-      type="button"
+    <ChevronButton
+      direction={direction}
       onClick={onClick}
       aria-label={direction === "prev" ? "Previous program" : "Next program"}
-      className="inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-control border-0 bg-transparent p-0 text-newsprint/70 transition-colors duration-150 ease-out hover:text-break-on-dark focus-visible:text-break-on-dark"
-    >
-      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <path
-          d={direction === "prev" ? "M12.5 4 6.5 10l6 6" : "M7.5 4l6 6-6 6"}
-          stroke="currentColor"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </button>
+    />
   );
 }
