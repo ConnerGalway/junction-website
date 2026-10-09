@@ -12,6 +12,7 @@ import {
 import { DashboardPreview } from "@/components/DashboardPreview";
 import { CALENDLY_URL } from "@/lib/constants";
 import { TaskChecklist, type Task } from "./TaskChecklist";
+import { VideoPlayer } from "./VideoPlayer";
 
 export const metadata: Metadata = {
   title: "The Accelerator",
@@ -148,6 +149,18 @@ export default function AcceleratorPage() {
             <div className="fade-out-bottom -m-10 p-10 lg:w-[calc(max(100%,min(62vw,920px))+80px)]">
               <DashboardPreview />
             </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Video */}
+      <Section flush="top">
+        <Container className="grid items-center gap-x-16 gap-y-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+          {/* TODO: pass src, poster and duration once the video is ready. */}
+          <VideoPlayer duration="[ 0:00 ]" label="See how it works" />
+          <div>
+            <h2 className="type-h3 m-0 mb-3">See how it works.</h2>
+            <p className="type-body m-0">[ One line about what the video shows ]</p>
           </div>
         </Container>
       </Section>
