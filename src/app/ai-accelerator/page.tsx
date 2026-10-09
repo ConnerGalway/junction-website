@@ -8,6 +8,7 @@ import {
   Container,
   Eyebrow,
   Placeholder,
+  QuoteCard,
   Section,
   TextLink,
   LogoWall,
@@ -33,8 +34,6 @@ export const metadata: Metadata = {
   description:
     "A hands-on program for leadership teams. Four one-hour sessions on your real work. You leave with AI tools already running, and a team that knows how to build the next one.",
 };
-
-const teams = ["Twin Lions Contracting", "West Coast Homes", "SMR Plumbing & Heating"];
 
 const deliverables = [
   {
@@ -233,47 +232,51 @@ export default function AIAcceleratorPage() {
         </Container>
       </Section>
 
-      {/* Testimonials */}
-      <Section flush="top">
-        <Container className="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))]">
-          {teams.map((team) => (
-            <Placeholder
-              key={team}
-              className="min-h-[200px] flex-col items-start! justify-between! gap-6 p-7! text-left!"
-            >
-              <span>[ Testimonial + result ]</span>
-              <span className="type-button text-(--tone-text)">{team}</span>
-            </Placeholder>
-          ))}
+      {/* Guarantee: break pink and Fraunces here are approved exceptions */}
+      <Section>
+        <Container>
+          {/* TODO: link the guarantee terms here once they're approved. */}
+          <div className="flex flex-col gap-5 rounded-card bg-break-on-light px-8 py-[26px] text-newsprint md:flex-row md:items-center md:gap-8">
+            <h2 className="m-0 shrink-0 font-quote text-[clamp(40px,4vw,52px)] leading-none font-black italic">
+              Guaranteed
+            </h2>
+            <span aria-hidden="true" className="h-px w-full shrink-0 bg-newsprint/50 md:h-14 md:w-px" />
+            <p className="m-0 font-display text-[clamp(18px,1.6vw,22px)] leading-snug font-semibold tracking-[-0.01em]">
+              One bottleneck automated and working by day 30. We agree on the
+              bottleneck together in Week 0, with a clear definition of
+              &ldquo;working.&rdquo;
+            </p>
+          </div>
         </Container>
       </Section>
 
-      {/* Guarantee & FAQ */}
-      <Section flush="top">
-        <Container className="grid items-start gap-x-20 gap-y-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr))]">
-          {/* Guarantee */}
-          <div className="card-pad rounded-card border-2 border-break">
-            <Eyebrow variant="highlight" className="mb-4">
-              The guarantee
-            </Eyebrow>
-            <h2 className="type-h3 m-0 mb-[18px]">
-              One bottleneck automated and working by day 30.
-            </h2>
-            <p className="type-body m-0 mb-[18px]">
-              We agree on the bottleneck together in Week 0, with a clear
-              definition of &quot;working.&quot;
-            </p>
-            <Placeholder className="justify-start! px-3.5! py-3! text-left!">
-              [ Guarantee terms: what happens if it isn&apos;t, e.g. we keep working
-              at no cost until it is ]
-            </Placeholder>
+      {/* Testimonials (placeholders; no faces) */}
+      <Section flush="top" aria-label="What teams say">
+        <Container className="grid gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+          <QuoteCard
+            className="flex min-h-[340px] flex-col justify-between"
+            quote="[ Testimonial from an Offload team ]"
+            caption="[ Name · role · business ]"
+          />
+          <div className="flex flex-col gap-6">
+            {[0, 1].map((i) => (
+              <Placeholder
+                key={i}
+                className="min-h-[158px] flex-1 flex-col items-start justify-between gap-6 text-left"
+              >
+                <span>[ Testimonial + result ]</span>
+                <span>[ Name · business ]</span>
+              </Placeholder>
+            ))}
           </div>
+        </Container>
+      </Section>
 
-          {/* FAQ */}
-          <div>
-            <h2 className="type-h2 m-0 mb-6">Questions</h2>
-            <Accordion items={faqs} />
-          </div>
+      {/* Questions */}
+      <Section flush="top">
+        <Container className="grid items-start gap-x-16 gap-y-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+          <h2 className="type-h2 m-0">Questions.</h2>
+          <Accordion items={faqs} />
         </Container>
       </Section>
 
