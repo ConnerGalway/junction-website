@@ -311,13 +311,16 @@ export default function AcceleratorPage() {
 
       {/* FAQ */}
       <Section flush="top">
-        <Container className="grid gap-x-12 gap-y-8 border-t-2 border-(--tone-rule) pt-9 [grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))]">
-          {faqs.map((faq) => (
-            <div key={faq.q}>
-              <p className="type-h4 mt-0 mb-2">{faq.q}</p>
-              <p className="type-body m-0">{faq.a}</p>
-            </div>
-          ))}
+        <Container className="grid items-start gap-x-16 gap-y-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+          <h2 className="type-h2 m-0">Questions.</h2>
+          <div className="divide-y divide-hairline border-t-2 border-(--tone-rule)">
+            {faqs.map((faq) => (
+              <div key={faq.q} className="py-6">
+                <h3 className="type-h4 mt-0 mb-2">{faq.q}</h3>
+                <p className="type-body m-0">{faq.a}</p>
+              </div>
+            ))}
+          </div>
         </Container>
       </Section>
 
