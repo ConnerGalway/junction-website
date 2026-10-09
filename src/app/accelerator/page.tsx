@@ -122,6 +122,26 @@ const phases = [
   { weeks: "Weeks 10–12", name: "Scale" },
 ];
 
+/**
+ * Ink box of each Bebas Neue digit at 100px (measured), so the SVG's
+ * viewBox wraps the glyph exactly and its height is the numeral's height.
+ */
+const GHOST_INK: Record<number, string> = {
+  1: "8 -70 23 70",
+  2: "3 -71 34 71",
+  3: "3 -71 34 72",
+};
+
+function GhostNumeral({ n, className }: { n: number; className?: string }) {
+  return (
+    <svg aria-hidden="true" viewBox={GHOST_INK[n]} className={cx("pointer-events-none select-none", className)}>
+      <text x="0" y="0" className="font-wordmark text-[100px]">
+        {n}
+      </text>
+    </svg>
+  );
+}
+
 export default function AcceleratorPage() {
   return (
     <>
@@ -267,16 +287,15 @@ export default function AcceleratorPage() {
                   tone={i === 2 ? "carbon" : "default"}
                   className="relative flex w-full flex-col overflow-hidden"
                 >
-                  {/* Ghost numeral, clipped by the card */}
-                  <span
-                    aria-hidden="true"
+                  {/* Ghost numeral: fully inside the card, 16px from the top
+                      and right, 70% of the card's height (scales with it). */}
+                  <GhostNumeral
+                    n={i + 1}
                     className={cx(
-                      "pointer-events-none absolute -top-10 right-2 font-wordmark text-[240px] leading-none select-none",
-                      i === 2 ? "text-newsprint/7" : "text-carbon/6"
+                      "absolute top-4 right-4 h-[70%]",
+                      i === 2 ? "fill-newsprint/7" : "fill-carbon/6"
                     )}
-                  >
-                    {i + 1}
-                  </span>
+                  />
                   <p className="type-numeral relative m-0 text-[40px]">{tp.day}</p>
                   <h3 className="type-h4 relative mt-4 mb-2">{tp.title}</h3>
                   <p className="type-body relative m-0">{tp.description}</p>
