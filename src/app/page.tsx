@@ -70,6 +70,7 @@ const programs: OrbitProgram[] = [
     price: "$5,000 · 30 days",
     href: "/ai-accelerator",
     media: "Offload Program mockup",
+    thumbnail: "offload",
   },
   {
     title: "Speaking",

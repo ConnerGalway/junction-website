@@ -13,6 +13,7 @@ import {
   TextLink,
   LogoWall,
 } from "@/components";
+import { OffloadPreview } from "@/components/OffloadPreview";
 import { CALENDLY_URL } from "@/lib/constants";
 import { CASE_INTRO, CASE_MEASURES, CASE_META } from "@/lib/buildingSupplyCase";
 import { teamLogos } from "@/lib/logos";
@@ -25,7 +26,6 @@ import {
   SecondBuildArtifact,
 } from "./KitArtifacts";
 import { KitCarousel, type KitItem } from "./KitCarousel";
-import { OffloadHeroVisual } from "./OffloadHeroVisual";
 import { ThirtyDays, type Session } from "./ThirtyDays";
 import { TimeBackCalculator } from "./TimeBackCalculator";
 
@@ -150,7 +150,7 @@ export default function AIAcceleratorPage() {
 
           {/* Badge row (about 50px) + two display lines + a gap */}
           <div className="xl:mt-[calc(var(--hero-line)*2+74px)]">
-            <OffloadHeroVisual />
+            <OffloadPreview />
           </div>
         </Container>
       </Section>

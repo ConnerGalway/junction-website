@@ -4,6 +4,7 @@ import { useId, useRef, useState } from "react";
 import type { CSSProperties, KeyboardEvent, MouseEvent, PointerEvent, ReactNode, WheelEvent } from "react";
 import { Card, ChevronButton, Placeholder, cx } from "@/components";
 import { DashboardPreview } from "@/components/DashboardPreview";
+import { OffloadPreview } from "@/components/OffloadPreview";
 
 export type OrbitProgram = {
   title: string;
@@ -15,7 +16,7 @@ export type OrbitProgram = {
   /** Label for the image/mockup placeholder. */
   media: string;
   /** Show a live thumbnail instead of the placeholder. */
-  thumbnail?: "dashboard";
+  thumbnail?: "dashboard" | "offload";
 };
 
 /** Minimum time between two steps, so every input moves exactly one stop. */
@@ -184,9 +185,13 @@ export function ProgramOrbit({
               )}
             >
               <div className="p-3 pb-0">
-                {program.thumbnail === "dashboard" ? (
+                {program.thumbnail ? (
                   <div className="aspect-[16/10] w-full overflow-hidden rounded-card">
-                    <DashboardPreview variant="thumbnail" />
+                    {program.thumbnail === "dashboard" ? (
+                      <DashboardPreview variant="thumbnail" />
+                    ) : (
+                      <OffloadPreview variant="thumbnail" />
+                    )}
                   </div>
                 ) : (
                   <Placeholder className="aspect-[16/10] w-full">[ {program.media} ]</Placeholder>

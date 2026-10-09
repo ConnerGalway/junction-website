@@ -1,10 +1,9 @@
-import { cx } from "@/components";
+import { cx } from "../ui/cx";
 
 /**
- * Static hero visual for the Offload Program: the 30-day journey and a
- * Session 3 build (a quote generator) for the example business, Conner's
- * Cabins. Illustration only: not interactive and hidden from assistive
- * tech (the page copy carries the message).
+ * The Offload Program visual: the 30-day journey and a Session 3 build (a
+ * quote generator) for the example business, Conner's Cabins. Static
+ * illustration; OffloadPreview wraps it (hero or thumbnail).
  */
 const journey = [
   { num: "01", title: "Foundations", state: "done" },
@@ -25,9 +24,9 @@ const lineItems = [
   { label: "Labour, 1.5 days", price: "$1,020.00" },
 ];
 
-export function OffloadHeroVisual() {
+export function OffloadVisual() {
   return (
-    <div aria-hidden="true" className="flex flex-col gap-4 select-none">
+    <div className="flex flex-col gap-4 select-none">
       {/* (a) Journey track */}
       <div className="card px-6 py-5">
         <ol className="m-0 grid list-none grid-cols-4 gap-3 p-0">
