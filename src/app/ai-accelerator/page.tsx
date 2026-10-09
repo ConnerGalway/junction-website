@@ -4,6 +4,7 @@ import {
   type AccordionItem,
   Badge,
   Button,
+  Chip,
   Container,
   Eyebrow,
   Placeholder,
@@ -12,7 +13,9 @@ import {
   LogoWall,
 } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
+import { CASE_INTRO, CASE_MEASURES, CASE_META } from "@/lib/buildingSupplyCase";
 import { teamLogos } from "@/lib/logos";
+import { CaseSwitcher } from "./CaseSwitcher";
 import {
   BrainArtifact,
   MainBuildArtifact,
@@ -103,38 +106,6 @@ const weeks = [
     title: "Build and refine",
     description: "The main build goes live. Roadmap handed over.",
   },
-];
-
-const exampleTableData = [
-  {
-    area: "Collections",
-    before: "Terms were 30 days, but only 65% was collected inside 30.",
-    cost: "Cash was hard to plan, and the president got pulled into difficult accounts.",
-  },
-  {
-    area: "Quotes",
-    before:
-      "Material lists arrived handwritten, by text or by email, and codes were typed in by hand.",
-    cost: "Each quote took five minutes to a day.",
-  },
-  {
-    area: "Receiving",
-    before:
-      "PO, supplier invoice and packing slip matched by hand, then keyed in.",
-    cost: "The AP role spent its time on data entry.",
-  },
-  {
-    area: "Leadership",
-    before: "One person covering three senior roles.",
-    cost: "No time left for customers or growth.",
-  },
-];
-
-const metrics = [
-  { label: "30-day collection rate", value: "65%" },
-  { label: "Quote turnaround", value: "≤ 1 day" },
-  { label: "Leaders using AI daily", value: "1" },
-  { label: "Hours saved per leader, weekly", value: "0" },
 ];
 
 const faqs: AccordionItem[] = [
@@ -265,62 +236,29 @@ export default function AIAcceleratorPage() {
         </Container>
       </Section>
 
-      {/* Example Program */}
-      <Section id="example" className="scroll-mt-24">
+      {/* Case study */}
+      <Section id="case-study" tone="forest" className="scroll-mt-24">
         <Container>
-          <div className="mb-10 grid items-end gap-x-[72px] gap-y-5 [grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr))]">
-            <div>
-              <Eyebrow className="mb-4">
-                Example program · building supply · 7 people
-              </Eyebrow>
-              <h2 className="type-h2 m-0">Where they started.</h2>
-            </div>
-            <p className="type-body m-0 max-w-[46ch]">
-              A family-owned supplier whose president was also covering GM and CFO
-              duties. His goal: &quot;Assistant capacity for me without a new hire.&quot;
-            </p>
+          <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <Chip variant="fern-outline">Case study</Chip>
+            <Eyebrow as="span">{CASE_META}</Eyebrow>
+          </div>
+          <div className="mb-12 grid items-end gap-x-16 gap-y-5 lg:grid-cols-2">
+            <h2 className="type-h2 m-0">Where they started.</h2>
+            <p className="type-body m-0 max-w-[50ch]">{CASE_INTRO}</p>
           </div>
 
-          {/* Table */}
-          <div className="data-table-frame">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th scope="col">Area</th>
-                  <th scope="col">What happened before</th>
-                  <th scope="col">What it cost</th>
-                </tr>
-              </thead>
-              <tbody>
-                {exampleTableData.map((row) => (
-                  <tr key={row.area}>
-                    <th scope="row">{row.area}</th>
-                    <td>{row.before}</td>
-                    <td>{row.cost}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <CaseSwitcher />
 
-          {/* Metrics */}
-          <h3 className="type-h3 m-0 mt-14 mb-6">What we measured.</h3>
-          <div className="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))]">
-            {metrics.map((m) => (
-              <div key={m.label} className="border-t-2 border-(--tone-rule) pt-4">
-                <p className="type-small m-0 mb-2.5">{m.label}</p>
-                <div className="flex flex-wrap items-baseline gap-2.5">
-                  <span className="type-numeral">{m.value}</span>
-                  <span aria-hidden="true" className="text-(--tone-numeral)">
-                    →
-                  </span>
-                  <Placeholder className="rounded-control! px-2! py-1!">
-                    [ result ]
-                  </Placeholder>
-                </div>
-              </div>
+          <h3 className="type-h3 m-0 mt-16 mb-6">What we measured</h3>
+          <ul className="m-0 grid list-none gap-6 p-0 sm:grid-cols-3">
+            {CASE_MEASURES.map((label) => (
+              <li key={label} className="border-t-2 border-(--tone-rule) pt-4">
+                <p className="type-small m-0 mb-3">{label}</p>
+                <p className="m-0 font-wordmark text-[56px] leading-none text-newsprint">[ — ]</p>
+              </li>
             ))}
-          </div>
+          </ul>
         </Container>
       </Section>
 
