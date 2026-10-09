@@ -30,6 +30,9 @@ export function Section({
     <section
       className={cx(
         `tone-${tone}`,
+        // The body is already Newsprint: Newsprint bands stay see-through so
+        // lowest-layer decoration (the hero wordmark) isn't covered.
+        tone === "newsprint" && "bg-transparent",
         "px-gutter",
         flush !== "top" && (y === "section" ? "pt-section" : "pt-section-tight"),
         flush !== "bottom" && (y === "section" ? "pb-section" : "pb-section-tight"),

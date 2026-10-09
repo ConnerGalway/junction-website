@@ -14,7 +14,9 @@ import {
   TextLink,
   LogoWall,
 } from "@/components";
+import { HeroWordmark } from "@/components/HeroWordmark";
 import { CALENDLY_URL } from "@/lib/constants";
+import { SHOW_HERO_WORDMARK } from "@/lib/flags";
 import { homeLogos } from "@/lib/logos";
 import { ProgramOrbit, type OrbitProgram } from "./ProgramOrbit";
 
@@ -142,6 +144,8 @@ const callSteps = [
 export default function HomePage() {
   return (
     <>
+      {SHOW_HERO_WORDMARK && <HeroWordmark />}
+
       {/* Hero */}
       <section className="relative overflow-hidden pb-section-tight">
         <div className="relative pt-[clamp(72px,9vw,128px)]">

@@ -139,7 +139,7 @@ Use `<Eyebrow>` only for meta labels: case-study meta ("Travel Yukon · Training
 
 ### Faces
 
-The only faces on the site are the Junction team's. Testimonials and quote cards never carry a headshot. `AvatarSlot` (the round photo placeholder) is only for team members, such as Conner on step 01 of "What happens on the call".
+The only faces on the site are the Junction team's. Testimonials and quote cards never carry a headshot.
 
 ### Links turn pink on hover
 
@@ -208,7 +208,7 @@ Controls:
   - Linked cards (`href`) get the 2px break-pink outline (offset 4px) on hover and focus. Nothing inside them is a button or another link.
 - **Dark panels:** `<Card tone="carbon">` and `<Card tone="forest">`. Neighbouring dark panels alternate.
 - **Light panels on dark grounds:** `<Card tone="newsprint">`, a Newsprint box with radius 14, no shadow and no top line (for example the homepage program cards on Carbon).
-- **Photos:** never get an outline or the 3px top line. A floating photo may have a soft shadow (`shadow-card`) and radius 14.
+- **Photos:** never get an outline or the 3px top line. A floating photo may have a soft shadow (`shadow-card`) and radius 14. **Photos are dark, so they never overlap headline text:** when space runs out, the photo shrinks or moves into the flow instead.
 - **Tables:** use a real `<table className="data-table">` inside `<div className="data-table-frame">`.
   - Header row: Carbon, with Newsprint eyebrow-style labels.
   - Body rows: Sage-25, with ink-soft cells.
@@ -222,7 +222,7 @@ Controls:
 
 | Component | Usage rules |
 |---|---|
-| `Section` | `tone="newsprint" \| "carbon" \| "forest"` and `spacing="default" \| "tight"`. `flush="top" \| "bottom"` drops one side's padding. |
+| `Section` | `tone="newsprint" \| "carbon" \| "forest"` and `spacing="default" \| "tight"`. `flush="top" \| "bottom"` drops one side's padding. Newsprint sections paint no fill of their own (the body is already Newsprint), so lowest-layer decoration such as the hero wordmark shows through them. |
 | `Container` | `width="wide" \| "headline" \| "body"`, centred. Use `as` for lists. |
 | `Button` | `variant="primary" \| "secondary"` and `size="default" \| "sm"`. Renders a `Link`, an `<a>` (external links open in a new tab) or a `<button>`. Every "Book a 20-min call" button uses `CALENDLY_URL`. |
 | `TextLink` | Underlined; colour from the tone, with a pink hover on text and underline. |
@@ -231,7 +231,6 @@ Controls:
 | `Card` | See Surfaces. `tone`, `href` and `padded`. |
 | `QuoteCard` | Sage fill, radius 14, `type-quote` with a Forest caption. No headshots (faces rule). |
 | `Callout` | sage-25 box, radius 14, Forest text and links. For a short highlighted statement. |
-| `AvatarSlot` | Small round dashed placeholder for a Junction team member's photo (never a client's). |
 | `Badge` | `outline` (2px break border, pink text, dot) or `filled` (break-on-light fill). Radius 10. |
 | `Chip` | `sage` (sage fill, Forest text), `outline` (1.5px Forest) or `fern-outline` (1.5px Fern border and text, for dark grounds). Radius 10. |
 | `Input`, `Select`, `Textarea` | Always labelled. 48px, with a Flint border and a canopy-text focus. |
@@ -246,16 +245,24 @@ Toggle pills are `<button aria-pressed>` elements inside a labelled `role="group
 
 ## Homepage hero
 
-The hero has three layers, bottom to top:
+- **Headline, lead and CTAs** on the left; no dashboard area or other block behind them.
+- **Team photo** on the right, vertically centred on the text (radius 14, soft shadow, -1.5°):
+  - **1024px and wider:** text and photo sit side by side with a 56px gap (48px minimum, plus room for the tilt). The photo is at most 220px wide (300px from 1280px), and shrinks rather than overlapping the headline.
+  - **Below 1024px:** the photo sits in the page flow under the buttons, right-aligned.
 
-1. **Dashboard area** (`.hero-dashboard`, a placeholder for now). One large newsprint-hover block that:
-   - starts 40% from the left, 16px below the nav, and bleeds off the right edge of the viewport;
-   - ends at the bottom of the CTA row;
-   - has radius 14 on its left corners and a gradient fade to transparent on its left side, so it melts into the page under the headline;
-   - shows its label in the visible right part, clear of the photo, with no dashed border;
-   - is hidden below 1024px.
-2. **Headline, lead and CTAs**, overlapping the dashboard's faded left side.
-3. **Team photo**, floating over the dashboard's right part (radius 14, soft shadow, -1.5°).
+### Hero wordmark
+
+`src/components/HeroWordmark.tsx`, rendered by the homepage with one line and switched by `SHOW_HERO_WORDMARK` in `src/lib/flags.ts` (default `true`).
+
+- **Look:** `JUNCTION` in Bebas Neue, Carbon at 10%, letter-spacing .04em, followed by the underscore as a solid Canopy bar at full opacity. The bar's bottom sits on the letters' baseline, like the logo. In em of the wordmark's font size: bar 0.42 wide and 0.11 tall, with a 0.04 gap before it.
+- **768px and wider:** right-aligned to the main container. The font size is fluid (container query units) so letters plus underscore span the container exactly, never cropped.
+- **Below 768px:** only `J_`, right-aligned, about 45vw wide.
+- **Position:** the underscore's bottom edge sits at `100svh + 2/3` of the underscore height from the top of the page, so on any screen the fold cuts through the underscore with two-thirds of it below the fold. The rest of the wordmark is revealed as you scroll.
+- **Layer:** the lowest one (`-z-10`): behind all hero and logo-wall content, above the page background. It's `aria-hidden` and `pointer-events: none`, and it takes no space.
+- **Slower scroll:** it moves at 85% of the page's scroll speed (it drifts down by 0.15 × the scroll distance), via framer-motion `useScroll` + `useTransform`. The drift stops once it has scrolled out of view. With `prefers-reduced-motion` there is no parallax; it scrolls with the page.
+- **Self-contained:** nothing else depends on it. With the flag off, the page's layout, spacing and layering are unchanged.
+
+**How to remove:** set `SHOW_HERO_WORDMARK` to `false` in `src/lib/flags.ts`. To remove it for good, delete `src/components/HeroWordmark.tsx` and its one line (and import) in `src/app/page.tsx`, and the flag. framer-motion can then be uninstalled if nothing else uses it.
 
 ## Program orbit (homepage "Find your program")
 
@@ -266,6 +273,7 @@ The hero has three layers, bottom to top:
 - **Side cards** (previous and next): `translateX(∓68%) translateZ(-160px) rotateY(±14°)`, angled gently inward. They're darkened by a 72% Carbon overlay (`::after`), with no gradient masks. Clicking one brings it to the centre; it never navigates. Side cards are `aria-hidden` and not focusable.
 - **All other cards:** hidden behind the front card (`opacity 0`, `translateZ(-420px) scale(.7)`). Nothing peeks out.
 - **Motion:** transform, opacity, shadow and the overlay transition over 700ms with `cubic-bezier(.22,1,.36,1)` (`--ease-orbit`). With `prefers-reduced-motion` there are no transitions.
+- **Arrows:** previous and next sit at either end of the program-name stops row under the stage, 12px from the names. They're thin chevrons (20px, 1.6px stroke, rounded ends) with no box or border, in Newsprint at 70%; hover and focus turn them break-on-dark pink, with the tone's focus ring. They're labelled "Previous program" / "Next program".
 - **Input:** one stop per input, with a 520ms lock between steps. Inputs are the arrow buttons, the stop labels, the ← → keys, horizontal wheel or trackpad (accumulated `deltaX`, one step past 40px; mostly-vertical scrolls are ignored) and touch or drag (one step past 50px).
 - **Mobile:** one card at a time, with the same stops and swipe.
 
@@ -312,3 +320,4 @@ The hero has three layers, bottom to top:
 - Cards transition their outline, border and shadow, and list rows their fill.
 - Buttons press down 1px when active.
 - `prefers-reduced-motion` disables transitions.
+- **framer-motion** (pinned) is used only for the hero wordmark's slower scroll. Everything else is CSS.
