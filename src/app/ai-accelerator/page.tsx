@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import {
+  Accordion,
+  type AccordionItem,
   Badge,
   Button,
   Card,
@@ -12,7 +14,6 @@ import {
 } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
 import { teamLogos } from "@/lib/logos";
-import { FaqAccordion, type Faq } from "./FaqAccordion";
 
 export const metadata: Metadata = {
   title: "Offload Program (AI Accelerator)",
@@ -117,7 +118,7 @@ const metrics = [
   { label: "Hours saved per leader, weekly", value: "0" },
 ];
 
-const faqs: Faq[] = [
+const faqs: AccordionItem[] = [
   {
     q: "Do we need technical people?",
     a: "No. If your team uses email and spreadsheets, they can do this. We pick tools that fit the people in the room, and they do the building with us beside them.",
@@ -377,7 +378,7 @@ export default function AIAcceleratorPage() {
           {/* FAQ */}
           <div>
             <h2 className="type-h2 m-0 mb-6">Questions</h2>
-            <FaqAccordion faqs={faqs} />
+            <Accordion items={faqs} />
           </div>
         </Container>
       </Section>

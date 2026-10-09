@@ -296,6 +296,12 @@
  * only (stats, index numerals, prices and durations).
  */
 @layer components {
+  /* One line of display type (font size × line height), for heroes whose
+     visual starts below the headline's long first lines. */
+  :root {
+    --hero-line: calc(clamp(48px, 6vw, 92px) * 0.94);
+  }
+
   .type-display {
     font-family: var(--font-display);
     font-weight: 900;
@@ -894,6 +900,28 @@
     .orbit-card::after {
       transition: none !important;
     }
+  }
+
+  /*
+   * Questions accordion (<Accordion>): the answer opens with a 250ms height
+   * animation (grid rows 0fr → 1fr). Collapsed answers are hidden from
+   * focus and assistive tech (visibility switches after the close).
+   */
+  .accordion-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition: grid-template-rows 0.25s ease-out, visibility 0s linear 0.25s;
+  }
+
+  .accordion-panel[data-open] {
+    grid-template-rows: 1fr;
+    visibility: visible;
+    transition: grid-template-rows 0.25s ease-out, visibility 0s linear 0s;
+  }
+
+  .accordion-trigger:hover .accordion-question {
+    color: var(--tone-link-hover);
   }
 
   /*

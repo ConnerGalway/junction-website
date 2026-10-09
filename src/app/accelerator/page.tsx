@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import {
+  Accordion,
   Badge,
   Button,
   Chip,
@@ -147,10 +148,14 @@ export default function AcceleratorPage() {
     <>
       {/* Hero */}
       <Section spacing="tight" className="overflow-hidden">
-        <Container className="grid items-center gap-x-[clamp(32px,5vw,72px)] gap-y-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+        <Container className="grid items-center gap-x-[clamp(32px,5vw,72px)] gap-y-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] xl:grid-cols-2 xl:items-start">
           <div>
+            {/* Three lines from 1280px (explicit breaks); the long first line
+                runs over the preview, which starts one line lower. */}
             <h1 className="type-display m-0">
-              A 90-day marketing plan you&apos;ll actually work.
+              <span className="xl:whitespace-nowrap">A 90-day marketing</span>
+              <br className="hidden xl:inline" /> <span className="xl:whitespace-nowrap">plan you&apos;ll</span>
+              <br className="hidden xl:inline" /> <span className="xl:whitespace-nowrap">actually work.</span>
             </h1>
             <p className="type-lead mt-7 mb-8">
               We score your digital marketing, build the plan with you, and
@@ -178,7 +183,7 @@ export default function AcceleratorPage() {
             Hidden below 768px. The padding keeps the shadow inside the
             bottom-fade mask.
           */}
-          <div className="hidden md:block">
+          <div className="hidden md:block xl:mt-[calc(var(--hero-line)*1+16px)]">
             <div className="fade-out-bottom -m-10 p-10 lg:w-[calc(max(100%,min(62vw,920px))+80px)]">
               <DashboardPreview />
             </div>
@@ -332,14 +337,7 @@ export default function AcceleratorPage() {
       <Section flush="top">
         <Container className="grid items-start gap-x-16 gap-y-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
           <h2 className="type-h2 m-0">Questions.</h2>
-          <div className="divide-y divide-hairline border-t-2 border-(--tone-rule)">
-            {faqs.map((faq) => (
-              <div key={faq.q} className="py-6">
-                <h3 className="type-h4 mt-0 mb-2">{faq.q}</h3>
-                <p className="type-body m-0">{faq.a}</p>
-              </div>
-            ))}
-          </div>
+          <Accordion items={faqs} />
         </Container>
       </Section>
 
