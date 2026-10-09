@@ -3,13 +3,13 @@ import {
   Button,
   Card,
   Container,
-  Eyebrow,
   Placeholder,
   Section,
   Stat,
   TextLink,
   cx,
 } from "@/components";
+import { DashboardPreview } from "@/components/DashboardPreview";
 import { CALENDLY_URL } from "@/lib/constants";
 import { TaskChecklist, type Task } from "./TaskChecklist";
 
@@ -18,15 +18,6 @@ export const metadata: Metadata = {
   description:
     "We score your digital marketing, build the plan with you, and reassess along the way so you can see the score move.",
 };
-
-const scoreData = [
-  { label: "Website & technical", value: 78 },
-  { label: "Reviews & reputation", value: 71 },
-  { label: "Booking & conversion", value: 80 },
-  { label: "Social media & content", value: 62 },
-  { label: "Customer experience", value: 84 },
-  { label: "Local visibility", value: 81 },
-];
 
 const deliverables = [
   {
@@ -110,21 +101,6 @@ const faqs = [
   },
 ];
 
-function ScoreBar({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="grid items-center gap-3 type-small text-(--tone-text) [grid-template-columns:minmax(0,1.3fr)_minmax(0,1fr)_34px]">
-      <span>{label}</span>
-      <div className="h-1.5 overflow-hidden rounded-full bg-hairline" aria-hidden="true">
-        <div
-          className={cx("h-full rounded-full", value < 70 ? "bg-break" : "bg-canopy")}
-          style={{ width: `${value}%` }}
-        />
-      </div>
-      <span className="text-right font-medium">{value}</span>
-    </div>
-  );
-}
-
 const phases = [
   { weeks: "Weeks 1–3", name: "Foundation" },
   { weeks: "Weeks 4–6", name: "Build" },
@@ -136,54 +112,43 @@ export default function AcceleratorPage() {
   return (
     <>
       {/* Hero */}
-      <Section spacing="tight">
-        <Container className="grid items-center gap-[clamp(32px,5vw,72px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
+      <Section spacing="tight" className="overflow-hidden">
+        <Container className="grid items-center gap-x-[clamp(32px,5vw,72px)] gap-y-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
           <div>
             <h1 className="type-display m-0">
               A 90-day marketing plan you&apos;ll actually work.
             </h1>
             <p className="type-lead mt-7 mb-8">
               We score your digital marketing, build the plan with you, and
-              reassess along the way so you can see the score move. The plan
-              lives online: a week-by-week roadmap, step-by-step guides, and
-              checklists that save as you go.
+              reassess along the way so you can see the score move.
             </p>
-            <p className="type-price m-0 mb-6">90 days · small businesses</p>
-            <div className="mb-2.5">
-              <p className="type-price m-0">$2,500</p>
-              <p className="type-small m-0 mt-2">3 coaching sessions · 90-day plan</p>
+            <div className="flex flex-wrap items-baseline gap-x-5 gap-y-1">
+              <p className="type-price m-0 text-[56px]">$2,500</p>
+              <p className="type-price m-0 text-[28px]">90 days · small businesses</p>
             </div>
-            <p className="type-small mt-0 mb-7">
-              Some industry and regional partners cover 25–100%. Ask on the call.
+            <p className="type-small mt-3 mb-8 max-w-[44ch]">
+              3 coaching sessions · 90-day plan. Some industry and regional
+              partners cover 25–100%. Ask on the call.
             </p>
             <div className="flex flex-wrap items-center gap-6">
               <Button href={CALENDLY_URL}>Book a 20-min call</Button>
-              <TextLink href="#plan" className="whitespace-nowrap">
-                Try a week of the plan ↓
+              <TextLink href="#quick-score" className="whitespace-nowrap">
+                Get your free score in 3 minutes ↓
               </TextLink>
             </div>
           </div>
 
-          {/* Assessment Preview */}
-          <Card className="flex flex-col gap-5">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <Eyebrow as="span">Your digital assessment</Eyebrow>
-              <span className="type-small">Sample client</span>
+          {/*
+            Product preview. 1024px+: bleeds off the right edge (clipped by the
+            section). 768–1023px: under the text at full container width.
+            Hidden below 768px. The padding keeps the shadow inside the
+            bottom-fade mask.
+          */}
+          <div className="hidden md:block">
+            <div className="fade-out-bottom -m-10 p-10 lg:w-[calc(max(100%,min(62vw,920px))+80px)]">
+              <DashboardPreview />
             </div>
-            <div className="flex items-end gap-4">
-              <span className="type-stat text-[clamp(72px,7vw,112px)]">74</span>
-              <span className="type-small pb-1.5">/ 100 overall</span>
-            </div>
-            <div className="flex flex-col gap-3">
-              {scoreData.map((s) => (
-                <ScoreBar key={s.label} label={s.label} value={s.value} />
-              ))}
-            </div>
-            <p className="tone-callout type-small m-0 rounded-card px-4 py-3.5">
-              <strong className="font-medium">Next step · Week 1:</strong>{" "}
-              clean up your analytics before spending anything on ads.
-            </p>
-          </Card>
+          </div>
         </Container>
       </Section>
 
