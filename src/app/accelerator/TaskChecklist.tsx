@@ -53,10 +53,9 @@ export function TaskChecklist({ tasks }: { tasks: Task[] }) {
           >
             {done[i] ? "✓" : ""}
           </span>
-          <span className="flex flex-col gap-1">
-            <span className={cx("type-body font-medium", done[i] && "line-through")}>
-              {task.label}
-            </span>
+          {/* Checked tasks fade back (no strikethrough). */}
+          <span className={cx("flex flex-col gap-1 transition-opacity duration-200", done[i] && "opacity-40")}>
+            <span className="type-body font-medium">{task.label}</span>
             <span className="type-small">{task.meta}</span>
           </span>
         </button>
