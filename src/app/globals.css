@@ -891,13 +891,13 @@
   }
 
   /*
-   * Rows that sit back at 50% and come forward on hover or keyboard focus
+   * Rows that sit back at 75% and come forward on hover or keyboard focus
    * (200ms). Pointer devices only: on touch (hover: none) every row stays
    * at full opacity.
    */
   @media (hover: hover) {
     .dim-row {
-      opacity: 0.5;
+      opacity: 0.75;
       transition: opacity 0.2s ease-out;
     }
 
