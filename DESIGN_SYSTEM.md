@@ -120,6 +120,7 @@ Other ground rules:
 - **Gold (accent-1) is the primary accent.** Every numeral uses it: index numbers, stats and highlighted figures. On Newsprint that means `accent-1-on-light`, and only at 24px and up. On Carbon it's `accent-1`.
 - **On Forest, numerals and stats are Newsprint.** accent-1 is not used on Forest. Revisit this if the accents change.
 - **Copper (accent-2) is the secondary accent.** It's for eyebrows on Newsprint. Never set numerals in copper.
+- **Exception: score bands on the quick score card** (Accelerator page) **only.** Area bars and their Bebas grade letters are coloured by band: healthy (65+) Canopy (letters in canopy-text), middling (45–64) accent-1-on-light, weak (under 45) copper. The two weakest area names in "Your biggest gaps" are copper too. Grade letters count as numerals here. No pink on the card.
 
 ### Pink means clickable
 
@@ -128,6 +129,7 @@ Pink appears only on things you can click. Non-clickable elements never get a pi
 - **Links:** pink text (and underline) on hover, as below.
 - **Clickable cards:** the whole card is the link (`<Card href>`), with no button or second link inside. On hover and keyboard focus it gets a 2px break-pink outline, offset 4px.
 - **Clickable list rows:** the newsprint-hover highlight plus a pink title (see Surfaces).
+- **Exception: the outline `Badge`.** It's a status label with a 2px break outline and break-on-light text, and it isn't clickable. It's the only non-clickable pink element (for example "Quick check · a general snapshot" on the Accelerator page). Don't add others.
 
 ### Eyebrows are for meta labels only
 
@@ -174,7 +176,7 @@ The type classes live in `@layer components`, so a colour utility can still over
 |---|---|---|---|
 | `type-stat` | clamp(96px, 13vw, 200px) | .85 | Big stats. Use `<Stat>`, which has no rule and a body-size label below. |
 | `type-numeral` | clamp(40px, 3.4vw, 48px) | .9 | Index numbers (01, 02…) in lists and cards |
-| `type-price` | 40px | 1 | Prices and durations ("$2,500 · 90 days", "30 days"). Carbon 60% on light, Newsprint 60% on dark. |
+| `type-price` | 40px | 1 | Prices and durations ("$2,500 · 90 days", "30 days"). Carbon 60% on light, Newsprint 60% on dark. In a program hero the price may be set larger (`type-price text-[56px]`) with the duration and audience beside it at 28px; both keep the 60% colour. |
 
 Fonts are loaded in `src/app/layout.tsx` with `next/font/google` and exposed as `--nf-*` variables. They map to the `font-sans` (DM Sans 300/400/500), `font-display` (Epilogue 600/900), `font-quote` (Fraunces 900 italic) and `font-wordmark` (Bebas Neue 400) utilities.
 
@@ -194,6 +196,7 @@ Use real heading elements in order: h1, then h2, then h3, with no skipped levels
 | `rounded-control` | 10px | Buttons, inputs, chips, badges, menu items, list-row highlights |
 | `rounded-card` | 14px | Cards, panels, the dropdown, media frames, tables |
 | `shadow-card` | `0 1px 2px rgba(28,28,26,.06), 0 10px 28px rgba(28,28,26,.07)` | Default card elevation |
+| `shadow-preview` | `0 1px 2px rgba(28,28,26,.06), 0 24px 60px rgba(28,28,26,.12)` | Product previews (the dashboard preview) |
 
 Controls:
 
@@ -209,6 +212,9 @@ Controls:
 - **Dark panels:** `<Card tone="carbon">` and `<Card tone="forest">`. Neighbouring dark panels alternate.
 - **Light panels on dark grounds:** `<Card tone="newsprint">`, a Newsprint box with radius 14, no shadow and no top line (for example the homepage program cards on Carbon).
 - **Photos:** never get an outline or the 3px top line. A floating photo may have a soft shadow (`shadow-card`) and radius 14. **Photos are dark, so they never overlap headline text:** when space runs out, the photo shrinks or moves into the flow instead.
+- **Dimmed rows** (`.dim-row`): rows that sit at 50% and come to full opacity on hover and keyboard focus (200ms), such as the Accelerator steps. Pointer devices only: on touch (`hover: none`) they stay at full opacity. Make each row focusable (`tabIndex={0}`) so keyboard users can bring it forward.
+- **Ghost numerals:** a big Bebas numeral (about 240px) in a card's top-right corner, clipped by the card, Carbon at 6% (Newsprint at 7% on Carbon), `aria-hidden`. Used on the Accelerator touchpoint cards.
+- **Edge fades:** `.fade-out-left`, `.fade-out-right` and `.fade-out-bottom` (mask). Give a faded element enough padding to keep its shadow inside the mask.
 - **Tables:** use a real `<table className="data-table">` inside `<div className="data-table-frame">`.
   - Header row: Carbon, with Newsprint eyebrow-style labels.
   - Body rows: Sage-25, with ink-soft cells.
@@ -231,7 +237,7 @@ Controls:
 | `Card` | See Surfaces. `tone`, `href` and `padded`. |
 | `QuoteCard` | Sage fill, radius 14, `type-quote` with a Forest caption. No headshots (faces rule). |
 | `Callout` | sage-25 box, radius 14, Forest text and links. For a short highlighted statement. |
-| `Badge` | `outline` (2px break border, pink text, dot) or `filled` (break-on-light fill). Radius 10. |
+| `Badge` | `outline` (2px break border, pink text, dot) or `filled` (break-on-light fill). Radius 10. The outline badge is the one non-clickable pink element (see Pink means clickable). |
 | `Chip` | `sage` (sage fill, Forest text), `outline` (1.5px Forest) or `fern-outline` (1.5px Fern border and text, for dark grounds). Radius 10. |
 | `Input`, `Select`, `Textarea` | Always labelled. 48px, with a Flint border and a canopy-text focus. |
 | `NewsletterSignup` | One row (email and Subscribe), labelled "Get The Brief in your inbox", with the helper line "[ Frequency ] · unsubscribe anytime". Submission is a TODO. |
@@ -277,6 +283,37 @@ Toggle pills are `<button aria-pressed>` elements inside a labelled `role="group
 - **Input:** one stop per input, with a 520ms lock between steps. Inputs are the arrow buttons, the stop labels, the ← → keys, horizontal wheel or trackpad (accumulated `deltaX`, one step past 40px; mostly-vertical scrolls are ignored) and touch or drag (one step past 50px).
 - **Mobile:** one card at a time, with the same stops and swipe.
 
+## Accelerator page
+
+`src/app/accelerator/`. Order: hero, video, steps + quick score (`#quick-score`), week one (Forest), touchpoints, proof, questions, closing CTA (Forest).
+
+- **Hero:** headline, lead, price row (`$2,500` and "90 days · small businesses", see Numerals), caption, then the Calendly button and "Get your free score in 3 minutes ↓". On the right, the dashboard preview bleeds off the right edge with a bottom fade (1024px+); from 768 to 1023px it sits under the text at full width; below 768px it's hidden.
+- **Video:** `VideoPlayer` is a 16:9 Carbon frame (radius 14) with a Newsprint round play button and a Bebas duration. It takes `src` and `poster` later and plays inline (muted, controls visible). Until then the button is disabled.
+- **Steps:** a 2px divider, then `.dim-row` rows with Bebas numerals; step 01 carries the six area chips.
+- **Touchpoints:** three equal cards (two Newsprint cards, one Carbon), each with a ghost numeral and a Bebas day label (Day 1, Day 45, Day 90) in the tone's numeral colour.
+- **Questions:** the H2 on the left; on the right, rows under a 2px divider with hairlines between them.
+
+### Quick score
+
+`QuickScore.tsx`, with every question, answer, weight and band in `src/lib/quickScore.ts`.
+
+> **Quick score: front-end demo only.** Needs approval, real questions and scoring from Conner, backend scoring and storage, a report email and a CASL check before going live.
+
+- **Deck:** three cards, right-aligned, up to 500px wide. Only the front card is fully visible; two plain shells peek out above it (16px and 32px up, inset 18px and 36px, soft shadow). The shell directly behind hints at the next card: Carbon when the inbox card is next, newsprint-hover otherwise.
+- **Question card:** a meta label and "About 3 minutes", an 8-segment progress bar (Canopy done, sage-25 to do), the question (`type-h3`) and answer tiles: newsprint-hover fill with no outline; selected = Sage fill, Forest text and a filled radio. "← Back" and "Next". Next with no answer shows "Pick an answer to continue" (the button is never disabled).
+- **Score card:** a Canopy donut on a sage-25 track, six area rows coloured by score band (see Accent hierarchy), the two biggest gaps, then the email row. The email is format-checked in the browser only.
+- **Inbox card:** Carbon, "Report sent" in Fern, and "Retake the check" (a secondary button) back to question 1.
+- **Scoring:** scored questions have four answers worth 100, 66, 33 and 0, plus "I'm not sure" (0). The overall score is the average of the six areas. Grades: 85+ A, 75+ B+, 65+ B, 55+ B−, 45+ C, 35+ D+, 25+ D, under 25 F.
+- **Motion:** the outgoing card slides down and fades as the next one rises into place (400ms, `--ease-orbit` curve, framer-motion). With `prefers-reduced-motion` the swap is instant. Focus moves to the new card's title.
+
+### Dashboard preview
+
+`src/components/DashboardPreview/` is a port of the approved product prototype, `design/redesign/accelerator-dashboard-prototype-v3.html`. Change the prototype first, then the port.
+
+- **It's the product's UI, not the site's:** its own small type sizes and layout, drawn at its design size (1280×760) and scaled to its container's width with a CSS transform. Colours, fonts and radii map to site tokens (`.dp-*` in globals.css). As a product mock-up it keeps the product's own colour coding (gold and copper grades and metrics, Bebas metric values) and its own subtle hovers, never the site's pink.
+- **Display only:** the sidebar and the tactic tabs switch views; nothing navigates, nothing saves, and the checkboxes aren't interactive.
+- **Accessible:** a region labelled "Interactive Accelerator dashboard preview, example business"; `tablist`/`tab`/`tabpanel` roles with arrow keys (↑ ↓ in the sidebar, ← → in the tactic tabs).
+
 ## Logo walls
 
 `<LogoWall>` shows organization logos in **one colour**: each logo is drawn through a CSS mask filled with the tone's logo colour (`logo-on-light` or `logo-on-dark`), so every logo matches whatever its original colours were.
@@ -320,4 +357,4 @@ Toggle pills are `<button aria-pressed>` elements inside a labelled `role="group
 - Cards transition their outline, border and shadow, and list rows their fill.
 - Buttons press down 1px when active.
 - `prefers-reduced-motion` disables transitions.
-- **framer-motion** (pinned) is used only for the hero wordmark's slower scroll. Everything else is CSS.
+- **framer-motion** (pinned) is used only for the hero wordmark's slower scroll and the quick score card swap. Everything else is CSS.
