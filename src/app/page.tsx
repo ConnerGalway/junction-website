@@ -266,11 +266,7 @@ export default function HomePage() {
               <div className="flex flex-wrap gap-x-14 gap-y-10">
                 {caseStats.map((stat) => (
                   <div key={stat.label}>
-                    <Stat
-                      value={stat.value}
-                      label={stat.label}
-                      valueClassName="whitespace-nowrap text-[clamp(64px,6vw,88px)]"
-                    />
+                    <Stat value={stat.value} label={stat.label} maxSize="clamp(64px, 6vw, 88px)" />
                     <Placeholder className="mt-4 w-fit px-3 py-1.5">[ result ]</Placeholder>
                   </div>
                 ))}

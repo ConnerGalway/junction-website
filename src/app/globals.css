@@ -386,10 +386,25 @@
   .type-stat {
     font-family: var(--font-wordmark);
     font-weight: 400;
-    font-size: clamp(96px, 13vw, 200px);
+    font-size: var(--stat-max, clamp(96px, 13vw, 200px));
     line-height: 0.85;
     letter-spacing: 0;
     color: var(--tone-numeral);
+  }
+
+  /* <Stat> text values: as large as --stat-max, never wider than the box
+     around the number (a size container). --stat-em is the value's width
+     in em. */
+  .stat {
+    --stat-max: clamp(96px, 13vw, 200px);
+  }
+
+  .stat-box {
+    container-type: inline-size;
+  }
+
+  .stat-fit {
+    font-size: min(var(--stat-max), 100cqw / var(--stat-em));
   }
 
   /* Index numerals (01, 02… in lists and cards). */
