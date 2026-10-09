@@ -10,11 +10,11 @@ import {
   Placeholder,
   QuoteCard,
   Section,
-  Stat,
   TextLink,
   LogoWall,
 } from "@/components";
 import { HeroWordmark } from "@/components/HeroWordmark";
+import { CASE_AREAS, CASE_INTRO, CASE_META, CASE_TOOLS } from "@/lib/buildingSupplyCase";
 import { CALENDLY_URL } from "@/lib/constants";
 import { SHOW_HERO_WORDMARK } from "@/lib/flags";
 import { homeLogos } from "@/lib/logos";
@@ -87,39 +87,7 @@ const programs: OrbitProgram[] = [
   },
 ];
 
-const aiExampleSteps = [
-  {
-    num: "01",
-    title: "A collections assistant",
-    description:
-      "Reads the aging report, suggests the next step for each account, and drafts reminders and call notes in the company's voice.",
-  },
-  {
-    num: "02",
-    title: "A material list converter",
-    description:
-      "Turns a photo, text or email of a handwritten list into clean line items for their ERP, and flags anything to confirm.",
-  },
-  {
-    num: "03",
-    title: "A business brain",
-    description:
-      "Price lists, account terms, policies and house style, loaded into one shared AI workspace the whole team uses.",
-  },
-  {
-    num: "04",
-    title: "A roadmap for what's next",
-    description:
-      "Takeoffs, invoice matching and system integration, prioritized for after the program.",
-  },
-];
-
 /** Existing metrics from the AI example; results to come. */
-const caseStats = [
-  { value: "65%", label: "Collected in 30 days" },
-  { value: "Up to 1 day", label: "Quote turnaround" },
-];
-
 const TRAINING_PLAYLIST_URL =
   "https://youtube.com/playlist?list=PLUvaA_x2Z8df8djNodScqE1XZTFz8a16f";
 
@@ -247,51 +215,43 @@ export default function HomePage() {
         </Container>
       </Section>
 
-      {/* Case study */}
+      {/* Case study (teaser; the full story is on /ai-accelerator#case-study) */}
       <Section tone="forest">
         <Container>
-          <div className="grid items-start gap-x-20 gap-y-14 [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
-            <div>
-              <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2">
-                <Chip variant="fern-outline">Case study</Chip>
-                <Eyebrow as="span">Offload Program · Building supply · 7 people</Eyebrow>
-              </div>
-              <h2 className="type-h2 m-0 mb-6">A building supplier&apos;s 30 days.</h2>
-              <p className="type-body m-0 mb-12">
-                A family-owned supply yard brought seven people, from the president
-                to accounts payable. Only 65% of invoices were collected inside 30
-                days, and quotes took anywhere from five minutes to a day. Here&apos;s
-                what they left with.
-              </p>
-
-              <div className="flex flex-wrap gap-x-14 gap-y-10">
-                {caseStats.map((stat) => (
-                  <div key={stat.label}>
-                    <Stat value={stat.value} label={stat.label} maxSize="clamp(64px, 6vw, 88px)" />
-                    <Placeholder className="mt-4 w-fit px-3 py-1.5">[ result ]</Placeholder>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <Placeholder aspectRatio="16/10" className="mb-10">
-                [ Animated demo: handwritten list → clean line items ]
-              </Placeholder>
-              <ul className="m-0 grid list-none gap-x-8 gap-y-8 p-0 sm:grid-cols-2">
-                {aiExampleSteps.map((step) => (
-                  <li key={step.num}>
-                    <span className="type-numeral">{step.num}</span>
-                    <h3 className="type-h4 mt-3 mb-1.5">{step.title}</h3>
-                    <p className="type-small m-0">{step.description}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <Chip variant="fern-outline">Case study</Chip>
+            <Eyebrow as="span">{CASE_META}</Eyebrow>
+          </div>
+          <div className="grid items-end gap-x-16 gap-y-5 lg:grid-cols-2">
+            <h2 className="type-h2 m-0">A building supplier&apos;s 30 days.</h2>
+            <p className="type-body m-0 max-w-[50ch]">{CASE_INTRO}</p>
           </div>
 
-          <TextLink href="/ai-accelerator" className="mt-14 inline-block">
-            See the Offload Program →
+          <ul className="m-0 mt-14 grid list-none gap-x-8 gap-y-10 p-0 sm:grid-cols-2 lg:grid-cols-4">
+            {CASE_AREAS.map((area) => (
+              <li key={area.id} className="border-t-2 border-fern pt-4">
+                <p className="m-0 text-[12px] font-medium tracking-[0.14em] text-newsprint/65 uppercase">
+                  {area.area}
+                </p>
+                <p className="m-0 mt-3 font-wordmark text-[clamp(56px,5vw,72px)] leading-[0.9] text-newsprint">
+                  {area.number}
+                </p>
+                <p className="type-body m-0 mt-2">{area.numberLabel}</p>
+              </li>
+            ))}
+          </ul>
+
+          <ul className="m-0 mt-14 grid list-none gap-x-8 gap-y-8 p-0 sm:grid-cols-2 lg:grid-cols-4">
+            {CASE_TOOLS.map((tool) => (
+              <li key={tool.name} className="border-t border-newsprint/40 pt-4">
+                <h3 className="type-h4 m-0 mb-1.5">{tool.name}</h3>
+                <p className="type-small m-0">{tool.line}</p>
+              </li>
+            ))}
+          </ul>
+
+          <TextLink href="/ai-accelerator#case-study" className="mt-12 inline-block">
+            See the full story →
           </TextLink>
         </Container>
       </Section>
