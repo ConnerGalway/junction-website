@@ -14,6 +14,7 @@ This file explains the rules behind them. If you're adding a page, compose it fr
 - **Bebas Neue is for the `JUNCTION_` wordmark and numerals only.** Numerals here means stats, index numbers, prices and durations. Use `<Wordmark>` / `<LogoLockup>`, `type-stat`, `type-numeral` and `type-price`.
 - **No hex or rgba values in pages, and no inline font styles.** Use tokens and type classes.
 - **No hard edges.** Every box, control and media frame is rounded.
+- **Examples use one of two businesses:** "Conner's Cabins" (the example small business) or the building-supply case. No other client names in mock-ups, sample data or placeholders.
 
 ## Colour tokens
 
@@ -120,6 +121,7 @@ Other ground rules:
 - **Gold (accent-1) is the primary accent.** Every numeral uses it: index numbers, stats and highlighted figures. On Newsprint that means `accent-1-on-light`, and only at 24px and up. On Carbon it's `accent-1`.
 - **On Forest, numerals and stats are Newsprint.** accent-1 is not used on Forest. Revisit this if the accents change.
 - **Copper (accent-2) is the secondary accent.** It's for eyebrows on Newsprint. Never set numerals in copper.
+- **Exception: copper editable values in the Offload calculator** ("What is that job costing you?") **only.** The four values in its sentence are copper (Epilogue 900, 3px copper underline) and turn break-on-light while their popover is open. This is a one-off, not a general rule for editable values.
 - **Exception: score bands on the quick score card** (Accelerator page) **only.** Area bars and their Bebas grade letters are coloured by band: healthy (65+) Canopy (letters in canopy-text), middling (45–64) accent-1-on-light, weak (under 45) copper. The two weakest area names in "Your biggest gaps" are copper too. Grade letters count as numerals here. No pink on the card.
 
 ### Pink means clickable
@@ -129,7 +131,8 @@ Pink appears only on things you can click. Non-clickable elements never get a pi
 - **Links:** pink text (and underline) on hover, as below.
 - **Clickable cards:** the whole card is the link (`<Card href>`), with no button or second link inside. On hover and keyboard focus it gets a 2px break-pink outline, offset 4px.
 - **Clickable list rows:** the newsprint-hover highlight plus a pink title (see Surfaces).
-- **Exception: the outline `Badge`.** It's a status label with a 2px break outline and break-on-light text, and it isn't clickable. It's the only non-clickable pink element (for example "Quick check · a general snapshot" on the Accelerator page). Don't add others.
+- **Exception: `Badge`** (outline and filled). A badge is a status label and isn't clickable, but it may be pink: the outline badge ("Quick check · a general snapshot" on the Accelerator page) and the filled badge ("New" on the Offload hero). Badges are the only non-clickable pink component.
+- **Exception: the Offload guarantee strip.** A break-on-light strip (radius 14) with "Guaranteed" in Fraunces 900 italic and the promise in Epilogue 600, both Newsprint (4.8:1). It's the only non-clickable pink surface, and the only Fraunces outside pull quotes. Don't reuse it elsewhere.
 
 ### Eyebrows are for meta labels only
 
@@ -151,6 +154,14 @@ All links turn pink on hover, and the text and underline change together:
 - break-on-dark on Carbon and Forest
 
 **Known exception:** break-on-dark on Forest is **2.9:1**, which is below AA. This is accepted for the hover state only. The resting colour (fern, 5.0:1) passes, and the underline stays as a second cue.
+
+## Hero headlines
+
+On landing pages the hero headline is **at most three lines at desktop widths (1280px and up)**, within the display type scale.
+
+- Choose the breaks per page: explicit breaks for desktop only (`<br className="hidden xl:inline" />` between `xl:whitespace-nowrap` spans) or balanced wrapping with a max width in ch. Tablet and mobile wrap freely.
+- A long line may run over the hero visual if nothing overlaps: start the visual lower with `xl:mt-[calc(var(--hero-line)*N+…)]`, where `--hero-line` is one display line (font size × .94).
+- Accelerator: "A 90-day marketing / plan you'll / actually work." (the preview starts one line lower). Offload: "We automate one of your / bottlenecks in 30 days. / Guaranteed." (the visual starts below the second line).
 
 ## Type scale
 
@@ -214,6 +225,7 @@ Controls:
 - **Light panels on dark grounds:** `<Card tone="newsprint">`, a Newsprint box with radius 14, no shadow and no top line (for example the homepage program cards on Carbon).
 - **Swappable images:** some images are meant to be replaced on GitHub by uploading a file with the same name, such as the homepage video card cover, `public/images/tourism-talks-cover.png` (16:9). Reference them by that exact path, fill the slot with `object-fit: cover`, and never hardcode their pixel size.
 - **Photos:** never get an outline or the 3px top line. A floating photo may have a soft shadow (`shadow-card`) and radius 14. **Photos are dark, so they never overlap headline text:** when space runs out, the photo shrinks or moves into the flow instead.
+- **Exception: the Offload KitCarousel** dims its side cards to 50% (below the 75% rule): they're previews, the spotlight card is at full opacity, and the live region announces it.
 - **Dimmed rows** (`.dim-row`): rows that sit at 75% and come to full opacity on hover and keyboard focus (200ms). 75% keeps body text above AA (ink-soft at 75% is about Flint, 4.9:1); don't dim text further, such as the Accelerator steps. Pointer devices only: on touch (`hover: none`) they stay at full opacity. Make each row focusable (`tabIndex={0}`) so keyboard users can bring it forward.
 - **Ghost numerals:** a big Bebas numeral fully inside a card's top-right corner, 16px from the top and right edges and about 70% of the card's height (it scales with the card). Never cropped. Carbon at 6% (Newsprint at 7% on Carbon), behind the text, `aria-hidden`. Drawn as an SVG whose viewBox is the digit's ink box, so its height is the numeral's height. Used on the Accelerator touchpoint cards.
 - **Edge fades:** `.fade-out-left`, `.fade-out-right` and `.fade-out-bottom` (mask). Give a faded element enough padding to keep its shadow inside the mask.
@@ -239,7 +251,9 @@ Controls:
 | `Card` | See Surfaces. `tone`, `href` and `padded` (`true`, `"sm"` for 20px compact padding, or `false`). |
 | `QuoteCard` | Sage fill, radius 14, `type-quote` with a Forest caption. No headshots (faces rule). |
 | `Callout` | sage-25 box, radius 14, Forest text and links. For a short highlighted statement. |
-| `Badge` | `outline` (2px break border, pink text, dot) or `filled` (break-on-light fill). Radius 10. The outline badge is the one non-clickable pink element (see Pink means clickable). |
+| `Badge` | `outline` (2px break border, pink text, dot) or `filled` (break-on-light fill). Radius 10. Badges are the one non-clickable pink component (see Pink means clickable). |
+| `Accordion` | Questions sections, everywhere. `items` (`q`, `a`). Each question is a full-width button row (`aria-expanded`, `aria-controls`) under a 2px divider, all collapsed by default (any number can be open). A gold chevron (accent-1-on-light, 20px, 2px stroke; a UI graphic, so 3:1 is enough) on the right turns 180° when open; the answer opens with a 250ms height animation (instant with reduced motion). The question turns pink on hover. No "+" icons. |
+| `ChevronButton` | Carousel previous / next: a thin 20px chevron (1.6px rounded stroke), no box, tone text at 70%, the tone's pink on hover and focus, 40% when disabled at the ends of a non-looping carousel. Needs an `aria-label`. Used by the program orbit and the KitCarousel. |
 | `Chip` | `sage` (sage fill, Forest text), `outline` (1.5px Forest) or `fern-outline` (1.5px Fern border and text, for dark grounds). Radius 10. |
 | `Input`, `Select`, `Textarea` | Always labelled. 48px, with a Flint border and a canopy-text focus. |
 | `NewsletterSignup` | One row (email and Subscribe), labelled "Get The Brief in your inbox", with the helper line "[ Frequency ] · unsubscribe anytime". Submission is a TODO. |
@@ -247,7 +261,7 @@ Controls:
 | `Wordmark` | `JUNCTION_` in Bebas with a Canopy underscore. The underscore is part of the logo. |
 | `LogoLockup` | Wordmark, a 1px divider (20% of the text colour, 34px tall) and the tagline "Strategy & / Capacity Building" (DM Sans 400, 14px, muted, .04em). Links to `/`. With `collapseOnSmall`, the divider and tagline are dropped under 420px. |
 | `SkipLink` | Rendered once by the root layout |
-| `LogoWall` | `logos`, `label`, and `variant="marquee" \| "row" \| "grid"`. See below. |
+| `LogoWall` | `logos`, `label`, and `variant="marquee" \| "row" \| "grid" \| "auto"`. See below. |
 
 Toggle pills are `<button aria-pressed>` elements inside a labelled `role="group"`. FAQ toggles use `aria-expanded` and `aria-controls`.
 
@@ -293,7 +307,26 @@ Toggle pills are `<button aria-pressed>` elements inside a labelled `role="group
 - **Video:** `VideoPlayer` is a 16:9 Carbon frame (radius 14) with a Newsprint round play button and a Bebas duration. It takes `src` and `poster` later and plays inline (muted, controls visible). Until then the button is disabled.
 - **Steps:** a 2px divider, then `.dim-row` rows with Bebas numerals; step 01 carries the six area chips.
 - **Touchpoints:** three equal cards (two Newsprint cards, one Carbon), each with a ghost numeral and a Bebas day label (Day 1, Day 45, Day 90) in the tone's numeral colour.
-- **Questions:** the H2 on the left; on the right, rows under a 2px divider with hairlines between them.
+- **Questions:** the H2 on the left; the `Accordion` on the right.
+
+## Offload Program page
+
+`src/app/ai-accelerator/`. Order: hero, teams who've been through it, what you leave with, calculator (`#calculator`), case study (Forest, `#case-study`), thirty days (Carbon), guarantee, testimonials, questions, closing CTA (Forest).
+
+- **Hero:** filled "New" badge, the three-line H1, lead, `$5,000` with "30 days · any industry" (both price colour), "Per team · on site or Zoom.", Calendly and "See a real build ↓". On the right a static two-card visual (`OffloadHeroVisual`, aria-hidden): the four-step journey track and a Session 3 quote generator for Conner's Cabins. From 1280px it starts below the H1's second line.
+- **Teams:** `LogoWall variant="auto"`.
+- **What you leave with** (`KitCarousel`): a horizontal scroll-snap track of five cards, each an artifact box (aria-hidden illustration) over a label (Bebas gold number, h4, body). The spotlight card's artifact is 280px tall (220px otherwise), at full opacity, with a 2px Canopy line above its label; the others sit at 50% (see Surfaces). 400ms soft ease, instant with reduced motion. Starts on 03. `ChevronButton`s around a Bebas "03 / 05" counter (current Carbon, "/ 05" at 45%). Drag, swipe, trackpad and arrow keys move one card (`scroll-snap-stop: always`); clicking a side card brings it forward. A labelled region with a live announcement.
+- **Calculator** (`TimeBackCalculator`, data in `src/lib/timeBack.ts`): a sentence (Epilogue 600, 26–44px) with four copper values (see Accent hierarchy) that open popovers (Newsprint, radius 14, soft shadow): styled native range sliders (sage-25 track, Canopy fill, Newsprint thumb with a Canopy ring; pink while dragging, with min/max below) or the job menu. Escape and outside clicks close a popover and return focus to its value. The Carbon result card shows yearly hours (Bebas gold) and cost (Bebas Newsprint), counting to new values in 300ms, the formula, "What we'd build", and an email row.
+- **Case study** (`CaseSwitcher`): a tablist of four areas (selected: Newsprint fill, Carbon text, gold number; others Newsprint text, number at 50%), default Quotes; a Newsprint panel with the big number, Before / What it cost, and "What we built" on sage-25 (a darker Newsprint "Next" box for a roadmap item). A horizontal row above the panel on mobile. Then "What we measured".
+- **Thirty days** (`ThirtyDays`): Newsprint session cards (the last one gold, Carbon text). From 768px they start in one row and collapse into a 6-column, 30-day calendar as the section's top moves from 80% to 30% of the viewport: the wrapper grows with the progress, the cards drop to their rows and shrink, then slide into their columns (two phases, so no card crosses another; transforms only), and the 25 empty days (faint cells, Bebas day number at low opacity) fade in. Scrolling back reverses it. Both layouts come from a hidden static row measured on mount, after fonts load and on resize, never while animating. Reduced motion shows the calendar; below 768px a plain list. Session cards use radius 14 (the card token).
+- **Guarantee:** its own section; see Pink means clickable. No terms link until the terms are approved.
+- **Testimonials:** a Sage quote card and two placeholders, no names or faces.
+
+> **Calculator: front-end demo only.** The email is format-checked in the browser; nothing is stored or sent. Needs approval, a backend, the estimate email and a CASL check before going live (like the quick score).
+
+### Building-supply case study
+
+Every fact lives in `src/lib/buildingSupplyCase.ts` (areas, numbers, before, cost, what we built, measures, tools). The Offload page tells the full story (`#case-study`); the homepage shows a teaser built from the same data: chip and meta, "A building supplier's 30 days.", the intro, the four numbers (area label in Newsprint 65%, 4.6:1; Bebas number; label; 2px Fern line above), the four tools under thin Newsprint rules, and "See the full story →". Change the data file, never one page.
 
 ### Quick score
 
@@ -330,6 +363,7 @@ Toggle pills are `<button aria-pressed>` elements inside a labelled `role="group
   - `marquee`: one row with a 40s seamless loop and faded edges. It pauses on hover and keyboard focus, and becomes a static wrapped row under `prefers-reduced-motion`. It uses CSS animation only.
   - `row`: static and evenly spaced, wrapping on small screens.
   - `grid`: 7 columns on desktop, 4 on tablet and 3 on mobile, with no tiles or borders.
+  - `auto`: one static row while the logos fit the width; it switches to the marquee only when they overflow (measured on a hidden copy, so it can't flicker). `marqueeClassName` adds the edge fades in marquee mode. Used for "Teams who've been through it" on the Offload page.
 - **No separator lines:** no grey rules above, below or around a logo wall.
 - **Event names** (such as "Recent stages") stay text: DM Sans 500 names separated by small Flint dots.
 
@@ -360,4 +394,4 @@ Toggle pills are `<button aria-pressed>` elements inside a labelled `role="group
 - Cards transition their outline, border and shadow, and list rows their fill.
 - Buttons press down 1px when active.
 - `prefers-reduced-motion` disables transitions.
-- **framer-motion** (pinned) is used only for the hero wordmark's slower scroll and the quick score card swap. Everything else is CSS.
+- **framer-motion** (pinned) is used only for the hero wordmark's slower scroll and the quick score card swap. Everything else is CSS or small scroll handlers (the Offload calendar).
