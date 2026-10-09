@@ -25,6 +25,7 @@ import {
 } from "./KitArtifacts";
 import { KitCarousel, type KitItem } from "./KitCarousel";
 import { OffloadHeroVisual } from "./OffloadHeroVisual";
+import { ThirtyDays, type Session } from "./ThirtyDays";
 import { TimeBackCalculator } from "./TimeBackCalculator";
 
 export const metadata: Metadata = {
@@ -78,34 +79,12 @@ const artifacts = [
 
 const kitItems: KitItem[] = deliverables.map((d, i) => ({ ...d, artifact: artifacts[i] }));
 
-const weeks = [
-  {
-    week: "Week 0",
-    title: "Setup",
-    description:
-      "Accounts, access, and baseline numbers so we can measure what changes.",
-  },
-  {
-    week: "Session 1",
-    title: "Foundations",
-    description:
-      "On site where possible. Safe setup, your AI policy, and the first quick wins.",
-  },
-  {
-    week: "Session 2",
-    title: "Business brain",
-    description: "Load what your company knows, so every answer sounds like you.",
-  },
-  {
-    week: "Session 3",
-    title: "Documents",
-    description: "The quotes, invoices and paperwork that get keyed in by hand.",
-  },
-  {
-    week: "Session 4",
-    title: "Build and refine",
-    description: "The main build goes live. Roadmap handed over.",
-  },
+const sessions: Session[] = [
+  { day: 1, label: "Week 0", title: "Setup", line: "Accounts, access, baseline numbers." },
+  { day: 6, label: "Session 1", title: "Foundations", line: "Safe setup, AI policy, first wins." },
+  { day: 13, label: "Session 2", title: "Business brain", line: "Load what your company knows." },
+  { day: 20, label: "Session 3", title: "Documents", line: "The paperwork keyed in by hand." },
+  { day: 27, label: "Session 4", title: "Build and refine", line: "The main build goes live." },
 ];
 
 const faqs: AccordionItem[] = [
@@ -214,28 +193,6 @@ export default function AIAcceleratorPage() {
         </Container>
       </Section>
 
-      {/* 30 Days */}
-      <Section tone="forest">
-        <Container>
-          <h2 className="type-h2 m-0 mb-9 max-w-[18ch]">
-            Four one-hour sessions. One a week.
-          </h2>
-          <div className="grid gap-0.5 overflow-hidden rounded-card [grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))]">
-            {weeks.map((w) => (
-              <div key={w.week} className="bg-newsprint/6 p-6">
-                <p className="type-eyebrow m-0">{w.week}</p>
-                <h3 className="type-h4 my-2">{w.title}</h3>
-                <p className="type-small m-0">{w.description}</p>
-              </div>
-            ))}
-          </div>
-          <p className="type-small m-0 mt-7">
-            We schedule around your busiest hours, so customers aren&apos;t left
-            waiting.
-          </p>
-        </Container>
-      </Section>
-
       {/* Case study */}
       <Section id="case-study" tone="forest" className="scroll-mt-24">
         <Container>
@@ -259,6 +216,20 @@ export default function AIAcceleratorPage() {
               </li>
             ))}
           </ul>
+        </Container>
+      </Section>
+
+      {/* Thirty days */}
+      <Section tone="carbon">
+        <Container>
+          <div className="mb-12 grid items-end gap-x-16 gap-y-5 lg:grid-cols-2">
+            <h2 className="type-h2 m-0">Thirty days, five steps.</h2>
+            <p className="type-body m-0 max-w-[46ch]">
+              Sessions are an hour each. Everything between is your team using
+              what we built.
+            </p>
+          </div>
+          <ThirtyDays sessions={sessions} />
         </Container>
       </Section>
 
