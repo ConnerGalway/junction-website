@@ -62,6 +62,7 @@ const programs: OrbitProgram[] = [
     price: "$2,500 · 90 days",
     href: "/accelerator",
     media: "Accelerator dashboard",
+    thumbnail: "dashboard",
   },
   {
     title: "Offload Program (AI Accelerator)",

@@ -6,6 +6,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import type { KeyboardEvent, PointerEvent } from "react";
 import { CALENDLY_URL } from "@/lib/constants";
 import { flagshipProgram, primaryNav, programGroups } from "@/lib/navigation";
+import { DashboardPreview } from "./DashboardPreview";
 import { Button, Dot, LogoLockup, cx } from "./ui";
 
 function Chevron({ open }: { open: boolean }) {
@@ -36,11 +37,8 @@ function ProgramsPanel({ onNavigate }: { onNavigate: () => void }) {
           {flagshipProgram.title}
         </span>
         <span className="type-small">{flagshipProgram.description}</span>
-        <span
-          aria-hidden="true"
-          className="mt-2 flex aspect-[16/9] items-center justify-center rounded-control border-[1.5px] border-dashed border-hairline-dark text-[12px] font-medium uppercase tracking-[0.08em] text-newsprint-muted"
-        >
-          [ Dashboard preview ]
+        <span className="mt-2 block aspect-[16/9] overflow-hidden rounded-control">
+          <DashboardPreview variant="thumbnail" />
         </span>
       </Link>
       <div className="flex flex-col justify-between gap-6">

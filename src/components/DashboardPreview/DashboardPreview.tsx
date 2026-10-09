@@ -47,7 +47,19 @@ const gradeBg: Record<GradeTone, string> = {
   copper: "bg-accent-2",
 };
 
-export function DashboardPreview({ className }: { className?: string }) {
+export function DashboardPreview({
+  variant = "interactive",
+  className,
+}: {
+  /**
+   * interactive: the full preview (labelled region, tabs work).
+   * thumbnail: the Dashboard screen only, filling its container's width,
+   * top-aligned with a faded bottom. Not interactive at all (inert,
+   * aria-hidden): the surrounding card carries the accessible name.
+   */
+  variant?: "interactive" | "thumbnail";
+  className?: string;
+}) {
   const frameRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState<number | null>(null);
 
@@ -61,6 +73,31 @@ export function DashboardPreview({ className }: { className?: string }) {
     return () => observer.disconnect();
   }, []);
 
+  const app = (
+    <div
+      className={cx(
+        "absolute top-0 left-0 origin-top-left transition-opacity duration-300",
+        !scale && "opacity-0"
+      )}
+      style={{ width: DESIGN_W, height: DESIGN_H, transform: `scale(${scale ?? 1})` }}
+    >
+      <DashboardApp />
+    </div>
+  );
+
+  if (variant === "thumbnail") {
+    return (
+      <div
+        ref={frameRef}
+        aria-hidden="true"
+        inert
+        className={cx("fade-out-bottom pointer-events-none relative size-full overflow-hidden select-none", className)}
+      >
+        {app}
+      </div>
+    );
+  }
+
   return (
     <div
       ref={frameRef}
@@ -68,15 +105,7 @@ export function DashboardPreview({ className }: { className?: string }) {
       aria-label="Interactive Accelerator dashboard preview, example business"
       className={cx("relative aspect-[1280/760] w-full", className)}
     >
-      <div
-        className={cx(
-          "absolute top-0 left-0 origin-top-left transition-opacity duration-300",
-          scale === null && "opacity-0"
-        )}
-        style={{ width: DESIGN_W, height: DESIGN_H, transform: `scale(${scale ?? 1})` }}
-      >
-        <DashboardApp />
-      </div>
+      {app}
     </div>
   );
 }
