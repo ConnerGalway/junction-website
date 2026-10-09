@@ -81,19 +81,19 @@ const taskData: Task[] = [
 
 const touchpoints = [
   {
-    label: "Touchpoint 1 · Start",
+    day: "Day 1",
     title: "Assessment and strategy",
     description:
       "We walk through your score, agree the goal, and hand over your plan.",
   },
   {
-    label: "Touchpoint 2 · Midway",
+    day: "Day 45",
     title: "Reassess and adjust",
     description:
       "A fresh score, a look at what's working, and changes to the plan where it isn't.",
   },
   {
-    label: "Touchpoint 3 · Day 90",
+    day: "Day 90",
     title: "Final score and what's next",
     description:
       "Before and after, side by side, plus a plan for keeping it going on your own.",
@@ -259,18 +259,31 @@ export default function AcceleratorPage() {
       {/* Touchpoints */}
       <Section>
         <Container>
-          <h2 className="type-h2 mt-0 mb-9">
-            Three touchpoints. One score that moves.
-          </h2>
-          <div className="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))]">
-            {touchpoints.map((tp) => (
-              <Card key={tp.label}>
-                <p className="type-eyebrow m-0">{tp.label}</p>
-                <h3 className="type-h4 mt-2.5 mb-2">{tp.title}</h3>
-                <p className="type-body m-0">{tp.description}</p>
-              </Card>
+          <h2 className="type-h2 mt-0 mb-9">Three touchpoints along the way.</h2>
+          <ol className="m-0 grid list-none gap-6 p-0 md:grid-cols-3">
+            {touchpoints.map((tp, i) => (
+              <li key={tp.day} className="flex">
+                <Card
+                  tone={i === 2 ? "carbon" : "default"}
+                  className="relative flex w-full flex-col overflow-hidden"
+                >
+                  {/* Ghost numeral, clipped by the card */}
+                  <span
+                    aria-hidden="true"
+                    className={cx(
+                      "pointer-events-none absolute -top-10 right-2 font-wordmark text-[240px] leading-none select-none",
+                      i === 2 ? "text-newsprint/7" : "text-carbon/6"
+                    )}
+                  >
+                    {i + 1}
+                  </span>
+                  <p className="type-numeral relative m-0 text-[40px]">{tp.day}</p>
+                  <h3 className="type-h4 relative mt-4 mb-2">{tp.title}</h3>
+                  <p className="type-body relative m-0">{tp.description}</p>
+                </Card>
+              </li>
             ))}
-          </div>
+          </ol>
         </Container>
       </Section>
 
