@@ -1,58 +1,33 @@
-import type { CSSProperties } from "react";
 import type { Logo } from "@/lib/logos";
 import { cx } from "./cx";
+import { LogoItem, LogoList } from "./logoParts";
+import { LogoWallAuto } from "./LogoWallAuto";
 
 type LogoWallProps = {
   logos: Logo[];
   /**
    * marquee: one row scrolling continuously (pauses on hover and focus,
    * static under prefers-reduced-motion). row: static, evenly spaced,
-   * wrapping. grid: 7 / 4 / 3 columns.
+   * wrapping. grid: 7 / 4 / 3 columns. auto: one static row while the
+   * logos fit the width, the marquee only when they overflow.
    */
-  variant?: "marquee" | "row" | "grid";
+  variant?: "marquee" | "row" | "grid" | "auto";
+  /** auto only: classes added while it runs as a marquee (e.g. edge fades). */
+  marqueeClassName?: string;
   /** Accessible name for the wall (the marquee is a focusable region). */
   label: string;
   className?: string;
 };
 
 /**
- * Optical size factor: wide wordmarks get less height, square badges more,
- * so every logo carries a similar visual weight in the fixed-height slot.
- */
-function opticalFactor(ratio: number) {
-  return Math.min(1, Math.max(0.5, 1.25 / Math.sqrt(ratio)));
-}
-
-function LogoItem({ logo }: { logo: Logo }) {
-  if (!logo.src || !logo.ratio) {
-    return <span className="logo-text">{logo.name}</span>;
-  }
-  const style = {
-    "--logo": `url("${logo.src}")`,
-    "--ratio": logo.ratio,
-    "--opt": opticalFactor(logo.ratio) * (logo.scale ?? 1),
-  } as CSSProperties;
-  return <span role="img" aria-label={logo.name} className="logo-mark" style={style} />;
-}
-
-function LogoList({ logos, hidden }: { logos: Logo[]; hidden?: boolean }) {
-  return (
-    <ul className="logo-wall-list" aria-hidden={hidden || undefined}>
-      {logos.map((logo) => (
-        <li key={logo.name} className="logo-wall-item">
-          <LogoItem logo={logo} />
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-/**
  * One-colour logo wall. Each logo is drawn through a CSS mask in the
  * tone's logo colour (Carbon 60% on Newsprint, Newsprint 70% on dark).
  * Organizations without a logo file render as DM Sans 500 text.
  */
-export function LogoWall({ logos, variant = "row", label, className }: LogoWallProps) {
+export function LogoWall({ logos, variant = "row", label, className, marqueeClassName }: LogoWallProps) {
+  if (variant === "auto") {
+    return <LogoWallAuto logos={logos} label={label} className={className} marqueeClassName={marqueeClassName} />;
+  }
   if (variant === "marquee") {
     return (
       <div

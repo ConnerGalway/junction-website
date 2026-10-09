@@ -4,7 +4,6 @@ import {
   type AccordionItem,
   Badge,
   Button,
-  Card,
   Container,
   Eyebrow,
   Placeholder,
@@ -14,6 +13,7 @@ import {
 } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
 import { teamLogos } from "@/lib/logos";
+import { OffloadHeroVisual } from "./OffloadHeroVisual";
 
 export const metadata: Metadata = {
   title: "Offload Program (AI Accelerator)",
@@ -149,83 +149,56 @@ export default function AIAcceleratorPage() {
   return (
     <>
       {/* Hero */}
-      <Section spacing="tight">
-        <Container className="grid items-center gap-[clamp(32px,5vw,72px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
+      <Section spacing="tight" className="overflow-hidden">
+        <Container className="grid items-center gap-x-[clamp(32px,5vw,72px)] gap-y-14 lg:grid-cols-2 xl:items-start">
           <div>
             <Badge variant="filled" className="mb-6">
               New
             </Badge>
+            {/* Three lines from 1280px (explicit breaks). The two long lines
+                run over the visual, which starts below the second line. */}
             <h1 className="type-display m-0">
-              We automate one of your bottlenecks in 30 days. Guaranteed.
+              <span className="xl:whitespace-nowrap">We automate one of your</span>
+              <br className="hidden xl:inline" />{" "}
+              <span className="xl:whitespace-nowrap">bottlenecks in 30 days.</span>
+              <br className="hidden xl:inline" /> <span className="xl:whitespace-nowrap">Guaranteed.</span>
             </h1>
             <p className="type-lead mt-7 mb-8">
-              A hands-on program for leadership teams. Four one-hour sessions on
-              your real work. You leave with AI tools already running, and a team
-              that knows how to build the next one.
+              Your team learns AI by building with it on the jobs that eat their
+              week: quotes, collections, paperwork, admin.
             </p>
-            <p className="type-price m-0 mb-6">30 days · any industry</p>
-            <div className="mb-8">
-              <p className="type-price m-0">$5,000</p>
-              <p className="type-small m-0 mt-2">per team · on site or Zoom</p>
+            <div className="flex flex-wrap items-baseline gap-x-5 gap-y-1">
+              <p className="type-price m-0 text-[56px]">$5,000</p>
+              <p className="type-price m-0 text-[28px]">30 days · any industry</p>
             </div>
+            <p className="type-small mt-3 mb-8">Per team · on site or Zoom.</p>
             <div className="flex flex-wrap items-center gap-6">
               <Button href={CALENDLY_URL}>Book a 20-min call</Button>
-              <TextLink href="#example" className="whitespace-nowrap">
-                See a real program ↓
+              <TextLink href="#case-study" className="whitespace-nowrap">
+                See a real build ↓
               </TextLink>
             </div>
           </div>
 
-          {/* Dashboard Preview */}
-          <Card tone="carbon" className="flex flex-col gap-5">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <Eyebrow as="span">Your program dashboard</Eyebrow>
-              <span className="type-small">3 of 4 sessions done</span>
-            </div>
-            <div className="h-1.5 overflow-hidden rounded-full bg-hairline-dark">
-              <div className="h-full rounded-full bg-fern" style={{ width: "75%" }} />
-            </div>
-            <div className="flex flex-col">
-              {[
-                { label: "Week 0 · Setup", status: "Done" },
-                { label: "Session 1 · Foundations", status: "Done" },
-                { label: "Session 2 · Business brain", status: "Done" },
-                { label: "Session 3 · Documents", status: "Done" },
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-3.5 border-b border-(--tone-hairline) py-3"
-                >
-                  <span className="size-[18px] shrink-0 rounded-sm bg-fern" />
-                  <span className="type-small flex-1 text-newsprint">{item.label}</span>
-                  <span className="type-small">{item.status}</span>
-                </div>
-              ))}
-              <div className="flex items-center gap-3.5 py-3">
-                <span className="size-[18px] shrink-0 rounded-sm border-[1.5px] border-fern" />
-                <span className="type-small flex-1 text-newsprint">
-                  Session 4 · Build and refine
-                </span>
-                <span className="type-small text-fern">Next</span>
-              </div>
-            </div>
-            <div className="type-small flex flex-wrap justify-between gap-3 rounded-control bg-fern/12 px-4 py-3.5 text-newsprint">
-              <span>Main build: Collections assistant</span>
-              <span className="font-medium text-fern">Live</span>
-            </div>
-          </Card>
+          {/* Badge row (about 50px) + two display lines + a gap */}
+          <div className="xl:mt-[calc(var(--hero-line)*2+74px)]">
+            <OffloadHeroVisual />
+          </div>
         </Container>
       </Section>
 
-      {/* Teams strip */}
-      <section className="px-gutter py-7">
+      {/* Teams who've been through it */}
+      <section className="px-gutter py-8">
         <Container className="flex flex-col gap-4 md:flex-row md:items-center md:gap-10">
-          <span className="type-eyebrow text-muted shrink-0">Teams who&apos;ve been through it</span>
+          <span className="shrink-0 text-[15px] font-medium text-flint">
+            Teams who&apos;ve been through it
+          </span>
           <LogoWall
-            variant="row"
+            variant="auto"
             logos={teamLogos}
             label="Teams who've been through it"
             className="min-w-0 flex-1"
+            marqueeClassName="[-webkit-mask-image:linear-gradient(to_right,transparent,black_12%,black_92%,transparent)] [mask-image:linear-gradient(to_right,transparent,black_12%,black_92%,transparent)]"
           />
         </Container>
       </section>

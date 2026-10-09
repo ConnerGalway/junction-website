@@ -808,6 +808,20 @@
     padding-inline-end: var(--logo-gap);
   }
 
+  /* auto (static state) and its hidden measuring copy: one row, no wrap */
+  .logo-wall-single .logo-wall-list,
+  .logo-wall-auto-measure .logo-wall-list {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: var(--logo-gap);
+  }
+
+  .logo-wall-single .logo-text,
+  .logo-wall-auto-measure .logo-text {
+    white-space: nowrap;
+  }
+
   .logo-wall-marquee .logo-text {
     white-space: nowrap;
   }
