@@ -16,4 +16,3 @@ export { Wordmark } from "./Wordmark";
 export { LogoLockup } from "./LogoLockup";
 export { LogoWall } from "./LogoWall";
 export { Callout } from "./Callout";
-export { AvatarSlot } from "./AvatarSlot";

@@ -873,12 +873,6 @@
     }
   }
 
-  /* Homepage hero dashboard area: melts into the page on its left side. */
-  .hero-dashboard {
-    -webkit-mask-image: linear-gradient(to right, transparent, #000 32%);
-    mask-image: linear-gradient(to right, transparent, #000 32%);
-  }
-
   /* Edge fades (mask): content fades out toward the named edge. */
   .fade-out-left {
     -webkit-mask-image: linear-gradient(to left, #000 45%, transparent);

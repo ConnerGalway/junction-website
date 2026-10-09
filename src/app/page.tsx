@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import {
-  AvatarSlot,
   Button,
   Callout,
   Card,
@@ -146,24 +145,12 @@ export default function HomePage() {
       {/* Hero */}
       <section className="relative overflow-hidden pb-section-tight">
         <div className="relative pt-[clamp(72px,9vw,128px)]">
-          {/*
-            Accelerator dashboard (placeholder) — the hero's bottom layer. Starts
-            40% in, a small gap below the nav, bleeds off the right edge and ends
-            at the bottom of the CTA row. Its left side fades into the page so the
-            headline can overlap it; the photo floats on top. Hidden below 1024px.
-          */}
-          <div
-            aria-hidden="true"
-            className="hero-dashboard absolute top-4 right-0 bottom-0 left-[40%] hidden rounded-l-card bg-newsprint-hover lg:block"
-          >
-            <span className="absolute inset-x-0 top-8 flex justify-center pl-[30%] text-[13px] font-medium tracking-[0.08em] text-flint uppercase">
-              [ Accelerator dashboard ]
-            </span>
-          </div>
-
           <div className="px-gutter">
-            <Container className="relative">
-              <div>
+            {/* 1024px+: text and photo side by side, at least 48px apart (56px
+                gap, which allows for the photo's tilt); the photo shrinks
+                rather than overlapping the headline. */}
+            <Container className="lg:flex lg:items-center lg:gap-14">
+              <div className="lg:shrink-0">
                 {/* 10.3em holds the headline to three lines at display size */}
                 <h1 className="type-display m-0 max-w-[10.3em]">
                   Feeling stuck? Let&apos;s get your organization moving.
@@ -180,16 +167,18 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Floating team photo (static for now; scroll drift comes with the motion pass) */}
-              <div className="relative mt-14 ml-auto h-[240px] w-[200px] -rotate-[1.5deg] overflow-hidden rounded-card shadow-card lg:absolute lg:top-1/2 lg:right-[4%] lg:mt-0 lg:h-[264px] lg:w-[220px] lg:-translate-y-1/2 xl:right-[1%] xl:h-[360px] xl:w-[300px]">
-                <Image
-                  src="/images/home-hero-team.jpg"
-                  alt="The Junction team working around a table"
-                  fill
-                  sizes="(min-width: 1280px) 300px, (min-width: 1024px) 220px, 200px"
-                  priority
-                  className="object-cover"
-                />
+              {/* Team photo: in the flow under the buttons below 1024px */}
+              <div className="lg:flex lg:min-w-0 lg:flex-1 lg:justify-end lg:pr-[4%] xl:pr-[1%]">
+                <div className="relative mt-14 ml-auto h-[240px] w-[200px] -rotate-[1.5deg] overflow-hidden rounded-card shadow-card lg:mt-0 lg:ml-0 lg:aspect-[5/6] lg:h-auto lg:w-full lg:max-w-[220px] xl:max-w-[300px]">
+                  <Image
+                    src="/images/home-hero-team.jpg"
+                    alt="The Junction team working around a table"
+                    fill
+                    sizes="(min-width: 1280px) 300px, (min-width: 1024px) 220px, 200px"
+                    priority
+                    className="object-cover"
+                  />
+                </div>
               </div>
             </Container>
           </div>
@@ -342,12 +331,9 @@ export default function HomePage() {
           <div>
             <h2 className="type-h2 m-0 mb-10">What happens on the call.</h2>
             <ol className="m-0 grid list-none gap-x-10 gap-y-9 p-0 md:grid-cols-3">
-              {callSteps.map((step, i) => (
+              {callSteps.map((step) => (
                 <li key={step.num}>
-                  <div className="mb-3 flex items-center gap-4">
-                    <span className="type-numeral">{step.num}</span>
-                    {i === 0 && <AvatarSlot label="Conner Galway" />}
-                  </div>
+                  <span className="type-numeral mb-3 block">{step.num}</span>
                   <h3 className="type-h4 m-0 mb-1.5">{step.title}</h3>
                   <p className="type-body m-0">{step.description}</p>
                 </li>
