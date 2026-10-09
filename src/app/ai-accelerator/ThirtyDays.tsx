@@ -15,8 +15,18 @@ const DAYS = 30;
 const MIN_CELL_H = 64;
 /** Session cards sit 4px inside their date cell, top and bottom. */
 const CELL_INSET = 4;
-/** Pinned travel: 35% of the viewport height. */
-const TRAVEL = 0.35;
+/** Pinned travel: 70% of the viewport height. */
+const TRAVEL = 0.7;
+/** Smoothing: each frame the shown progress moves this share of the way to the scroll progress. */
+const SMOOTHING = 0.14;
+/** Below this difference the shown progress snaps to the scroll progress. */
+const SNAP = 0.0005;
+/**
+ * The shown progress never trails the scroll progress by more than the
+ * closing hold (1 − .72), so even after a fast fling the calendar is
+ * complete when the sticky releases.
+ */
+const MAX_LAG = 0.28;
 
 const clamp01 = (t: number) => Math.min(1, Math.max(0, t));
 const seg = (p: number, a: number, b: number) => clamp01((p - a) / (b - a));
@@ -104,13 +114,14 @@ function EmptyDay({ day }: { day: number }) {
  * "Thirty days, five steps."
  *
  * 768px+ wide and 640px+ tall (motion allowed): a pinned scene. The
- * section's track is the sticky stage height plus a travel of 35% of the
+ * section's track is the sticky stage height plus a travel of 70% of the
  * viewport; the sticky container (below the nav) holds the heading and the
  * stage. The five session cards sit in one row under the heading, then
  * move and resize into a 6 × 5 calendar that fits the stage, and the empty
  * days fade in. Reversible. Layouts are measured off-screen on mount, after
- * fonts load and on resize (debounced), never mid-animation; one rAF update
- * per scroll frame.
+ * fonts load and on resize (debounced), never mid-animation. The shown
+ * progress eases toward the scroll progress (× 0.14 per frame) in one rAF
+ * loop that stops when it arrives.
  *
  * Reduced motion, or 768px+ but under 640px tall: the final calendar,
  * static. Under 768px: a vertical list of row-state cards.
@@ -133,14 +144,20 @@ export function ThirtyDays({ sessions, heading, intro }: { sessions: Session[]; 
     return { x: (d % COLS) * (g.cellW + GAP), y: Math.floor(d / COLS) * (g.cellH + GAP) };
   }, []);
 
-  const apply = useCallback(() => {
-    const g = geo.current;
+  /** Scroll-derived (target) progress. */
+  const targetProgress = useCallback(() => {
     const section = sectionRef.current;
-    if (!g || !section) return;
+    if (!section) return 0;
     const vh = window.innerHeight;
     const start = 0.5 * vh;
     const distance = start - NAV + TRAVEL * vh;
-    const p = clamp01((start - section.getBoundingClientRect().top) / distance);
+    return clamp01((start - section.getBoundingClientRect().top) / distance);
+  }, []);
+
+  /** Draws every visual value from a progress value (the smoothed "current"). */
+  const render = useCallback((p: number) => {
+    const g = geo.current;
+    if (!g) return;
 
     const size = easeInOut(seg(p, ...MOVE));
     const down = easeInOut(seg(p, ...DOWN));
@@ -169,6 +186,29 @@ export function ThirtyDays({ sessions, heading, intro }: { sessions: Session[]; 
     });
   }, [sessions, cellPos]);
 
+  // The shown ("current") progress eases toward the scroll ("target")
+  // progress, one step per animation frame; the loop stops once it
+  // arrives (no idle loop).
+  const current = useRef<number | null>(null);
+  const frame = useRef(0);
+  const running = useRef(false);
+
+  const kick = useCallback(() => {
+    if (running.current || !geo.current) return;
+    running.current = true;
+    const step = () => {
+      const target = targetProgress();
+      const now = Math.min(target + MAX_LAG, Math.max(target - MAX_LAG, current.current ?? target));
+      const diff = target - now;
+      const next = Math.abs(diff) < SNAP ? target : now + diff * SMOOTHING;
+      current.current = next;
+      render(next);
+      if (next !== target) frame.current = requestAnimationFrame(step);
+      else running.current = false;
+    };
+    frame.current = requestAnimationFrame(step);
+  }, [targetProgress, render]);
+
   const measure = useCallback(() => {
     const stage = stageRef.current;
     const list = measureRef.current;
@@ -194,21 +234,15 @@ export function ThirtyDays({ sessions, heading, intro }: { sessions: Session[]; 
       cell.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0)`;
     });
     setReady(true);
-    apply();
-  }, [sessions, apply, cellPos]);
+    // First layout: start at the scroll position (no catch-up animation).
+    if (current.current === null) current.current = targetProgress();
+    render(current.current);
+    kick();
+  }, [sessions, cellPos, targetProgress, render, kick]);
 
   useEffect(() => {
-    let frame = 0;
-    let pending = false;
     let resizeTimer: ReturnType<typeof setTimeout> | undefined;
-    const onScroll = () => {
-      if (pending) return;
-      pending = true;
-      frame = requestAnimationFrame(() => {
-        pending = false;
-        apply();
-      });
-    };
+    const onScroll = () => kick();
     const observer = new ResizeObserver(() => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(measure, 120);
@@ -218,12 +252,13 @@ export function ThirtyDays({ sessions, heading, intro }: { sessions: Session[]; 
     measure();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
-      cancelAnimationFrame(frame);
+      cancelAnimationFrame(frame.current);
+      running.current = false;
       clearTimeout(resizeTimer);
       observer.disconnect();
       window.removeEventListener("scroll", onScroll);
     };
-  }, [apply, measure]);
+  }, [kick, measure]);
 
   const headingGap = "mt-[clamp(28px,5.5svh,48px)]";
 
@@ -231,7 +266,7 @@ export function ThirtyDays({ sessions, heading, intro }: { sessions: Session[]; 
     <Section tone="carbon" flush="top">
       <Container>
         {/* Pinned scene: 768px+ wide, 640px+ tall, motion allowed */}
-        <div ref={sectionRef} className="td-pinned relative h-[calc(135svh-64px)]">
+        <div ref={sectionRef} className="td-pinned relative h-[calc(170svh-64px)]">
           <div className="sticky top-16 flex h-[calc(100svh-64px)] flex-col pt-[clamp(32px,6svh,64px)] pb-[clamp(16px,3svh,32px)]">
             <Heading heading={heading} intro={intro} />
             <div ref={stageRef} className={cx("relative min-h-0 flex-1", headingGap)}>
