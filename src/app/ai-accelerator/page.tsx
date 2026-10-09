@@ -219,18 +219,11 @@ export default function AIAcceleratorPage() {
       </Section>
 
       {/* Thirty days */}
-      <Section tone="carbon">
-        <Container>
-          <div className="mb-12 grid items-end gap-x-16 gap-y-5 lg:grid-cols-2">
-            <h2 className="type-h2 m-0">Thirty days, five steps.</h2>
-            <p className="type-body m-0 max-w-[46ch]">
-              Sessions are an hour each. Everything between is your team using
-              what we built.
-            </p>
-          </div>
-          <ThirtyDays sessions={sessions} />
-        </Container>
-      </Section>
+      <ThirtyDays
+        sessions={sessions}
+        heading="Thirty days, five steps."
+        intro="Sessions are an hour each. Everything between is your team using what we built."
+      />
 
       {/* Guarantee: break pink and Fraunces here are approved exceptions */}
       <Section>

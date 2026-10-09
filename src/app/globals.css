@@ -988,6 +988,28 @@
   }
 
   /*
+   * Offload "Thirty days": which layout shows. The pinned scene needs
+   * 768px+, a viewport at least 640px tall and motion allowed; otherwise
+   * the static calendar (768px+) or the list (under 768px, md:hidden).
+   */
+  .td-pinned,
+  .td-static {
+    display: none;
+  }
+
+  @media (min-width: 768px) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+    .td-pinned {
+      display: block;
+    }
+  }
+
+  @media (min-width: 768px) and (max-height: 639px), (min-width: 768px) and (prefers-reduced-motion: reduce) {
+    .td-static {
+      display: block;
+    }
+  }
+
+  /*
    * KitCarousel (Offload "What you leave with"): a scroll-snap track of
    * slots that ALL have the same fixed size at all times, so the snap
    * centre never moves (no layout animation). The spotlight is transform

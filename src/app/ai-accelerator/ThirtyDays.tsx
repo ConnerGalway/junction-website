@@ -1,253 +1,382 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { cx } from "@/components";
+import { Container, Section, cx } from "@/components";
 
 export type Session = { day: number; label: string; title: string; line: string };
 
+/** Fixed (compact) header height: the sticky scene sits just below it. */
+const NAV = 64;
 const GAP = 16;
 const COLS = 6;
+const ROWS = 5;
 const DAYS = 30;
+const MIN_CELL_H = 72;
 
-/** Progress runs 0 → 1 as the section's top moves from 80% to 30% of the viewport (eased). */
-const START = 0.8;
-const END = 0.3;
-
-const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+const clamp01 = (t: number) => Math.min(1, Math.max(0, t));
+const seg = (p: number, a: number, b: number) => clamp01((p - a) / (b - a));
+const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+/*
+ * Choreography (progress p = how far the pinned track has scrolled):
+ *   0–.15     hold: heading + the five cards in one row, centred in the stage
+ *   .15–.45   cards drop to their calendar rows and resize; descriptions fade
+ *   .45–.70   cards slide sideways into their columns (two phases, so no card
+ *             crosses another)
+ *   .55–.95   the 25 empty days fade in
+ *   .95–1     hold on the calendar; then the sticky releases
+ */
+const Y_FROM = 0.15;
+const Y_TO = 0.45;
+const X_FROM = 0.45;
+const X_TO = 0.7;
+const LINE_TO = 0.32;
+const CELLS_FROM = 0.55;
+const CELLS_TO = 0.95;
 
 type Geometry = {
   rowW: number;
   rowH: number;
-  calH: number;
-  scale: number;
+  rowY: number;
   cellW: number;
   cellH: number;
-  /** Row slot x per session. */
-  rowX: number[];
-  /** Calendar cell x/y per day (index = day - 1). */
-  cellX: number[];
-  cellY: number[];
+  /** Card background scale at the calendar (non-uniform: it's a plain box). */
+  sx: number;
+  sy: number;
+  /** Card content scale at the calendar (uniform; fits day, label, title). */
+  sc: number;
 };
 
-function SessionCard({ session, last, className }: { session: Session; last: boolean; className?: string }) {
+function Heading({ heading, intro }: { heading: string; intro: string }) {
   return (
-    <div
-      className={cx(
-        "flex h-full flex-col rounded-card p-5",
-        last ? "bg-accent-1 text-carbon" : "bg-newsprint text-carbon",
-        className
-      )}
-    >
-      <span className={cx("font-wordmark text-[36px] leading-none", last ? "text-carbon" : "text-accent-1-on-light")}>
-        Day {session.day}
-      </span>
-      <span
-        className={cx(
-          "mt-3 text-[12px] font-medium tracking-[0.12em] uppercase",
-          last ? "text-carbon/75" : "text-flint"
-        )}
-      >
-        {session.label}
-      </span>
-      <span className="type-h4 mt-1">{session.title}</span>
-      <span className={cx("mt-1.5 text-[15px] leading-snug", last ? "text-carbon" : "text-ink-soft")}>
-        {session.line}
-      </span>
+    <div className="grid items-end gap-x-16 gap-y-5 lg:grid-cols-2">
+      <h2 className="type-h2 m-0">{heading}</h2>
+      <p className="type-body m-0 max-w-[46ch]">{intro}</p>
     </div>
   );
 }
 
+function cardColours(last: boolean) {
+  return {
+    bg: last ? "bg-accent-1" : "bg-newsprint",
+    day: last ? "text-carbon" : "text-accent-1-on-light",
+    label: last ? "text-carbon/75" : "text-flint",
+    line: last ? "text-carbon" : "text-ink-soft",
+  };
+}
+
+/** Day, small caps label and title (and, unless `compact`, the line). */
+function CardText({
+  session,
+  last,
+  compact,
+  lineRef,
+}: {
+  session: Session;
+  last: boolean;
+  compact?: boolean;
+  lineRef?: (el: HTMLSpanElement | null) => void;
+}) {
+  const c = cardColours(last);
+  return (
+    <>
+      <span className={cx("block font-wordmark text-[36px] leading-none", c.day)}>Day {session.day}</span>
+      <span className={cx("mt-3 block text-[12px] font-medium tracking-[0.12em] uppercase", c.label)}>
+        {session.label}
+      </span>
+      <span className="type-h4 mt-1 block text-carbon">{session.title}</span>
+      {!compact && (
+        <span ref={lineRef} className={cx("mt-1.5 block text-[15px] leading-snug", c.line)}>
+          {session.line}
+        </span>
+      )}
+    </>
+  );
+}
+
 /**
- * "Thirty days, five steps": the five session cards start in one row and
- * collapse into a 30-day calendar as the section scrolls into view
- * (768px+). The wrapper's height follows the progress (the page makes
- * room as it grows); the cards move and scale with transforms only; the
- * 25 other days fade in. Scrolling back reverses it exactly.
+ * "Thirty days, five steps."
  *
- * Both layouts are computed from one hidden, static row of cards (never
- * from the animating ones) on mount, after fonts load and on resize. The
- * calendar cell is the row slot scaled down uniformly, so cards keep their
- * proportions. Reduced motion shows the final calendar. Below 768px: a
- * plain vertical list.
+ * 768px+ with a viewport at least 640px tall (and motion allowed): a pinned
+ * scene. The section's track is about 150vh taller than the viewport; a
+ * sticky container (below the nav) holds the heading and a fixed-height
+ * stage. As the track scrolls, the five session cards move and resize from
+ * one row into a 6 × 5 calendar that fits the stage, then the sticky
+ * releases. Scrolling up reverses it. Only transform and opacity animate;
+ * both layouts are measured off-screen on mount, after fonts load and on
+ * resize (debounced), never during the animation.
+ *
+ * Shorter viewports and reduced motion: the final calendar, static. Under
+ * 768px: a vertical list.
  */
-export function ThirtyDays({ sessions }: { sessions: Session[] }) {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const measureRef = useRef<HTMLOListElement>(null);
+export function ThirtyDays({ sessions, heading, intro }: { sessions: Session[]; heading: string; intro: string }) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLDivElement>(null);
+  const rowMeasureRef = useRef<HTMLOListElement>(null);
+  const compactMeasureRef = useRef<HTMLOListElement>(null);
+  const bgRefs = useRef<(HTMLDivElement | null)[]>([]);
   const cardRefs = useRef<(HTMLLIElement | null)[]>([]);
+  const lineRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const cellRefs = useRef<(HTMLDivElement | null)[]>([]);
   const geo = useRef<Geometry | null>(null);
   const [ready, setReady] = useState(false);
-  const sessionDays = new Set(sessions.map((s) => s.day));
   const lastIndex = sessions.length - 1;
+  const sessionDays = new Set(sessions.map((s) => s.day));
+
+  const cellPos = useCallback((day: number, g: Geometry) => {
+    const d = day - 1;
+    return { x: (d % COLS) * (g.cellW + GAP), y: Math.floor(d / COLS) * (g.cellH + GAP) };
+  }, []);
 
   const apply = useCallback(() => {
     const g = geo.current;
-    const wrap = wrapRef.current;
-    if (!g || !wrap) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    // Linear progress r; the moves are eased per axis.
-    let r = 1;
-    if (!reduce) {
-      const section = wrap.closest("section") ?? wrap;
-      const top = section.getBoundingClientRect().top;
-      const vh = window.innerHeight;
-      r = Math.min(1, Math.max(0, (START * vh - top) / ((START - END) * vh)));
-    }
-    // Two phases, so no card crosses another: first every card drops to its
-    // calendar row and shrinks (r 0 → .65), then slides sideways into its
-    // column (r .35 → 1). Cards leaving the first row have cleared it
-    // before the Day 6 card slides right along it.
-    const py = easeInOut(Math.min(1, r / 0.65));
-    const px = easeInOut(Math.min(1, Math.max(0, (r - 0.35) / 0.65)));
-    const s = lerp(1, g.scale, py);
-    let bottom = 0;
+    const track = trackRef.current;
+    if (!g || !track) return;
+    const rect = track.getBoundingClientRect();
+    const travel = track.offsetHeight - (window.innerHeight - NAV);
+    const p = travel > 0 ? clamp01((NAV - rect.top) / travel) : 0;
+
+    const py = ease(seg(p, Y_FROM, Y_TO));
+    const px = ease(seg(p, X_FROM, X_TO));
+    const lineOpacity = String(1 - seg(p, Y_FROM, LINE_TO));
     sessions.forEach((session, i) => {
-      const el = cardRefs.current[i];
-      const x = lerp(g.rowX[i], g.cellX[session.day - 1], px);
-      const y = lerp(0, g.cellY[session.day - 1], py);
-      bottom = Math.max(bottom, y + g.rowH * s);
-      if (el) el.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${s})`;
+      const target = cellPos(session.day, g);
+      const x = lerp(i * (g.rowW + GAP), target.x, px);
+      const y = lerp(g.rowY, target.y, py);
+      const bg = bgRefs.current[i];
+      const card = cardRefs.current[i];
+      const line = lineRefs.current[i];
+      if (bg) bg.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${lerp(1, g.sx, py)}, ${lerp(1, g.sy, py)})`;
+      if (card) card.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${lerp(1, g.sc, py)})`;
+      if (line) line.style.opacity = lineOpacity;
     });
-    // The wrapper follows the lowest card, so it only ever grows with r.
-    wrap.style.height = `${Math.max(bottom, lerp(g.rowH, g.calH, py))}px`;
-    // Empty days fade in through the second half of the move.
-    const cellOpacity = String(Math.min(1, Math.max(0, (r - 0.35) / 0.65)));
+    const cellOpacity = String(ease(seg(p, CELLS_FROM, CELLS_TO)));
     cellRefs.current.forEach((cell) => {
       if (cell) cell.style.opacity = cellOpacity;
     });
-  }, [sessions]);
+  }, [sessions, cellPos]);
 
   const measure = useCallback(() => {
-    const row = measureRef.current;
-    if (!row) return;
-    const W = row.clientWidth;
-    if (W === 0) return; // hidden (mobile)
+    const stage = stageRef.current;
+    const rowList = rowMeasureRef.current;
+    const compactList = compactMeasureRef.current;
+    if (!stage || !rowList || !compactList) return;
+    const W = stage.clientWidth;
+    const H = stage.clientHeight;
+    if (W === 0 || H === 0) return; // not the pinned layout at this size
     const n = sessions.length;
     const rowW = (W - GAP * (n - 1)) / n;
-    const rowH = Math.max(...Array.from(row.children).map((c) => (c as HTMLElement).offsetHeight));
+    const rowH = Math.max(...Array.from(rowList.children).map((c) => (c as HTMLElement).offsetHeight));
+    const compactH = Math.max(...Array.from(compactList.children).map((c) => (c as HTMLElement).offsetHeight));
     const cellW = (W - GAP * (COLS - 1)) / COLS;
-    const scale = cellW / rowW;
-    const cellH = rowH * scale;
-    const rows = Math.ceil(DAYS / COLS);
-    const cellX: number[] = [];
-    const cellY: number[] = [];
-    for (let d = 0; d < DAYS; d++) {
-      cellX.push((d % COLS) * (cellW + GAP));
-      cellY.push(Math.floor(d / COLS) * (cellH + GAP));
-    }
-    geo.current = {
+    const cellH = Math.max(MIN_CELL_H, (H - GAP * (ROWS - 1)) / ROWS);
+    const g: Geometry = {
       rowW,
       rowH,
-      calH: rows * cellH + (rows - 1) * GAP,
-      scale,
+      rowY: Math.max(0, (H - rowH) / 2),
       cellW,
       cellH,
-      rowX: sessions.map((_, i) => i * (rowW + GAP)),
-      cellX,
-      cellY,
+      sx: cellW / rowW,
+      sy: cellH / rowH,
+      sc: Math.min(cellW / rowW, cellH / compactH),
     };
-    // Static sizes (never animated).
-    cardRefs.current.forEach((el) => {
-      if (!el) return;
-      el.style.width = `${rowW}px`;
-      el.style.height = `${rowH}px`;
+    geo.current = g;
+    // Static sizes and positions (never animated).
+    sessions.forEach((_, i) => {
+      const bg = bgRefs.current[i];
+      const card = cardRefs.current[i];
+      if (bg) {
+        bg.style.width = `${rowW}px`;
+        bg.style.height = `${rowH}px`;
+      }
+      if (card) card.style.width = `${rowW}px`;
     });
     cellRefs.current.forEach((cell, d) => {
       if (!cell) return;
+      const pos = cellPos(d + 1, g);
       cell.style.width = `${cellW}px`;
       cell.style.height = `${cellH}px`;
-      cell.style.transform = `translate3d(${cellX[d]}px, ${cellY[d]}px, 0)`;
+      cell.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0)`;
     });
     setReady(true);
     apply();
-  }, [sessions, apply]);
+  }, [sessions, apply, cellPos]);
 
   useEffect(() => {
     let frame = 0;
+    let pending = false;
+    let resizeTimer: ReturnType<typeof setTimeout> | undefined;
+    // One rAF-driven update per frame.
     const onScroll = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(apply);
+      if (pending) return;
+      pending = true;
+      frame = requestAnimationFrame(() => {
+        pending = false;
+        apply();
+      });
     };
+    // Re-measure on resize, debounced (the stage size only depends on the viewport).
     const observer = new ResizeObserver(() => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(measure);
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(measure, 120);
     });
-    if (measureRef.current) observer.observe(measureRef.current);
+    if (stageRef.current) observer.observe(stageRef.current);
     document.fonts?.ready.then(() => measure());
     measure();
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
     return () => {
       cancelAnimationFrame(frame);
+      clearTimeout(resizeTimer);
       observer.disconnect();
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
     };
   }, [apply, measure]);
 
   return (
-    <>
-      {/* 768px+: row → calendar */}
-      <div ref={wrapRef} className="relative hidden md:block">
-        {/* Hidden static row: the source of both layouts' measurements */}
-        <ol
-          ref={measureRef}
-          aria-hidden="true"
-          className="pointer-events-none invisible absolute inset-x-0 top-0 m-0 flex list-none p-0"
-          style={{ gap: GAP }}
-        >
-          {sessions.map((session, i) => (
-            <li key={session.day} className="min-w-0 flex-1">
-              <SessionCard session={session} last={i === lastIndex} />
-            </li>
-          ))}
-        </ol>
+    <Section tone="carbon">
+      <Container>
+        {/* Pinned scene (768px+, 640px+ tall, motion allowed) */}
+        <div ref={trackRef} className="td-pinned relative h-[calc(100svh-64px+150vh)]">
+          <div className="sticky top-16 flex h-[calc(100svh-64px)] flex-col pt-8 pb-8">
+            <Heading heading={heading} intro={intro} />
+            <div ref={stageRef} className="relative mt-8 min-h-0 flex-1">
+              {/* Off-screen measuring copies: full cards in a row, and the
+                  compact (calendar) content at row width. */}
+              <ol
+                ref={rowMeasureRef}
+                aria-hidden="true"
+                className="pointer-events-none invisible absolute inset-x-0 top-0 m-0 flex list-none p-0"
+                style={{ gap: GAP }}
+              >
+                {sessions.map((session, i) => (
+                  <li key={session.day} className="min-w-0 flex-1 rounded-card p-5">
+                    <CardText session={session} last={i === lastIndex} />
+                  </li>
+                ))}
+              </ol>
+              <ol
+                ref={compactMeasureRef}
+                aria-hidden="true"
+                className="pointer-events-none invisible absolute inset-x-0 top-0 m-0 flex list-none p-0"
+                style={{ gap: GAP }}
+              >
+                {sessions.map((session, i) => (
+                  <li key={session.day} className="min-w-0 flex-1 p-5">
+                    <CardText session={session} last={i === lastIndex} compact />
+                  </li>
+                ))}
+              </ol>
 
-        {/* Empty days */}
-        {Array.from({ length: DAYS }, (_, d) =>
-          sessionDays.has(d + 1) ? null : (
-            <div
-              key={d}
-              ref={(el) => {
-                cellRefs.current[d] = el;
-              }}
-              aria-hidden="true"
-              className={cx(
-                "absolute top-0 left-0 rounded-card border border-hairline-dark bg-newsprint/4 p-4",
-                !ready && "hidden"
+              {/* Empty days */}
+              {Array.from({ length: DAYS }, (_, d) =>
+                sessionDays.has(d + 1) ? null : (
+                  <div
+                    key={d}
+                    ref={(el) => {
+                      cellRefs.current[d] = el;
+                    }}
+                    aria-hidden="true"
+                    className={cx(
+                      "absolute top-0 left-0 rounded-card border border-hairline-dark bg-newsprint/4 px-4 py-3",
+                      !ready && "hidden"
+                    )}
+                    style={{ opacity: 0 }}
+                  >
+                    <span className="font-wordmark text-[24px] leading-none text-newsprint/25">{d + 1}</span>
+                  </div>
+                )
               )}
-              style={{ opacity: 0 }}
-            >
-              <span className="font-wordmark text-[28px] leading-none text-newsprint/25">{d + 1}</span>
+
+              {/* Card backgrounds (plain boxes, so they can scale non-uniformly) */}
+              {sessions.map((session, i) => (
+                <div
+                  key={session.day}
+                  ref={(el) => {
+                    bgRefs.current[i] = el;
+                  }}
+                  aria-hidden="true"
+                  className={cx(
+                    "absolute top-0 left-0 origin-top-left rounded-card will-change-transform",
+                    cardColours(i === lastIndex).bg,
+                    !ready && "hidden"
+                  )}
+                />
+              ))}
+
+              {/* Card content (uniform scale; the line fades out) */}
+              <ol
+                className={cx(
+                  "m-0 list-none p-0",
+                  !ready && "absolute inset-0 flex items-center"
+                )}
+                style={ready ? undefined : { gap: GAP }}
+              >
+                {sessions.map((session, i) => (
+                  <li
+                    key={session.day}
+                    ref={(el) => {
+                      cardRefs.current[i] = el;
+                    }}
+                    className={cx(
+                      "p-5",
+                      ready
+                        ? "absolute top-0 left-0 origin-top-left will-change-transform"
+                        : cx("min-w-0 flex-1 rounded-card", cardColours(i === lastIndex).bg)
+                    )}
+                  >
+                    <CardText
+                      session={session}
+                      last={i === lastIndex}
+                      lineRef={(el) => {
+                        lineRefs.current[i] = el;
+                      }}
+                    />
+                  </li>
+                ))}
+              </ol>
             </div>
-          )
-        )}
+          </div>
+        </div>
 
-        {/* Session cards: a static row until measured, then positioned */}
-        <ol className={cx("m-0 list-none p-0", !ready && "flex")} style={ready ? undefined : { gap: GAP }}>
-          {sessions.map((session, i) => (
-            <li
-              key={session.day}
-              ref={(el) => {
-                cardRefs.current[i] = el;
-              }}
-              className={cx(ready ? "absolute top-0 left-0 origin-top-left will-change-transform" : "min-w-0 flex-1")}
-            >
-              <SessionCard session={session} last={i === lastIndex} />
-            </li>
-          ))}
-        </ol>
-      </div>
+        {/* Static calendar (768px+ but short viewport, or reduced motion) */}
+        <div className="td-static">
+          <Heading heading={heading} intro={intro} />
+          <ol className="m-0 mt-10 grid list-none grid-cols-6 gap-4 p-0">
+            {Array.from({ length: DAYS }, (_, d) => {
+              const i = sessions.findIndex((s) => s.day === d + 1);
+              if (i === -1) {
+                return (
+                  <li
+                    key={d}
+                    aria-hidden="true"
+                    className="min-h-[72px] rounded-card border border-hairline-dark bg-newsprint/4 px-4 py-3"
+                  >
+                    <span className="font-wordmark text-[24px] leading-none text-newsprint/25">{d + 1}</span>
+                  </li>
+                );
+              }
+              return (
+                <li key={d} className={cx("min-h-[72px] rounded-card p-4", cardColours(i === lastIndex).bg)}>
+                  <CardText session={sessions[i]} last={i === lastIndex} compact />
+                </li>
+              );
+            })}
+          </ol>
+        </div>
 
-      {/* Below 768px: a plain list */}
-      <ol className="m-0 flex list-none flex-col gap-3 p-0 md:hidden">
-        {sessions.map((session, i) => (
-          <li key={session.day}>
-            <SessionCard session={session} last={i === lastIndex} />
-          </li>
-        ))}
-      </ol>
-    </>
+        {/* Under 768px: a vertical list */}
+        <div className="md:hidden">
+          <Heading heading={heading} intro={intro} />
+          <ol className="m-0 mt-10 flex list-none flex-col gap-3 p-0">
+            {sessions.map((session, i) => (
+              <li key={session.day} className={cx("rounded-card p-5", cardColours(i === lastIndex).bg)}>
+                <CardText session={session} last={i === lastIndex} />
+              </li>
+            ))}
+          </ol>
+        </div>
+      </Container>
+    </Section>
   );
 }
