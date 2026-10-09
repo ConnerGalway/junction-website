@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties, FormEvent, ReactNode } from "react";
-import { Button, Eyebrow, Input, cx } from "@/components";
+import { Button, Eyebrow, Input, Stat, cx } from "@/components";
 import { DEFAULTS, HOURS, JOBS, PEOPLE, RATE, WEEKS_PER_YEAR, yearlyHours, type Range } from "@/lib/timeBack";
 
 /*
@@ -129,10 +129,9 @@ export function TimeBackCalculator() {
       {/* Result */}
       <div className="tone-carbon card-pad rounded-card">
         <Eyebrow className="m-0">{current.label} cost your team, every year</Eyebrow>
-        <p className="m-0 mt-4 font-wordmark text-[clamp(72px,7.5vw,104px)] leading-[0.9] text-accent-1">
-          {whole.format(shownHours)} h
-        </p>
-        <p className="m-0 mt-2 font-wordmark text-[52px] leading-none text-newsprint">{money.format(shownCost)}</p>
+        {/* Stat fits the numbers to the card (up to 104,000 h and $31,200,000). */}
+        <Stat value={`${whole.format(shownHours)} h`} maxSize="clamp(72px, 7.5vw, 104px)" className="mt-4" />
+        <Stat value={money.format(shownCost)} maxSize="52px" valueClassName="text-newsprint" className="mt-2" />
         <p className="type-small m-0 mt-3">
           {hours} h × {people} {people === 1 ? "person" : "people"} × {WEEKS_PER_YEAR} weeks × ${rate} an hour
         </p>
@@ -312,12 +311,44 @@ function Slider({
   format: (v: number) => string;
 }) {
   const [dragging, setDragging] = useState(false);
-  const fill = ((value - range.min) / (range.max - range.min)) * 100;
+  // What's typed in the number field; null shows the current value.
+  const [draft, setDraft] = useState<string | null>(null);
+  const fill = ((Math.min(Math.max(value, range.min), range.max) - range.min) / (range.max - range.min)) * 100;
+  const clamp = (n: number) => Math.min(range.max, Math.max(range.min, Math.round(n)));
+
+  function commit() {
+    if (draft !== null && draft.trim() !== "" && !Number.isNaN(Number(draft))) onChange(clamp(Number(draft)));
+    setDraft(null);
+  }
+
   return (
     <div>
-      <div className="flex items-baseline justify-between gap-3 text-[14px] font-medium text-carbon">
+      <div className="flex items-center justify-between gap-3 text-[14px] font-medium text-carbon">
         <span>{label}</span>
-        <span className="font-wordmark text-[24px] leading-none text-carbon">{format(value)}</span>
+        {/* Exact value: any whole number in the range, kept in sync with the slider. */}
+        <input
+          type="number"
+          inputMode="numeric"
+          aria-label={`${label}, exact value`}
+          min={range.min}
+          max={range.max}
+          step={1}
+          value={draft ?? String(value)}
+          onChange={(event) => {
+            const text = event.target.value;
+            setDraft(text);
+            const n = Number(text);
+            if (text.trim() !== "" && Number.isInteger(n) && n >= range.min && n <= range.max) onChange(n);
+          }}
+          onBlur={commit}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              commit();
+            }
+          }}
+          className="tb-number w-20 rounded-control border-[1.5px] border-flint bg-newsprint px-2 py-1 text-right font-sans text-[16px] text-carbon"
+        />
       </div>
       <input
         type="range"
@@ -326,7 +357,10 @@ function Slider({
         max={range.max}
         step={range.step}
         value={value}
-        onChange={(event) => onChange(Number(event.target.value))}
+        onChange={(event) => {
+          setDraft(null);
+          onChange(Number(event.target.value));
+        }}
         onPointerDown={() => setDragging(true)}
         onPointerUp={() => setDragging(false)}
         onPointerCancel={() => setDragging(false)}

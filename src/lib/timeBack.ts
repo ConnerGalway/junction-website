@@ -30,11 +30,12 @@ export const JOBS: Job[] = [
 export type Range = { min: number; max: number; step: number };
 
 /** Hours a week, per person. */
-export const HOURS: Range = { min: 1, max: 20, step: 1 };
+export const HOURS: Range = { min: 1, max: 40, step: 1 };
 /** People doing the job. */
-export const PEOPLE: Range = { min: 1, max: 20, step: 1 };
+export const PEOPLE: Range = { min: 1, max: 50, step: 1 };
 /** Hourly cost per person, including overhead ($). */
-export const RATE: Range = { min: 20, max: 150, step: 5 };
+/** Slider steps by 5; the number field takes any whole dollar amount. */
+export const RATE: Range = { min: 20, max: 300, step: 5 };
 
 export const DEFAULTS = { hours: 6, people: 3, rate: 45, job: 0 };
 

@@ -974,6 +974,13 @@
     box-shadow: 0 0 0 2px var(--tb), 0 1px 4px color-mix(in srgb, var(--color-carbon) 20%, transparent);
   }
 
+  /* The exact-value field next to each calculator slider. */
+  .tb-number:focus-visible {
+    outline: none;
+    border-color: var(--color-canopy-text);
+    box-shadow: 0 0 0 3px var(--tone-focus);
+  }
+
   .tb-range:focus-visible {
     outline: 2px solid var(--tone-focus);
     outline-offset: 4px;
