@@ -349,11 +349,27 @@ export default function HomePage() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Not ready for a call? Watch a free training session (opens YouTube in a new tab)"
+            padded="sm"
             className="flex flex-col gap-4"
           >
-            <div className="relative flex aspect-video w-full items-center justify-center rounded-control border-[1.5px] border-dashed border-hairline-dark">
-              <svg aria-hidden="true" width="40" height="40" viewBox="0 0 40 40" className="text-newsprint">
-                <circle cx="20" cy="20" r="19" fill="none" stroke="currentColor" strokeWidth="1.5" />
+            {/* Cover image: swap public/images/tourism-talks-cover.png on GitHub
+                to change it (keep the path and filename; any 16:9 size). */}
+            <div className="relative aspect-video w-full overflow-hidden rounded-control">
+              <Image
+                src="/images/tourism-talks-cover.png"
+                alt="Tourism Talks playlist"
+                fill
+                sizes="(min-width: 1024px) 260px, (min-width: 640px) 90vw, 100vw"
+                className="object-cover"
+              />
+              <svg
+                aria-hidden="true"
+                width="40"
+                height="40"
+                viewBox="0 0 40 40"
+                className="absolute bottom-3 left-3 text-newsprint"
+              >
+                <circle cx="20" cy="20" r="19" strokeWidth="1.5" className="fill-carbon/40 stroke-current" />
                 <path d="M16 13.5v13l11-6.5z" fill="currentColor" />
               </svg>
             </div>

@@ -10,8 +10,9 @@ type CardProps<T extends ElementType> = {
    * newsprint: a light panel on a dark ground (no shadow, no top rule).
    */
   tone?: "default" | "carbon" | "forest" | "newsprint";
-  /** Set false to control padding yourself (e.g. tables, media). */
-  padded?: boolean;
+  /** true = card padding (28px, 24px under 640px); "sm" = compact 20px for
+   *  small cards; false = control padding yourself (e.g. tables, media). */
+  padded?: boolean | "sm";
   /** Makes the whole card a link: 2px pink outline on hover/focus. Put no
    *  buttons or other links inside a linked card. */
   href?: string;
@@ -33,7 +34,7 @@ export function Card<T extends ElementType = "div">({
 }: CardProps<T>) {
   const classes = cx(
     tone === "default" ? "card" : `tone-${tone} rounded-card`,
-    padded && "card-pad",
+    padded === "sm" ? "card-pad-sm" : padded && "card-pad",
     href && "card-link group block",
     className
   );

@@ -78,7 +78,8 @@
   --spacing-section-tight: clamp(64px, 7vw, 100px);   /* stacked sections */
   --spacing-gutter: clamp(20px, 4vw, 60px);           /* side gutter */
   --spacing-card: 28px;                               /* 24px under 640px */
-  --spacing-card-sm: 24px;
+  --spacing-card-narrow: 24px;                        /* card padding under 640px */
+  --spacing-card-sm: 20px;                            /* compact cards (card-pad-sm) */
   --spacing-gap: 24px;                                /* between components */
   --spacing-stack: 36px;                              /* heading → content */
 
@@ -655,13 +656,18 @@
     outline-offset: 4px;
   }
   .card-pad {
-    padding: var(--spacing-card-sm);
+    padding: var(--spacing-card-narrow);
   }
 
   @media (min-width: 640px) {
     .card-pad {
       padding: var(--spacing-card);
     }
+  }
+
+  /* Compact padding for small cards (20px at every width). */
+  .card-pad-sm {
+    padding: var(--spacing-card-sm);
   }
 
   /*
