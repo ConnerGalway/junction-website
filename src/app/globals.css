@@ -917,6 +917,70 @@
   }
 
   /*
+   * Calculator sliders (Offload): native range inputs. Track sage-25 with
+   * a Canopy fill up to --fill, Newsprint thumb with a Canopy ring. While
+   * dragging ([data-active]) the fill and ring turn break-on-light.
+   */
+  .tb-range {
+    --tb: var(--color-canopy);
+    display: block;
+    width: 100%;
+    height: 24px;
+    margin: 0;
+    background: transparent;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .tb-range[data-active] {
+    --tb: var(--color-break-on-light);
+  }
+
+  .tb-range::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 999px;
+    background: linear-gradient(to right, var(--tb) var(--fill), var(--color-sage-25) var(--fill));
+  }
+
+  .tb-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    margin-top: -7px;
+    border-radius: 50%;
+    background: var(--color-newsprint);
+    box-shadow: 0 0 0 2px var(--tb), 0 1px 4px color-mix(in srgb, var(--color-carbon) 20%, transparent);
+  }
+
+  .tb-range::-moz-range-track {
+    height: 6px;
+    border-radius: 999px;
+    background: var(--color-sage-25);
+  }
+
+  .tb-range::-moz-range-progress {
+    height: 6px;
+    border-radius: 999px;
+    background: var(--tb);
+  }
+
+  .tb-range::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--color-newsprint);
+    box-shadow: 0 0 0 2px var(--tb), 0 1px 4px color-mix(in srgb, var(--color-carbon) 20%, transparent);
+  }
+
+  .tb-range:focus-visible {
+    outline: 2px solid var(--tone-focus);
+    outline-offset: 4px;
+    border-radius: 999px;
+  }
+
+  /*
    * KitCarousel (Offload "What you leave with"): a scroll-snap track. The
    * spotlight card's artifact is taller (280 vs 220px) and at full
    * opacity with a 2px Canopy line above its label; the others sit at 50%

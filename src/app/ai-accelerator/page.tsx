@@ -22,6 +22,7 @@ import {
 } from "./KitArtifacts";
 import { KitCarousel, type KitItem } from "./KitCarousel";
 import { OffloadHeroVisual } from "./OffloadHeroVisual";
+import { TimeBackCalculator } from "./TimeBackCalculator";
 
 export const metadata: Metadata = {
   title: "Offload Program (AI Accelerator)",
@@ -232,6 +233,13 @@ export default function AIAcceleratorPage() {
             </p>
           </div>
           <KitCarousel items={kitItems} label="What you leave with" initial={2} />
+        </Container>
+      </Section>
+
+      {/* Calculator */}
+      <Section id="calculator" className="scroll-mt-24">
+        <Container>
+          <TimeBackCalculator />
         </Container>
       </Section>
 
