@@ -120,6 +120,7 @@ Other ground rules:
 
 - **Gold (accent-1) is the primary accent.** Every numeral uses it: index numbers, stats and highlighted figures. On Newsprint that means `accent-1-on-light`, and only at 24px and up. On Carbon it's `accent-1`.
 - **On Forest, numerals and stats are Newsprint.** accent-1 is not used on Forest. Revisit this if the accents change.
+  - **Exception: the gold course card in the Custom Training CourseShelf** (a filled card, not a numeral) on the Forest hero. Nothing else on Forest is gold.
 - **Copper (accent-2) is the secondary accent.** It's for eyebrows on Newsprint. Never set numerals in copper.
 - **Exception: copper editable values in the Offload calculator** ("What is that job costing you?") **only.** The four values in its sentence are copper (Epilogue 900, 3px copper underline) and turn break-on-light while their popover is open. This is a one-off, not a general rule for editable values.
 - **Exception: score bands on the quick score card** (Accelerator page) **only.** Area bars and their Bebas grade letters are coloured by band: healthy (65+) Canopy (letters in canopy-text), middling (45–64) accent-1-on-light, weak (under 45) copper. The two weakest area names in "Your biggest gaps" are copper too. Grade letters count as numerals here. No pink on the card.
@@ -145,6 +146,8 @@ Use `<Eyebrow>` only for meta labels: case-study meta ("Travel Yukon · Training
 ### Faces
 
 The only faces on the site are the Junction team's. Testimonials and quote cards never carry a headshot.
+
+- **Temporary exception: the Custom Training photos** (Who panels and Formats) show audience members at Junction sessions. They're placeholders to be swapped (see Custom Training page); the rule isn't relaxed elsewhere.
 
 ### Links turn pink on hover
 
@@ -252,6 +255,7 @@ Controls:
 | `QuoteCard` | Sage fill, radius 14, `type-quote` with a Forest caption. No headshots (faces rule). |
 | `Callout` | sage-25 box, radius 14, Forest text and links. For a short highlighted statement. |
 | `Badge` | `outline` (2px break border, pink text, dot) or `filled` (break-on-light fill). Radius 10. Badges are the one non-clickable pink component (see Pink means clickable). |
+| `Tabs` | Underlined tabs: `items` (`id`, `label`, `panel`) and a `label`. Large titles (Epilogue 600, 22px) on a 1px rule; active Carbon with a 3px Canopy underline, inactive Flint with a pink hover. `tablist`/`tab`/`tabpanel`, ← → Home End; panels cross-fade in 250ms (instant with reduced motion); the tab row scrolls sideways on narrow screens. |
 | `Accordion` | Questions sections, everywhere. `items` (`q`, `a`). Each question is a full-width button row (`aria-expanded`, `aria-controls`) under a 2px divider, all collapsed by default (any number can be open). A gold chevron (accent-1-on-light, 20px, 2px stroke; a UI graphic, so 3:1 is enough) on the right turns 180° when open; the answer opens with a 250ms height animation (instant with reduced motion). The question turns pink on hover. No "+" icons. |
 | `DashboardPreview`, `OffloadPreview` | Product previews (`src/components/`), each with a `thumbnail` variant for program cards: scaled to fill the slot's width, top-aligned, bottom faded, `inert` and `aria-hidden`. `OffloadPreview` is the Offload hero visual (journey track + Session 3 quote generator); its thumbnail is drawn at 560px. Used on the homepage orbit (The Accelerator, Offload Program) and the Programs dropdown (The Accelerator). |
 | `ChevronButton` | Carousel previous / next: a thin 20px chevron (1.6px rounded stroke), no box, tone text at 70%, the tone's pink on hover and focus, 40% when disabled at the ends of a non-looping carousel. Needs an `aria-label`. Used by the program orbit and the KitCarousel. |
@@ -355,6 +359,21 @@ Every fact lives in `src/lib/buildingSupplyCase.ts` (areas, numbers, before, cos
 - **Display only:** the sidebar and the tactic tabs switch views; nothing navigates, nothing saves, and the checkboxes aren't interactive.
 - **Accessible:** a region labelled "Interactive Accelerator dashboard preview, example business"; `tablist`/`tab`/`tabpanel` roles with arrow keys (↑ ↓ in the sidebar, ← → in the tactic tabs).
 - **Thumbnail** (`<DashboardPreview variant="thumbnail" />`): the Dashboard screen only, scaled to fill its container's width, top-aligned, with the bottom faded out (`.fade-out-bottom`). Not interactive at all: `inert`, `aria-hidden` and no pointer events; the card around it carries the accessible name and the link. Put it in a slot with its own size, radius and `overflow: hidden`. Used in the Accelerator card of the Programs dropdown (16:9, radius 10) and on The Accelerator card in the homepage orbit (16:10, radius 14).
+
+## Custom Training page
+
+`src/app/custom-training/`. Order: hero (Forest, with the CourseShelf), who it's for, logo strip ("Organizations we've trained", `LogoWall variant="auto"`), formats, proof, program sketcher (Forest).
+
+**Every Custom Training image is temporary and swappable by filename** in `public/images/custom-training/`: `who-dmos.jpg`, `who-leadership.jpg`, `formats-live-workshop.jpg`, `formats-webinar-series.jpg`, `formats-leadership-program.jpg`, `formats-custom-course.jpg`, the optional `formats-custom-course.mp4`, and course posters in `posters/<slug>.jpg`. Keep the filenames; sizes don't matter (images fill their slots with `object-fit: cover`).
+
+- **Hero:** the three-line H1 on the left; the lead (Newsprint 88%) and "Scope a program" + the Calendly link on the right; the CourseShelf about 96px below.
+- **CourseShelf** (`CourseShelf.tsx`, data in `src/lib/customCourses.ts`): course "poster" cards (250 × 300, radius 14, soft shadow) in a full-bleed row drifting left in a seamless 40s linear loop (the set is duplicated); static with reduced motion. Display only: `aria-hidden`, not focusable, no hover, with a visually hidden sentence listing the titles. A card shows "Built for a client" (small caps) with an 18 × 4px colour bar, then the title (Epilogue 900, 28px) and "Custom course". Variants: Newsprint, Carbon, Sage (Forest text) and gold (Carbon text and bar; see Accent hierarchy). If `posters/<slug>.jpg` exists (checked at build), the poster fills the card instead; no code change needed. No client names in titles.
+- **Who it's for:** `Tabs` with two panels (radius 14, about 48px padding, two columns that stack on mobile). DMOs on Carbon with gold chevrons; leadership teams on Forest with Sage chevrons (no gold on Forest). Each has a 2-column feature list and a Newsprint button.
+- **Who-panel visual** (`WhoPanel.tsx`): a photo (radius 14) set 70px down and 40px in from the right, with a small Newsprint card (300px, radius 14, shadow) in the top-right corner overlapping the top of the photo: a meta label and three rows (Bebas gold-on-light number, title, small line). Below 1024px the card sits under the photo.
+- **FormatsAccordion:** four panels in one 520px row (12px gaps, radius 14). One open at a time (flex 3 vs 1, 450ms ease-out, instant with reduced motion); hover on pointer devices, or click, tap or Enter, opens a panel (each has a full-panel button with `aria-expanded`). Closed: alternating Carbon and Forest, the duration in Bebas at the top (Newsprint 60%), the name set vertically, reading bottom to top (Epilogue 900, 30px). Open: the photo with a dark bottom gradient, the duration (Bebas 24px, Newsprint 70%), the name (about 40px) and the description. Below 768px: a vertical accordion whose open item shows its image or player at 220px. The durations ("90 min – 1 day", "Several weeks", "Self-paced", "Multi-session") are placeholders taken from the descriptions.
+- **CoursePlayer** (`CoursePlayer.tsx`, decorative, `aria-hidden`): the custom course's open state on Forest, inset 48px: a Newsprint frame with a 220px sidebar (Forest header: "Course", "Export readiness", a thin Fern progress bar; Modules 1–6 with Bebas gold-on-light numbers, module 2 on sage-25) and a video area with a slim control bar (Newsprint play button, Fern progress, Bebas time). Drawn at 600 × 340 and scaled to fit. If `formats-custom-course.mp4` exists it plays muted, looped and inline with the jpg as poster; reduced motion shows the still.
+- **Proof:** a copper meta label, the two stats as `<Stat maxSize="112px">` (gold-on-light, they fit their column), the Sage quote card and the placeholder.
+- **Program sketcher** (`ProgramSketcher.tsx`, rules in `src/lib/programSketch.ts`, placeholders): three selects in a row (stacked on mobile), styled for Forest over native `<select>`s: Newsprint 8% fill, 1px Newsprint 16% border, radius 10 (the control token), small caps label (Newsprint 60%) above the value (Epilogue 600, 18px), Fern chevron, Fern border on focus. Under them a Newsprint result card: "Your program, sketched", the program (Epilogue 900, 28px), a week strip (live weeks Canopy, others Sage) and a summary line, updating instantly with a 200ms text fade. "Send this sketch to us" opens `/contact?type=training&who=…&how=…&size=…&sketch=…`, which pre-fills the training audience and learners (the sketch title has no field yet: TODO).
 
 ## Logo walls
 
