@@ -8,12 +8,15 @@ import {
   QuoteCard,
   Section,
   Stat,
+  Tabs,
   TextLink,
   LogoWall,
 } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
 import { clientLogos } from "@/lib/logos";
+import { COURSES } from "@/lib/customCourses";
 import { CourseShelf } from "./CourseShelf";
+import { WhoPanel } from "./WhoPanel";
 
 export const metadata: Metadata = {
   title: "Custom Training",
@@ -58,18 +61,6 @@ const formats = [
   },
 ];
 
-function FeatureList({ items }: { items: string[] }) {
-  return (
-    <ul className="m-0 list-none border-t border-(--tone-hairline) p-0">
-      {items.map((f) => (
-        <li key={f} className="type-body border-b border-(--tone-hairline) py-3.5 last:border-b-0">
-          {f}
-        </li>
-      ))}
-    </ul>
-  );
-}
-
 export default function CustomTrainingPage() {
   return (
     <>
@@ -100,37 +91,51 @@ export default function CustomTrainingPage() {
         <CourseShelf className="-mx-gutter mt-[72px]" />
       </Section>
 
-      {/* Two Audiences */}
-      <Section flush="top">
-        <Container className="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,480px),1fr))]">
-          {/* DMO Card */}
-          <Card tone="forest" className="flex flex-col gap-4">
-            <Eyebrow>For DMOs and tourism organizations</Eyebrow>
-            <h2 className="type-h3 m-0">Custom courses for your operators.</h2>
-            <p className="type-body m-0">
-              Give every business in your region training that fits their week.
-              Your board gets a report showing the capacity you built.
-            </p>
-            <FeatureList items={dmoFeatures} />
-            <TextLink href="/contact?type=training" className="mt-auto self-start">
-              Scope a regional program →
-            </TextLink>
-          </Card>
-
-          {/* Leadership Card */}
-          <Card tone="carbon" className="flex flex-col gap-4">
-            <Eyebrow>For organizations training their leaders</Eyebrow>
-            <h2 className="type-h3 m-0">Leadership training on AI and marketing.</h2>
-            <p className="type-body m-0">
-              High-quality sessions for senior teams who need to make good
-              decisions about AI and marketing, using your strategy and your real
-              work.
-            </p>
-            <FeatureList items={leadershipFeatures} />
-            <TextLink href="/contact?type=training" className="mt-auto self-start">
-              Scope a leadership program →
-            </TextLink>
-          </Card>
+      {/* Who it's for */}
+      <Section>
+        <Container>
+          <h2 className="type-h2 m-0 mb-9">Who it&apos;s for.</h2>
+          <Tabs
+            label="Who it's for"
+            items={[
+              {
+                id: "dmos",
+                label: "For DMOs and tourism organizations",
+                panel: (
+                  <WhoPanel
+                    tone="carbon"
+                    title="Custom courses for your operators."
+                    line="Your operators learn from courses built for your region, and you see who is progressing."
+                    features={dmoFeatures}
+                    button={{ label: "Scope a course program", href: "/contact?type=training" }}
+                    photo={{ src: "/images/custom-training/who-dmos.jpg", alt: "A Junction workshop for tourism operators" }}
+                    cardMeta="Custom courses · on JunctionU"
+                    cardRows={COURSES.map((title) => ({ title, line: "[ x ] operators enrolled" }))}
+                  />
+                ),
+              },
+              {
+                id: "leadership",
+                label: "For leadership teams",
+                panel: (
+                  <WhoPanel
+                    tone="forest"
+                    title="Leadership training on AI and marketing."
+                    line="Sessions built on your strategy and real decisions, with homework that ships between them."
+                    features={leadershipFeatures}
+                    button={{ label: "Scope a leadership program", href: "/contact?type=training" }}
+                    photo={{ src: "/images/custom-training/who-leadership.jpg", alt: "A Junction leadership session" }}
+                    cardMeta="Leadership program · 4 sessions"
+                    cardRows={[
+                      { title: "Where AI fits in your organization", line: "Homework: one use case per leader" },
+                      { title: "Your data, your decisions", line: "Homework: a shared dashboard" },
+                      { title: "Policy and guardrails", line: "Homework: a draft AI policy" },
+                    ]}
+                  />
+                ),
+              },
+            ]}
+          />
         </Container>
       </Section>
 
