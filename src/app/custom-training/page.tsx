@@ -183,20 +183,23 @@ export default function CustomTrainingPage() {
       </Section>
 
       {/* Proof */}
-      <Section>
-        <Container className="grid items-center gap-x-20 gap-y-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr))]">
+      <Section flush="top">
+        <Container className="grid items-start gap-x-20 gap-y-12 lg:grid-cols-2">
           <div>
-            <Eyebrow className="mb-4">Town of Okotoks · webinar series</Eyebrow>
-            <Stat value="$900,000+" />
-            <p className="type-body m-0 mt-5 max-w-[44ch]">
-              In potential local spend identified for businesses ahead of 4,500
-              visitors. Then we turned it into a three-part series where every
-              action took under an hour.
-            </p>
-          </div>
-          <div className="flex flex-col gap-6">
+            <Eyebrow className="m-0">Results · Training programs</Eyebrow>
+            <div className="mt-8">
+              <p className="type-small m-0 mb-3">Town of Okotoks · webinar series</p>
+              <Stat value="$900,000+" maxSize="112px" />
+              <p className="type-body m-0 mt-5 max-w-[44ch]">
+                In potential local spend identified for businesses ahead of 4,500
+                visitors. Then we turned it into a three-part series where every
+                action took under an hour.
+              </p>
+            </div>
             <Stat
-                            value="300+"
+              className="mt-12"
+              value="300+"
+              maxSize="112px"
               label={
                 <>
                   businesses through Travel Yukon&apos;s program in four years, now
@@ -204,6 +207,8 @@ export default function CustomTrainingPage() {
                 </>
               }
             />
+          </div>
+          <div className="flex flex-col gap-6">
             <QuoteCard
               quote={
                 <>
