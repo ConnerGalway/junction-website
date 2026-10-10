@@ -13,6 +13,7 @@ import {
 } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
 import { clientLogos } from "@/lib/logos";
+import { CourseShelf } from "./CourseShelf";
 
 export const metadata: Metadata = {
   title: "Custom Training",
@@ -73,13 +74,16 @@ export default function CustomTrainingPage() {
   return (
     <>
       {/* Hero */}
-      <Section spacing="tight">
-        <Container className="grid items-end gap-x-[72px] gap-y-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
+      <Section tone="forest" spacing="tight" className="overflow-hidden">
+        <Container className="grid items-end gap-x-[72px] gap-y-8 lg:grid-cols-2">
+          {/* Three lines at most from 1280px (explicit breaks, desktop only) */}
+          <h1 className="type-display m-0">
+            <span className="xl:whitespace-nowrap">Training built</span>
+            <br className="hidden xl:inline" /> <span className="xl:whitespace-nowrap">around your</span>
+            <br className="hidden xl:inline" /> <span className="xl:whitespace-nowrap">people.</span>
+          </h1>
           <div>
-            <h1 className="type-display m-0">Training built around your people.</h1>
-          </div>
-          <div>
-            <p className="type-lead m-0 mb-8">
+            <p className="type-lead m-0 mb-8 text-newsprint/88">
               Custom courses for the operators in your region, and programs for
               the leaders in your organization. We design it, deliver it, and
               report on what changed.
@@ -92,6 +96,8 @@ export default function CustomTrainingPage() {
             </div>
           </div>
         </Container>
+        {/* Full-bleed: the row drifts left past both screen edges */}
+        <CourseShelf className="-mx-gutter mt-[72px]" />
       </Section>
 
       {/* Two Audiences */}

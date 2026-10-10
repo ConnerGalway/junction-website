@@ -988,6 +988,30 @@
   }
 
   /*
+   * CourseShelf (Custom Training hero): the duplicated row drifts left by
+   * half its width in a 40s linear loop, so it repeats seamlessly. Static
+   * with reduced motion.
+   */
+  .course-shelf-track {
+    animation: course-shelf 40s linear infinite;
+  }
+
+  @keyframes course-shelf {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .course-shelf-track {
+      animation: none !important;
+    }
+  }
+
+  /*
    * Offload "Thirty days": which layout shows. The pinned scene needs
    * 768px+, a viewport at least 640px tall and motion allowed; otherwise
    * the static calendar (768px+) or the list (under 768px, md:hidden).
