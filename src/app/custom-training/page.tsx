@@ -18,6 +18,7 @@ import { clientLogos } from "@/lib/logos";
 import { COURSES } from "@/lib/customCourses";
 import { CourseShelf } from "./CourseShelf";
 import { FormatsAccordion, type Format } from "./FormatsAccordion";
+import { ProgramSketcher } from "./ProgramSketcher";
 import { WhoPanel } from "./WhoPanel";
 
 export const metadata: Metadata = {
@@ -184,7 +185,7 @@ export default function CustomTrainingPage() {
 
       {/* Proof */}
       <Section flush="top">
-        <Container className="grid items-start gap-x-20 gap-y-12 lg:grid-cols-2">
+        <Container className="grid grid-cols-1 items-start gap-x-20 gap-y-12 lg:grid-cols-2">
           <div>
             <Eyebrow className="m-0">Results · Training programs</Eyebrow>
             <div className="mt-8">
@@ -223,16 +224,13 @@ export default function CustomTrainingPage() {
         </Container>
       </Section>
 
-      {/* CTA */}
+      {/* Program sketcher */}
       <Section id="start" tone="forest" className="scroll-mt-24">
         <Container>
-          <h2 className="type-display m-0 max-w-[15ch]">
+          <h2 className="type-h2 m-0 mb-10 max-w-[22ch]">
             Tell us who needs training. We&apos;ll sketch the program.
           </h2>
-          <div className="mt-10 flex flex-wrap items-center gap-7">
-            <Button href="/contact?type=training">Scope a program</Button>
-            <TextLink href={CALENDLY_URL}>Or book a 20-min call →</TextLink>
-          </div>
+          <ProgramSketcher />
         </Container>
       </Section>
     </>

@@ -17,7 +17,23 @@ const typeLabels: Record<FormType, string> = {
   other: "Something else",
 };
 
-function ContactFormFields({ initialType }: { initialType: FormType }) {
+/** Answers passed in by the Custom Training program sketcher. */
+type TrainingPrefill = { audience?: string; learners?: string; sketch?: string };
+
+const sketchAudience: Record<string, string> = {
+  operators: "Businesses or operators in our region",
+  leadership: "Our leadership team",
+  staff: "Our staff",
+};
+
+const sketchLearners: Record<string, string> = {
+  "under-20": "Under 20",
+  "20-100": "20–100",
+  "100-500": "100–500",
+  "500-plus": "500+",
+};
+
+function ContactFormFields({ initialType, prefill }: { initialType: FormType; prefill?: TrainingPrefill }) {
   const typeLabelId = useId();
   const [selectedType, setSelectedType] = useState<FormType>(initialType);
   const [sent, setSent] = useState(false);
@@ -146,14 +162,17 @@ function ContactFormFields({ initialType }: { initialType: FormType }) {
           {/* Training fields */}
           {selectedType === "training" && (
             <div className="flex flex-col gap-4">
-              <Select label="Who's the training for?" name="audience">
+              {/* TODO: the training form has no message field, so the sketch title
+                  (prefill.sketch) isn't shown yet; add one if the form gets it. */}
+              {prefill?.sketch && <input type="hidden" name="sketch" value={prefill.sketch} />}
+              <Select label="Who's the training for?" name="audience" defaultValue={prefill?.audience}>
                 <option>Businesses or operators in our region</option>
                 <option>Our leadership team</option>
                 <option>Our staff</option>
                 <option>Our members</option>
               </Select>
               <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr))]">
-                <Input label="Roughly how many learners?" name="learners" />
+                <Input label="Roughly how many learners?" name="learners" defaultValue={prefill?.learners} />
                 <Input label="Ideal timing" name="timing" placeholder="e.g. spring 2027" />
               </div>
             </div>
@@ -201,7 +220,12 @@ function ContactFormFromParams() {
   const searchParams = useSearchParams();
   const param = searchParams.get("type") as FormType | null;
   const initialType = param && validTypes.includes(param) ? param : "ai";
-  return <ContactFormFields initialType={initialType} />;
+  const prefill: TrainingPrefill = {
+    audience: sketchAudience[searchParams.get("who") ?? ""],
+    learners: sketchLearners[searchParams.get("size") ?? ""],
+    sketch: searchParams.get("sketch") ?? undefined,
+  };
+  return <ContactFormFields initialType={initialType} prefill={prefill} />;
 }
 
 /**

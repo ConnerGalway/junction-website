@@ -987,6 +987,25 @@
     border-radius: 999px;
   }
 
+  /* Program sketcher: native option lists in Newsprint, and the 200ms text fade. */
+  .sketch-select option {
+    background-color: var(--color-newsprint);
+    color: var(--color-carbon);
+  }
+
+  .sketch-fade {
+    animation: sketch-fade 0.2s ease-out;
+  }
+
+  @keyframes sketch-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
   /*
    * CourseShelf (Custom Training hero): the duplicated row drifts left by
    * half its width in a 40s linear loop, so it repeats seamlessly. Static
