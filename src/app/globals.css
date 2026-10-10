@@ -1,183 +1,1570 @@
 @import "tailwindcss";
 
-:root {
-  /* Core colors */
+/*
+ * ─── Design tokens ────────────────────────────────────────────────────────
+ * Defined directly in @theme so Tailwind generates utilities from them
+ * (bg-carbon, text-flint, border-hairline, rounded-card, py-section, …).
+ * The default Tailwind palette is cleared: only brand colours exist, and
+ * there is deliberately no white. See DESIGN_SYSTEM.md.
+ *
+ * Colour roles
+ * - Newsprint ground (most of a page): headings carbon, body ink-soft, muted
+ *   flint, eyebrow accent-2 (copper), numerals accent-1-on-light (24px+),
+ *   prices forest, links + primary buttons canopy-text, rules canopy. Sage
+ *   only inside boxes (quote cards, chips), never on full-width sections.
+ * - Carbon and Forest grounds (sections and boxes; neighbouring dark boxes
+ *   alternate): text newsprint, muted newsprint-muted, eyebrows + links
+ *   fern, numerals accent-1, primary button newsprint fill.
+ * - Accent hierarchy: gold (accent-1 / accent-1-on-light) is primary and
+ *   used for all numerals; copper (accent-2) is secondary, eyebrows only.
+ * - Every link turns pink on hover (text + underline): break-on-light on
+ *   Newsprint, break-on-dark on Carbon and Forest. On Forest that is 2.9:1,
+ *   an accepted exception for the hover state only.
+ */
+@theme {
+  --color-*: initial;
+
   --color-carbon: #1C1C1A;
-  --color-newsprint: #F4F0E8;
+  --color-flint: #6A6862;          /* muted text on Newsprint */
+  --color-newsprint: #F4F0E8;      /* replaces white everywhere */
+
   --color-forest: #1A4D2E;
-  --color-canopy: #2E7D4F;
+  --color-canopy: #2E7D4F;         /* rules, fills (not text) */
+  --color-canopy-text: #2B764A;    /* text, links, primary button on light */
   --color-fern: #7FC99A;
   --color-sage: #C8E8D4;
-  --color-accent: #C4963A;
-  --color-accent-shade: #6B4D12; /* Darkened from #8A6420 for WCAG AA contrast */
-  --color-break: #E0176A;
-  --color-white: #FFFFFF;
+  --color-sage-25: #E9EEE3;        /* table body rows */
+  --color-newsprint-hover: #EDE6DA; /* list-row hover / focus */
 
-  /* Muted text - improved contrast */
-  --color-carbon-muted: rgba(28, 28, 26, 0.78);
-  --color-newsprint-muted: rgba(244, 240, 232, 0.85);
+  --color-ink-soft: #3C3C39;       /* body copy on Newsprint (carbon ~85%) */
 
-  /* Hairlines */
-  --color-hairline: rgba(28, 28, 26, 0.12);
-  --color-hairline-strong: rgba(28, 28, 26, 0.18);
+  --color-accent-1: #C4963A;          /* gold, primary accent on dark grounds */
+  --color-accent-1-on-light: #A57E31; /* gold on Newsprint, 24px and up only */
+  --color-accent-2: #A55527;          /* copper, secondary: eyebrows */
+
+  --color-break: #E0176A;          /* dots, outlines, underlines */
+  --color-break-on-light: #CD1561; /* pink text and fills on Newsprint */
+  --color-break-on-dark: #ED5192;  /* pink text on Carbon and Forest */
+
+  --color-newsprint-muted: rgba(244, 240, 232, 0.8); /* muted text on dark */
+  --color-hairline: rgba(28, 28, 26, 0.14);
   --color-hairline-dark: rgba(244, 240, 232, 0.15);
+  --color-logo-on-light: rgba(28, 28, 26, 0.6);    /* one-colour logos on Newsprint */
+  --color-logo-on-dark: rgba(244, 240, 232, 0.7);  /* one-colour logos on Carbon/Forest */
+  --color-logo-text-on-light: rgba(28, 28, 26, 0.64); /* text fallback in a wall: 4.9:1, AA */
+  --color-price-on-light: rgba(28, 28, 26, 0.6);    /* Bebas price/duration lines on Newsprint */
+  --color-price-on-dark: rgba(244, 240, 232, 0.6);  /* Bebas price/duration lines on Carbon/Forest */
+
+  --color-transparent: transparent;
+  --color-current: currentColor;
 }
 
 @theme inline {
-  /* Colors */
-  --color-carbon: var(--color-carbon);
-  --color-newsprint: var(--color-newsprint);
-  --color-forest: var(--color-forest);
-  --color-canopy: var(--color-canopy);
-  --color-fern: var(--color-fern);
-  --color-sage: var(--color-sage);
-  --color-accent: var(--color-accent);
-  --color-accent-shade: var(--color-accent-shade);
-  --color-break: var(--color-break);
-
-  /* Fonts */
-  --font-epilogue: var(--font-epilogue);
-  --font-dm-sans: var(--font-dm-sans);
-  --font-bebas: var(--font-bebas);
-  --font-fraunces: var(--font-fraunces);
+  /* next/font exposes --nf-* on <html>; map them to font-* utilities. */
+  --font-sans: var(--nf-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--nf-epilogue), ui-sans-serif, system-ui, sans-serif;
+  --font-quote: var(--nf-fraunces), ui-serif, Georgia, serif;
+  --font-wordmark: var(--nf-bebas), ui-sans-serif, system-ui, sans-serif;
 }
 
-* {
-  box-sizing: border-box;
+@theme {
+  /* Radius: controls (buttons, inputs, chips, badges, menu items) and
+     surfaces (cards, panels, dropdown, media frames). No hard edges. */
+  --radius-control: 10px;
+  --radius-card: 14px;
+
+  /* Spacing */
+  --spacing-section: clamp(80px, 9vw, 136px);         /* section top/bottom */
+  --spacing-section-tight: clamp(64px, 7vw, 100px);   /* stacked sections */
+  --spacing-gutter: clamp(20px, 4vw, 60px);           /* side gutter */
+  --spacing-card: 28px;                               /* 24px under 640px */
+  --spacing-card-narrow: 24px;                        /* card padding under 640px */
+  --spacing-card-sm: 20px;                            /* compact cards (card-pad-sm) */
+  --spacing-gap: 24px;                                /* between components */
+  --spacing-stack: 36px;                              /* heading → content */
+
+  /* Elevation for cards that sit on a ground of their own colour. */
+  --shadow-card: 0 1px 2px rgba(28, 28, 26, 0.06), 0 10px 28px rgba(28, 28, 26, 0.07);
+  --shadow-orbit: 0 30px 70px rgba(0, 0, 0, 0.45);   /* front card of the program orbit */
+  --ease-orbit: cubic-bezier(0.22, 1, 0.36, 1);
+  --shadow-card-hover: 0 1px 2px rgba(28, 28, 26, 0.08), 0 14px 36px rgba(28, 28, 26, 0.11);
+  /* Product previews (the Accelerator dashboard) floating on Newsprint. */
+  --shadow-preview: 0 1px 2px rgba(28, 28, 26, 0.06), 0 24px 60px rgba(28, 28, 26, 0.12);
+
+  /* Widths */
+  --container-wide: 1320px;
+  --container-headline: 1040px;
+  --container-body: 680px;
 }
 
-body {
-  margin: 0;
-  background: var(--color-newsprint);
-  color: var(--color-carbon);
-  font-family: var(--font-dm-sans), sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/*
+ * Base element rules live in @layer base so Tailwind utilities (which sit in
+ * @layer utilities) always win. Unlayered rules beat every layered rule, which
+ * is why `a { color: inherit }` used to override text-* classes on links.
+ */
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-newsprint);
+    color: var(--color-carbon);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Focus ring: 2px outline whose colour comes from the section tone. */
+  :focus {
+    outline: none;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--tone-focus, var(--color-forest));
+    outline-offset: 2px;
+  }
+
+  /* Transition only cheap, visual properties (never `all`). */
+  a,
+  button {
+    transition-property: color, background-color, border-color,
+      text-decoration-color, opacity, transform;
+    transition-duration: 0.15s;
+    transition-timing-function: ease-out;
+  }
+
+  button:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  ::placeholder {
+    color: var(--color-flint);
+  }
+
+  ::selection {
+    background: var(--color-sage);
+    color: var(--color-carbon);
+  }
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+/*
+ * ─── Tones ────────────────────────────────────────────────────────────────
+ * A tone sets the ground colour plus CSS variables that every component
+ * reads, so text, links, eyebrows, stats, buttons and the focus ring adapt
+ * to whatever they sit on. <Section tone="…"> and dark <Card tone="carbon">
+ * apply these classes; :root carries the Newsprint tone as the default.
+ */
+@layer base {
+  :root,
+  .tone-newsprint {
+    --tone-bg: var(--color-newsprint);
+    --tone-text: var(--color-carbon);
+    --tone-muted: var(--color-flint);
+    --tone-eyebrow: var(--color-accent-2);
+    --tone-link: var(--color-canopy-text);
+    --tone-link-hover: var(--color-break-on-light);
+    --tone-focus: var(--color-canopy-text);
+    --tone-rule: var(--color-canopy);
+    --tone-hairline: var(--color-hairline);
+    --tone-numeral: var(--color-accent-1-on-light);
+    --tone-price: var(--color-price-on-light);
+    --tone-body: var(--color-ink-soft);
+    --tone-highlight: var(--color-break-on-light);
+    --tone-btn-bg: var(--color-canopy-text);
+    --tone-btn-text: var(--color-newsprint);
+    --tone-btn-hover-bg: var(--color-forest);
+    --tone-btn-line: var(--color-carbon);
+    --tone-logo: var(--color-logo-on-light);
+    --tone-logo-text: var(--color-logo-text-on-light);
+    --tone-card-rule: var(--color-forest);
+    --tone-card-border: 0 solid transparent;
+    --tone-card-shadow: var(--shadow-card);
+    --tone-card-shadow-hover: var(--shadow-card-hover);
+  }
+
+  .tone-carbon {
+    --tone-bg: var(--color-carbon);
+    --tone-text: var(--color-newsprint);
+    --tone-muted: var(--color-newsprint-muted);
+    --tone-eyebrow: var(--color-fern);
+    --tone-link: var(--color-fern);
+    --tone-link-hover: var(--color-break-on-dark);
+    --tone-focus: var(--color-fern);
+    --tone-rule: var(--color-fern); /* dividers on dark grounds are Fern */
+    --tone-hairline: var(--color-hairline-dark);
+    --tone-highlight: var(--color-break-on-dark);
+    --tone-btn-bg: var(--color-newsprint);
+    --tone-btn-text: var(--color-carbon);
+    --tone-btn-hover-bg: var(--color-sage);
+    --tone-btn-line: var(--color-newsprint);
+    --tone-numeral: var(--color-accent-1);
+    --tone-price: var(--color-price-on-dark);
+    --tone-body: var(--color-newsprint-muted);
+    --tone-logo: var(--color-logo-on-dark);
+    --tone-logo-text: var(--color-logo-on-dark);
+    --tone-card-rule: var(--color-fern);
+    --tone-card-border: 1px solid var(--color-hairline-dark);
+    --tone-card-shadow: none;
+    --tone-card-shadow-hover: none;
+  }
+
+  /* Forest: sections and boxes. Numerals are Newsprint here (no accent-1). */
+  .tone-forest {
+    --tone-bg: var(--color-forest);
+    --tone-text: var(--color-newsprint);
+    --tone-muted: var(--color-newsprint-muted);
+    --tone-eyebrow: var(--color-fern);
+    --tone-link: var(--color-fern);
+    --tone-link-hover: var(--color-break-on-dark); /* 2.9:1, hover-only exception */
+    --tone-focus: var(--color-fern);
+    --tone-rule: var(--color-fern); /* dividers on dark grounds are Fern */
+    --tone-hairline: var(--color-hairline-dark);
+    --tone-highlight: var(--color-break-on-dark);
+    --tone-btn-bg: var(--color-newsprint);
+    --tone-btn-text: var(--color-forest);
+    --tone-btn-hover-bg: var(--color-sage);
+    --tone-btn-line: var(--color-newsprint);
+    --tone-numeral: var(--color-newsprint); /* accent-1 is not used on Forest; revisit if accents change */
+    --tone-price: var(--color-price-on-dark);
+    --tone-body: var(--color-newsprint-muted);
+    --tone-logo: var(--color-logo-on-dark);
+    --tone-logo-text: var(--color-logo-on-dark);
+    --tone-card-rule: var(--color-fern);
+    --tone-card-border: 1px solid var(--color-hairline-dark);
+    --tone-card-shadow: none;
+    --tone-card-shadow-hover: none;
+  }
+
+  /* Sage boxes (quote cards, chips): forest text keeps AA contrast. */
+  .tone-sage {
+    --tone-bg: var(--color-sage);
+    --tone-text: var(--color-forest);
+    --tone-muted: var(--color-forest);
+    --tone-eyebrow: var(--color-forest);
+    --tone-link: var(--color-forest);
+    --tone-link-hover: var(--color-break-on-light);
+    --tone-focus: var(--color-forest);
+    --tone-rule: var(--color-forest);
+    --tone-hairline: var(--color-hairline);
+    --tone-highlight: var(--color-break-on-light);
+    --tone-btn-bg: var(--color-forest);
+    --tone-btn-text: var(--color-newsprint);
+    --tone-btn-hover-bg: var(--color-carbon);
+    --tone-btn-line: var(--color-forest);
+    --tone-numeral: var(--color-forest);
+    --tone-price: var(--color-forest);
+    --tone-body: var(--tone-text);
+  }
+
+  /* Sage callouts: sage-25 box with Forest text. */
+  .tone-callout {
+    --tone-bg: var(--color-sage-25);
+    --tone-text: var(--color-forest);
+    --tone-muted: var(--color-forest);
+    --tone-body: var(--color-forest);
+    --tone-eyebrow: var(--color-forest);
+    --tone-link: var(--color-forest);
+    --tone-link-hover: var(--color-break-on-light);
+    --tone-focus: var(--color-forest);
+    --tone-rule: var(--color-canopy);
+    --tone-hairline: var(--color-hairline);
+    --tone-numeral: var(--color-forest);
+    --tone-price: var(--color-forest);
+  }
+
+  .tone-newsprint,
+  .tone-carbon,
+  .tone-forest,
+  .tone-sage,
+  .tone-callout {
+    background-color: var(--tone-bg);
+    color: var(--tone-text);
+  }
 }
 
-/* Focus states for accessibility */
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-  outline: 2px solid var(--color-forest);
-  outline-offset: 2px;
+/*
+ * ─── Type scale ───────────────────────────────────────────────────────────
+ * In @layer components so a colour utility (text-*) can still override.
+ * Bebas Neue (font-wordmark) is for the JUNCTION_ wordmark and numerals
+ * only (stats, index numerals, prices and durations).
+ */
+@layer components {
+  /* One line of display type (font size × line height), for heroes whose
+     visual starts below the headline's long first lines. */
+  :root {
+    --hero-line: calc(clamp(48px, 6vw, 92px) * 0.94);
+  }
+
+  .type-display {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(48px, 6vw, 92px);
+    line-height: 0.94;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+
+  .type-h2 {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(34px, 3.8vw, 56px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+  }
+
+  .type-h3 {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(24px, 2vw, 30px);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+  }
+
+  .type-h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+  }
+
+  .type-lead {
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: clamp(18px, 1.5vw, 21px);
+    line-height: 1.5;
+    max-width: 34ch;
+    color: var(--tone-body);
+  }
+
+  .type-body {
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.5;
+    max-width: var(--container-body);
+    color: var(--tone-body);
+  }
+
+  .type-small {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--tone-muted);
+  }
+
+  .type-eyebrow {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 1.4;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--tone-eyebrow);
+  }
+
+  .type-quote {
+    font-family: var(--font-quote);
+    font-style: italic;
+    font-weight: 900;
+    font-size: clamp(24px, 2.6vw, 36px);
+    line-height: 1.15;
+  }
+
+  .type-button {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.2;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  /* ─── Numerals: Bebas Neue, gold (accent-1 family) ─── */
+  .type-stat {
+    font-family: var(--font-wordmark);
+    font-weight: 400;
+    font-size: var(--stat-max, clamp(96px, 13vw, 200px));
+    line-height: 0.85;
+    letter-spacing: 0;
+    color: var(--tone-numeral);
+  }
+
+  /* <Stat> text values: as large as --stat-max, never wider than the box
+     around the number (a size container). --stat-em is the value's width
+     in em. */
+  .stat {
+    --stat-max: clamp(96px, 13vw, 200px);
+  }
+
+  .stat-box {
+    container-type: inline-size;
+  }
+
+  .stat-fit {
+    font-size: min(var(--stat-max), 100cqw / var(--stat-em));
+  }
+
+  /* Index numerals (01, 02… in lists and cards). */
+  .type-numeral {
+    font-family: var(--font-wordmark);
+    font-weight: 400;
+    font-size: clamp(40px, 3.4vw, 48px);
+    line-height: 0.9;
+    letter-spacing: 0.01em;
+    color: var(--tone-numeral);
+  }
+
+  /* Prices and durations ("$2,500 · 90 days", "30 days"). */
+  .type-price {
+    font-family: var(--font-wordmark);
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    color: var(--tone-price);
+  }
+
+  .type-wordmark {
+    font-family: var(--font-wordmark);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    line-height: 1;
+  }
+
+  /* Muted copy in the current tone. */
+  .text-muted {
+    color: var(--tone-muted);
+  }
+
+  /* ─── Links and buttons ─── */
+  .link {
+    color: var(--tone-link);
+    text-decoration-line: underline;
+    text-decoration-color: currentColor;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 0.22em;
+  }
+
+  .link:hover {
+    color: var(--tone-link-hover);
+  }
+
+  /* Plain (non-underlined) links such as nav and footer items. */
+  .link-plain {
+    color: inherit;
+  }
+
+  .link-plain:hover {
+    color: var(--tone-link-hover);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 48px;
+    padding: 10px 22px;
+    border-radius: var(--radius-control);
+    border: 1.5px solid transparent;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.2;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  /* Compact button for the nav CTA. */
+  .btn-sm {
+    min-height: 44px;
+    padding: 8px 18px;
+  }
+
+  .btn-primary {
+    background-color: var(--tone-btn-bg);
+    border-color: var(--tone-btn-bg);
+    color: var(--tone-btn-text);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--tone-btn-hover-bg);
+    border-color: var(--tone-btn-hover-bg);
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    border-color: var(--tone-btn-line);
+    color: var(--tone-text);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--tone-btn-line);
+    color: var(--tone-bg);
+  }
+
+  .btn:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  /* ─── Form fields ─── */
+  .field {
+    display: block;
+    width: 100%;
+    min-height: 48px;
+    padding: 10px 16px;
+    border-radius: var(--radius-control);
+    border: 1.5px solid var(--color-flint);
+    background-color: var(--color-newsprint);
+    color: var(--color-carbon);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.4;
+    transition-property: border-color, box-shadow;
+    transition-duration: 0.15s;
+  }
+
+  .field::placeholder {
+    color: var(--color-flint);
+  }
+
+  .field:focus-visible {
+    outline: none;
+    border-color: var(--color-canopy-text);
+    box-shadow: 0 0 0 3px var(--tone-focus);
+  }
+
+  textarea.field {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  /* ─── Surfaces ─── */
+
+  /*
+   * Default card: same colour as its ground, lifted by a soft shadow and a
+   * 3px Forest top rule (no hairline). On Carbon/Forest grounds the shadow
+   * can't show, so it gets a hairline-dark border and a Fern top rule.
+   */
+  .card {
+    border-radius: var(--radius-card);
+    background-color: var(--tone-bg);
+    border: var(--tone-card-border);
+    border-top: 3px solid var(--tone-card-rule);
+    box-shadow: var(--tone-card-shadow);
+    transition-property: border-color, box-shadow;
+    transition-duration: 0.15s;
+  }
+
+  /*
+   * Clickable list rows (articles, programs): on hover or keyboard focus the
+   * whole row gets the newsprint-hover fill (radius 10) and its .row-title
+   * turns break-on-light. The negative inline margin gives the highlight
+   * breathing room while the row's text stays aligned with the page.
+   */
+  .row-link {
+    display: block;
+    border-radius: var(--radius-control);
+    margin-inline: -16px;
+    padding-inline: 16px;
+    transition-property: background-color;
+    transition-duration: 0.15s;
+  }
+
+  .row-link:hover,
+  .row-link:focus-visible {
+    background-color: var(--color-newsprint-hover);
+  }
+
+  .row-link .row-title {
+    transition-property: color;
+    transition-duration: 0.15s;
+  }
+
+  .row-link:hover .row-title,
+  .row-link:focus-visible .row-title {
+    color: var(--color-break-on-light);
+  }
+
+  /*
+   * Data table: Carbon header with Newsprint eyebrow labels, Sage-25 body
+   * rows with ink-soft cells and a Carbon 500 row label. Wrap it in
+   * .data-table-frame for the 14px radius (and horizontal scroll on phones).
+   */
+  .data-table-frame {
+    border-radius: var(--radius-card);
+    overflow-x: auto;
+  }
+
+  .data-table {
+    width: 100%;
+    min-width: 560px;
+    border-collapse: collapse;
+    text-align: left;
+  }
+
+  .data-table thead th {
+    background-color: var(--color-carbon);
+    color: var(--color-newsprint);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 1.4;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 16px 20px;
+    vertical-align: bottom;
+  }
+
+  .data-table tbody th,
+  .data-table tbody td {
+    background-color: var(--color-sage-25);
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.5;
+    padding: 18px 20px;
+    vertical-align: top;
+    border-top: 1px solid var(--color-hairline);
+  }
+
+  .data-table tbody td {
+    color: var(--color-ink-soft);
+    font-weight: 300;
+  }
+
+  .data-table tbody th {
+    color: var(--color-carbon);
+    font-weight: 500;
+  }
+
+  /* Pink means clickable: the whole card is the link and gets a 2px
+     break outline (offset 4px) on hover and keyboard focus. */
+  .card-link {
+    outline: 2px solid transparent;
+    outline-offset: 4px;
+    transition-property: outline-color, border-color, box-shadow;
+    transition-duration: 0.15s;
+  }
+
+  .card-link:hover,
+  .card-link:focus-visible {
+    outline: 2px solid var(--color-break);
+    outline-offset: 4px;
+  }
+  .card-pad {
+    padding: var(--spacing-card-narrow);
+  }
+
+  @media (min-width: 640px) {
+    .card-pad {
+      padding: var(--spacing-card);
+    }
+  }
+
+  /* Compact padding for small cards (20px at every width). */
+  .card-pad-sm {
+    padding: var(--spacing-card-sm);
+  }
+
+  /*
+   * ─── Logo wall ───
+   * Logos are drawn through a CSS mask in one colour (the tone's logo
+   * colour). They sit in a fixed-height slot (36px, 48px from 768px) and
+   * --opt scales each by its aspect ratio so wide and square marks weigh
+   * the same. Hovering the wall dims every logo but the one under the
+   * cursor (opacity only, 200ms).
+   */
+  .logo-wall {
+    --slot: 36px;
+    --logo-gap: 40px;
+    color: var(--tone-logo);
+  }
+
+  @media (min-width: 768px) {
+    .logo-wall {
+      --slot: 48px;
+      --logo-gap: 56px;
+    }
+  }
+
+  .logo-wall-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .logo-wall-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--slot);
+    transition: opacity 0.2s ease-out;
+  }
+
+  @media (hover: hover) {
+    .logo-wall-list:hover .logo-wall-item {
+      opacity: 0.5;
+    }
+
+    .logo-wall-list .logo-wall-item:hover {
+      opacity: 1;
+    }
+  }
+
+  .logo-mark {
+    display: block;
+    flex: none;
+    height: calc(var(--slot) * var(--opt));
+    width: calc(var(--slot) * var(--opt) * var(--ratio));
+    background-color: currentColor;
+    -webkit-mask: var(--logo) center / contain no-repeat;
+    mask: var(--logo) center / contain no-repeat;
+  }
+
+  /* Text stand-in for a missing logo: a touch darker on Newsprint so it
+     passes AA as text (logo marks only need 3:1). */
+  .logo-text {
+    color: var(--tone-logo-text);
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.2;
+    text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    .logo-text {
+      font-size: 17px;
+    }
+  }
+
+  /* row: static, evenly spaced, wrapping on small screens */
+  .logo-wall-row .logo-wall-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 20px var(--logo-gap);
+  }
+
+  /* grid: 3 / 4 / 7 columns, generous gaps, no tiles */
+  .logo-wall-grid .logo-wall-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 40px 24px;
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .logo-wall-grid .logo-wall-list {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 48px 40px;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .logo-wall-grid .logo-wall-list {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+  }
+
+  /* marquee: one row, ~40s per seamless loop, edges fade out */
+  .logo-wall-marquee {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  }
+
+  .logo-wall-marquee:focus-visible {
+    outline-offset: 4px;
+  }
+
+  .logo-marquee-track {
+    display: flex;
+    width: max-content;
+    animation: logo-marquee 40s linear infinite;
+  }
+
+  .logo-wall-marquee:hover .logo-marquee-track,
+  .logo-wall-marquee:focus-within .logo-marquee-track {
+    animation-play-state: paused;
+  }
+
+  .logo-wall-marquee .logo-wall-list {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--logo-gap);
+    padding-inline-end: var(--logo-gap);
+  }
+
+  /* auto (static state) and its hidden measuring copy: one row, no wrap */
+  .logo-wall-single .logo-wall-list,
+  .logo-wall-auto-measure .logo-wall-list {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: var(--logo-gap);
+  }
+
+  .logo-wall-single .logo-text,
+  .logo-wall-auto-measure .logo-text {
+    white-space: nowrap;
+  }
+
+  .logo-wall-marquee .logo-text {
+    white-space: nowrap;
+  }
+
+  @keyframes logo-marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .logo-wall-marquee {
+      -webkit-mask-image: none;
+      mask-image: none;
+    }
+
+    .logo-marquee-track {
+      width: auto;
+      animation: none !important;
+    }
+
+    .logo-wall-marquee .logo-wall-list {
+      flex: 1;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      row-gap: 20px;
+      padding-inline-end: 0;
+    }
+
+    .logo-wall-marquee .logo-wall-list[aria-hidden] {
+      display: none;
+    }
+  }
+
+  /*
+   * ─── Program orbit ───
+   * Front card: no transform, soft shadow, the only one with the pink
+   * outline. Side cards sit back (translateZ -160px), angle 14° inward and
+   * are darkened by a 72% Carbon overlay. All others hide behind the front.
+   */
+  .orbit-stage {
+    perspective: 1800px;
+  }
+
+  .orbit-card {
+    z-index: 1;
+    opacity: 0;
+    transition-property: transform, opacity, box-shadow, outline-color;
+    transition-duration: 700ms;
+    transition-timing-function: var(--ease-orbit);
+    backface-visibility: hidden;
+  }
+
+  .orbit-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: var(--color-carbon);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 700ms var(--ease-orbit);
+  }
+
+  .orbit-card[data-slot="front"] {
+    z-index: 3;
+    opacity: 1;
+    box-shadow: var(--shadow-orbit);
+  }
+
+  .orbit-card[data-slot="prev"],
+  .orbit-card[data-slot="next"] {
+    z-index: 2;
+    opacity: 1;
+    cursor: pointer;
+  }
+
+  .orbit-card[data-slot="prev"]::after,
+  .orbit-card[data-slot="next"]::after {
+    opacity: 0.72;
+  }
+
+  .orbit-card:not([data-slot="front"]):hover,
+  .orbit-card:not([data-slot="front"]):focus-visible {
+    outline-color: transparent;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .orbit-card,
+    .orbit-card::after {
+      transition: none !important;
+    }
+  }
+
+  /*
+   * Calculator sliders (Offload): native range inputs. Track sage-25 with
+   * a Canopy fill up to --fill, Newsprint thumb with a Canopy ring. While
+   * dragging ([data-active]) the fill and ring turn break-on-light.
+   */
+  .tb-range {
+    --tb: var(--color-canopy);
+    display: block;
+    width: 100%;
+    height: 24px;
+    margin: 0;
+    background: transparent;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .tb-range[data-active] {
+    --tb: var(--color-break-on-light);
+  }
+
+  .tb-range::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 999px;
+    background: linear-gradient(to right, var(--tb) var(--fill), var(--color-sage-25) var(--fill));
+  }
+
+  .tb-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    margin-top: -7px;
+    border-radius: 50%;
+    background: var(--color-newsprint);
+    box-shadow: 0 0 0 2px var(--tb), 0 1px 4px color-mix(in srgb, var(--color-carbon) 20%, transparent);
+  }
+
+  .tb-range::-moz-range-track {
+    height: 6px;
+    border-radius: 999px;
+    background: var(--color-sage-25);
+  }
+
+  .tb-range::-moz-range-progress {
+    height: 6px;
+    border-radius: 999px;
+    background: var(--tb);
+  }
+
+  .tb-range::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--color-newsprint);
+    box-shadow: 0 0 0 2px var(--tb), 0 1px 4px color-mix(in srgb, var(--color-carbon) 20%, transparent);
+  }
+
+  /* The exact-value field next to each calculator slider. */
+  .tb-number:focus-visible {
+    outline: none;
+    border-color: var(--color-canopy-text);
+    box-shadow: 0 0 0 3px var(--tone-focus);
+  }
+
+  .tb-range:focus-visible {
+    outline: 2px solid var(--tone-focus);
+    outline-offset: 4px;
+    border-radius: 999px;
+  }
+
+  /* Program sketcher: native option lists in Newsprint, and the 200ms text fade. */
+  .sketch-select option {
+    background-color: var(--color-newsprint);
+    color: var(--color-carbon);
+  }
+
+  .sketch-fade {
+    animation: sketch-fade 0.2s ease-out;
+  }
+
+  @keyframes sketch-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /*
+   * CourseShelf (Custom Training hero): the duplicated row drifts left by
+   * half its width in a 40s linear loop, so it repeats seamlessly. Static
+   * with reduced motion.
+   */
+  .course-shelf-track {
+    animation: course-shelf 40s linear infinite;
+  }
+
+  @keyframes course-shelf {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .course-shelf-track {
+      animation: none !important;
+    }
+  }
+
+  /*
+   * Offload "Thirty days": which layout shows. The pinned scene needs
+   * 768px+, a viewport at least 640px tall and motion allowed; otherwise
+   * the static calendar (768px+) or the list (under 768px, md:hidden).
+   */
+  .td-pinned,
+  .td-static {
+    display: none;
+  }
+
+  @media (min-width: 768px) and (min-height: 640px) and (prefers-reduced-motion: no-preference) {
+    .td-pinned {
+      display: block;
+    }
+  }
+
+  @media (min-width: 768px) and (max-height: 639px), (min-width: 768px) and (prefers-reduced-motion: reduce) {
+    .td-static {
+      display: block;
+    }
+  }
+
+  /*
+   * KitCarousel (Offload "What you leave with"): a scroll-snap track of
+   * slots that ALL have the same fixed size at all times, so the snap
+   * centre never moves (no layout animation). The spotlight is transform
+   * and opacity only: its artifact box scales up 1.15 from the bottom
+   * centre inside a zone that already reserves the scaled height; its
+   * label keeps its size and gains a 2px Canopy line. Side cards sit at
+   * 50% (an approved exception to the 75% rule). 400ms soft ease.
+   */
+  .kit-track {
+    --kit-w: min(320px, 78vw);
+    scrollbar-width: none;
+    padding-inline: calc(50% - var(--kit-w) / 2);
+  }
+
+  .kit-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .kit-card {
+    width: var(--kit-w);
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    opacity: 0.5;
+    transition: opacity 0.4s var(--ease-orbit);
+  }
+
+  .kit-card[data-active] {
+    opacity: 1;
+  }
+
+  /* Reserves the scaled height (220 × 1.15); the box sits at its bottom. */
+  .kit-zone {
+    position: relative;
+    height: 253px;
+  }
+
+  .kit-artifact {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 220px;
+    overflow: hidden;
+    transform-origin: 50% 100%;
+    transition: transform 0.4s var(--ease-orbit);
+  }
+
+  .kit-card[data-active] .kit-artifact {
+    transform: scale(1.15);
+  }
+
+  .kit-label {
+    border-top-color: transparent;
+    transition: border-color 0.4s var(--ease-orbit);
+  }
+
+  .kit-card[data-active] .kit-label {
+    border-top-color: var(--color-canopy);
+  }
+
+  /*
+   * Questions accordion (<Accordion>): the answer opens with a 250ms height
+   * animation (grid rows 0fr → 1fr). Collapsed answers are hidden from
+   * focus and assistive tech (visibility switches after the close).
+   */
+  .accordion-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition: grid-template-rows 0.25s ease-out, visibility 0s linear 0.25s;
+  }
+
+  .accordion-panel[data-open] {
+    grid-template-rows: 1fr;
+    visibility: visible;
+    transition: grid-template-rows 0.25s ease-out, visibility 0s linear 0s;
+  }
+
+  .accordion-trigger:hover .accordion-question {
+    color: var(--tone-link-hover);
+  }
+
+  /*
+   * Rows that sit back at 75% and come forward on hover or keyboard focus
+   * (200ms). Pointer devices only: on touch (hover: none) every row stays
+   * at full opacity.
+   */
+  @media (hover: hover) {
+    .dim-row {
+      opacity: 0.75;
+      transition: opacity 0.2s ease-out;
+    }
+
+    .dim-row:hover,
+    .dim-row:focus-visible,
+    .dim-row:focus-within {
+      opacity: 1;
+    }
+  }
+
+  /* Edge fades (mask): content fades out toward the named edge. */
+  .fade-out-left {
+    -webkit-mask-image: linear-gradient(to left, #000 45%, transparent);
+    mask-image: linear-gradient(to left, #000 45%, transparent);
+  }
+
+  .fade-out-right {
+    -webkit-mask-image: linear-gradient(to right, #000 45%, transparent);
+    mask-image: linear-gradient(to right, #000 45%, transparent);
+  }
+
+  .fade-out-bottom {
+    -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent);
+    mask-image: linear-gradient(to bottom, #000 72%, transparent);
+  }
+
+  .sr-only-focusable:not(:focus) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
 }
 
-/* Remove default outline and use custom */
-*:focus {
-  outline: none;
+/*
+ * ─── Dashboard preview (src/components/DashboardPreview) ─────────────────
+ * A port of the approved product prototype
+ * (design/redesign/accelerator-dashboard-prototype-v3.html). It's the
+ * product's own UI, drawn at its design size (1280×760) and scaled to fit,
+ * so its type sizes are the product's, not the site scale. Colours, fonts
+ * and radii come from the site tokens. Hovers are the product's own (never
+ * the site's pink link hover).
+ */
+@layer components {
+  .dp-app {
+    width: 1280px;
+    height: 760px;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 230px minmax(0, 1fr);
+    background: var(--color-newsprint);
+    box-shadow: var(--shadow-preview);
+    color: var(--color-carbon);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    text-align: left;
+  }
+
+  .dp-aside {
+    background: var(--color-newsprint-hover);
+    padding: 20px 14px;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+  }
+
+  .dp-tracker {
+    margin: 0 2px 8px;
+    padding: 14px;
+    border-radius: var(--radius-card);
+    background: var(--color-newsprint);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .dp-grp {
+    margin: 16px 0 4px 10px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-flint);
+  }
+
+  .dp-tab {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    padding: 8px 10px;
+    border: 0;
+    border-radius: var(--radius-control);
+    background: transparent;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--color-ink-soft);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .dp-tab:hover {
+    color: var(--color-carbon);
+  }
+
+  .dp-tab[aria-selected="true"] {
+    font-weight: 500;
+    color: var(--color-carbon);
+  }
+
+  .dp-tab:focus-visible {
+    outline: 2px solid var(--color-canopy);
+    outline-offset: 2px;
+  }
+
+  .dp-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--color-canopy);
+    flex-shrink: 0;
+  }
+
+  .dp-badge {
+    margin-left: auto;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: var(--radius-control);
+    background: var(--color-newsprint);
+    color: var(--color-flint);
+  }
+
+  .dp-side-foot {
+    margin-top: auto;
+    padding: 14px 10px 0;
+    border-top: 1px solid var(--color-hairline);
+    font-size: 13px;
+    color: var(--color-flint);
+  }
+
+  .dp-main {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .dp-scroll {
+    padding: 28px;
+    overflow: auto;
+    flex: 1;
+  }
+
+  .dp-scroll:focus-visible {
+    outline: 2px solid var(--color-canopy);
+    outline-offset: -2px;
+  }
+
+  .dp-view {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    animation: dp-fade 0.25s ease;
+  }
+
+  .dp-meta {
+    margin: 0;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-flint);
+  }
+
+  .dp-h1,
+  .dp-h2,
+  .dp-h3,
+  .dp-h4 {
+    margin: 0;
+    font-family: var(--font-display);
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+  }
+
+  .dp-h1 {
+    font-weight: 900;
+    font-size: 30px;
+    letter-spacing: -0.04em;
+  }
+
+  .dp-h2 {
+    font-weight: 900;
+    font-size: 21px;
+  }
+
+  .dp-h3 {
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: -0.015em;
+  }
+
+  .dp-h4 {
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+  }
+
+  .dp-p {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--color-ink-soft);
+  }
+
+  .dp-card {
+    background: var(--color-newsprint);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-card);
+    padding: 18px 20px;
+  }
+
+  .dp-dark {
+    background: var(--color-carbon);
+    color: var(--color-newsprint);
+    border-radius: var(--radius-card);
+    padding: 20px 22px;
+  }
+
+  .dp-dark .dp-p {
+    color: var(--color-newsprint-muted);
+  }
+
+  .dp-dark .dp-meta {
+    color: var(--color-fern);
+  }
+
+  .dp-num {
+    font-family: var(--font-wordmark);
+    font-weight: 400;
+    line-height: 0.9;
+  }
+
+  .dp-small {
+    font-size: 12px;
+    color: var(--color-flint);
+  }
+
+  .dp-pill {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    padding: 0 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .dp-bar {
+    height: 5px;
+    border-radius: 3px;
+    background: var(--color-sage-25);
+    overflow: hidden;
+  }
+
+  .dp-bar > i {
+    display: block;
+    height: 100%;
+    background: var(--color-canopy);
+    border-radius: 3px;
+  }
+
+  .dp-dark .dp-bar {
+    background: var(--color-hairline-dark);
+  }
+
+  .dp-dark .dp-bar > i {
+    background: var(--color-fern);
+  }
+
+  .dp-chk {
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    border: 1.5px solid color-mix(in srgb, var(--color-carbon) 30%, transparent);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dp-chk[data-on] {
+    background: var(--color-sage);
+    border-color: var(--color-sage);
+  }
+
+  .dp-chk[data-on]::after {
+    content: "";
+    width: 8px;
+    height: 4px;
+    border-left: 2px solid var(--color-forest);
+    border-bottom: 2px solid var(--color-forest);
+    transform: rotate(-45deg) translate(1px, -1px);
+  }
+
+  .dp-dark .dp-chk {
+    border-color: color-mix(in srgb, var(--color-newsprint) 40%, transparent);
+  }
+
+  .dp-task {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: var(--radius-control);
+    font-size: 13.5px;
+    color: var(--color-ink-soft);
+  }
+
+  .dp-task[data-state="open"] {
+    border: 1px solid var(--color-hairline);
+    background: var(--color-newsprint);
+  }
+
+  .dp-task[data-state="done"] {
+    opacity: 0.45;
+  }
+
+  .dp-wk {
+    width: 30px;
+    height: 30px;
+    border-radius: var(--radius-control);
+    background: var(--color-carbon);
+    color: var(--color-newsprint);
+    font-family: var(--font-wordmark);
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .dp-grade {
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-control);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-wordmark);
+    font-size: 18px;
+    color: var(--color-newsprint);
+    flex-shrink: 0;
+  }
+
+  .dp-ghost {
+    position: absolute;
+    right: 16px;
+    top: 6px;
+    font-family: var(--font-wordmark);
+    font-size: 72px;
+    line-height: 1;
+    color: color-mix(in srgb, var(--color-carbon) 7%, transparent);
+  }
+
+  .dp-ttab {
+    cursor: pointer;
+    padding: 10px 16px;
+    border: 0;
+    border-radius: var(--radius-control) var(--radius-control) 0 0;
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: color-mix(in srgb, var(--color-newsprint) 75%, transparent);
+    background: color-mix(in srgb, var(--color-newsprint) 8%, transparent);
+  }
+
+  .dp-ttab[aria-selected="true"] {
+    background: var(--color-newsprint);
+    color: var(--color-forest);
+  }
+
+  .dp-ttab:focus-visible {
+    outline: 2px solid var(--color-fern);
+    outline-offset: 2px;
+  }
+
+  .dp-tile {
+    background: var(--color-newsprint-hover);
+    border-radius: var(--radius-control);
+    padding: 12px 14px;
+  }
 }
 
-*:focus-visible {
-  outline: 2px solid var(--color-forest);
-  outline-offset: 2px;
+@keyframes dp-fade {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-/* Smooth transitions for interactive elements */
-a,
-button {
-  transition: all 0.15s ease-out;
+@media (prefers-reduced-motion: reduce) {
+  .dp-view {
+    animation: none;
+  }
 }
 
-/* Button active state - subtle press effect */
-button:active:not(:disabled),
-a.text-button:active {
-  transform: translateY(1px);
-}
-
-/* Input focus enhancement */
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: var(--color-forest) !important;
-  box-shadow: 0 0 0 3px rgba(26, 77, 46, 0.12);
-}
-
-/* Placeholder styling */
-::placeholder {
-  color: rgba(28, 28, 26, 0.45);
-}
-
-/* Selection styling */
-::selection {
-  background: var(--color-sage);
-  color: var(--color-carbon);
-}
-
-/* Responsive clamp utilities */
-.text-h1 {
-  font-family: var(--font-epilogue), sans-serif;
-  font-weight: 900;
-  font-size: clamp(48px, 7.4vw, 118px);
-  line-height: 0.92;
-  letter-spacing: -0.035em;
-}
-
-.text-h2 {
-  font-family: var(--font-epilogue), sans-serif;
-  font-weight: 900;
-  font-size: clamp(36px, 4.6vw, 64px);
-  line-height: 0.96;
-  letter-spacing: -0.03em;
-}
-
-.text-h3 {
-  font-family: var(--font-epilogue), sans-serif;
-  font-weight: 900;
-  font-size: clamp(24px, 2.6vw, 40px);
-  line-height: 1.04;
-  letter-spacing: -0.02em;
-}
-
-.text-body {
-  font-size: clamp(17px, 1.5vw, 20px);
-  font-weight: 300;
-  line-height: 1.6;
-}
-
-.text-eyebrow {
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
-
-.text-button {
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-/* Section padding */
-.section-padding {
-  padding: clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px);
-}
-
-.section-padding-cta {
-  padding: clamp(80px, 10vw, 140px) clamp(20px, 4vw, 48px);
-}
-
-.side-padding {
-  padding-left: clamp(20px, 4vw, 48px);
-  padding-right: clamp(20px, 4vw, 48px);
-}
-
-/* Content container */
-.content-container {
-  max-width: 1320px;
-  margin: 0 auto;
-}
-
-/* Two column grid */
-.two-col-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }

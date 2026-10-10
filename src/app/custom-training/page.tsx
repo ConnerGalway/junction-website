@@ -1,23 +1,31 @@
-import Link from "next/link";
-import { Header, Footer, Placeholder } from "@/components";
+import fs from "node:fs";
+import path from "node:path";
+import type { Metadata } from "next";
+import {
+  Button,
+  Container,
+  Eyebrow,
+  Placeholder,
+  QuoteCard,
+  Section,
+  Stat,
+  Tabs,
+  TextLink,
+  LogoWall,
+} from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
+import { clientLogos } from "@/lib/logos";
+import { COURSES } from "@/lib/customCourses";
+import { CourseShelf } from "./CourseShelf";
+import { FormatsAccordion, type Format } from "./FormatsAccordion";
+import { ProgramSketcher } from "./ProgramSketcher";
+import { WhoPanel } from "./WhoPanel";
 
-const clients = [
-  "Destination BC",
-  "Travel Alberta",
-  "Travel Yukon",
-  "Travel Maine",
-  "Visit Mississippi",
-  "Ontario Destination Association",
-  "Southwest Ontario Tourism Corporation",
-  "Northern BC Tourism",
-  "4VI",
-  "Kootenay Rockies Tourism",
-  "Tourism Red Deer",
-  "Tourism Golden",
-  "South Canadian Rockies Tourism",
-  "Town of Okotoks",
-];
+export const metadata: Metadata = {
+  title: "Custom Training",
+  description:
+    "Custom courses for the operators in your region, and programs for the leaders in your organization. We design it, deliver it, and report on what changed.",
+};
 
 const dmoFeatures = [
   "Courses on JunctionU, branded for your region",
@@ -33,547 +41,198 @@ const leadershipFeatures = [
   "Measured against outcomes you set at the start",
 ];
 
-const formats = [
+const formats: Format[] = [
   {
-    num: "01",
-    title: "Live workshop",
+    id: "live",
+    name: "Live workshop",
+    duration: "90 min – 1 day",
     description: "Ninety minutes to a full day, in person or virtual.",
+    image: "/images/custom-training/formats-live-workshop.jpg",
   },
   {
-    num: "02",
-    title: "Webinar series",
+    id: "webinar",
+    name: "Webinar series",
+    duration: "Several weeks",
     description: "Short sessions over several weeks, each with homework.",
+    image: "/images/custom-training/formats-webinar-series.jpg",
   },
   {
-    num: "03",
-    title: "Custom course",
+    id: "course",
+    name: "Custom course",
+    duration: "Self-paced",
     description: "Self-paced on JunctionU, with certificates and reporting.",
   },
   {
-    num: "04",
-    title: "Leadership program",
+    id: "leadership",
+    name: "Leadership program",
+    duration: "Multi-session",
     description: "Multi-session, built on your strategy and real decisions.",
+    image: "/images/custom-training/formats-leadership-program.jpg",
   },
 ];
 
+/** The custom course loop plays only if this file has been added (checked at build). */
+const COURSE_VIDEO = "/images/custom-training/formats-custom-course.mp4";
+const courseVideo = fs.existsSync(path.join(process.cwd(), "public", COURSE_VIDEO)) ? COURSE_VIDEO : undefined;
+
 export default function CustomTrainingPage() {
   return (
-    <div className="min-h-screen bg-newsprint text-carbon font-dm-sans">
-      <Header />
-
+    <>
       {/* Hero */}
-      <section
-        style={{
-          padding:
-            "clamp(48px, 7vw, 96px) clamp(20px, 4vw, 48px) clamp(48px, 6vw, 80px)",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(min(100%, 440px), 1fr))",
-            gap: "24px 72px",
-            alignItems: "end",
-          }}
-        >
+      <Section tone="forest" spacing="tight" className="overflow-hidden">
+        <Container className="grid items-end gap-x-[72px] gap-y-8 lg:grid-cols-2">
+          {/* Three lines at most from 1280px (explicit breaks, desktop only) */}
+          <h1 className="type-display m-0">
+            <span className="xl:whitespace-nowrap">Training built</span>
+            <br className="hidden xl:inline" /> <span className="xl:whitespace-nowrap">around your</span>
+            <br className="hidden xl:inline" /> <span className="xl:whitespace-nowrap">people.</span>
+          </h1>
           <div>
-            <div className="text-eyebrow text-accent-shade mb-5">
-              Custom training
-            </div>
-            <h1
-              className="font-epilogue m-0"
-              style={{
-                fontWeight: 900,
-                fontSize: "clamp(48px, 7vw, 108px)",
-                lineHeight: 0.92,
-                letterSpacing: "-0.035em",
-                textWrap: "balance",
-              }}
-            >
-              Training built around your people.
-            </h1>
-          </div>
-          <div>
-            <p
-              style={{
-                fontSize: "clamp(17px, 1.5vw, 20px)",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(28, 28, 26, 0.76)",
-                margin: "0 0 32px",
-                maxWidth: "46ch",
-              }}
-            >
+            <p className="type-lead m-0 mb-8 text-newsprint/88">
               Custom courses for the operators in your region, and programs for
               the leaders in your organization. We design it, deliver it, and
               report on what changed.
             </p>
-            <div className="flex gap-6 items-center flex-wrap">
-              <Link
-                href="/contact?type=training"
-                className="text-button bg-forest text-newsprint rounded-[3px] transition-colors hover:bg-canopy"
-                style={{ padding: "17px 28px" }}
-              >
-                Scope a program
-              </Link>
-              <a
-                href={CALENDLY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-medium whitespace-nowrap"
-                style={{
-                  fontSize: "15px",
-                  borderBottom: "2px solid #C4963A",
-                  paddingBottom: "3px",
-                }}
-              >
+            <div className="flex flex-wrap items-center gap-6">
+              <Button href="/contact?type=training">Scope a program</Button>
+              <TextLink href={CALENDLY_URL} className="whitespace-nowrap">
                 Or book a 20-min call →
-              </a>
+              </TextLink>
             </div>
           </div>
-        </div>
-      </section>
+        </Container>
+        {/* Full-bleed: the row drifts left past both screen edges */}
+        <CourseShelf className="-mx-gutter mt-[72px]" />
+      </Section>
 
-      {/* Two Audiences */}
-      <section
-        style={{ padding: "0 clamp(20px, 4vw, 48px) clamp(64px, 8vw, 112px)" }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(min(100%, 480px), 1fr))",
-            gap: "20px",
-          }}
-        >
-          {/* DMO Card */}
-          <div
-            className="bg-forest text-newsprint rounded flex flex-col gap-4"
-            style={{ padding: "clamp(28px, 3.5vw, 48px)" }}
-          >
-            <div
-              className="text-fern"
-              style={{
-                fontSize: "12px",
-                fontWeight: 500,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-              }}
-            >
-              For DMOs and tourism organizations
-            </div>
-            <h2
-              className="font-epilogue m-0"
-              style={{
-                fontWeight: 900,
-                fontSize: "clamp(30px, 3.4vw, 46px)",
-                lineHeight: 1,
-                letterSpacing: "-0.025em",
-              }}
-            >
-              Custom courses for your operators.
-            </h2>
-            <p
-              style={{
-                fontSize: "17px",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(244, 240, 232, 0.84)",
-                margin: 0,
-              }}
-            >
-              Give every business in your region training that fits their week.
-              Your board gets a report showing the capacity you built.
-            </p>
-            <div
-              className="flex flex-col"
-              style={{ borderTop: "1px solid rgba(244, 240, 232, 0.2)" }}
-            >
-              {dmoFeatures.map((f, i) => (
-                <div
-                  key={i}
-                  style={{
-                    padding: "14px 0",
-                    borderBottom:
-                      i < dmoFeatures.length - 1
-                        ? "1px solid rgba(244, 240, 232, 0.12)"
-                        : "none",
-                    fontSize: "16px",
-                  }}
-                >
-                  {f}
-                </div>
-              ))}
-            </div>
-            <Link
-              href="/contact?type=training"
-              className="text-fern font-medium mt-auto"
-              style={{ fontSize: "15px" }}
-            >
-              Scope a regional program →
-            </Link>
-          </div>
+      {/* Who it's for */}
+      <Section>
+        <Container>
+          <h2 className="type-h2 m-0 mb-9">Who it&apos;s for.</h2>
+          <Tabs
+            label="Who it's for"
+            items={[
+              {
+                id: "dmos",
+                label: "For DMOs and tourism organizations",
+                panel: (
+                  <WhoPanel
+                    tone="carbon"
+                    title="Custom courses for your operators."
+                    line="Your operators learn from courses built for your region, and you see who is progressing."
+                    features={dmoFeatures}
+                    button={{ label: "Scope a course program", href: "/contact?type=training" }}
+                    photo={{ src: "/images/custom-training/who-dmos.jpg", alt: "A Junction workshop for tourism operators" }}
+                    cardMeta="Custom courses · on JunctionU"
+                    cardRows={COURSES.map((title) => ({ title, line: "[ x ] operators enrolled" }))}
+                  />
+                ),
+              },
+              {
+                id: "leadership",
+                label: "For leadership teams",
+                panel: (
+                  <WhoPanel
+                    tone="forest"
+                    title="Leadership training on AI and marketing."
+                    line="Sessions built on your strategy and real decisions, with homework that ships between them."
+                    features={leadershipFeatures}
+                    button={{ label: "Scope a leadership program", href: "/contact?type=training" }}
+                    photo={{ src: "/images/custom-training/who-leadership.jpg", alt: "A Junction leadership session" }}
+                    cardMeta="Leadership program · 4 sessions"
+                    cardRows={[
+                      { title: "Where AI fits in your organization", line: "Homework: one use case per leader" },
+                      { title: "Your data, your decisions", line: "Homework: a shared dashboard" },
+                      { title: "Policy and guardrails", line: "Homework: a draft AI policy" },
+                    ]}
+                  />
+                ),
+              },
+            ]}
+          />
+        </Container>
+      </Section>
 
-          {/* Leadership Card */}
-          <div
-            className="bg-carbon text-newsprint rounded flex flex-col gap-4"
-            style={{ padding: "clamp(28px, 3.5vw, 48px)" }}
-          >
-            <div
-              className="text-accent"
-              style={{
-                fontSize: "12px",
-                fontWeight: 500,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-              }}
-            >
-              For organizations training their leaders
-            </div>
-            <h2
-              className="font-epilogue m-0"
-              style={{
-                fontWeight: 900,
-                fontSize: "clamp(30px, 3.4vw, 46px)",
-                lineHeight: 1,
-                letterSpacing: "-0.025em",
-              }}
-            >
-              Leadership training on AI and marketing.
-            </h2>
-            <p
-              style={{
-                fontSize: "17px",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(244, 240, 232, 0.84)",
-                margin: 0,
-              }}
-            >
-              High-quality sessions for senior teams who need to make good
-              decisions about AI and marketing, using your strategy and your real
-              work.
-            </p>
-            <div
-              className="flex flex-col"
-              style={{ borderTop: "1px solid rgba(244, 240, 232, 0.2)" }}
-            >
-              {leadershipFeatures.map((f, i) => (
-                <div
-                  key={i}
-                  style={{
-                    padding: "14px 0",
-                    borderBottom:
-                      i < leadershipFeatures.length - 1
-                        ? "1px solid rgba(244, 240, 232, 0.12)"
-                        : "none",
-                    fontSize: "16px",
-                  }}
-                >
-                  {f}
-                </div>
-              ))}
-            </div>
-            <Link
-              href="/contact?type=training"
-              className="text-accent font-medium mt-auto"
-              style={{ fontSize: "15px" }}
-            >
-              Scope a leadership program →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Clients */}
-      <section
-        style={{ padding: "0 clamp(20px, 4vw, 48px) clamp(64px, 8vw, 112px)" }}
-      >
-        <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
-          <div
-            className="flex items-baseline justify-between gap-4 flex-wrap"
-            style={{ marginBottom: "24px" }}
-          >
-            <h2
-              className="font-epilogue m-0"
-              style={{
-                fontWeight: 900,
-                fontSize: "clamp(30px, 3.4vw, 46px)",
-                lineHeight: 1,
-                letterSpacing: "-0.025em",
-              }}
-            >
-              Organizations we&apos;ve trained.
-            </h2>
-            <span style={{ fontSize: "14px", color: "rgba(28, 28, 26, 0.76)" }}>
-              Across Canada and the US
-            </span>
-          </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fill, minmax(min(100%, 240px), 1fr))",
-              borderTop: "2px solid #1C1C1A",
-              borderLeft: "1px solid rgba(28, 28, 26, 0.14)",
-            }}
-          >
-            {clients.map((c) => (
-              <div
-                key={c}
-                style={{
-                  padding: "22px 20px",
-                  borderRight: "1px solid rgba(28, 28, 26, 0.14)",
-                  borderBottom: "1px solid rgba(28, 28, 26, 0.14)",
-                  fontSize: "17px",
-                  fontWeight: 500,
-                }}
-              >
-                {c}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Proof */}
-      <section
-        className="bg-sage"
-        style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(min(100%, 400px), 1fr))",
-            gap: "40px 80px",
-            alignItems: "center",
-          }}
-        >
-          <div>
-            <div
-              className="text-forest"
-              style={{
-                fontSize: "12px",
-                fontWeight: 500,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                marginBottom: "14px",
-              }}
-            >
-              Town of Okotoks · webinar series
-            </div>
-            <div
-              className="font-bebas text-forest"
-              style={{
-                fontSize: "clamp(84px, 11vw, 168px)",
-                lineHeight: 0.85,
-              }}
-            >
-              $900,000+
-            </div>
-            <p
-              style={{
-                fontSize: "18px",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(28, 28, 26, 0.82)",
-                margin: "18px 0 0",
-                maxWidth: "44ch",
-              }}
-            >
-              In potential local spend identified for businesses ahead of 4,500
-              visitors. Then we turned it into a three-part series where every
-              action took under an hour.
-            </p>
-          </div>
-          <div className="flex flex-col gap-7">
-            <div
-              className="flex items-baseline gap-4"
-              style={{
-                borderBottom: "1px solid rgba(26, 77, 46, 0.25)",
-                paddingBottom: "22px",
-              }}
-            >
-              <span
-                className="font-bebas text-forest"
-                style={{ fontSize: "64px", lineHeight: 0.85 }}
-              >
-                300+
-              </span>
-              <span style={{ fontSize: "16px" }}>
-                businesses through Travel Yukon&apos;s program in four years, now led
-                by alumni
-              </span>
-            </div>
-            <blockquote
-              className="m-0"
-              style={{ borderLeft: "3px solid #1A4D2E", paddingLeft: "22px" }}
-            >
-              <p
-                className="font-fraunces italic text-forest"
-                style={{
-                  fontWeight: 900,
-                  fontSize: "clamp(22px, 2.4vw, 30px)",
-                  lineHeight: 1.2,
-                  margin: "0 0 12px",
-                }}
-              >
-                &quot;Functional, accessible, and personalized. Incredibly valuable
-                education for our tourism sector.&quot;
-              </p>
-              <cite
-                style={{
-                  fontStyle: "normal",
-                  fontSize: "14px",
-                  color: "rgba(28, 28, 26, 0.75)",
-                }}
-              >
-                Avery Bramadat, Travel Yukon
-              </cite>
-            </blockquote>
-            <Placeholder className="text-forest">
-              [ Leadership training testimonial ]
-            </Placeholder>
-          </div>
-        </div>
+      {/* Organizations we've trained */}
+      <section className="px-gutter py-8">
+        <Container className="flex flex-col gap-4 md:flex-row md:items-center md:gap-10">
+          <p className="m-0 shrink-0 text-[15px] font-medium text-flint">
+            Organizations we&apos;ve trained
+            <span className="block text-[13px] font-normal">Across Canada and the US</span>
+          </p>
+          <LogoWall
+            variant="auto"
+            logos={clientLogos}
+            label="Organizations we've trained"
+            className="min-w-0 flex-1"
+            marqueeClassName="[-webkit-mask-image:linear-gradient(to_right,transparent,black_10%,black_92%,transparent)] [mask-image:linear-gradient(to_right,transparent,black_10%,black_92%,transparent)]"
+          />
+        </Container>
       </section>
 
       {/* Formats */}
-      <section
-        style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
-          <div className="text-eyebrow text-accent-shade mb-4">Formats</div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit, minmax(min(100%, 240px), 1fr))",
-              borderTop: "2px solid #1C1C1A",
-            }}
-          >
-            {formats.map((f) => (
-              <div
-                key={f.num}
-                style={{
-                  padding: "24px 24px 24px 0",
-                  borderBottom: "1px solid rgba(28, 28, 26, 0.14)",
-                }}
-              >
-                <div
-                  className="font-bebas text-accent"
-                  style={{ fontSize: "26px" }}
-                >
-                  {f.num}
-                </div>
-                <div
-                  style={{
-                    fontSize: "19px",
-                    fontWeight: 500,
-                    margin: "6px 0",
-                  }}
-                >
-                  {f.title}
-                </div>
-                <div
-                  style={{
-                    fontSize: "15px",
-                    fontWeight: 300,
-                    lineHeight: 1.55,
-                    color: "rgba(28, 28, 26, 0.76)",
-                  }}
-                >
-                  {f.description}
-                </div>
-              </div>
-            ))}
+      <Section>
+        <Container>
+          <div className="mb-10 flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+            <h2 className="type-h2 m-0">Formats.</h2>
+            <TextLink href="/junctionu" className="whitespace-nowrap">
+              See how we teach first: watch free →
+            </TextLink>
           </div>
-          <div
-            className="rounded flex items-center justify-between gap-4 flex-wrap"
-            style={{
-              marginTop: "40px",
-              padding: "20px 24px",
-              border: "1.5px solid rgba(28, 28, 26, 0.2)",
-            }}
-          >
-            <span style={{ fontSize: "16px" }}>
-              <strong style={{ fontWeight: 500 }}>See how we teach first.</strong>{" "}
-              <span style={{ fontWeight: 300 }}>
-                Watch a free Tourism Talk or a sample lesson.
-              </span>
-            </span>
-            <Link
-              href="/junctionu"
-              className="font-medium whitespace-nowrap"
-              style={{
-                fontSize: "14px",
-                borderBottom: "2px solid #C4963A",
-                paddingBottom: "2px",
-              }}
-            >
-              Watch free →
-            </Link>
-          </div>
-        </div>
-      </section>
+          <FormatsAccordion formats={formats} videoSrc={courseVideo} />
+        </Container>
+      </Section>
 
-      {/* CTA */}
-      <section
-        id="start"
-        className="bg-forest text-newsprint"
-        style={{ padding: "clamp(80px, 10vw, 140px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
-          <h2
-            className="font-epilogue"
-            style={{
-              fontWeight: 900,
-              fontSize: "clamp(44px, 6.6vw, 104px)",
-              lineHeight: 0.92,
-              letterSpacing: "-0.035em",
-              margin: 0,
-              maxWidth: "15ch",
-            }}
-          >
+      {/* Proof */}
+      <Section flush="top">
+        <Container className="grid grid-cols-1 items-start gap-x-20 gap-y-12 lg:grid-cols-2">
+          <div>
+            <Eyebrow className="m-0">Results · Training programs</Eyebrow>
+            <div className="mt-8">
+              <p className="type-small m-0 mb-3">Town of Okotoks · webinar series</p>
+              <Stat value="$900,000+" maxSize="112px" />
+              <p className="type-body m-0 mt-5 max-w-[44ch]">
+                In potential local spend identified for businesses ahead of 4,500
+                visitors. Then we turned it into a three-part series where every
+                action took under an hour.
+              </p>
+            </div>
+            <Stat
+              className="mt-12"
+              value="300+"
+              maxSize="112px"
+              label={
+                <>
+                  businesses through Travel Yukon&apos;s program in four years, now
+                  led by alumni
+                </>
+              }
+            />
+          </div>
+          <div className="flex flex-col gap-6">
+            <QuoteCard
+              quote={
+                <>
+                  &quot;Functional, accessible, and personalized. Incredibly
+                  valuable education for our tourism sector.&quot;
+                </>
+              }
+              caption="Avery Bramadat, Travel Yukon"
+            />
+            <Placeholder>[ Leadership training testimonial ]</Placeholder>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Program sketcher */}
+      <Section id="start" tone="forest" className="scroll-mt-24">
+        <Container>
+          <h2 className="type-h2 m-0 mb-10 max-w-[22ch]">
             Tell us who needs training. We&apos;ll sketch the program.
           </h2>
-          <div
-            className="flex items-center gap-7 flex-wrap"
-            style={{ marginTop: "40px" }}
-          >
-            <Link
-              href="/contact?type=training"
-              className="text-button bg-newsprint text-forest rounded-[3px] transition-colors hover:bg-sage"
-              style={{ padding: "17px 28px" }}
-            >
-              Scope a program
-            </Link>
-            <a
-              href={CALENDLY_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium text-fern"
-              style={{
-                fontSize: "15px",
-                borderBottom: "2px solid #7FC99A",
-                paddingBottom: "3px",
-              }}
-            >
-              Or book a 20-min call →
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <Footer />
-    </div>
+          <ProgramSketcher />
+        </Container>
+      </Section>
+    </>
   );
 }

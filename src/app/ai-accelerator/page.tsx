@@ -1,11 +1,39 @@
-"use client";
-
-import { useState } from "react";
-import Link from "next/link";
-import { Header, Footer } from "@/components";
+import type { Metadata } from "next";
+import {
+  Accordion,
+  type AccordionItem,
+  Badge,
+  Button,
+  Chip,
+  Container,
+  Eyebrow,
+  Placeholder,
+  QuoteCard,
+  Section,
+  TextLink,
+  LogoWall,
+} from "@/components";
+import { OffloadPreview } from "@/components/OffloadPreview";
 import { CALENDLY_URL } from "@/lib/constants";
+import { CASE_INTRO, CASE_MEASURES, CASE_META } from "@/lib/buildingSupplyCase";
+import { teamLogos } from "@/lib/logos";
+import { CaseSwitcher } from "./CaseSwitcher";
+import {
+  BrainArtifact,
+  MainBuildArtifact,
+  PolicyArtifact,
+  RoadmapArtifact,
+  SecondBuildArtifact,
+} from "./KitArtifacts";
+import { KitCarousel, type KitItem } from "./KitCarousel";
+import { ThirtyDays, type Session } from "./ThirtyDays";
+import { TimeBackCalculator } from "./TimeBackCalculator";
 
-const teams = ["Twin Lions Contracting", "West Coast Homes", "SMR Plumbing & Heating"];
+export const metadata: Metadata = {
+  title: "Offload Program (AI Accelerator)",
+  description:
+    "A hands-on program for leadership teams. Four one-hour sessions on your real work. You leave with AI tools already running, and a team that knows how to build the next one.",
+};
 
 const deliverables = [
   {
@@ -40,69 +68,25 @@ const deliverables = [
   },
 ];
 
-const weeks = [
-  {
-    week: "Week 0",
-    title: "Setup",
-    description:
-      "Accounts, access, and baseline numbers so we can measure what changes.",
-  },
-  {
-    week: "Session 1",
-    title: "Foundations",
-    description:
-      "On site where possible. Safe setup, your AI policy, and the first quick wins.",
-  },
-  {
-    week: "Session 2",
-    title: "Business brain",
-    description: "Load what your company knows, so every answer sounds like you.",
-  },
-  {
-    week: "Session 3",
-    title: "Documents",
-    description: "The quotes, invoices and paperwork that get keyed in by hand.",
-  },
-  {
-    week: "Session 4",
-    title: "Build and refine",
-    description: "The main build goes live. Roadmap handed over.",
-  },
+const artifacts = [
+  <PolicyArtifact key="1" />,
+  <BrainArtifact key="2" />,
+  <MainBuildArtifact key="3" />,
+  <SecondBuildArtifact key="4" />,
+  <RoadmapArtifact key="5" />,
 ];
 
-const exampleTableData = [
-  {
-    area: "Collections",
-    before: "Terms were 30 days, but only 65% was collected inside 30.",
-    cost: "Cash was hard to plan, and the president got pulled into difficult accounts.",
-  },
-  {
-    area: "Quotes",
-    before:
-      "Material lists arrived handwritten, by text or by email, and codes were typed in by hand.",
-    cost: "Each quote took five minutes to a day.",
-  },
-  {
-    area: "Receiving",
-    before:
-      "PO, supplier invoice and packing slip matched by hand, then keyed in.",
-    cost: "The AP role spent its time on data entry.",
-  },
-  {
-    area: "Leadership",
-    before: "One person covering three senior roles.",
-    cost: "No time left for customers or growth.",
-  },
+const kitItems: KitItem[] = deliverables.map((d, i) => ({ ...d, artifact: artifacts[i] }));
+
+const sessions: Session[] = [
+  { day: 1, label: "Week 0", title: "Setup", line: "Accounts, access, baseline numbers." },
+  { day: 6, label: "Session 1", title: "Foundations", line: "Safe setup, AI policy, first wins." },
+  { day: 13, label: "Session 2", title: "Business brain", line: "Load what your company knows." },
+  { day: 20, label: "Session 3", title: "Documents", line: "The paperwork keyed in by hand." },
+  { day: 27, label: "Session 4", title: "Build and refine", line: "The main build goes live." },
 ];
 
-const metrics = [
-  { label: "30-day collection rate", value: "65%" },
-  { label: "Quote turnaround", value: "≤ 1 day" },
-  { label: "Leaders using AI daily", value: "1" },
-  { label: "Hours saved per leader, weekly", value: "0" },
-];
-
-const faqs = [
+const faqs: AccordionItem[] = [
   {
     q: "Do we need technical people?",
     a: "No. If your team uses email and spreadsheets, they can do this. We pick tools that fit the people in the room, and they do the building with us beside them.",
@@ -129,818 +113,182 @@ const faqs = [
   },
 ];
 
-function FAQAccordion() {
-  const [openIndex, setOpenIndex] = useState<number>(-1);
-
-  return (
-    <div style={{ borderTop: "2px solid #1C1C1A" }}>
-      {faqs.map((faq, i) => (
-        <div
-          key={i}
-          style={{ borderBottom: "1px solid rgba(28, 28, 26, 0.14)" }}
-        >
-          <button
-            onClick={() => setOpenIndex(openIndex === i ? -1 : i)}
-            className="w-full flex justify-between items-center gap-4 bg-transparent border-0 cursor-pointer text-left font-dm-sans text-carbon"
-            style={{ padding: "20px 0", fontSize: "18px", fontWeight: 500 }}
-          >
-            <span>{faq.q}</span>
-            <span
-              className="font-bebas text-accent"
-              style={{ fontSize: "26px", lineHeight: 1 }}
-            >
-              {openIndex === i ? "−" : "+"}
-            </span>
-          </button>
-          {openIndex === i && (
-            <p
-              style={{
-                fontSize: "16px",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(28, 28, 26, 0.78)",
-                margin: "0 0 22px",
-                maxWidth: "60ch",
-              }}
-            >
-              {faq.a}
-            </p>
-          )}
-        </div>
-      ))}
-    </div>
-  );
-}
-
 export default function AIAcceleratorPage() {
   return (
-    <div className="min-h-screen bg-newsprint text-carbon font-dm-sans">
-      <Header />
-
+    <>
       {/* Hero */}
-      <section
-        style={{
-          padding:
-            "clamp(48px, 7vw, 96px) clamp(20px, 4vw, 48px) clamp(48px, 6vw, 80px)",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(min(100%, 440px), 1fr))",
-            gap: "clamp(32px, 5vw, 72px)",
-            alignItems: "center",
-          }}
-        >
+      <Section spacing="tight" className="overflow-hidden">
+        <Container className="grid items-center gap-x-[clamp(32px,5vw,72px)] gap-y-14 lg:grid-cols-2 xl:items-start">
           <div>
-            <div
-              className="flex items-center gap-3 flex-wrap"
-              style={{ marginBottom: "22px" }}
-            >
-              <span className="text-eyebrow text-accent-shade">
-                AI Accelerator · 30 days · any industry
-              </span>
-              <span
-                className="bg-break text-white"
-                style={{
-                  fontSize: "11px",
-                  fontWeight: 500,
-                  letterSpacing: "0.1em",
-                  textTransform: "uppercase",
-                  padding: "4px 9px 3px",
-                  borderRadius: "2px",
-                }}
-              >
-                New
-              </span>
-            </div>
-            <h1
-              className="font-epilogue m-0"
-              style={{
-                fontWeight: 900,
-                fontSize: "clamp(46px, 6.6vw, 100px)",
-                lineHeight: 0.92,
-                letterSpacing: "-0.035em",
-                textWrap: "balance",
-              }}
-            >
-              We automate one of your bottlenecks in 30 days. Guaranteed.
+            <Badge variant="filled" className="mb-6">
+              New
+            </Badge>
+            {/* Three lines from 1280px (explicit breaks). The two long lines
+                run over the visual, which starts below the second line. */}
+            <h1 className="type-display m-0">
+              <span className="xl:whitespace-nowrap">We automate one of your</span>
+              <br className="hidden xl:inline" />{" "}
+              <span className="xl:whitespace-nowrap">bottlenecks in 30 days.</span>
+              <br className="hidden xl:inline" /> <span className="xl:whitespace-nowrap">Guaranteed.</span>
             </h1>
-            <p
-              style={{
-                fontSize: "clamp(17px, 1.5vw, 20px)",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(28, 28, 26, 0.76)",
-                maxWidth: "46ch",
-                margin: "28px 0 32px",
-              }}
-            >
-              A hands-on program for leadership teams. Four one-hour sessions on
-              your real work. You leave with AI tools already running, and a team
-              that knows how to build the next one.
+            <p className="type-lead mt-7 mb-8">
+              Your team learns AI by building with it on the jobs that eat their
+              week: quotes, collections, paperwork, admin.
             </p>
-            <div
-              className="flex items-baseline gap-3.5 flex-wrap"
-              style={{ marginBottom: "28px" }}
-            >
-              <span
-                className="font-bebas text-forest"
-                style={{ fontSize: "64px", lineHeight: 0.85 }}
-              >
-                $5,000
-              </span>
-              <span style={{ fontSize: "15px", color: "rgba(28, 28, 26, 0.7)" }}>
-                per team · on site or Zoom
-              </span>
+            <div className="flex flex-wrap items-baseline gap-x-5 gap-y-1">
+              <p className="type-price m-0 text-[56px]">$5,000</p>
+              <p className="type-price m-0 text-[28px]">30 days · any industry</p>
             </div>
-            <div className="flex gap-6 items-center flex-wrap">
-              <a
-                href={CALENDLY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-button bg-forest text-newsprint rounded-[3px] transition-colors hover:bg-canopy"
-                style={{ padding: "17px 28px" }}
-              >
-                Book a 20-min call
-              </a>
-              <a
-                href="#example"
-                className="font-medium whitespace-nowrap"
-                style={{
-                  fontSize: "15px",
-                  borderBottom: "2px solid #C4963A",
-                  paddingBottom: "3px",
-                }}
-              >
-                See a real program ↓
-              </a>
+            <p className="type-small mt-3 mb-8">Per team · on site or Zoom.</p>
+            <div className="flex flex-wrap items-center gap-6">
+              <Button href={CALENDLY_URL}>Book a 20-min call</Button>
+              <TextLink href="#case-study" className="whitespace-nowrap">
+                See a real build ↓
+              </TextLink>
             </div>
           </div>
 
-          {/* Dashboard Preview */}
-          <div
-            className="bg-carbon text-newsprint rounded flex flex-col gap-5"
-            style={{ padding: "clamp(24px, 3vw, 36px)" }}
-          >
-            <div className="flex justify-between items-center gap-3 flex-wrap">
-              <span
-                className="text-accent"
-                style={{
-                  fontSize: "12px",
-                  fontWeight: 500,
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                }}
-              >
-                Your program dashboard
-              </span>
-              <span
-                style={{ fontSize: "13px", color: "rgba(244, 240, 232, 0.78)" }}
-              >
-                3 of 4 sessions done
-              </span>
-            </div>
-            <div
-              style={{
-                height: "6px",
-                background: "rgba(244, 240, 232, 0.14)",
-                borderRadius: "3px",
-                overflow: "hidden",
-              }}
-            >
-              <div
-                className="bg-fern"
-                style={{ height: "100%", width: "75%" }}
-              />
-            </div>
-            <div className="flex flex-col">
-              {[
-                { label: "Week 0 · Setup", status: "Done" },
-                { label: "Session 1 · Foundations", status: "Done" },
-                { label: "Session 2 · Business brain", status: "Done" },
-                { label: "Session 3 · Documents", status: "Done" },
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-3.5"
-                  style={{
-                    padding: "12px 0",
-                    borderBottom: "1px solid rgba(244, 240, 232, 0.1)",
-                  }}
-                >
-                  <span
-                    className="bg-fern rounded-sm flex-shrink-0"
-                    style={{ width: "18px", height: "18px" }}
-                  />
-                  <span style={{ fontSize: "15px", flex: 1 }}>{item.label}</span>
-                  <span
-                    style={{
-                      fontSize: "12px",
-                      color: "rgba(244, 240, 232, 0.78)",
-                    }}
-                  >
-                    {item.status}
-                  </span>
-                </div>
-              ))}
-              <div
-                className="flex items-center gap-3.5"
-                style={{ padding: "12px 0" }}
-              >
-                <span
-                  className="flex-shrink-0 rounded-sm"
-                  style={{
-                    width: "18px",
-                    height: "18px",
-                    border: "1.5px solid #7FC99A",
-                  }}
-                />
-                <span style={{ fontSize: "15px", flex: 1 }}>
-                  Session 4 · Build and refine
-                </span>
-                <span className="text-fern" style={{ fontSize: "12px" }}>
-                  Next
-                </span>
-              </div>
-            </div>
-            <div
-              className="rounded-[3px] flex justify-between gap-3 flex-wrap"
-              style={{
-                background: "rgba(127, 201, 154, 0.12)",
-                padding: "14px 16px",
-                fontSize: "14px",
-              }}
-            >
-              <span>Main build: Collections assistant</span>
-              <span className="text-fern font-medium">Live</span>
-            </div>
+          {/* Badge row (about 50px) + two display lines + a gap */}
+          <div className="xl:mt-[calc(var(--hero-line)*2+74px)]">
+            <OffloadPreview />
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* Teams strip */}
-      <section
-        style={{
-          borderTop: "1px solid rgba(28, 28, 26, 0.12)",
-          borderBottom: "1px solid rgba(28, 28, 26, 0.12)",
-          padding: "24px clamp(20px, 4vw, 48px)",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "flex",
-            alignItems: "center",
-            gap: "12px 32px",
-            flexWrap: "wrap",
-          }}
-        >
-          <span
-            style={{
-              fontSize: "12px",
-              fontWeight: 500,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "rgba(28, 28, 26, 0.72)",
-            }}
-          >
+      {/* Teams who've been through it */}
+      <section className="px-gutter py-8">
+        <Container className="flex flex-col gap-4 md:flex-row md:items-center md:gap-10">
+          <span className="shrink-0 text-[15px] font-medium text-flint">
             Teams who&apos;ve been through it
           </span>
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "10px 32px",
-              fontSize: "17px",
-              fontWeight: 500,
-            }}
-          >
-            {teams.map((team) => (
-              <span key={team}>{team}</span>
-            ))}
-          </div>
-        </div>
+          <LogoWall
+            variant="auto"
+            logos={teamLogos}
+            label="Teams who've been through it"
+            className="min-w-0 flex-1"
+            marqueeClassName="[-webkit-mask-image:linear-gradient(to_right,transparent,black_12%,black_92%,transparent)] [mask-image:linear-gradient(to_right,transparent,black_12%,black_92%,transparent)]"
+          />
+        </Container>
       </section>
 
-      {/* Deliverables */}
-      <section
-        style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(min(100%, 400px), 1fr))",
-            gap: "clamp(32px, 5vw, 80px)",
-            alignItems: "start",
-          }}
-        >
-          <div>
-            <div className="text-eyebrow text-accent-shade mb-4">
-              What you leave with
-            </div>
-            <h2
-              className="font-epilogue"
-              style={{
-                fontWeight: 900,
-                fontSize: "clamp(36px, 4.6vw, 64px)",
-                lineHeight: 0.96,
-                letterSpacing: "-0.03em",
-                margin: "0 0 22px",
-              }}
-            >
-              Tools that run on Monday morning.
+      {/* What you leave with */}
+      <Section className="overflow-hidden">
+        <Container>
+          <div className="mb-12 grid items-end gap-x-16 gap-y-5 lg:grid-cols-2">
+            <h2 className="type-h2 m-0">What you leave with.</h2>
+            <p className="type-body m-0 max-w-[46ch]">
+              Everything is yours on day 30: the accounts, the tools, the prompts
+              and the plan.
+            </p>
+          </div>
+          <KitCarousel items={kitItems} label="What you leave with" initial={2} />
+        </Container>
+      </Section>
+
+      {/* Calculator */}
+      <Section id="calculator" className="scroll-mt-24">
+        <Container>
+          <TimeBackCalculator />
+        </Container>
+      </Section>
+
+      {/* Case study */}
+      <Section id="case-study" tone="forest" className="scroll-mt-24">
+        <Container>
+          <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <Chip variant="fern-outline">Case study</Chip>
+            <Eyebrow as="span">{CASE_META}</Eyebrow>
+          </div>
+          <div className="mb-12 grid items-end gap-x-16 gap-y-5 lg:grid-cols-2">
+            <h2 className="type-h2 m-0">Where they started.</h2>
+            <p className="type-body m-0 max-w-[50ch]">{CASE_INTRO}</p>
+          </div>
+
+          <CaseSwitcher />
+
+          <h3 className="type-h3 m-0 mt-16 mb-6">What we measured</h3>
+          <ul className="m-0 grid list-none gap-6 p-0 sm:grid-cols-3">
+            {CASE_MEASURES.map((label) => (
+              <li key={label} className="border-t-2 border-(--tone-rule) pt-4">
+                <p className="type-small m-0 mb-3">{label}</p>
+                <p className="m-0 font-wordmark text-[56px] leading-none text-newsprint">[ — ]</p>
+              </li>
+            ))}
+          </ul>
+        </Container>
+      </Section>
+
+      {/* Thirty days */}
+      <ThirtyDays
+        sessions={sessions}
+        heading="Thirty days, five steps."
+        intro="Sessions are an hour each. Everything between is your team using what we built."
+      />
+
+      {/* Guarantee: break pink and Fraunces here are approved exceptions */}
+      <Section>
+        <Container>
+          {/* TODO: link the guarantee terms here once they're approved. */}
+          <div className="flex flex-col gap-5 rounded-card bg-break-on-light px-8 py-[26px] text-newsprint md:flex-row md:items-center md:gap-8">
+            <h2 className="m-0 shrink-0 font-quote text-[clamp(40px,4vw,52px)] leading-none font-black italic">
+              Guaranteed
             </h2>
-            <p
-              style={{
-                fontSize: "18px",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(28, 28, 26, 0.76)",
-                margin: 0,
-                maxWidth: "42ch",
-              }}
-            >
-              Your team learns AI by building with it on the jobs that eat their
-              week: quotes, collections, paperwork, admin. Plus a custom dashboard
-              and prompt library you keep.
+            <span aria-hidden="true" className="h-px w-full shrink-0 bg-newsprint/50 md:h-14 md:w-px" />
+            <p className="m-0 font-display text-[clamp(18px,1.6vw,22px)] leading-snug font-semibold tracking-[-0.01em]">
+              One bottleneck automated and working by day 30. We agree on the
+              bottleneck together in Week 0, with a clear definition of
+              &ldquo;working.&rdquo;
             </p>
           </div>
-          <div style={{ borderTop: "2px solid #1C1C1A" }}>
-            {deliverables.map((item) => (
-              <div
-                key={item.num}
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "56px 1fr",
-                  padding: "22px 0",
-                  borderBottom: "1px solid rgba(28, 28, 26, 0.14)",
-                }}
-              >
-                <span
-                  className="font-bebas text-accent"
-                  style={{ fontSize: "28px" }}
-                >
-                  {item.num}
-                </span>
-                <div>
-                  <div
-                    style={{
-                      fontSize: "19px",
-                      fontWeight: 500,
-                      marginBottom: "6px",
-                    }}
-                  >
-                    {item.title}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: 300,
-                      lineHeight: 1.55,
-                      color: "rgba(28, 28, 26, 0.76)",
-                    }}
-                  >
-                    {item.description}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* 30 Days */}
-      <section
-        className="bg-forest text-newsprint"
-        style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
-          <div
-            className="text-fern"
-            style={{
-              fontSize: "12px",
-              fontWeight: 500,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              marginBottom: "18px",
-            }}
-          >
-            How the 30 days run
-          </div>
-          <h2
-            className="font-epilogue"
-            style={{
-              fontWeight: 900,
-              fontSize: "clamp(36px, 4.6vw, 64px)",
-              lineHeight: 0.96,
-              letterSpacing: "-0.03em",
-              margin: "0 0 44px",
-              maxWidth: "18ch",
-            }}
-          >
-            Four one-hour sessions. One a week.
-          </h2>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit, minmax(min(100%, 200px), 1fr))",
-              gap: "2px",
-            }}
-          >
-            {weeks.map((w) => (
-              <div
-                key={w.week}
-                style={{
-                  background: "rgba(244, 240, 232, 0.06)",
-                  padding: "24px",
-                }}
-              >
-                <div
-                  className="font-bebas text-fern"
-                  style={{ fontSize: "22px", letterSpacing: "0.04em" }}
-                >
-                  {w.week}
-                </div>
-                <div
-                  style={{ fontSize: "18px", fontWeight: 500, margin: "8px 0" }}
-                >
-                  {w.title}
-                </div>
-                <div
-                  style={{
-                    fontSize: "15px",
-                    fontWeight: 300,
-                    lineHeight: 1.55,
-                    color: "rgba(244, 240, 232, 0.8)",
-                  }}
-                >
-                  {w.description}
-                </div>
-              </div>
-            ))}
-          </div>
-          <p
-            style={{
-              fontSize: "15px",
-              fontWeight: 300,
-              color: "rgba(244, 240, 232, 0.78)",
-              margin: "28px 0 0",
-            }}
-          >
-            We schedule around your busiest hours, so customers aren&apos;t left
-            waiting.
-          </p>
-        </div>
-      </section>
-
-      {/* Example Program */}
-      <section
-        id="example"
-        style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit, minmax(min(100%, 380px), 1fr))",
-              gap: "20px 72px",
-              alignItems: "end",
-              marginBottom: "40px",
-            }}
-          >
-            <div>
-              <div className="text-eyebrow text-accent-shade mb-4">
-                Example program · building supply · 7 people
-              </div>
-              <h2
-                className="font-epilogue m-0"
-                style={{
-                  fontWeight: 900,
-                  fontSize: "clamp(36px, 4.6vw, 64px)",
-                  lineHeight: 0.96,
-                  letterSpacing: "-0.03em",
-                }}
-              >
-                Where they started.
-              </h2>
-            </div>
-            <p
-              style={{
-                fontSize: "18px",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(28, 28, 26, 0.76)",
-                margin: 0,
-                maxWidth: "46ch",
-              }}
-            >
-              A family-owned supplier whose president was also covering GM and CFO
-              duties. His goal: &quot;Assistant capacity for me without a new hire.&quot;
-            </p>
-          </div>
-
-          {/* Table */}
-          <div className="bg-white rounded overflow-hidden">
-            <div
-              className="bg-carbon text-newsprint"
-              style={{
-                display: "grid",
-                gridTemplateColumns:
-                  "minmax(120px, 0.6fr) minmax(0, 1.4fr) minmax(0, 1fr)",
-                gap: "20px",
-                padding: "16px 24px",
-                fontSize: "12px",
-                fontWeight: 500,
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-              }}
-            >
-              <span>Area</span>
-              <span>What happened before</span>
-              <span>What it cost</span>
-            </div>
-            {exampleTableData.map((row, i) => (
-              <div
+      {/* Testimonials (placeholders; no faces) */}
+      <Section flush="top" aria-label="What teams say">
+        <Container className="grid gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+          <QuoteCard
+            className="flex min-h-[340px] flex-col justify-between"
+            quote="[ Testimonial from an Offload team ]"
+            caption="[ Name · role · business ]"
+          />
+          <div className="flex flex-col gap-6">
+            {[0, 1].map((i) => (
+              <Placeholder
                 key={i}
-                style={{
-                  display: "grid",
-                  gridTemplateColumns:
-                    "minmax(120px, 0.6fr) minmax(0, 1.4fr) minmax(0, 1fr)",
-                  gap: "20px",
-                  padding: "20px 24px",
-                  borderBottom:
-                    i < exampleTableData.length - 1
-                      ? "1px solid rgba(28, 28, 26, 0.1)"
-                      : "none",
-                  fontSize: "16px",
-                  lineHeight: 1.5,
-                }}
+                className="min-h-[158px] flex-1 flex-col items-start justify-between gap-6 text-left"
               >
-                <strong style={{ fontWeight: 500 }}>{row.area}</strong>
-                <span style={{ fontWeight: 300 }}>{row.before}</span>
-                <span style={{ fontWeight: 300 }}>{row.cost}</span>
-              </div>
+                <span>[ Testimonial + result ]</span>
+                <span>[ Name · business ]</span>
+              </Placeholder>
             ))}
           </div>
+        </Container>
+      </Section>
 
-          {/* Metrics */}
-          <h3
-            className="font-epilogue"
-            style={{
-              fontWeight: 900,
-              fontSize: "clamp(28px, 3vw, 40px)",
-              lineHeight: 1,
-              letterSpacing: "-0.025em",
-              margin: "56px 0 24px",
-            }}
-          >
-            What we measured.
-          </h3>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit, minmax(min(100%, 240px), 1fr))",
-              gap: "16px",
-            }}
-          >
-            {metrics.map((m) => (
-              <div
-                key={m.label}
-                style={{ borderTop: "2px solid #1C1C1A", paddingTop: "16px" }}
-              >
-                <div
-                  style={{
-                    fontSize: "13px",
-                    color: "rgba(28, 28, 26, 0.7)",
-                    marginBottom: "10px",
-                  }}
-                >
-                  {m.label}
-                </div>
-                <div className="flex items-baseline gap-2.5 flex-wrap">
-                  <span
-                    className="font-bebas"
-                    style={{ fontSize: "44px", lineHeight: 0.9 }}
-                  >
-                    {m.value}
-                  </span>
-                  <span className="text-accent">→</span>
-                  <span
-                    style={{
-                      fontSize: "12px",
-                      fontWeight: 500,
-                      color: "rgba(28, 28, 26, 0.72)",
-                      border: "1.5px dashed rgba(28, 28, 26, 0.3)",
-                      padding: "4px 8px",
-                      borderRadius: "2px",
-                    }}
-                  >
-                    [ result ]
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section
-        style={{ padding: "0 clamp(20px, 4vw, 48px) clamp(64px, 8vw, 112px)" }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
-            gap: "20px",
-          }}
-        >
-          {teams.map((team) => (
-            <div
-              key={team}
-              className="rounded flex flex-col justify-between gap-6"
-              style={{
-                border: "1.5px dashed rgba(28, 28, 26, 0.3)",
-                padding: "28px",
-                minHeight: "200px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "13px",
-                  fontWeight: 500,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  color: "rgba(28, 28, 26, 0.72)",
-                }}
-              >
-                [ Testimonial + result ]
-              </div>
-              <div style={{ fontSize: "15px", fontWeight: 500 }}>{team}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Guarantee & FAQ */}
-      <section
-        style={{ padding: "0 clamp(20px, 4vw, 48px) clamp(64px, 8vw, 112px)" }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(min(100%, 400px), 1fr))",
-            gap: "40px 80px",
-            alignItems: "start",
-          }}
-        >
-          {/* Guarantee */}
-          <div
-            className="rounded"
-            style={{
-              border: "2px solid #E0176A",
-              padding: "clamp(28px, 3.5vw, 44px)",
-            }}
-          >
-            <div
-              style={{
-                fontSize: "12px",
-                fontWeight: 500,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                color: "#B0104F",
-                marginBottom: "16px",
-              }}
-            >
-              The guarantee
-            </div>
-            <div
-              className="font-epilogue"
-              style={{
-                fontWeight: 900,
-                fontSize: "clamp(28px, 3vw, 40px)",
-                lineHeight: 1,
-                letterSpacing: "-0.025em",
-                marginBottom: "18px",
-              }}
-            >
-              One bottleneck automated and working by day 30.
-            </div>
-            <p
-              style={{
-                fontSize: "17px",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(28, 28, 26, 0.78)",
-                margin: "0 0 18px",
-              }}
-            >
-              We agree on the bottleneck together in Week 0, with a clear
-              definition of &quot;working.&quot;
-            </p>
-            <div
-              style={{
-                fontSize: "13px",
-                fontWeight: 500,
-                letterSpacing: "0.06em",
-                color: "rgba(28, 28, 26, 0.72)",
-                border: "1.5px dashed rgba(28, 28, 26, 0.3)",
-                padding: "12px 14px",
-                borderRadius: "3px",
-              }}
-            >
-              [ Guarantee terms: what happens if it isn&apos;t, e.g. we keep working
-              at no cost until it is ]
-            </div>
-          </div>
-
-          {/* FAQ */}
-          <div>
-            <div className="text-eyebrow text-accent-shade mb-3">Questions</div>
-            <FAQAccordion />
-          </div>
-        </div>
-      </section>
+      {/* Questions */}
+      <Section flush="top">
+        <Container className="grid items-start gap-x-16 gap-y-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+          <h2 className="type-h2 m-0">Questions.</h2>
+          <Accordion items={faqs} />
+        </Container>
+      </Section>
 
       {/* CTA */}
-      <section
-        id="start"
-        className="bg-forest text-newsprint"
-        style={{ padding: "clamp(80px, 10vw, 140px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
-          <h2
-            className="font-epilogue"
-            style={{
-              fontWeight: 900,
-              fontSize: "clamp(44px, 6.6vw, 104px)",
-              lineHeight: 0.92,
-              letterSpacing: "-0.035em",
-              margin: 0,
-              maxWidth: "15ch",
-            }}
-          >
+      <Section id="start" tone="forest" className="scroll-mt-24">
+        <Container>
+          <h2 className="type-display m-0 max-w-[15ch]">
             What&apos;s eating your team&apos;s week?
           </h2>
-          <p
-            style={{
-              fontSize: "18px",
-              fontWeight: 300,
-              lineHeight: 1.6,
-              color: "rgba(244, 240, 232, 0.84)",
-              margin: "24px 0 0",
-              maxWidth: "46ch",
-            }}
-          >
+          <p className="type-body m-0 mt-6 max-w-[46ch]">
             Bring it to a 20-minute call. We&apos;ll tell you whether it&apos;s a good
             first build, and what 30 days would look like.
           </p>
-          <div
-            className="flex items-center gap-7 flex-wrap"
-            style={{ marginTop: "36px" }}
-          >
-            <a
-              href={CALENDLY_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-button bg-newsprint text-forest rounded-[3px] transition-colors hover:bg-sage"
-              style={{ padding: "17px 28px" }}
-            >
-              Book a 20-min call
-            </a>
-            <Link
-              href="/contact?type=ai"
-              className="font-medium text-fern"
-              style={{
-                fontSize: "15px",
-                borderBottom: "2px solid #7FC99A",
-                paddingBottom: "3px",
-              }}
-            >
-              Or send us the details →
-            </Link>
+          <div className="mt-9 flex flex-wrap items-center gap-7">
+            <Button href={CALENDLY_URL}>Book a 20-min call</Button>
+            <TextLink href="/contact?type=ai">Or send us the details →</TextLink>
           </div>
-        </div>
-      </section>
-
-      <Footer />
-    </div>
+        </Container>
+      </Section>
+    </>
   );
 }

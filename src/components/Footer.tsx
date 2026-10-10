@@ -1,14 +1,30 @@
 import Link from "next/link";
 import { CALENDLY_URL } from "@/lib/constants";
+import type { NavGroup } from "@/lib/navigation";
+import { Container, LogoLockup, NewsletterSignup } from "./ui";
 
-const footerSections = [
+const footerGroups: NavGroup[] = [
   {
     title: "Programs",
     links: [
-      { label: "AI Accelerator", href: "/ai-accelerator" },
       { label: "The Accelerator", href: "/accelerator" },
-      { label: "Custom Training", href: "/custom-training" },
+      { label: "Offload Program (AI Accelerator)", href: "/ai-accelerator" },
       { label: "Speaking", href: "/speaking" },
+      { label: "See all programs", href: "/programs" },
+    ],
+  },
+  {
+    title: "Strategy",
+    links: [
+      { label: "Marketing strategy", href: "/programs#marketing-strategy" },
+      { label: "Destination partnerships", href: "/programs#destination-partnerships" },
+    ],
+  },
+  {
+    title: "Training",
+    links: [
+      { label: "Custom Training", href: "/custom-training" },
+      { label: "JunctionU", href: "/junctionu" },
     ],
   },
   {
@@ -16,115 +32,82 @@ const footerSections = [
     links: [
       { label: "Work", href: "/work" },
       { label: "About", href: "/about" },
+      { label: "The Brief", href: "/the-brief" },
       { label: "Contact", href: "/contact" },
-    ],
-  },
-  {
-    title: "Talk to us",
-    links: [
-      { label: "Book a 20-min call", href: CALENDLY_URL, external: true },
-      { label: "conner@wearejunction.com", href: "mailto:conner@wearejunction.com" },
-      { label: "LinkedIn", href: "#" },
     ],
   },
 ];
 
+const talkLinks = [
+  { label: "Book a 20-min call", href: CALENDLY_URL, external: true },
+  { label: "conner@wearejunction.com", href: "mailto:conner@wearejunction.com" },
+  // TODO: add the Junction LinkedIn URL.
+  { label: "LinkedIn", href: "#" },
+];
+
 export function Footer() {
   return (
-    <footer
-      className="bg-carbon text-newsprint"
-      style={{ padding: "64px clamp(20px, 4vw, 48px) 32px" }}
-    >
-      <div
-        className="content-container"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))",
-          gap: "40px",
-        }}
-      >
-        {/* Logo */}
-        <div className="flex items-start gap-3">
-          <span
-            className="font-bebas leading-none"
-            style={{ fontSize: "30px", letterSpacing: "0.08em" }}
-          >
-            JUNCTION
-          </span>
-          <span
-            className="font-light"
-            style={{
-              fontSize: "10px",
-              lineHeight: "1.25",
-              letterSpacing: "0.06em",
-              color: "rgba(244, 240, 232, 0.78)",
-              borderLeft: "1px solid rgba(244, 240, 232, 0.2)",
-              paddingLeft: "12px",
-              marginTop: "2px",
-            }}
-          >
-            Strategy &<br />
-            Capacity Building
-          </span>
+    <footer className="tone-carbon px-gutter pb-8 pt-section-tight">
+      <Container className="flex flex-col gap-14">
+        <div className="grid gap-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))]">
+          <div>
+            <LogoLockup />
+          </div>
+          <NewsletterSignup className="max-w-[520px]" />
         </div>
 
-        {/* Footer sections */}
-        {footerSections.map((section) => (
-          <div
-            key={section.title}
-            className="flex flex-col gap-2.5 text-sm font-light"
-          >
-            <span
-              className="text-accent mb-1"
-              style={{
-                fontSize: "12px",
-                fontWeight: 500,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-              }}
-            >
-              {section.title}
-            </span>
-            {section.links.map((link) =>
-              "external" in link && link.external ? (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="transition-colors hover:text-fern"
-                >
-                  {link.label}
-                </a>
-              ) : (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="transition-colors hover:text-fern"
-                >
-                  {link.label}
-                </Link>
-              )
-            )}
+        <nav
+          aria-label="Footer"
+          className="grid gap-10 [grid-template-columns:repeat(auto-fit,minmax(170px,1fr))]"
+        >
+          {footerGroups.map((group) => (
+            <div key={group.title} className="flex flex-col gap-3">
+              <p className="type-eyebrow m-0">{group.title}</p>
+              <ul className="m-0 flex list-none flex-col gap-2.5 p-0 text-[15px]">
+                {group.links.map((link) => (
+                  <li key={link.href}>
+                    <Link href={link.href} className="link-plain">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+          <div className="flex flex-col gap-3">
+            <p className="type-eyebrow m-0">Talk to us</p>
+            <ul className="m-0 flex list-none flex-col gap-2.5 p-0 text-[15px]">
+              {talkLinks.map((link) => (
+                <li key={link.label}>
+                  <a
+                    href={link.href}
+                    className="link-plain"
+                    {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  >
+                    {/* Let the email address wrap after the @, never mid-word. */}
+                    {link.label.includes("@") ? (
+                      <>
+                        {link.label.split("@")[0]}@<wbr />
+                        {link.label.split("@")[1]}
+                      </>
+                    ) : (
+                      link.label
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
-        ))}
-      </div>
+        </nav>
 
-      {/* Bottom bar */}
-      <div
-        className="content-container flex justify-between gap-4 flex-wrap text-sm"
-        style={{
-          marginTop: "56px",
-          paddingTop: "20px",
-          borderTop: "1px solid rgba(244, 240, 232, 0.12)",
-          color: "rgba(244, 240, 232, 0.78)",
-        }}
-      >
-        <span>© Junction Consulting 2026</span>
-        <Link href="#" className="hover:text-newsprint transition-colors">
-          Privacy
-        </Link>
-      </div>
+        <div className="type-small flex flex-wrap justify-between gap-4 border-t border-hairline-dark pt-5">
+          <span>© Junction Consulting 2026</span>
+          {/* TODO: link the privacy policy once it exists. */}
+          <a href="#" className="link-plain">
+            Privacy
+          </a>
+        </div>
+      </Container>
     </footer>
   );
 }

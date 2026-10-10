@@ -1,18 +1,28 @@
-"use client";
-
-import { useState } from "react";
-import Link from "next/link";
-import { Header, Footer } from "@/components";
+import type { Metadata } from "next";
+import {
+  Accordion,
+  Badge,
+  Button,
+  Chip,
+  Card,
+  Container,
+  Placeholder,
+  Section,
+  Stat,
+  TextLink,
+  cx,
+} from "@/components";
+import { DashboardPreview } from "@/components/DashboardPreview";
 import { CALENDLY_URL } from "@/lib/constants";
+import { QuickScore } from "./QuickScore";
+import { TaskChecklist, type Task } from "./TaskChecklist";
+import { VideoPlayer } from "./VideoPlayer";
 
-const scoreData = [
-  { label: "Website & technical", value: 78 },
-  { label: "Reviews & reputation", value: 71 },
-  { label: "Booking & conversion", value: 80 },
-  { label: "Social media & content", value: 62 },
-  { label: "Customer experience", value: 84 },
-  { label: "Local visibility", value: 81 },
-];
+export const metadata: Metadata = {
+  title: "The Accelerator",
+  description:
+    "We score your digital marketing, build the plan with you, and reassess along the way so you can see the score move.",
+};
 
 const deliverables = [
   {
@@ -47,7 +57,17 @@ const deliverables = [
   },
 ];
 
-const taskData = [
+/** The six areas the assessment scores (chips on step 01). */
+const scoredAreas = [
+  "Website",
+  "Reviews",
+  "Booking",
+  "Social",
+  "Customer experience",
+  "Local visibility",
+];
+
+const taskData: Task[] = [
   { label: "Filter bot traffic out of your analytics", meta: "20 min · You" },
   {
     label: "Mark real enquiries and bookings as conversions",
@@ -62,19 +82,19 @@ const taskData = [
 
 const touchpoints = [
   {
-    label: "Touchpoint 1 · Start",
+    day: "Day 1",
     title: "Assessment and strategy",
     description:
       "We walk through your score, agree the goal, and hand over your plan.",
   },
   {
-    label: "Touchpoint 2 · Midway",
+    day: "Day 45",
     title: "Reassess and adjust",
     description:
       "A fresh score, a look at what's working, and changes to the plan where it isn't.",
   },
   {
-    label: "Touchpoint 3 · Day 90",
+    day: "Day 90",
     title: "Final score and what's next",
     description:
       "Before and after, side by side, plus a plan for keeping it going on your own.",
@@ -96,733 +116,245 @@ const faqs = [
   },
 ];
 
-function ScoreBar({ label, value }: { label: string; value: number }) {
-  const color = value < 70 ? "#E0176A" : "#2E7D4F";
+const phases = [
+  { weeks: "Weeks 1–3", name: "Foundation" },
+  { weeks: "Weeks 4–6", name: "Build" },
+  { weeks: "Weeks 7–9", name: "Launch" },
+  { weeks: "Weeks 10–12", name: "Scale" },
+];
+
+/**
+ * Ink box of each Bebas Neue digit at 100px (measured), so the SVG's
+ * viewBox wraps the glyph exactly and its height is the numeral's height.
+ */
+const GHOST_INK: Record<number, string> = {
+  1: "8 -70 23 70",
+  2: "3 -71 34 71",
+  3: "3 -71 34 72",
+};
+
+function GhostNumeral({ n, className }: { n: number; className?: string }) {
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "minmax(0, 1.3fr) minmax(0, 1fr) 34px",
-        gap: "12px",
-        alignItems: "center",
-        fontSize: "14px",
-      }}
-    >
-      <span>{label}</span>
-      <div
-        style={{
-          height: "6px",
-          background: "rgba(28, 28, 26, 0.1)",
-          borderRadius: "3px",
-          overflow: "hidden",
-        }}
-      >
-        <div
-          style={{ height: "100%", width: `${value}%`, background: color }}
-        />
-      </div>
-      <span style={{ fontWeight: 500, textAlign: "right" }}>{value}</span>
-    </div>
-  );
-}
-
-function TaskChecklist() {
-  const [done, setDone] = useState([false, false, false, false]);
-  const doneCount = done.filter(Boolean).length;
-  const pct = (doneCount / 4) * 100;
-  const allDone = doneCount === 4;
-
-  const toggle = (i: number) => {
-    setDone((prev) => {
-      const next = [...prev];
-      next[i] = !next[i];
-      return next;
-    });
-  };
-
-  return (
-    <div
-      className="bg-newsprint text-carbon rounded"
-      style={{ padding: "clamp(24px, 3vw, 36px)" }}
-    >
-      <div
-        className="flex justify-between items-baseline gap-3 flex-wrap"
-        style={{ marginBottom: "6px" }}
-      >
-        <span
-          className="font-bebas text-accent-shade"
-          style={{ fontSize: "26px", letterSpacing: "0.04em" }}
-        >
-          Week 1 · Tracking setup
-        </span>
-        <span style={{ fontSize: "14px", fontWeight: 500 }}>
-          {doneCount} / 4
-        </span>
-      </div>
-      <div
-        style={{
-          height: "6px",
-          background: "rgba(28, 28, 26, 0.1)",
-          borderRadius: "3px",
-          overflow: "hidden",
-          marginBottom: "12px",
-        }}
-      >
-        <div
-          className="bg-canopy"
-          style={{
-            height: "100%",
-            width: `${pct}%`,
-            transition: "width 0.3s ease-out",
-          }}
-        />
-      </div>
-      {taskData.map((task, i) => (
-        <button
-          key={i}
-          onClick={() => toggle(i)}
-          className="w-full flex items-start gap-3.5 border-0 bg-transparent cursor-pointer text-left font-dm-sans text-carbon"
-          style={{
-            padding: "16px 0",
-            borderBottom: "1px solid rgba(28, 28, 26, 0.12)",
-          }}
-        >
-          <span
-            className="flex-shrink-0 rounded-[3px] flex items-center justify-center"
-            style={{
-              width: "22px",
-              height: "22px",
-              marginTop: "1px",
-              fontSize: "14px",
-              fontWeight: 500,
-              background: done[i] ? "#2E7D4F" : "transparent",
-              border: "1.5px solid #2E7D4F",
-              color: "#F4F0E8",
-            }}
-          >
-            {done[i] ? "✓" : ""}
-          </span>
-          <span className="flex flex-col gap-1">
-            <span
-              style={{
-                fontSize: "16px",
-                fontWeight: 500,
-                textDecoration: done[i] ? "line-through" : "none",
-              }}
-            >
-              {task.label}
-            </span>
-            <span style={{ fontSize: "13px", color: "rgba(28, 28, 26, 0.72)" }}>
-              {task.meta}
-            </span>
-          </span>
-        </button>
-      ))}
-      {allDone && (
-        <div
-          className="text-forest font-medium"
-          style={{ marginTop: "16px", fontSize: "15px" }}
-        >
-          Week 1 done. That&apos;s how it feels. →
-        </div>
-      )}
-    </div>
+    <svg aria-hidden="true" viewBox={GHOST_INK[n]} className={cx("pointer-events-none select-none", className)}>
+      <text x="0" y="0" className="font-wordmark text-[100px]">
+        {n}
+      </text>
+    </svg>
   );
 }
 
 export default function AcceleratorPage() {
   return (
-    <div className="min-h-screen bg-newsprint text-carbon font-dm-sans">
-      <Header />
-
+    <>
       {/* Hero */}
-      <section
-        style={{
-          padding:
-            "clamp(48px, 7vw, 96px) clamp(20px, 4vw, 48px) clamp(48px, 6vw, 80px)",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(min(100%, 440px), 1fr))",
-            gap: "clamp(32px, 5vw, 72px)",
-            alignItems: "center",
-          }}
-        >
+      <Section spacing="tight" className="overflow-hidden">
+        <Container className="grid items-center gap-x-[clamp(32px,5vw,72px)] gap-y-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] xl:grid-cols-2 xl:items-start">
           <div>
-            <div className="text-eyebrow text-accent-shade mb-5">
-              The Accelerator · 90 days · small businesses
-            </div>
-            <h1
-              className="font-epilogue m-0"
-              style={{
-                fontWeight: 900,
-                fontSize: "clamp(46px, 6.8vw, 104px)",
-                lineHeight: 0.92,
-                letterSpacing: "-0.035em",
-                textWrap: "balance",
-              }}
-            >
-              A 90-day marketing plan you&apos;ll actually work.
+            {/* Three lines from 1280px (explicit breaks); the long first line
+                runs over the preview, which starts one line lower. */}
+            <h1 className="type-display m-0">
+              <span className="xl:whitespace-nowrap">A 90-day marketing</span>
+              <br className="hidden xl:inline" /> <span className="xl:whitespace-nowrap">plan you&apos;ll</span>
+              <br className="hidden xl:inline" /> <span className="xl:whitespace-nowrap">actually work.</span>
             </h1>
-            <p
-              style={{
-                fontSize: "clamp(17px, 1.5vw, 20px)",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(28, 28, 26, 0.76)",
-                maxWidth: "46ch",
-                margin: "28px 0 32px",
-              }}
-            >
+            <p className="type-lead mt-7 mb-8">
               We score your digital marketing, build the plan with you, and
-              reassess along the way so you can see the score move. The plan
-              lives online: a week-by-week roadmap, step-by-step guides, and
-              checklists that save as you go.
+              reassess along the way so you can see the score move.
             </p>
-            <div
-              className="flex items-baseline gap-3.5 flex-wrap"
-              style={{ marginBottom: "10px" }}
-            >
-              <span
-                className="font-bebas text-forest"
-                style={{ fontSize: "64px", lineHeight: 0.85 }}
-              >
-                $2,500
-              </span>
-              <span style={{ fontSize: "15px", color: "rgba(28, 28, 26, 0.7)" }}>
-                3 coaching sessions · 90-day plan
-              </span>
+            <div className="flex flex-wrap items-baseline gap-x-5 gap-y-1">
+              <p className="type-price m-0 text-[56px]">$2,500</p>
+              <p className="type-price m-0 text-[28px]">90 days · small businesses</p>
             </div>
-            <div
-              style={{
-                fontSize: "14px",
-                color: "rgba(28, 28, 26, 0.7)",
-                marginBottom: "28px",
-              }}
-            >
-              Some industry and regional partners cover 25–100%. Ask on the call.
-            </div>
-            <div className="flex gap-6 items-center flex-wrap">
-              <a
-                href={CALENDLY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-button bg-forest text-newsprint rounded-[3px] transition-colors hover:bg-canopy"
-                style={{ padding: "17px 28px" }}
-              >
-                Book a 20-min call
-              </a>
-              <a
-                href="#plan"
-                className="font-medium whitespace-nowrap"
-                style={{
-                  fontSize: "15px",
-                  borderBottom: "2px solid #C4963A",
-                  paddingBottom: "3px",
-                }}
-              >
-                Try a week of the plan ↓
-              </a>
+            <p className="type-small mt-3 mb-8 max-w-[44ch]">
+              3 coaching sessions · 90-day plan. Some industry and regional
+              partners cover 25–100%. Ask on the call.
+            </p>
+            <div className="flex flex-wrap items-center gap-6">
+              <Button href={CALENDLY_URL}>Book a 20-min call</Button>
+              <TextLink href="#quick-score" className="whitespace-nowrap">
+                Get your free score in 3 minutes ↓
+              </TextLink>
             </div>
           </div>
 
-          {/* Assessment Preview */}
-          <div
-            className="bg-white rounded flex flex-col gap-5"
-            style={{ padding: "clamp(24px, 3vw, 36px)" }}
-          >
-            <div className="flex justify-between items-center gap-3 flex-wrap">
-              <span className="text-eyebrow text-accent-shade">
-                Your digital assessment
-              </span>
-              <span style={{ fontSize: "12px", color: "rgba(28, 28, 26, 0.72)" }}>
-                Sample client
-              </span>
-            </div>
-            <div className="flex items-end gap-4">
-              <span
-                className="font-bebas text-forest"
-                style={{ fontSize: "96px", lineHeight: 0.8 }}
-              >
-                74
-              </span>
-              <span
-                style={{
-                  fontSize: "15px",
-                  color: "rgba(28, 28, 26, 0.7)",
-                  paddingBottom: "6px",
-                }}
-              >
-                / 100 overall
-              </span>
-            </div>
-            <div className="flex flex-col gap-3">
-              {scoreData.map((s) => (
-                <ScoreBar key={s.label} label={s.label} value={s.value} />
-              ))}
-            </div>
-            <div
-              className="bg-sage rounded-[3px]"
-              style={{
-                padding: "14px 16px",
-                fontSize: "14px",
-                lineHeight: 1.5,
-              }}
-            >
-              <strong style={{ fontWeight: 500 }}>Next step · Week 1:</strong>{" "}
-              clean up your analytics before spending anything on ads.
+          {/*
+            Product preview. 1024px+: bleeds off the right edge (clipped by the
+            section). 768–1023px: under the text at full container width.
+            Hidden below 768px. The padding keeps the shadow inside the
+            bottom-fade mask.
+          */}
+          <div className="hidden md:block xl:mt-[calc(var(--hero-line)*1+16px)]">
+            <div className="fade-out-bottom -m-10 p-10 lg:w-[calc(max(100%,min(62vw,920px))+80px)]">
+              <DashboardPreview />
             </div>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* What you get */}
-      <section
-        style={{
-          padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)",
-          borderTop: "1px solid rgba(28, 28, 26, 0.12)",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(min(100%, 400px), 1fr))",
-            gap: "clamp(32px, 5vw, 80px)",
-            alignItems: "start",
-          }}
-        >
+      {/* Video */}
+      <Section flush="top">
+        <Container className="grid items-center gap-x-16 gap-y-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+          {/* TODO: pass src, poster and duration once the video is ready. */}
+          <VideoPlayer duration="[ 0:00 ]" label="See how it works" />
           <div>
-            <div className="text-eyebrow text-accent-shade mb-4">
-              What you get
-            </div>
-            <h2
-              className="font-epilogue"
-              style={{
-                fontWeight: 900,
-                fontSize: "clamp(36px, 4.6vw, 64px)",
-                lineHeight: 0.96,
-                letterSpacing: "-0.03em",
-                margin: "0 0 22px",
-              }}
-            >
-              A plan with your name on every task.
-            </h2>
-            <p
-              style={{
-                fontSize: "18px",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(28, 28, 26, 0.76)",
-                margin: 0,
-                maxWidth: "42ch",
-              }}
-            >
+            <h2 className="type-h3 m-0 mb-3">See how it works.</h2>
+            <p className="type-body m-0">[ One line about what the video shows ]</p>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Steps + quick score */}
+      <Section id="quick-score" className="scroll-mt-24">
+        <Container className="grid items-start gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,560px)]">
+          <div>
+            <h2 className="type-h2 m-0 mb-6">A plan with your name on every task.</h2>
+            <p className="type-body m-0 max-w-[42ch]">
               Every task says how long it takes, who does it, and how to do it.
               If a step needs a contractor, the plan includes the brief and a
               price range.
             </p>
-          </div>
-          <div style={{ borderTop: "2px solid #1C1C1A" }}>
-            {deliverables.map((item) => (
-              <div
-                key={item.num}
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "56px 1fr",
-                  padding: "22px 0",
-                  borderBottom: "1px solid rgba(28, 28, 26, 0.14)",
-                }}
-              >
-                <span
-                  className="font-bebas text-accent"
-                  style={{ fontSize: "28px" }}
+            <ol className="m-0 mt-9 list-none border-t-2 border-(--tone-rule) p-0">
+              {deliverables.map((item, i) => (
+                // Focusable so keyboard users can bring a dimmed row forward.
+                <li
+                  key={item.num}
+                  tabIndex={0}
+                  className="dim-row grid grid-cols-[64px_minmax(0,1fr)] border-b border-hairline py-6"
                 >
-                  {item.num}
-                </span>
-                <div>
-                  <div
-                    style={{
-                      fontSize: "19px",
-                      fontWeight: 500,
-                      marginBottom: "6px",
-                    }}
-                  >
-                    {item.title}
+                  <span className="type-numeral">{item.num}</span>
+                  <div>
+                    <h3 className="type-h4 mt-0 mb-1.5">{item.title}</h3>
+                    <p className="type-body m-0">{item.description}</p>
+                    {i === 0 && (
+                      <ul className="m-0 mt-4 flex list-none flex-wrap gap-2 p-0" aria-label="Areas scored">
+                        {scoredAreas.map((area) => (
+                          <li key={area}>
+                            <Chip>{area}</Chip>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
-                  <div
-                    style={{
-                      fontSize: "16px",
-                      fontWeight: 300,
-                      lineHeight: 1.55,
-                      color: "rgba(28, 28, 26, 0.76)",
-                    }}
-                  >
-                    {item.description}
-                  </div>
-                </div>
-              </div>
-            ))}
+                </li>
+              ))}
+            </ol>
           </div>
-        </div>
-      </section>
+
+          {/* Sticky while the steps scroll past */}
+          <div className="lg:sticky lg:top-24">
+            <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+              <h3 className="type-h4 m-0">Get your free quick score</h3>
+              <Badge>Quick check · a general snapshot</Badge>
+            </div>
+            <QuickScore />
+          </div>
+        </Container>
+      </Section>
 
       {/* Plan Demo */}
-      <section
-        id="plan"
-        className="bg-forest text-newsprint"
-        style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(min(100%, 400px), 1fr))",
-            gap: "clamp(32px, 5vw, 80px)",
-            alignItems: "center",
-          }}
-        >
+      <Section id="plan" tone="forest" className="scroll-mt-24">
+        <Container className="grid items-center gap-[clamp(32px,5vw,80px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr))]">
           <div>
-            <div
-              className="text-fern"
-              style={{
-                fontSize: "12px",
-                fontWeight: 500,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                marginBottom: "18px",
-              }}
-            >
-              Try it
-            </div>
-            <h2
-              className="font-epilogue"
-              style={{
-                fontWeight: 900,
-                fontSize: "clamp(36px, 4.6vw, 64px)",
-                lineHeight: 0.96,
-                letterSpacing: "-0.03em",
-                margin: "0 0 22px",
-              }}
-            >
+            <h2 className="type-h2 mt-0 mb-6">
               This is what week one looks like.
             </h2>
-            <p
-              style={{
-                fontSize: "18px",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(244, 240, 232, 0.84)",
-                margin: "0 0 28px",
-                maxWidth: "42ch",
-              }}
-            >
+            <p className="type-body mt-0 mb-7 max-w-[42ch]">
               Tick the tasks off. In the real plan, every week works like this,
               and your coach sees your progress before each session.
             </p>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-                gap: "2px",
-                fontSize: "13px",
-              }}
-            >
-              <div
-                className="bg-fern text-carbon"
-                style={{ padding: "12px" }}
-              >
-                <div style={{ fontWeight: 500 }}>Weeks 1–3</div>
-                <div>Foundation</div>
-              </div>
-              <div
-                style={{
-                  background: "rgba(244, 240, 232, 0.1)",
-                  padding: "12px",
-                }}
-              >
-                <div style={{ fontWeight: 500 }}>Weeks 4–6</div>
-                <div>Build</div>
-              </div>
-              <div
-                style={{
-                  background: "rgba(244, 240, 232, 0.1)",
-                  padding: "12px",
-                }}
-              >
-                <div style={{ fontWeight: 500 }}>Weeks 7–9</div>
-                <div>Launch</div>
-              </div>
-              <div
-                style={{
-                  background: "rgba(244, 240, 232, 0.1)",
-                  padding: "12px",
-                }}
-              >
-                <div style={{ fontWeight: 500 }}>Weeks 10–12</div>
-                <div>Scale</div>
-              </div>
+            <div className="type-small grid grid-cols-2 gap-0.5 overflow-hidden rounded-card sm:grid-cols-4">
+              {phases.map((phase, i) => (
+                <div
+                  key={phase.weeks}
+                  className={cx(
+                    "p-3",
+                    i === 0 ? "bg-fern text-carbon" : "bg-hairline-dark text-newsprint"
+                  )}
+                >
+                  <div className="font-medium">{phase.weeks}</div>
+                  <div>{phase.name}</div>
+                </div>
+              ))}
             </div>
           </div>
-          <TaskChecklist />
-        </div>
-      </section>
+          <TaskChecklist tasks={taskData} />
+        </Container>
+      </Section>
 
       {/* Touchpoints */}
-      <section
-        style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
-          <div className="text-eyebrow text-accent-shade mb-4">
-            How the 90 days run
-          </div>
-          <h2
-            className="font-epilogue"
-            style={{
-              fontWeight: 900,
-              fontSize: "clamp(36px, 4.6vw, 64px)",
-              lineHeight: 0.96,
-              letterSpacing: "-0.03em",
-              margin: "0 0 44px",
-            }}
-          >
-            Three touchpoints. One score that moves.
-          </h2>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
-              gap: "20px",
-            }}
-          >
-            {touchpoints.map((tp) => (
-              <div
-                key={tp.label}
-                className="bg-white rounded-b"
-                style={{
-                  borderTop: "4px solid #1A4D2E",
-                  padding: "28px",
-                }}
-              >
-                <div
-                  className="font-bebas text-accent"
-                  style={{ fontSize: "24px", letterSpacing: "0.04em" }}
+      <Section>
+        <Container>
+          <h2 className="type-h2 mt-0 mb-9">Three touchpoints along the way.</h2>
+          <ol className="m-0 grid list-none gap-6 p-0 md:grid-cols-3">
+            {touchpoints.map((tp, i) => (
+              <li key={tp.day} className="flex">
+                <Card
+                  tone={i === 2 ? "carbon" : "default"}
+                  className="relative flex w-full flex-col overflow-hidden"
                 >
-                  {tp.label}
-                </div>
-                <div
-                  style={{
-                    fontSize: "19px",
-                    fontWeight: 500,
-                    margin: "10px 0 8px",
-                  }}
-                >
-                  {tp.title}
-                </div>
-                <p
-                  style={{
-                    fontSize: "16px",
-                    fontWeight: 300,
-                    lineHeight: 1.55,
-                    color: "rgba(28, 28, 26, 0.76)",
-                    margin: 0,
-                  }}
-                >
-                  {tp.description}
-                </p>
-              </div>
+                  {/* Ghost numeral: fully inside the card, 16px from the top
+                      and right, 70% of the card's height (scales with it). */}
+                  <GhostNumeral
+                    n={i + 1}
+                    className={cx(
+                      "absolute top-4 right-4 h-[70%]",
+                      i === 2 ? "fill-newsprint/7" : "fill-carbon/6"
+                    )}
+                  />
+                  <p className="type-numeral relative m-0 text-[40px]">{tp.day}</p>
+                  <h3 className="type-h4 relative mt-4 mb-2">{tp.title}</h3>
+                  <p className="type-body relative m-0">{tp.description}</p>
+                </Card>
+              </li>
             ))}
-          </div>
-        </div>
-      </section>
+          </ol>
+        </Container>
+      </Section>
 
       {/* Proof */}
-      <section
-        style={{ padding: "0 clamp(20px, 4vw, 48px) clamp(64px, 8vw, 112px)" }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
-            gap: "20px",
-          }}
-        >
-          <div
-            className="bg-carbon text-newsprint rounded flex flex-col gap-2.5"
-            style={{ padding: "28px" }}
-          >
-            <div
-              className="font-bebas text-accent"
-              style={{ fontSize: "80px", lineHeight: 0.85 }}
-            >
-              +300%
-            </div>
-            <div style={{ fontSize: "16px", fontWeight: 500 }}>
-              Past the engagement goal
-            </div>
-            <p
-              style={{
-                fontSize: "15px",
-                fontWeight: 300,
-                lineHeight: 1.55,
-                color: "rgba(244, 240, 232, 0.78)",
-                margin: 0,
-              }}
-            >
+      <Section flush="top">
+        <Container className="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))]">
+          <Card tone="carbon" className="flex flex-col gap-2.5">
+            <Stat value="+300%" />
+            <p className="type-h4 m-0">Past the engagement goal</p>
+            <p className="type-small m-0">
               Accelerator rolled out across a provincial association&apos;s member
               businesses, with bookings up inside three months.
             </p>
-          </div>
-          <div
-            className="rounded flex flex-col justify-between gap-6"
-            style={{
-              border: "1.5px dashed rgba(28, 28, 26, 0.3)",
-              padding: "28px",
-              minHeight: "220px",
-            }}
-          >
-            <div
-              style={{
-                fontSize: "13px",
-                fontWeight: 500,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: "rgba(28, 28, 26, 0.72)",
-              }}
-            >
-              [ Score change from a recent client, e.g. 58 → 81 ]
-            </div>
-            <div style={{ fontSize: "15px", fontWeight: 500 }}>
-              [ Business name · industry ]
-            </div>
-          </div>
-          <div
-            className="rounded flex flex-col justify-between gap-6"
-            style={{
-              border: "1.5px dashed rgba(28, 28, 26, 0.3)",
-              padding: "28px",
-              minHeight: "220px",
-            }}
-          >
-            <div
-              style={{
-                fontSize: "13px",
-                fontWeight: 500,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: "rgba(28, 28, 26, 0.72)",
-              }}
-            >
-              [ Testimonial ]
-            </div>
-            <div style={{ fontSize: "15px", fontWeight: 500 }}>
-              [ Owner name · business ]
-            </div>
-          </div>
-        </div>
-      </section>
+          </Card>
+          <Placeholder className="min-h-[220px] flex-col gap-6">
+            <span>[ Score change from a recent client, e.g. 58 → 81 ]</span>
+            <span>[ Business name · industry ]</span>
+          </Placeholder>
+          <Placeholder className="min-h-[220px] flex-col gap-6">
+            <span>[ Testimonial ]</span>
+            <span>[ Owner name · business ]</span>
+          </Placeholder>
+        </Container>
+      </Section>
 
       {/* FAQ */}
-      <section
-        style={{ padding: "0 clamp(20px, 4vw, 48px) clamp(64px, 8vw, 112px)" }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(min(100%, 300px), 1fr))",
-            gap: "32px 48px",
-            borderTop: "2px solid #1C1C1A",
-            paddingTop: "36px",
-          }}
-        >
-          {faqs.map((faq) => (
-            <div key={faq.q}>
-              <div
-                style={{ fontSize: "18px", fontWeight: 500, marginBottom: "8px" }}
-              >
-                {faq.q}
-              </div>
-              <p
-                style={{
-                  fontSize: "16px",
-                  fontWeight: 300,
-                  lineHeight: 1.6,
-                  color: "rgba(28, 28, 26, 0.76)",
-                  margin: 0,
-                }}
-              >
-                {faq.a}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <Section flush="top">
+        <Container className="grid items-start gap-x-16 gap-y-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+          <h2 className="type-h2 m-0">Questions.</h2>
+          <Accordion items={faqs} />
+        </Container>
+      </Section>
 
       {/* CTA */}
-      <section
-        id="start"
-        className="bg-forest text-newsprint"
-        style={{ padding: "clamp(80px, 10vw, 140px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
-          <h2
-            className="font-epilogue"
-            style={{
-              fontWeight: 900,
-              fontSize: "clamp(44px, 6.6vw, 104px)",
-              lineHeight: 0.92,
-              letterSpacing: "-0.035em",
-              margin: 0,
-              maxWidth: "15ch",
-            }}
-          >
+      <Section id="start" tone="forest" className="scroll-mt-24">
+        <Container>
+          <h2 className="type-display m-0 max-w-[15ch]">
             Find out your score in the first week.
           </h2>
-          <div
-            className="flex items-center gap-7 flex-wrap"
-            style={{ marginTop: "40px" }}
-          >
-            <a
-              href={CALENDLY_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-button bg-newsprint text-forest rounded-[3px] transition-colors hover:bg-sage"
-              style={{ padding: "17px 28px" }}
-            >
-              Book a 20-min call
-            </a>
-            <Link
-              href="/contact?type=accelerator"
-              className="font-medium text-fern"
-              style={{
-                fontSize: "15px",
-                borderBottom: "2px solid #7FC99A",
-                paddingBottom: "3px",
-              }}
-            >
+          <div className="mt-10 flex flex-wrap items-center gap-7">
+            <Button href={CALENDLY_URL}>Book a 20-min call</Button>
+            <TextLink href="/contact?type=accelerator">
               Or send us the details →
-            </Link>
+            </TextLink>
           </div>
-        </div>
-      </section>
-
-      <Footer />
-    </div>
+        </Container>
+      </Section>
+    </>
   );
 }

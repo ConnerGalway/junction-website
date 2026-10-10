@@ -1,6 +1,30 @@
-import Link from "next/link";
-import { Header, Footer, Placeholder } from "@/components";
+import type { Metadata } from "next";
+import Image from "next/image";
+import {
+  Button,
+  Callout,
+  Card,
+  Chip,
+  Container,
+  Eyebrow,
+  Placeholder,
+  QuoteCard,
+  Section,
+  TextLink,
+  LogoWall,
+} from "@/components";
+import { HeroWordmark } from "@/components/HeroWordmark";
+import { CASE_AREAS, CASE_INTRO, CASE_META, CASE_TOOLS } from "@/lib/buildingSupplyCase";
 import { CALENDLY_URL } from "@/lib/constants";
+import { SHOW_HERO_WORDMARK } from "@/lib/flags";
+import { homeLogos } from "@/lib/logos";
+import { ProgramOrbit, type OrbitProgram } from "./ProgramOrbit";
+
+export const metadata: Metadata = {
+  title: { absolute: "Junction | Strategy & Capacity Building" },
+  description:
+    "When growth stalls, the cause is usually technology that isn't pulling its weight yet: online booking, social media, internal systems, AI.",
+};
 
 const stuckItems = [
   {
@@ -30,85 +54,43 @@ const stuckItems = [
   },
 ];
 
-const organizations = [
-  "Twin Lions Contracting",
-  "West Coast Homes",
-  "SMR Plumbing & Heating",
-  "Destination BC",
-  "Travel Alberta",
-  "Travel Maine",
-  "Visit Mississippi",
-];
-
-const programs = [
+/** Find your program: same order as the Programs submenu. */
+const programs: OrbitProgram[] = [
   {
-    num: "01",
-    title: "AI Accelerator",
-    meta: "$5,000 · 30 days",
-    tagline: "For any business losing hours to admin.",
-    description:
-      "Four sessions with your leadership team on your real work. One bottleneck automated by day 30, guaranteed.",
-    href: "/ai-accelerator",
-    linkText: "See the AI Accelerator →",
-  },
-  {
-    num: "02",
     title: "The Accelerator",
-    meta: "$2,500 · 90 days",
-    tagline: "For small businesses that need a marketing plan they'll work.",
-    description:
-      "A scored digital assessment, an interactive 90-day plan, three coaching sessions and reassessments that show your progress.",
+    description: "For small businesses that need a marketing plan they'll work.",
+    price: "$2,500 · 90 days",
     href: "/accelerator",
-    linkText: "See the Accelerator →",
+    media: "Accelerator dashboard",
+    thumbnail: "dashboard",
   },
   {
-    num: "03",
-    title: "Custom Training",
-    meta: "Scoped to you",
-    tagline: "For organizations training their members or their leaders.",
-    description:
-      "Courses, workshops and series built around your people, with delivery and progress reporting handled for you.",
-    href: "/custom-training",
-    linkText: "See Custom Training →",
+    title: "Offload Program (AI Accelerator)",
+    description: "For any business losing hours to admin.",
+    price: "$5,000 · 30 days",
+    href: "/ai-accelerator",
+    media: "Offload Program mockup",
+    thumbnail: "offload",
   },
   {
-    num: "04",
     title: "Speaking",
-    meta: "Keynote · Workshop · Virtual",
-    tagline: "For event organizers who want the room to leave with a plan.",
-    description:
-      "Keynotes and workshops on AI, marketing trends and strategy. Every talk ends with actions people can take that week.",
+    description: "For event organizers who want the room to leave with a plan.",
+    price: "Keynote · Workshop · Virtual",
     href: "/speaking",
-    linkText: "See speaking topics →",
+    media: "Speaking photo",
+  },
+  {
+    title: "Custom Training",
+    description: "For organizations training their members or their leaders.",
+    price: "Scoped to you",
+    href: "/custom-training",
+    media: "Custom Training photo",
   },
 ];
 
-const aiExampleSteps = [
-  {
-    num: "01",
-    title: "A collections assistant",
-    description:
-      "Reads the aging report, suggests the next step for each account, and drafts reminders and call notes in the company's voice.",
-  },
-  {
-    num: "02",
-    title: "A material list converter",
-    description:
-      "Turns a photo, text or email of a handwritten list into clean line items for their ERP, and flags anything to confirm.",
-  },
-  {
-    num: "03",
-    title: "A business brain",
-    description:
-      "Price lists, account terms, policies and house style, loaded into one shared AI workspace the whole team uses.",
-  },
-  {
-    num: "04",
-    title: "A roadmap for what's next",
-    description:
-      "Takeoffs, invoice matching and system integration, prioritized for after the program.",
-  },
-];
+/** Existing metrics from the AI example; results to come. */
+const TRAINING_PLAYLIST_URL =
+  "https://youtube.com/playlist?list=PLUvaA_x2Z8df8djNodScqE1XZTFz8a16f";
 
 const callSteps = [
   {
@@ -131,734 +113,247 @@ const callSteps = [
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-newsprint text-carbon font-dm-sans">
-      <Header />
+    <>
+      {SHOW_HERO_WORDMARK && <HeroWordmark />}
 
       {/* Hero */}
-      <section
-        style={{
-          padding:
-            "clamp(48px, 7vw, 96px) clamp(20px, 4vw, 48px) clamp(48px, 6vw, 80px)",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 440px), 1fr))",
-            gap: "clamp(32px, 5vw, 72px)",
-            alignItems: "center",
-          }}
-        >
-          <div>
-            <div className="text-eyebrow text-accent-shade mb-5">
-              Strategy & capacity building
-            </div>
-            <h1
-              className="font-epilogue m-0"
-              style={{
-                fontWeight: 900,
-                fontSize: "clamp(48px, 7.2vw, 112px)",
-                lineHeight: 0.92,
-                letterSpacing: "-0.035em",
-                textWrap: "balance",
-              }}
-            >
-              Feeling stuck? Let&apos;s get your organization moving.
-            </h1>
-            <p
-              style={{
-                fontSize: "clamp(17px, 1.5vw, 20px)",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(28, 28, 26, 0.76)",
-                maxWidth: "46ch",
-                margin: "28px 0 36px",
-              }}
-            >
-              When growth stalls, the cause is usually technology that isn&apos;t
-              pulling its weight yet: online booking, social media, internal
-              systems, AI. We find the bottleneck, put the right tools to work,
-              and get your people confident running them.
-            </p>
-            <div className="flex gap-6 items-center flex-wrap">
-              <a
-                href={CALENDLY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-button bg-forest text-newsprint rounded-[3px] transition-colors hover:bg-canopy"
-                style={{ padding: "17px 28px" }}
-              >
-                Book a 20-min call
-              </a>
-              <a
-                href="#programs"
-                className="font-medium whitespace-nowrap"
-                style={{
-                  fontSize: "15px",
-                  borderBottom: "2px solid #C4963A",
-                  paddingBottom: "3px",
-                }}
-              >
-                Find your program ↓
-              </a>
-            </div>
-          </div>
-
-          {/* Where organizations get stuck panel */}
-          <div
-            className="bg-carbon text-newsprint rounded"
-            style={{ padding: "clamp(26px, 3.2vw, 40px)" }}
-          >
-            <div
-              className="text-accent"
-              style={{
-                fontSize: "12px",
-                fontWeight: 500,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                marginBottom: "10px",
-              }}
-            >
-              Where organizations get stuck
-            </div>
-            <div style={{ borderTop: "1px solid rgba(244, 240, 232, 0.2)" }}>
-              {stuckItems.map((item) => (
-                <div
-                  key={item.num}
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "44px minmax(0, 1fr)",
-                    gap: "0 4px",
-                    padding: "16px 0",
-                    borderBottom: "1px solid rgba(244, 240, 232, 0.12)",
-                  }}
-                >
-                  <span
-                    className="font-bebas text-accent"
-                    style={{ fontSize: "24px", lineHeight: 1 }}
-                  >
-                    {item.num}
-                  </span>
-                  <div>
-                    <div
-                      style={{
-                        fontSize: "17px",
-                        fontWeight: 500,
-                        marginBottom: "3px",
-                      }}
-                    >
-                      {item.title}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "14px",
-                        fontWeight: 300,
-                        color: "rgba(244, 240, 232, 0.74)",
-                      }}
-                    >
-                      {item.description}
-                    </div>
-                  </div>
+      <section className="relative overflow-hidden pb-section-tight">
+        <div className="relative pt-[clamp(72px,9vw,128px)]">
+          <div className="px-gutter">
+            {/* 1024px+: text and photo side by side, at least 48px apart (56px
+                gap, which allows for the photo's tilt); the photo shrinks
+                rather than overlapping the headline. */}
+            <Container className="lg:flex lg:items-center lg:gap-14">
+              <div className="lg:shrink-0">
+                {/* 10.3em holds the headline to three lines at display size */}
+                <h1 className="type-display m-0 max-w-[10.3em]">
+                  Feeling stuck? Let&apos;s get your organization moving.
+                </h1>
+                <p className="type-lead mt-7 mb-10 max-w-[40ch]">
+                  We find the bottleneck, put the right tools to work, and get your
+                  people confident running them.
+                </p>
+                <div className="flex flex-wrap items-center gap-6">
+                  <Button href={CALENDLY_URL}>Book a 20-min call</Button>
+                  <TextLink href="#programs" className="whitespace-nowrap">
+                    Find your program ↓
+                  </TextLink>
                 </div>
-              ))}
-            </div>
-            <div style={{ fontSize: "15px", lineHeight: 1.55, marginTop: "20px" }}>
-              <span className="text-fern font-medium">
-                We start with the one costing you most
-              </span>
-              <span style={{ fontWeight: 300, color: "rgba(244, 240, 232, 0.8)" }}>
-                , fix it, and build from there.
-              </span>
-            </div>
+              </div>
+
+              {/* Team photo: in the flow under the buttons below 1024px */}
+              <div className="lg:flex lg:min-w-0 lg:flex-1 lg:justify-end lg:pr-[4%] xl:pr-[1%]">
+                <div className="relative mt-14 ml-auto h-[240px] w-[200px] -rotate-[1.5deg] overflow-hidden rounded-card shadow-card lg:mt-0 lg:ml-0 lg:aspect-[5/6] lg:h-auto lg:w-full lg:max-w-[220px] xl:max-w-[300px]">
+                  <Image
+                    src="/images/home-hero-team.jpg"
+                    alt="The Junction team working around a table"
+                    fill
+                    sizes="(min-width: 1280px) 300px, (min-width: 1024px) 220px, 200px"
+                    priority
+                    className="object-cover"
+                  />
+                </div>
+              </div>
+            </Container>
           </div>
         </div>
       </section>
 
-      {/* Organizations strip */}
-      <section
-        style={{
-          borderTop: "1px solid rgba(28, 28, 26, 0.12)",
-          borderBottom: "1px solid rgba(28, 28, 26, 0.12)",
-          padding: "28px clamp(20px, 4vw, 48px)",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "flex",
-            alignItems: "center",
-            gap: "14px 40px",
-            flexWrap: "wrap",
-          }}
-        >
-          <span
-            style={{
-              fontSize: "12px",
-              fontWeight: 500,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "rgba(28, 28, 26, 0.72)",
-            }}
-          >
+      {/* Organizations strip: logos fade out behind the label */}
+      <section className="px-gutter py-8">
+        <Container className="flex flex-col gap-4 md:flex-row md:items-center md:gap-0">
+          <span className="shrink-0 text-[15px] font-medium text-flint md:pr-2">
             Organizations we work with
           </span>
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "10px 32px",
-              fontSize: "17px",
-              fontWeight: 500,
-              color: "rgba(28, 28, 26, 0.82)",
-            }}
-          >
-            {organizations.map((org) => (
-              <span key={org}>{org}</span>
-            ))}
-          </div>
-        </div>
+          <LogoWall
+            variant="marquee"
+            logos={homeLogos}
+            label="Organizations we work with"
+            className="min-w-0 flex-1 [-webkit-mask-image:linear-gradient(to_right,transparent,black_16%,black_94%,transparent)] [mask-image:linear-gradient(to_right,transparent,black_16%,black_94%,transparent)]"
+          />
+        </Container>
       </section>
 
-      {/* Programs */}
-      <section
-        id="programs"
-        style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit, minmax(min(100%, 380px), 1fr))",
-              gap: "20px 72px",
-              alignItems: "end",
-              marginBottom: "44px",
-            }}
-          >
-            <div>
-              <div className="text-eyebrow text-accent-shade mb-4">
-                Four ways in
-              </div>
-              <h2
-                className="font-epilogue m-0"
-                style={{
-                  fontWeight: 900,
-                  fontSize: "clamp(36px, 4.6vw, 64px)",
-                  lineHeight: 0.96,
-                  letterSpacing: "-0.03em",
-                }}
-              >
+      {/* Where organizations get stuck */}
+      <Section>
+        <Container>
+          <h2 className="type-h2 m-0">Where organizations get stuck.</h2>
+          <p className="type-lead m-0 mt-4 max-w-[44ch]">
+            Usually, it&apos;s technology that isn&apos;t pulling its weight yet.
+          </p>
+          <ol className="mt-9 mb-0 grid list-none gap-x-8 gap-y-10 border-t-2 border-(--tone-rule) p-0 pt-9 sm:grid-cols-2 lg:grid-cols-5">
+            {stuckItems.map((item) => (
+              <li key={item.num}>
+                <span className="type-numeral">{item.num}</span>
+                <h3 className="type-h4 mt-3 mb-2">{item.title}</h3>
+                <p className="type-body m-0">{item.description}</p>
+              </li>
+            ))}
+          </ol>
+          <Callout className="mt-12 flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
+            <p className="type-body m-0 font-medium">
+              We start with the one costing you most, fix it, and build from there.
+            </p>
+            <TextLink href="#programs" className="whitespace-nowrap">
+              Find your program →
+            </TextLink>
+          </Callout>
+        </Container>
+      </Section>
+
+      {/* Find your program: orbit carousel */}
+      <Section id="programs" tone="carbon" className="scroll-mt-24 overflow-hidden">
+        <Container>
+          <ProgramOrbit
+            programs={programs}
+            headingId="programs-heading"
+            heading={
+              <h2 id="programs-heading" className="type-h2 m-0">
                 Find your program.
               </h2>
-            </div>
-            <p
-              style={{
-                fontSize: "18px",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(28, 28, 26, 0.76)",
-                margin: 0,
-                maxWidth: "48ch",
-              }}
-            >
-              Each one ends with something your team owns: a working tool, a
-              plan, a course, or a room full of people with next steps.
-            </p>
+            }
+          />
+        </Container>
+      </Section>
+
+      {/* Case study (teaser; the full story is on /ai-accelerator#case-study) */}
+      <Section tone="forest">
+        <Container>
+          <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2">
+            <Chip variant="fern-outline">Case study</Chip>
+            <Eyebrow as="span">{CASE_META}</Eyebrow>
+          </div>
+          <div className="grid items-end gap-x-16 gap-y-5 lg:grid-cols-2">
+            <h2 className="type-h2 m-0">A building supplier&apos;s 30 days.</h2>
+            <p className="type-body m-0 max-w-[50ch]">{CASE_INTRO}</p>
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit, minmax(min(100%, 520px), 1fr))",
-              gap: "20px",
-            }}
-          >
-            {programs.map((program) => (
-              <Link
-                key={program.num}
-                href={program.href}
-                className="flex flex-col gap-3.5 bg-white rounded transition-colors hover:bg-sage"
-                style={{
-                  padding: "clamp(26px, 3vw, 38px)",
-                  borderTop: "4px solid #1A4D2E",
-                }}
-              >
-                <div className="flex justify-between items-center gap-3">
-                  <span
-                    className="font-bebas text-accent"
-                    style={{ fontSize: "28px" }}
-                  >
-                    {program.num}
-                  </span>
-                  <span
-                    style={{
-                      fontSize: "12px",
-                      fontWeight: 500,
-                      letterSpacing: "0.1em",
-                      textTransform: "uppercase",
-                      color: "rgba(28, 28, 26, 0.72)",
-                    }}
-                  >
-                    {program.meta}
-                  </span>
-                </div>
-                <h3
-                  className="font-epilogue m-0"
-                  style={{
-                    fontWeight: 900,
-                    fontSize: "clamp(28px, 2.8vw, 38px)",
-                    lineHeight: 1,
-                    letterSpacing: "-0.02em",
-                  }}
-                >
-                  {program.title}
-                </h3>
-                <div
-                  className="text-forest"
-                  style={{ fontSize: "15px", fontWeight: 500 }}
-                >
-                  {program.tagline}
-                </div>
-                <p
-                  style={{
-                    fontSize: "16px",
-                    fontWeight: 300,
-                    lineHeight: 1.6,
-                    color: "rgba(28, 28, 26, 0.76)",
-                    margin: 0,
-                  }}
-                >
-                  {program.description}
+          <ul className="m-0 mt-14 grid list-none gap-x-8 gap-y-10 p-0 sm:grid-cols-2 lg:grid-cols-4">
+            {CASE_AREAS.map((area) => (
+              <li key={area.id} className="border-t-2 border-fern pt-4">
+                <p className="m-0 text-[12px] font-medium tracking-[0.14em] text-newsprint/65 uppercase">
+                  {area.area}
                 </p>
-                <span
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: 500,
-                    marginTop: "auto",
-                    paddingTop: "8px",
-                  }}
-                >
-                  {program.linkText}
-                </span>
-              </Link>
+                <p className="m-0 mt-3 font-wordmark text-[clamp(56px,5vw,72px)] leading-[0.9] text-newsprint">
+                  {area.number}
+                </p>
+                <p className="type-body m-0 mt-2">{area.numberLabel}</p>
+              </li>
             ))}
-          </div>
-        </div>
-      </section>
+          </ul>
 
-      {/* AI Example */}
-      <section
-        className="bg-carbon text-newsprint"
-        style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 440px), 1fr))",
-            gap: "clamp(40px, 5vw, 80px)",
-            alignItems: "start",
-          }}
-        >
-          <div>
-            <div
-              className="text-accent"
-              style={{
-                fontSize: "12px",
-                fontWeight: 500,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                marginBottom: "18px",
-              }}
-            >
-              Inside an AI Accelerator
-            </div>
-            <h2
-              className="font-epilogue"
-              style={{
-                fontWeight: 900,
-                fontSize: "clamp(36px, 4.6vw, 64px)",
-                lineHeight: 0.96,
-                letterSpacing: "-0.03em",
-                margin: "0 0 22px",
-              }}
-            >
-              A building supplier&apos;s 30 days.
-            </h2>
-            <p
-              style={{
-                fontSize: "18px",
-                fontWeight: 300,
-                lineHeight: 1.6,
-                color: "rgba(244, 240, 232, 0.8)",
-                margin: "0 0 32px",
-                maxWidth: "44ch",
-              }}
-            >
-              A family-owned supply yard brought seven people, from the president
-              to accounts payable. Only 65% of invoices were collected inside 30
-              days, and quotes took anywhere from five minutes to a day. Here&apos;s
-              what they left with.
-            </p>
-
-            {/* Metrics */}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                gap: "12px",
-                marginBottom: "32px",
-              }}
-            >
-              <div
-                style={{
-                  border: "1px solid rgba(244, 240, 232, 0.18)",
-                  borderRadius: "4px",
-                  padding: "18px",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "12px",
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase",
-                    color: "rgba(244, 240, 232, 0.78)",
-                    marginBottom: "8px",
-                  }}
-                >
-                  Collected in 30 days
-                </div>
-                <div className="flex items-baseline gap-2.5 flex-wrap">
-                  <span
-                    className="font-bebas"
-                    style={{ fontSize: "40px", lineHeight: 0.9 }}
-                  >
-                    65%
-                  </span>
-                  <span className="text-accent">→</span>
-                  <Placeholder className="text-newsprint">[ result ]</Placeholder>
-                </div>
-              </div>
-              <div
-                style={{
-                  border: "1px solid rgba(244, 240, 232, 0.18)",
-                  borderRadius: "4px",
-                  padding: "18px",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "12px",
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase",
-                    color: "rgba(244, 240, 232, 0.78)",
-                    marginBottom: "8px",
-                  }}
-                >
-                  Quote turnaround
-                </div>
-                <div className="flex items-baseline gap-2.5 flex-wrap">
-                  <span
-                    className="font-bebas"
-                    style={{ fontSize: "40px", lineHeight: 0.9 }}
-                  >
-                    Up to 1 day
-                  </span>
-                  <span className="text-accent">→</span>
-                  <Placeholder className="text-newsprint">[ result ]</Placeholder>
-                </div>
-              </div>
-            </div>
-
-            <Link
-              href="/ai-accelerator#example"
-              className="text-fern font-medium"
-              style={{
-                fontSize: "15px",
-                borderBottom: "2px solid #7FC99A",
-                paddingBottom: "3px",
-              }}
-            >
-              See the full program →
-            </Link>
-          </div>
-
-          {/* Steps */}
-          <div style={{ borderTop: "1px solid rgba(244, 240, 232, 0.25)" }}>
-            {aiExampleSteps.map((step) => (
-              <div
-                key={step.num}
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "48px 1fr",
-                  padding: "22px 0",
-                  borderBottom: "1px solid rgba(244, 240, 232, 0.14)",
-                }}
-              >
-                <span
-                  className="font-bebas text-accent"
-                  style={{ fontSize: "26px" }}
-                >
-                  {step.num}
-                </span>
-                <div>
-                  <div
-                    style={{
-                      fontSize: "18px",
-                      fontWeight: 500,
-                      marginBottom: "6px",
-                    }}
-                  >
-                    {step.title}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: "15px",
-                      fontWeight: 300,
-                      lineHeight: 1.55,
-                      color: "rgba(244, 240, 232, 0.76)",
-                    }}
-                  >
-                    {step.description}
-                  </div>
-                </div>
-              </div>
+          <ul className="m-0 mt-14 grid list-none gap-x-8 gap-y-8 p-0 sm:grid-cols-2 lg:grid-cols-4">
+            {CASE_TOOLS.map((tool) => (
+              <li key={tool.name} className="border-t border-newsprint/40 pt-4">
+                <h3 className="type-h4 m-0 mb-1.5">{tool.name}</h3>
+                <p className="type-small m-0">{tool.line}</p>
+              </li>
             ))}
-          </div>
-        </div>
-      </section>
+          </ul>
+
+          <TextLink href="/ai-accelerator#case-study" className="mt-12 inline-block">
+            See the full story →
+          </TextLink>
+        </Container>
+      </Section>
 
       {/* Testimonials */}
-      <section
-        style={{ padding: "clamp(64px, 8vw, 112px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
-          <div className="text-eyebrow text-accent-shade mb-7">
-            What clients say
-          </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns:
-                "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
-              gap: "20px",
-            }}
-          >
-            <div
-              className="rounded flex flex-col justify-between gap-6"
-              style={{
-                border: "1.5px dashed rgba(28, 28, 26, 0.3)",
-                padding: "28px",
-                minHeight: "220px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "13px",
-                  fontWeight: 500,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  color: "rgba(28, 28, 26, 0.72)",
-                }}
-              >
-                [ Testimonial + result ]
-              </div>
-              <div style={{ fontSize: "15px", fontWeight: 500 }}>
+      <Section aria-label="What clients say">
+        <Container className="grid gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+          <QuoteCard
+            className="flex min-h-[340px] flex-col justify-between"
+            quote={
+              <>
+                &quot;We are a stronger, smarter organization today thanks to
+                the work we did with Junction.&quot;
+              </>
+            }
+            caption="Kathy Cooper, CEO, Kootenay Rockies Tourism"
+          />
+          <div className="flex flex-col gap-6">
+            <Placeholder className="min-h-[158px] flex-1 flex-col items-start justify-between gap-6 text-left">
+              <span>[ Testimonial + result ]</span>
+              <span className="normal-case tracking-normal text-(--tone-text)">
                 Twin Lions Contracting · AI Accelerator
-              </div>
-            </div>
-            <div
-              className="rounded flex flex-col justify-between gap-6"
-              style={{
-                border: "1.5px dashed rgba(28, 28, 26, 0.3)",
-                padding: "28px",
-                minHeight: "220px",
-              }}
-            >
-              <div
-                style={{
-                  fontSize: "13px",
-                  fontWeight: 500,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  color: "rgba(28, 28, 26, 0.72)",
-                }}
-              >
-                [ Testimonial + result ]
-              </div>
-              <div style={{ fontSize: "15px", fontWeight: 500 }}>
+              </span>
+            </Placeholder>
+            <Placeholder className="min-h-[158px] flex-1 flex-col items-start justify-between gap-6 text-left">
+              <span>[ Testimonial + result ]</span>
+              <span className="normal-case tracking-normal text-(--tone-text)">
                 West Coast Homes · AI Accelerator
-              </div>
-            </div>
-            <blockquote
-              className="m-0 bg-white rounded flex flex-col justify-between gap-6"
-              style={{ padding: "28px", minHeight: "220px" }}
-            >
-              <p
-                className="font-fraunces italic text-forest m-0"
-                style={{
-                  fontWeight: 900,
-                  fontSize: "24px",
-                  lineHeight: 1.2,
-                }}
-              >
-                &quot;We are a stronger, smarter organization today thanks to the work
-                we did with Junction.&quot;
-              </p>
-              <cite style={{ fontStyle: "normal", fontSize: "15px", fontWeight: 500 }}>
-                Kathy Cooper, CEO, Kootenay Rockies Tourism
-              </cite>
-            </blockquote>
+              </span>
+            </Placeholder>
           </div>
-        </div>
-      </section>
+        </Container>
+      </Section>
 
-      {/* The Call */}
-      <section style={{ padding: "0 clamp(20px, 4vw, 48px) clamp(64px, 8vw, 112px)" }}>
-        <div
-          style={{
-            maxWidth: "1320px",
-            margin: "0 auto",
-            borderTop: "2px solid #1C1C1A",
-            paddingTop: "44px",
-            display: "grid",
-            gridTemplateColumns:
-              "repeat(auto-fit, minmax(min(100%, 260px), 1fr))",
-            gap: "36px 48px",
-          }}
-        >
+      {/* What happens on the call */}
+      <Section>
+        <Container className="grid items-start gap-x-16 gap-y-12 border-t-2 border-(--tone-rule) pt-12 lg:grid-cols-[minmax(0,1fr)_300px]">
           <div>
-            <div className="text-eyebrow text-accent-shade mb-3.5">
-              The first step
-            </div>
-            <h2
-              className="font-epilogue m-0"
-              style={{
-                fontWeight: 900,
-                fontSize: "clamp(28px, 3vw, 40px)",
-                lineHeight: 1,
-                letterSpacing: "-0.025em",
-              }}
-            >
-              What happens on the call.
-            </h2>
+            <h2 className="type-h2 m-0 mb-10">What happens on the call.</h2>
+            <ol className="m-0 grid list-none gap-x-10 gap-y-9 p-0 md:grid-cols-3">
+              {callSteps.map((step) => (
+                <li key={step.num}>
+                  <span className="type-numeral mb-3 block">{step.num}</span>
+                  <h3 className="type-h4 m-0 mb-1.5">{step.title}</h3>
+                  <p className="type-body m-0">{step.description}</p>
+                </li>
+              ))}
+            </ol>
           </div>
-          {callSteps.map((step) => (
-            <div key={step.num}>
-              <div
-                className="font-bebas text-accent"
-                style={{ fontSize: "32px", marginBottom: "8px" }}
-              >
-                {step.num}
-              </div>
-              <div
-                style={{ fontSize: "18px", fontWeight: 500, marginBottom: "6px" }}
-              >
-                {step.title}
-              </div>
-              <p
-                style={{
-                  fontSize: "16px",
-                  fontWeight: 300,
-                  lineHeight: 1.55,
-                  color: "rgba(28, 28, 26, 0.76)",
-                  margin: 0,
-                }}
-              >
-                {step.description}
-              </p>
-            </div>
-          ))}
-        </div>
 
-        {/* Not ready banner */}
-        <div
-          className="bg-sage rounded"
-          style={{
-            maxWidth: "1320px",
-            margin: "40px auto 0",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            gap: "16px",
-            flexWrap: "wrap",
-            padding: "20px 24px",
-          }}
-        >
-          <span style={{ fontSize: "16px" }}>
-            <strong style={{ fontWeight: 500 }}>Not ready for a call?</strong>{" "}
-            <span style={{ fontWeight: 300 }}>
-              Watch a free training session and see how we teach.
-            </span>
-          </span>
-          <Link
-            href="/junctionu"
-            className="font-medium whitespace-nowrap"
-            style={{
-              fontSize: "14px",
-              borderBottom: "2px solid #1A4D2E",
-              paddingBottom: "2px",
-            }}
+          {/* Not ready for a call: free training sessions on YouTube */}
+          <Card
+            tone="carbon"
+            href={TRAINING_PLAYLIST_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Not ready for a call? Watch a free training session (opens YouTube in a new tab)"
+            padded="sm"
+            className="flex flex-col gap-4"
           >
-            Watch free →
-          </Link>
-        </div>
-      </section>
+            {/* Cover image: swap public/images/tourism-talks-cover.png on GitHub
+                to change it (keep the path and filename; any 16:9 size). */}
+            <div className="relative aspect-video w-full overflow-hidden rounded-control">
+              <Image
+                src="/images/tourism-talks-cover.png"
+                alt="Tourism Talks playlist"
+                fill
+                sizes="(min-width: 1024px) 260px, (min-width: 640px) 90vw, 100vw"
+                className="object-cover"
+              />
+              <svg
+                aria-hidden="true"
+                width="40"
+                height="40"
+                viewBox="0 0 40 40"
+                className="absolute bottom-3 left-3 text-newsprint"
+              >
+                <circle cx="20" cy="20" r="19" strokeWidth="1.5" className="fill-carbon/40 stroke-current" />
+                <path d="M16 13.5v13l11-6.5z" fill="currentColor" />
+              </svg>
+            </div>
+            <p className="type-body m-0 text-newsprint">
+              <span className="font-medium text-fern">Not ready for a call?</span>{" "}
+              Watch a free training session and see how we teach.
+            </p>
+          </Card>
+        </Container>
+      </Section>
 
       {/* CTA */}
-      <section
-        id="start"
-        className="bg-forest text-newsprint"
-        style={{ padding: "clamp(80px, 10vw, 140px) clamp(20px, 4vw, 48px)" }}
-      >
-        <div style={{ maxWidth: "1320px", margin: "0 auto" }}>
-          <h2
-            className="font-epilogue"
-            style={{
-              fontWeight: 900,
-              fontSize: "clamp(44px, 6.6vw, 104px)",
-              lineHeight: 0.92,
-              letterSpacing: "-0.035em",
-              margin: 0,
-              maxWidth: "15ch",
-            }}
-          >
+      <Section id="start" tone="forest" className="scroll-mt-24">
+        <Container>
+          <h2 className="type-display m-0 max-w-[15ch]">
             Twenty minutes. A straight answer on what fits.
           </h2>
-          <div
-            className="flex items-center gap-7 flex-wrap"
-            style={{ marginTop: "40px" }}
-          >
-            <a
-              href={CALENDLY_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-button bg-newsprint text-forest rounded-[3px] transition-colors hover:bg-sage"
-              style={{ padding: "17px 28px" }}
-            >
-              Book a 20-min call
-            </a>
-            <Link
-              href="/contact"
-              className="font-medium text-fern"
-              style={{
-                fontSize: "15px",
-                borderBottom: "2px solid #7FC99A",
-                paddingBottom: "3px",
-              }}
-            >
-              Or send us the details →
-            </Link>
+          <div className="mt-10 flex flex-wrap items-center gap-7">
+            <Button href={CALENDLY_URL}>Book a 20-min call</Button>
+            <TextLink href="/contact">Or send us the details →</TextLink>
           </div>
-        </div>
-      </section>
-
-      <Footer />
-    </div>
+        </Container>
+      </Section>
+    </>
   );
 }
