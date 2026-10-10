@@ -1,7 +1,8 @@
+import fs from "node:fs";
+import path from "node:path";
 import type { Metadata } from "next";
 import {
   Button,
-  Card,
   Container,
   Eyebrow,
   Placeholder,
@@ -16,6 +17,7 @@ import { CALENDLY_URL } from "@/lib/constants";
 import { clientLogos } from "@/lib/logos";
 import { COURSES } from "@/lib/customCourses";
 import { CourseShelf } from "./CourseShelf";
+import { FormatsAccordion, type Format } from "./FormatsAccordion";
 import { WhoPanel } from "./WhoPanel";
 
 export const metadata: Metadata = {
@@ -38,28 +40,39 @@ const leadershipFeatures = [
   "Measured against outcomes you set at the start",
 ];
 
-const formats = [
+const formats: Format[] = [
   {
-    num: "01",
-    title: "Live workshop",
+    id: "live",
+    name: "Live workshop",
+    duration: "90 min – 1 day",
     description: "Ninety minutes to a full day, in person or virtual.",
+    image: "/images/custom-training/formats-live-workshop.jpg",
   },
   {
-    num: "02",
-    title: "Webinar series",
+    id: "webinar",
+    name: "Webinar series",
+    duration: "Several weeks",
     description: "Short sessions over several weeks, each with homework.",
+    image: "/images/custom-training/formats-webinar-series.jpg",
   },
   {
-    num: "03",
-    title: "Custom course",
+    id: "course",
+    name: "Custom course",
+    duration: "Self-paced",
     description: "Self-paced on JunctionU, with certificates and reporting.",
   },
   {
-    num: "04",
-    title: "Leadership program",
+    id: "leadership",
+    name: "Leadership program",
+    duration: "Multi-session",
     description: "Multi-session, built on your strategy and real decisions.",
+    image: "/images/custom-training/formats-leadership-program.jpg",
   },
 ];
+
+/** The custom course loop plays only if this file has been added (checked at build). */
+const COURSE_VIDEO = "/images/custom-training/formats-custom-course.mp4";
+const courseVideo = fs.existsSync(path.join(process.cwd(), "public", COURSE_VIDEO)) ? COURSE_VIDEO : undefined;
 
 export default function CustomTrainingPage() {
   return (
@@ -139,14 +152,33 @@ export default function CustomTrainingPage() {
         </Container>
       </Section>
 
-      {/* Clients */}
-      <Section flush="top">
+      {/* Organizations we've trained */}
+      <section className="px-gutter py-8">
+        <Container className="flex flex-col gap-4 md:flex-row md:items-center md:gap-10">
+          <p className="m-0 shrink-0 text-[15px] font-medium text-flint">
+            Organizations we&apos;ve trained
+            <span className="block text-[13px] font-normal">Across Canada and the US</span>
+          </p>
+          <LogoWall
+            variant="auto"
+            logos={clientLogos}
+            label="Organizations we've trained"
+            className="min-w-0 flex-1"
+            marqueeClassName="[-webkit-mask-image:linear-gradient(to_right,transparent,black_10%,black_92%,transparent)] [mask-image:linear-gradient(to_right,transparent,black_10%,black_92%,transparent)]"
+          />
+        </Container>
+      </section>
+
+      {/* Formats */}
+      <Section>
         <Container>
-          <div className="mb-9 flex flex-wrap items-baseline justify-between gap-4">
-            <h2 className="type-h3 m-0">Organizations we&apos;ve trained.</h2>
-            <span className="type-small">Across Canada and the US</span>
+          <div className="mb-10 flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
+            <h2 className="type-h2 m-0">Formats.</h2>
+            <TextLink href="/junctionu" className="whitespace-nowrap">
+              See how we teach first: watch free →
+            </TextLink>
           </div>
-          <LogoWall variant="grid" logos={clientLogos} label="Organizations we've trained" />
+          <FormatsAccordion formats={formats} videoSrc={courseVideo} />
         </Container>
       </Section>
 
@@ -183,33 +215,6 @@ export default function CustomTrainingPage() {
             />
             <Placeholder>[ Leadership training testimonial ]</Placeholder>
           </div>
-        </Container>
-      </Section>
-
-      {/* Formats */}
-      <Section>
-        <Container>
-          <h2 className="type-h2 m-0 mb-9">Formats</h2>
-          <ol className="m-0 grid list-none border-t-2 border-(--tone-rule) p-0 [grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))]">
-            {formats.map((f) => (
-              <li key={f.num} className="border-b border-hairline py-6 pr-6">
-                <span className="type-numeral">{f.num}</span>
-                <h3 className="type-h4 m-0 my-1.5">{f.title}</h3>
-                <p className="type-small m-0">{f.description}</p>
-              </li>
-            ))}
-          </ol>
-          <Card className="mt-10 flex flex-wrap items-center justify-between gap-4">
-            <p className="type-body m-0">
-              <strong className="font-medium">See how we teach first.</strong>{" "}
-              <span className="text-muted">
-                Watch a free Tourism Talk or a sample lesson.
-              </span>
-            </p>
-            <TextLink href="/junctionu" className="whitespace-nowrap">
-              Watch free →
-            </TextLink>
-          </Card>
         </Container>
       </Section>
 
