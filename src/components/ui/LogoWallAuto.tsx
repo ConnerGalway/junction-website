@@ -39,13 +39,12 @@ export function LogoWallAuto({
 
   return (
     <div ref={boxRef} className={cx("relative", className, overflow && marqueeClassName)}>
-      {/* Natural single-row width, measured off-screen */}
-      <div
-        ref={measureRef}
-        aria-hidden="true"
-        className="logo-wall logo-wall-auto-measure pointer-events-none invisible absolute top-0 left-0 h-0 w-max overflow-hidden"
-      >
-        <LogoList logos={logos} />
+      {/* Natural single-row width, measured off-screen. The clipping box
+          keeps the wide copy from widening the page. */}
+      <div aria-hidden="true" className="pointer-events-none invisible absolute inset-0 overflow-hidden">
+        <div ref={measureRef} className="logo-wall logo-wall-auto-measure h-0 w-max overflow-hidden">
+          <LogoList logos={logos} />
+        </div>
       </div>
 
       {overflow ? (
