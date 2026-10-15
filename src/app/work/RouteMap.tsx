@@ -5,6 +5,7 @@ import type { MouseEvent, PointerEvent } from "react";
 import { cx } from "@/components";
 import type { LabelPlacement } from "@/lib/routeMap";
 import type { RouteMapGeometry } from "./routeMapGeometry";
+import { useRevealCase } from "./WorkFilter";
 
 type Tip = { key: string; x: number; y: number; name: string; note?: string; href?: string };
 
@@ -27,17 +28,11 @@ const isNarrow = () => window.matchMedia("(max-width: 767px)").matches;
  * on hover and focus). Other clients and the next stop show their names in a
  * tooltip on hover or tap. Under 768px the case names are hidden (numbers
  * stay) and the first tap on a stop shows its name as a link to the chapter.
+ * A jump first clears a service filter that would hide the chapter.
  */
-export function RouteMap({
-  geo,
-  onJump,
-  className,
-}: {
-  geo: RouteMapGeometry;
-  /** Called before scrolling to a chapter (e.g. to clear a filter that hides it). */
-  onJump?: (caseId: string) => void;
-  className?: string;
-}) {
+export function RouteMap({ geo, className }: { geo: RouteMapGeometry; className?: string }) {
+  // Clears a service filter that would hide the chapter we're jumping to.
+  const reveal = useRevealCase();
   const [tip, setTip] = useState<Tip | null>(null);
   const [hot, setHot] = useState<string | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -55,7 +50,7 @@ export function RouteMap({
   }, [tip]);
 
   function jump(caseId: string) {
-    onJump?.(caseId);
+    reveal?.(caseId);
     setTip(null);
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     // Let a revealed chapter render before scrolling to it.
