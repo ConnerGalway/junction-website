@@ -64,10 +64,11 @@ const topics = [
 ];
 
 const formats = [
-  { title: "Keynote", description: "30 to 60 minutes, main stage" },
-  { title: "Workshop", description: "Half or full day, hands-on" },
-  { title: "Panel or fireside", description: "Moderator or panellist" },
-  { title: "Virtual", description: "Live online, any time zone" },
+  { title: "Keynote", length: "30–60 min", description: "30 to 60 minutes, main stage" },
+  { title: "Workshop", length: "½ or full day", description: "Half or full day, hands-on" },
+  // TODO: confirm the panel / fireside length.
+  { title: "Panel or fireside", length: "[ length ]", description: "Moderator or panellist" },
+  { title: "Virtual", length: "Any time zone", description: "Live online, any time zone" },
 ];
 
 export default function SpeakingPage() {
@@ -177,15 +178,18 @@ export default function SpeakingPage() {
         </Container>
       </Section>
 
-      {/* Formats */}
+      {/* Formats: one centred row, no dividers */}
       <Section flush="top">
-        <Container className="grid border-t-2 border-(--tone-rule) [grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))]">
-          {formats.map((f) => (
-            <div key={f.title} className="border-b border-hairline py-6 pr-6">
-              <p className="type-h4 mt-0 mb-1.5">{f.title}</p>
-              <p className="type-small m-0">{f.description}</p>
-            </div>
-          ))}
+        <Container>
+          <ul className="m-0 flex list-none flex-wrap justify-center gap-x-[88px] gap-y-8 p-0 text-center">
+            {formats.map((f) => (
+              <li key={f.title}>
+                <p className="type-price m-0 text-[44px]">{f.length}</p>
+                <h3 className="type-h4 m-0 mt-3">{f.title}</h3>
+                <p className="type-small m-0 mt-1 text-flint">{f.description}</p>
+              </li>
+            ))}
+          </ul>
         </Container>
       </Section>
 
