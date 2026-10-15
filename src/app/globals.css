@@ -1077,6 +1077,45 @@
     --tone-bg: var(--color-newsprint);
   }
 
+  /* About "Who we are": touch / reduced motion shows every name at full
+     Newsprint with a small portrait; a fine pointer dims them to 45% (About-only
+     exception) and uses the floating card instead. */
+  .team-name {
+    color: var(--color-newsprint);
+    transition: color 150ms ease;
+  }
+
+  .team-role {
+    color: var(--color-newsprint-muted);
+    transition: color 150ms ease;
+  }
+
+  .team-card {
+    display: none;
+  }
+
+  @media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .team-thumb {
+      display: none;
+    }
+
+    .team-card {
+      display: block;
+    }
+
+    .team-name {
+      color: color-mix(in srgb, var(--color-newsprint) 45%, transparent);
+    }
+
+    .team-row[data-active] .team-name {
+      color: var(--color-newsprint);
+    }
+
+    .team-row[data-active] .team-role {
+      color: var(--color-fern);
+    }
+  }
+
   /* Program sketcher: native option lists in Newsprint, and the 200ms text fade. */
   .sketch-select option {
     background-color: var(--color-newsprint);
