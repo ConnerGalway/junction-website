@@ -2,126 +2,138 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import type { FocusEvent, PointerEvent } from "react";
 import { cx } from "@/components";
 import type { TeamMember } from "@/lib/about";
 
-/** How far the portrait moves toward the cursor each frame. */
-const LERP = 0.16;
-/** Portrait card size (px) and its offset from the cursor. */
-const CARD_W = 220;
-const CARD_H = 280;
-const OFFSET_X = 32;
+/** Portrait card size (px). */
+const CARD_W = 180;
+const CARD_H = 225;
+/** Space the card keeps from the name (and from the role, when centred in the gap). */
+const CARD_GAP = 24;
 
 /**
  * "Who we are" names (About page, on Carbon), in Fraunces 900 italic.
  *
- * Fine pointer, motion allowed: names rest at Newsprint 45%; the hovered or
- * focused one goes to full Newsprint, its role to Fern, and a greyscale
- * portrait card (-3°) appears and follows the cursor with a smooth lag
- * (rAF only while moving). Keyboard focus puts the card next to the name.
- * Leaving the list hides it (150ms fade).
+ * Fine pointer: names rest at Newsprint 45%; the hovered or focused one goes
+ * to full Newsprint and its role to Fern, and a greyscale portrait card (-3°)
+ * sits in that row, centred in the gap between the name and the role (just
+ * right of the name when the gap is too narrow). Moving between names, it
+ * glides to the new row (300ms ease-out) and the image cross-fades (200ms);
+ * entering the list it fades and scales in (0.96 → 1, 200ms); leaving, it
+ * fades out (150ms). With reduced motion it appears in place, without
+ * transitions.
  *
- * Touch, coarse pointer or reduced motion (CSS decides, so there's no flash):
- * names at full Newsprint, a small portrait beside each, no floating card.
+ * Touch or coarse pointer (CSS decides, so there's no flash): names at full
+ * Newsprint, a small portrait beside each, no card.
  */
 export function TeamList({ team }: { team: TeamMember[] }) {
   const [active, setActive] = useState<number | null>(null);
   // The card's portrait; kept while the card fades out.
   const [portrait, setPortrait] = useState(0);
   const listRef = useRef<HTMLUListElement>(null);
+  const placeRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const live = useRef(false);
-  const pos = useRef({ x: 0, y: 0 });
-  const goal = useRef({ x: 0, y: 0 });
-  const frame = useRef(0);
-  const running = useRef(false);
-  const shown = useRef(false);
+  const reduce = useRef(false);
+  const visible = useRef(false);
+  const activeRow = useRef<HTMLLIElement | null>(null);
 
-  useEffect(() => {
-    const mq = window.matchMedia("(pointer: fine) and (prefers-reduced-motion: no-preference)");
-    const update = () => {
-      live.current = mq.matches;
-      if (!mq.matches) setActive(null);
+  /** Where the card goes for a row (list coordinates). */
+  function spotFor(row: HTMLLIElement) {
+    const list = listRef.current!.getBoundingClientRect();
+    const r = row.getBoundingClientRect();
+    const name = row.querySelector("[data-name]")!.getBoundingClientRect();
+    const role = row.querySelector("[data-role]")!.getBoundingClientRect();
+    const sameLine = role.top < name.bottom && role.left > name.right;
+    const gap = sameLine ? role.left - name.right : 0;
+    const x =
+      gap >= CARD_W + 2 * CARD_GAP
+        ? (name.right + role.left) / 2 - CARD_W / 2 // centred in the gap
+        : name.right + CARD_GAP; // just right of the name
+    return {
+      x: Math.min(Math.max(x - list.left, 0), Math.max(0, list.width - CARD_W)),
+      y: r.top - list.top + r.height / 2 - CARD_H / 2,
     };
-    update();
-    mq.addEventListener("change", update);
-    return () => {
-      mq.removeEventListener("change", update);
-      cancelAnimationFrame(frame.current);
-    };
-  }, []);
+  }
 
-  function draw() {
+  /** Move the card to a row: glide if it's showing, else appear there (fade + scale in). */
+  function place(row: HTMLLIElement, animate: boolean) {
+    const holder = placeRef.current;
     const card = cardRef.current;
-    if (card) card.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0) rotate(-3deg)`;
-  }
-
-  function step() {
-    const p = pos.current;
-    const g = goal.current;
-    p.x += (g.x - p.x) * LERP;
-    p.y += (g.y - p.y) * LERP;
-    draw();
-    if (Math.abs(g.x - p.x) > 0.5 || Math.abs(g.y - p.y) > 0.5) {
-      frame.current = requestAnimationFrame(step);
-    } else {
-      running.current = false;
-    }
-  }
-
-  /** Move the card's top-left toward (x, y) in list coordinates; snap if it was hidden. */
-  function moveTo(rawX: number, y: number) {
-    // Keep the card inside the list's width so it never causes a sideways scroll.
-    const maxX = Math.max(0, listRef.current!.clientWidth - CARD_W);
-    const x = Math.min(Math.max(rawX, 0), maxX);
-    goal.current = { x, y };
-    if (!shown.current) {
-      pos.current = { x, y };
-      shown.current = true;
-      draw();
+    if (!holder || !card) return;
+    const { x, y } = spotFor(row);
+    const motion = animate && !reduce.current;
+    if (visible.current) {
+      holder.style.transition = motion ? "transform 300ms ease-out" : "none";
+      holder.style.transform = `translate3d(${x}px, ${y}px, 0)`;
       return;
     }
-    if (!running.current) {
-      running.current = true;
-      frame.current = requestAnimationFrame(step);
-    }
-  }
-
-  function onMove(event: PointerEvent) {
-    if (!live.current || event.pointerType !== "mouse") return;
-    const r = listRef.current!.getBoundingClientRect();
-    moveTo(event.clientX - r.left + OFFSET_X, event.clientY - r.top - CARD_H / 2);
-  }
-
-  function activate(i: number) {
-    setActive(i);
-    setPortrait(i);
+    // Appear: jump to the row with no transition, then fade and scale in.
+    holder.style.transition = "none";
+    holder.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    card.style.transition = "none";
+    card.style.opacity = "0";
+    card.style.transform = "rotate(-3deg) scale(0.96)";
+    void card.offsetWidth; // apply the start state before transitioning
+    card.style.transition = motion ? "opacity 200ms ease-out, transform 200ms ease-out" : "none";
+    card.style.opacity = "1";
+    card.style.transform = "rotate(-3deg) scale(1)";
+    visible.current = true;
   }
 
   function hide() {
     setActive(null);
-    shown.current = false;
+    activeRow.current = null;
+    const card = cardRef.current;
+    if (!card || !visible.current) return;
+    visible.current = false;
+    card.style.transition = reduce.current ? "none" : "opacity 150ms ease-out";
+    card.style.opacity = "0";
   }
 
-  function onFocus(i: number, event: FocusEvent<HTMLLIElement>) {
+  function activate(i: number, row: HTMLLIElement) {
     if (!live.current) return;
-    activate(i);
-    // Keyboard: the card sits next to the name, not at the cursor.
-    const list = listRef.current!.getBoundingClientRect();
-    const name = event.currentTarget.querySelector("[data-name]")!.getBoundingClientRect();
-    const row = event.currentTarget.getBoundingClientRect();
-    shown.current = false;
-    moveTo(name.right - list.left + OFFSET_X, row.top - list.top + row.height / 2 - CARD_H / 2);
+    setActive(i);
+    setPortrait(i);
+    activeRow.current = row;
+    place(row, true);
   }
+
+  // Latest place/hide for the listeners below.
+  const handlers = useRef({ place, hide });
+  useEffect(() => {
+    handlers.current = { place, hide };
+  });
+
+  useEffect(() => {
+    const fine = window.matchMedia("(pointer: fine)");
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => {
+      live.current = fine.matches;
+      reduce.current = still.matches;
+      if (!fine.matches) handlers.current.hide();
+    };
+    // Keep the card on its row when the layout changes.
+    const onResize = () => {
+      if (activeRow.current && visible.current) handlers.current.place(activeRow.current, false);
+    };
+    update();
+    fine.addEventListener("change", update);
+    still.addEventListener("change", update);
+    window.addEventListener("resize", onResize);
+    return () => {
+      fine.removeEventListener("change", update);
+      still.removeEventListener("change", update);
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
 
   return (
     <div className="relative">
       <ul
         ref={listRef}
         className="team-list relative m-0 list-none p-0"
-        onPointerMove={onMove}
-        onPointerLeave={hide}
+        onPointerLeave={(e) => e.pointerType === "mouse" && hide()}
         onBlur={(e) => {
           if (!e.currentTarget.contains(e.relatedTarget as Node)) hide();
         }}
@@ -131,8 +143,8 @@ export function TeamList({ team }: { team: TeamMember[] }) {
             key={m.name}
             tabIndex={0}
             data-active={active === i ? "" : undefined}
-            onPointerEnter={(e) => live.current && e.pointerType === "mouse" && activate(i)}
-            onFocus={(e) => onFocus(i, e)}
+            onPointerEnter={(e) => e.pointerType === "mouse" && activate(i, e.currentTarget)}
+            onFocus={(e) => activate(i, e.currentTarget)}
             className="team-row flex items-center gap-x-5 py-6 outline-offset-4 not-last:border-b not-last:border-sage"
           >
             <span className="team-thumb relative h-[70px] w-14 shrink-0 overflow-hidden rounded-control">
@@ -142,32 +154,41 @@ export function TeamList({ team }: { team: TeamMember[] }) {
               <span data-name className="team-name font-quote text-[clamp(32px,4.6vw,64px)] leading-[1.05] font-black italic">
                 {m.name}
               </span>
-              <span className="team-role text-[13px] font-medium tracking-[0.14em] uppercase">{m.role}</span>
+              <span data-role className="team-role text-[13px] font-medium tracking-[0.14em] uppercase">
+                {m.role}
+              </span>
             </span>
           </li>
         ))}
       </ul>
 
-      {/* The floating portrait (fine pointer only; decorative) */}
+      {/* The portrait card (fine pointer only; decorative). The holder moves
+          between rows; the card inside fades, scales and holds the tilt. */}
       <div
-        ref={cardRef}
+        ref={placeRef}
         aria-hidden="true"
-        className={cx(
-          "team-card pointer-events-none absolute top-0 left-0 z-10 overflow-hidden rounded-card shadow-card transition-opacity duration-150",
-          active === null ? "opacity-0" : "opacity-100"
-        )}
+        className="team-card pointer-events-none absolute top-0 left-0 z-10"
         style={{ width: CARD_W, height: CARD_H }}
       >
-        {team.map((m, i) => (
-          <Image
-            key={m.name}
-            src={m.portrait}
-            alt=""
-            fill
-            sizes={`${CARD_W}px`}
-            className={cx("object-cover object-top grayscale", portrait === i ? "opacity-100" : "opacity-0")}
-          />
-        ))}
+        <div
+          ref={cardRef}
+          className="relative size-full overflow-hidden rounded-card shadow-card"
+          style={{ opacity: 0, transform: "rotate(-3deg) scale(0.96)" }}
+        >
+          {team.map((m, i) => (
+            <Image
+              key={m.name}
+              src={m.portrait}
+              alt=""
+              fill
+              sizes={`${CARD_W}px`}
+              className={cx(
+                "object-cover object-top grayscale transition-opacity duration-200 ease-out motion-reduce:transition-none",
+                portrait === i ? "opacity-100" : "opacity-0"
+              )}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

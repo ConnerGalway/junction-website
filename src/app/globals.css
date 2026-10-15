@@ -1099,9 +1099,9 @@
     --tone-bg: var(--color-newsprint);
   }
 
-  /* About "Who we are": touch / reduced motion shows every name at full
+  /* About "Who we are": touch / coarse pointer shows every name at full
      Newsprint with a small portrait; a fine pointer dims them to 45% (About-only
-     exception) and uses the floating card instead. */
+     exception) and uses the in-row portrait card instead. */
   .team-name {
     color: var(--color-newsprint);
     transition: color 150ms ease;
@@ -1116,7 +1116,7 @@
     display: none;
   }
 
-  @media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  @media (pointer: fine) {
     .team-thumb {
       display: none;
     }
