@@ -4,11 +4,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import {
   Button,
-  Card,
   Container,
+  Eyebrow,
   Placeholder,
   Section,
   TextLink,
+  cx,
 } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
 import { SHOW_SPEAKING_REEL } from "@/lib/flags";
@@ -24,6 +25,12 @@ export const metadata: Metadata = {
 /** The 60-second reel: shown only with the flag on and the file in place. */
 const REEL = "/images/speaking/reel.mp4";
 const showReel = SHOW_SPEAKING_REEL && fs.existsSync(path.join(process.cwd(), "public", REEL));
+
+/** Talk posters (1600×900): public/images/speaking/talk-01.jpg … talk-03.jpg, used once they exist. */
+function talkImage(n: number) {
+  const rel = `/images/speaking/talk-${String(n).padStart(2, "0")}.jpg`;
+  return fs.existsSync(path.join(process.cwd(), "public", rel)) ? rel : null;
+}
 
 const stages = [
   "Northern BC Tourism Summit",
@@ -131,22 +138,42 @@ export default function SpeakingPage() {
         </SpotlightHero>
       </section>
 
-      {/* Topics */}
+      {/* Three talks */}
       <Section>
         <Container>
-          <h2 className="type-h2 mt-0 mb-9">
-            Three talks, tailored to your room.
-          </h2>
-          <div className="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))]">
-            {topics.map((t) => (
-              <Card key={t.num} className="flex flex-col gap-3.5">
-                <span className="type-numeral">{t.num}</span>
-                <h3 className="type-h3 m-0">{t.title}</h3>
-                <p className="type-body m-0">{t.description}</p>
-                <p className="type-small mt-auto mb-0 pt-2.5">{t.audience}</p>
-              </Card>
-            ))}
-          </div>
+          <h2 className="type-h2 m-0 mb-12">Three talks, tailored to your room.</h2>
+          <ol className="m-0 list-none p-0">
+            {topics.map((t, i) => {
+              const image = talkImage(i + 1);
+              return (
+                <li
+                  key={t.num}
+                  className={cx(
+                    "grid items-start gap-x-12 gap-y-8 py-10 md:grid-cols-[minmax(0,1fr)_minmax(0,360px)]",
+                    i === 0 ? "border-t-2 border-(--tone-rule)" : "border-t border-hairline"
+                  )}
+                >
+                  <div className="grid gap-x-8 gap-y-3 sm:grid-cols-[88px_minmax(0,1fr)]">
+                    <span className="type-numeral text-[64px] leading-[0.85]">{t.num}</span>
+                    <div>
+                      <h3 className="m-0 font-display text-[clamp(28px,3vw,40px)] leading-[1.05] font-black tracking-[-0.035em]">
+                        {t.title}
+                      </h3>
+                      <p className="type-body m-0 mt-4 max-w-[52ch]">{t.description}</p>
+                      <Eyebrow className="m-0 mt-5">{t.audience}</Eyebrow>
+                    </div>
+                  </div>
+                  {image ? (
+                    <div className="relative aspect-video overflow-hidden rounded-card shadow-card">
+                      <Image src={image} alt="" fill sizes="(min-width: 768px) 360px, 100vw" className="object-cover" />
+                    </div>
+                  ) : (
+                    <Placeholder aspectRatio="16/9">[ talk poster ]</Placeholder>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
         </Container>
       </Section>
 
