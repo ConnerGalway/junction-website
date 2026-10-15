@@ -25,7 +25,7 @@ Defined directly in `@theme`, so each token generates `bg-*`, `text-*`, `border-
 | `carbon` | `#1C1C1A` | Headings and UI text on Newsprint; dark ground |
 | `ink-soft` | `#3C3C39` | Body copy on Newsprint (Carbon at about 85%) |
 | `flint` | `#6A6862` | Muted text on Newsprint (captions, small print) |
-| `stage` | `#121211` | The Speaking hero's near-black stage only (`.tone-stage`, see Speaking page) |
+| `stage` | `#121211` | The Speaking near-black stage only: the Speaking hero (`.tone-stage`) and the Speaking card's stage thumbnail (see Speaking page) |
 | `newsprint` | `#F4F0E8` | Main ground; replaces white |
 | `newsprint-hover` | `#EDE6DA` | Hover and focus fill for clickable list rows |
 | `forest` | `#1A4D2E` | Dark ground (sections and boxes); prices on light; card top rule |
@@ -111,7 +111,7 @@ Other ground rules:
 - **Carbon and Forest are both allowed** for full sections and for boxes.
 - **Neighbouring dark boxes alternate.** If two dark boxes sit side by side, make one Forest and one Carbon, as with the two audience cards on Custom Training.
 - **Two dark sections of the same colour should never touch.**
-- **Stage** (`.tone-stage`) is a near-black ground for the Speaking hero only. It takes Carbon's roles (Newsprint button, Fern focus, gold numerals, Newsprint 60% prices).
+- **Stage** (`.tone-stage`) is a near-black ground for the Speaking hero and its stage thumbnail only. It takes Carbon's roles (Newsprint button, Fern focus, gold numerals, Newsprint 60% prices).
 - **Sage is never a full-width section.** Use it only inside boxes.
   - **Callouts** (`<Callout>`): sage-25 background with Forest text and Forest links (8.3:1).
   - **Quote cards** (`<QuoteCard>`): Sage background, also with Forest text.
@@ -260,6 +260,7 @@ Controls:
 | `Tabs` | Underlined tabs: `items` (`id`, `label`, `panel`) and a `label`. Large titles (Epilogue 600, 22px) on a 1px rule; active Carbon with a 3px Canopy underline, inactive Flint with a pink hover. `tablist`/`tab`/`tabpanel`, ← → Home End; panels cross-fade in 250ms (instant with reduced motion); the tab row scrolls sideways on narrow screens. |
 | `Accordion` | Questions sections, everywhere. `items` (`q`, `a`). Each question is a full-width button row (`aria-expanded`, `aria-controls`) under a 2px divider, all collapsed by default (any number can be open). A gold chevron (accent-1-on-light, 20px, 2px stroke; a UI graphic, so 3:1 is enough) on the right turns 180° when open; the answer opens with a 250ms height animation (instant with reduced motion). The question turns pink on hover. No "+" icons. |
 | `DashboardPreview`, `OffloadPreview` | Product previews (`src/components/`), each with a `thumbnail` variant for program cards: scaled to fill the slot's width, top-aligned, bottom faded, `inert` and `aria-hidden`. `OffloadPreview` is the Offload hero visual (journey track + Session 3 quote generator); its thumbnail is drawn at 560px. Used on the homepage orbit (The Accelerator, Offload Program) and the Programs dropdown (The Accelerator). |
+| `ThumbnailFrame` | Static program-card thumbnails (`src/components/ThumbnailFrame.tsx`): children drawn at a design size (default 640 × 400, the 16:10 slot) and scaled to the slot's width, top-aligned; `inert`, `aria-hidden`, no pointer events (the card stays the link). Takes the ground as `className`. Used by the homepage orbit's two static previews, passed as a program's `preview`: **`StageThumbnail`** (Speaking; see Speaking page) and **`CourseShelfThumbnail`** (Custom Training; see Custom Training page). Same slot as the other thumbnails (16:10, radius 14). |
 | `ChevronButton` | Carousel previous / next: a thin 20px chevron (1.6px rounded stroke), no box, tone text at 70%, the tone's pink on hover and focus, 40% when disabled at the ends of a non-looping carousel. Needs an `aria-label`. Used by the program orbit and the KitCarousel. |
 | `Chip` | `sage` (sage fill, Forest text), `outline` (1.5px Forest) or `fern-outline` (1.5px Fern border and text, for dark grounds). Radius 10. |
 | `Input`, `Select`, `Textarea` | Always labelled. 48px, with a Flint border and a canopy-text focus. |
@@ -370,6 +371,7 @@ Every fact lives in `src/lib/buildingSupplyCase.ts` (areas, numbers, before, cos
 
 - **Hero:** the three-line H1 on the left; the lead (Newsprint 88%) and "Scope a program" + the Calendly link on the right; the CourseShelf about 96px below.
 - **CourseShelf** (`CourseShelf.tsx`, data in `src/lib/customCourses.ts`): course "poster" cards (250 × 300, radius 14, soft shadow) in a full-bleed row drifting left in a seamless 40s linear loop (the set is duplicated); static with reduced motion. Display only: `aria-hidden`, not focusable, no hover, with a visually hidden sentence listing the titles. A card shows "Built for a client" (small caps) with an 18 × 4px colour bar, then the title (Epilogue 900, 28px) and "Custom course". Variants: Newsprint, Carbon, Sage (Forest text) and gold (Carbon text and bar; see Accent hierarchy). If `posters/<slug>.jpg` exists (checked at build), the poster fills the card instead; no code change needed. No client names in titles.
+- **Course shelf thumbnail** (`CourseShelfThumbnail` in `CourseShelf.tsx`, the Custom Training card in the homepage orbit): Forest, with the first three `SHELF` cards (same variants, posters if set) in one row from the left, cropped by the right edge. It reuses the shelf's own card, drawn full size and scaled with the slot (about 65% on desktop). Static.
 - **Who it's for:** `Tabs` with two panels (radius 14, about 48px padding, two columns that stack on mobile). DMOs on Carbon with gold chevrons; leadership teams on Forest with Sage chevrons (no gold on Forest). Each has a 2-column feature list and a Newsprint button.
 - **Who-panel visual** (`WhoPanel.tsx`): a photo (radius 14) set 70px down and 40px in from the right, with a small Newsprint card (300px, radius 14, shadow) in the top-right corner overlapping the top of the photo: a meta label and three rows (Bebas gold-on-light number, title, small line). Below 1024px the card sits under the photo.
 - **FormatsAccordion:** four panels in one 520px row (12px gaps, radius 14). One open at a time (flex 3 vs 1, 450ms ease-out, instant with reduced motion); hover on pointer devices, or click, tap or Enter, opens a panel (each has a full-panel button with `aria-expanded`). Closed: alternating Carbon and Forest, the duration in Bebas at the top (Newsprint 60%), the name set vertically, reading bottom to top (Epilogue 900, 30px). Open: the photo with a dark bottom gradient, the duration (Bebas 24px, Newsprint 70%), the name (about 40px) and the description. Below 768px: a vertical accordion whose open item shows its image or player at 220px. The durations ("90 min – 1 day", "Several weeks", "Self-paced", "Multi-session") are placeholders taken from the descriptions.
@@ -390,10 +392,15 @@ Sections:
 
 - **Hero** (`SpotlightHero.tsx`):
   - **Ground:** the near-black stage, at least one viewport minus the nav and never under 620px.
-  - **Copy:** max 600px wide. The H1 is "Talks that send the room home with a plan." Its last words "with a plan." rest at **Newsprint 35% on this page** (the beam lifts them; this is the page's design, not a listed exception). The lead is Newsprint 85%, then the existing buttons.
-  - **Cutout** (`.speaking-conner`): bottom-anchored and right-aligned. Its height is capped so it never reaches under the copy column. Below 768px it sits lower (52svh) with a dark gradient behind the copy.
-  - **Beam:** a soft radial glow (Newsprint 16% at the centre, gone by ~420px) and a faint cone from the top, both `aria-hidden`. It follows a fine pointer with a 0.12 lerp (rAF only while moving) and rests 120px right of "with a plan.". As it nears the words, their opacity rises from 35% to 100% over a 380px falloff.
-  - **Touch, coarse pointer or reduced motion:** a static beam at the rest point, the words at 35%.
+  - **Copy:** max 600px wide. The H1 is "Talks that send the room home with a plan." Its last words "with a plan." rest at **Newsprint 35% on this page** (the light lifts them; this is the page's design, not a listed exception). Each word is its own inline span (`data-spot-word`), so wrapping and the read-out sentence are unchanged. The lead is Newsprint 85%, then the existing buttons.
+  - **Cutout** (`.speaking-conner`, a box with the image's aspect ratio): bottom-anchored and right-aligned. Its height is capped so it never reaches under the copy column. Below 768px it sits lower (52svh) with a dark gradient behind the copy. It holds two copies of the same image:
+    - **Base:** at 60% opacity, always visible.
+    - **Lit** (`.speaking-conner-lit`): on top, `brightness(1.2) contrast(1.05)`, masked by a 300px radial gradient centred on the light (fully visible at the centre, 60% at 45%, gone at the edge), so only the area under the light looks brighter. The mask centre (`--mx`/`--my`) is the light point in the image's own coordinates. Its opacity goes from 0 to 1 as the light nears his face (53% across, 32% down the image box), with a linear falloff over 520px.
+  - **Light** (`.spot-pool`, `aria-hidden`): one round, diffused pool, as if the pointer were a light aimed straight at the screen. No cone. Radius 300px; Newsprint 13% at the centre, 7% at 35%, 2% at 65%, gone at the edge.
+    - It follows a fine pointer with a 0.12 lerp (rAF only while moving), and the words, mask and lit opacity update on the same tick.
+    - On page load it starts 120px right of "with a plan.". That's its only rest point: when the cursor leaves the hero the light stays where it was, and on re-entry it glides from there to the cursor.
+    - Each word's opacity rises from 35% to 100% as the light nears that word's own centre (linear over 240px), so the words light up one at a time.
+  - **Touch, coarse pointer or reduced motion:** a static pool at the rest point, the base cutout only (no lit layer), all three words at 35%.
   - **"Recent stages" strip:** pinned to the bottom, with a Newsprint 10% top hairline. The label is in small caps at Newsprint 55%, and the stages are separated by "·".
 - **Three talks:** an `<ol>` of editorial rows, with a 2px Canopy rule above the first row and 1px hairlines above the others. Each row has:
   - a Bebas gold-on-light number (64px);
@@ -417,7 +424,8 @@ Sections:
   - a 2×2 grid (stacked on mobile) of Event (required, with an inline error), Date, Format and Audience;
   - the button and a small line under it.
 
-  Submitting opens `/contact?type=speaking&event=…&date=…&format=…&audience=…`. The contact form pre-fills organization/event, date, format and audience size from it. A format the contact form doesn't list ("Not sure yet") goes into a hidden `note` field (TODO: a visible notes field).
+  Submitting opens `/contact?type=speaking&event=…&date=…&format=…&audience=…`. The contact form pre-fills organization/event, date, format and audience size from it. Its Format list matches the availability form's, including "Not sure yet". A format it doesn't list would go into a hidden `note` field (TODO: a visible notes field).
+- **Stage thumbnail** (`StageThumbnail.tsx`, the Speaking card in the homepage orbit): the stage ground, a `.spot-pool` at half size (150px radius) upper-right of centre near his face, and the cutout at 80%, bottom-anchored and right-aligned, slightly cropped by the right and bottom edges. No text, static. See program thumbnails under Components.
 - **Reel:** no video player is shown. A frosted "Watch the reel" pill (`ReelPill.tsx`, round Newsprint play button) sits after the hero buttons. It appears only when `SHOW_SPEAKING_REEL` in `src/lib/flags.ts` is `true` **and** `public/images/speaking/reel.mp4` exists, and it opens the file in a new tab.
 
 ## Logo walls
