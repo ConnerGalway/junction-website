@@ -1065,6 +1065,18 @@
     );
   }
 
+  /* Work chapters: even chapters (by visible position) put the stat on the right. */
+  @media (min-width: 1024px) {
+    .work-chapter[data-flip="true"] .work-chapter-stat {
+      order: 2;
+    }
+  }
+
+  /* Work quote cards: Sage, except on Forest, where they're a Newsprint card (Forest text). */
+  .tone-forest .quote-adapt {
+    --tone-bg: var(--color-newsprint);
+  }
+
   /* Program sketcher: native option lists in Newsprint, and the 200ms text fade. */
   .sketch-select option {
     background-color: var(--color-newsprint);

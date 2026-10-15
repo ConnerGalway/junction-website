@@ -1,15 +1,10 @@
 import type { Metadata } from "next";
-import {
-  Button,
-  Container,
-  Eyebrow,
-  QuoteCard,
-  Section,
-  Stat,
-  TextLink,
-} from "@/components";
+import { Button, Container, Section } from "@/components";
+import { WORK_CASES } from "@/lib/workCases";
+import { CaseChapter } from "./CaseChapter";
 import { RouteMap } from "./RouteMap";
 import { buildRouteMap } from "./routeMapGeometry";
+import { ChapterList, ServiceFilter, WorkFilterProvider } from "./WorkFilter";
 
 export const metadata: Metadata = {
   title: "Work",
@@ -19,14 +14,11 @@ export const metadata: Metadata = {
 
 const routeMap = buildRouteMap();
 
-const caseGrid =
-  "grid gap-x-[72px] gap-y-8 [grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr))]";
-
 export default function WorkPage() {
   return (
-    <>
+    <WorkFilterProvider services={Object.fromEntries(WORK_CASES.map((c) => [c.id, c.service]))}>
       {/* Hero: headline and intro, with the route map */}
-      <Section spacing="tight">
+      <Section spacing="tight" flush="bottom">
         <Container className="grid items-center gap-x-12 gap-y-10 lg:grid-cols-[minmax(0,45fr)_minmax(0,55fr)]">
           <div>
             {/* Exactly two lines from 1024px (explicit break) */}
@@ -44,117 +36,17 @@ export default function WorkPage() {
         </Container>
       </Section>
 
-      {/* Travel Yukon */}
-      <Section spacing="tight" flush="top">
-        <Container className={`${caseGrid} border-t-2 border-(--tone-rule) pt-section-tight`}>
-          <div>
-            <Eyebrow className="mb-4">Travel Yukon · Training · 4 years</Eyebrow>
-            <Stat
-                            value="300+"
-              label="Businesses through the Go Digital program"
-            />
-          </div>
-          <div className="flex flex-col justify-end gap-7">
-            <h2 className="type-h3 m-0">Go Digital program</h2>
-            <p className="type-body m-0 max-w-[52ch]">
-              A territory-wide digital capacity program, from Whitehorse to
-              Dawson City. 300+ businesses came through in four years, and
-              alumni now lead the program themselves.
-            </p>
-            <QuoteCard
-              quote={
-                <>
-                  &quot;Incredibly valuable insights and education for our tourism
-                  sector.&quot;
-                </>
-              }
-              caption="Avery Bramadat, Travel Yukon"
-            />
-          </div>
+      {/* Service filter */}
+      <div className="px-gutter pt-8 pb-14">
+        <Container>
+          <ServiceFilter />
         </Container>
-      </Section>
+      </div>
 
-      {/* ITBC */}
-      <Section tone="forest" spacing="tight">
-        <Container className={caseGrid}>
-          <div>
-            <Eyebrow className="mb-4">
-              Indigenous Tourism BC · Accelerator · 3 months
-            </Eyebrow>
-            <Stat value="+300%" label="Past engagement goal" />
-          </div>
-          <div className="flex flex-col items-start justify-end gap-7">
-            <h2 className="type-h3 m-0">Accelerator across ITBC members</h2>
-            <p className="type-body m-0 max-w-[52ch]">
-              Assessments, one-to-one coaching and implementation plans,
-              subsidised by ITBC for its member businesses. Engagement landed
-              300% past goal, with bookings up across the province inside three
-              months.
-            </p>
-            <TextLink href="/programs">About the Accelerator →</TextLink>
-          </div>
-        </Container>
-      </Section>
-
-      {/* Ontario's Southwest */}
-      <Section spacing="tight">
-        <Container className={caseGrid}>
-          <div>
-            <Eyebrow className="mb-4">
-              Ontario&apos;s Southwest · Research · 2025–26
-            </Eyebrow>
-            <Stat
-                            value="2026"
-              label="Tourism strategy driven by our findings"
-            />
-          </div>
-          <div className="flex flex-col justify-end gap-7">
-            <h2 className="type-h3 m-0">Traveller Insights Study</h2>
-            <p className="type-body m-0 max-w-[52ch]">
-              Region-wide research into who visits Southwest Ontario, why they
-              come, and what brings them back. The findings now drive the
-              region&apos;s 2026 tourism strategy.
-            </p>
-            <QuoteCard
-              quote={
-                <>
-                  &quot;Invaluable support to our region, our DMOs and our
-                  operators.&quot;
-                </>
-              }
-              caption="Joanne Wolnik, Ontario's Southwest"
-            />
-          </div>
-        </Container>
-      </Section>
-
-      {/* Kootenay Rockies */}
-      <Section tone="carbon" spacing="tight">
-        <Container className={`${caseGrid} items-end`}>
-          <div>
-            <Eyebrow className="mb-4">Kootenay Rockies · Strategy</Eyebrow>
-            <figure className="m-0">
-              <blockquote className="type-quote m-0 mb-5 text-fern">
-                &quot;We are a stronger, smarter tourism organization today thanks
-                to the work we did with Junction.&quot;
-              </blockquote>
-              <figcaption>
-                <cite className="type-small not-italic">
-                  Kathy Cooper, CEO, Kootenay Rockies Tourism
-                </cite>
-              </figcaption>
-            </figure>
-          </div>
-          <div className="flex flex-col gap-5">
-            <h2 className="type-h3 m-0">A region running its own playbook</h2>
-            <p className="type-body m-0 max-w-[52ch]">
-              Destination marketing strategy. Marketing operations restructured
-              around the activities with the most impact, with new investment
-              redirected into responsible travel.
-            </p>
-          </div>
-        </Container>
-      </Section>
+      {/* Case chapters */}
+      <ChapterList
+        chapters={WORK_CASES.map((item) => ({ id: item.id, node: <CaseChapter item={item} /> }))}
+      />
 
       {/* Note */}
       <section className="px-gutter py-10">
@@ -177,6 +69,6 @@ export default function WorkPage() {
           </div>
         </Container>
       </Section>
-    </>
+    </WorkFilterProvider>
   );
 }
