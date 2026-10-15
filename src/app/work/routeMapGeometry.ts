@@ -1,5 +1,5 @@
 import { geoConicConformal, geoPath } from "d3-geo";
-import type { Feature, FeatureCollection, Geometry } from "geojson";
+import type { Feature, FeatureCollection, Geometry, MultiPolygon } from "geojson";
 import { feature } from "topojson-client";
 import type { GeometryCollection, Topology } from "topojson-specification";
 import countries from "world-atlas/countries-110m.json";
@@ -16,6 +16,8 @@ type Pt = { x: number; y: number };
 export type RouteMapGeometry = {
   width: number;
   height: number;
+  /** How far the land reaches past each side of the box (map units); the land layer is drawn this much larger. */
+  landPad: { l: number; t: number; r: number; b: number };
   canada: string;
   usa: string;
   hub: Pt;
@@ -52,6 +54,15 @@ export function buildRouteMap(): RouteMapGeometry {
   const topo = countries as unknown as Topology<{ countries: GeometryCollection }>;
   const all = feature(topo, topo.objects.countries) as FeatureCollection<Geometry>;
   const byId = (id: string) => all.features.find((f) => String(f.id) === id) as Feature<Geometry>;
+  // Hawaii sits far off the frame (it would only ever be faded out): keep the mainland and Alaska.
+  const usa = byId("840") as Feature<MultiPolygon>;
+  const contiguous: Feature<MultiPolygon> = {
+    ...usa,
+    geometry: {
+      ...usa.geometry,
+      coordinates: usa.geometry.coordinates.filter((poly) => poly[0].some(([, lat]) => lat >= 24)),
+    },
+  };
 
   const projection = geoConicConformal()
     .parallels([42, 68])
@@ -70,12 +81,24 @@ export function buildRouteMap(): RouteMapGeometry {
     return { x: round(x), y: round(y) };
   };
 
+  const canada = byId("124");
+  // The land drawn outside the box (Arctic islands, Alaska, Labrador, the south), plus a margin.
+  const bounds = [path.bounds(canada), path.bounds(contiguous)];
+  const margin = 12;
+  const landPad = {
+    l: Math.ceil(Math.max(0, -Math.min(...bounds.map((b) => b[0][0]))) + margin),
+    t: Math.ceil(Math.max(0, -Math.min(...bounds.map((b) => b[0][1]))) + margin),
+    r: Math.ceil(Math.max(0, Math.max(...bounds.map((b) => b[1][0])) - MAP_W) + margin),
+    b: Math.ceil(Math.max(0, Math.max(...bounds.map((b) => b[1][1])) - MAP_H) + margin),
+  };
+
   const hub = at(HUB.coords);
   return {
     width: MAP_W,
     height: MAP_H,
-    canada: path(byId("124")) ?? "",
-    usa: path(byId("840")) ?? "",
+    landPad,
+    canada: path(canada) ?? "",
+    usa: path(contiguous) ?? "",
     hub,
     stops: CASE_STOPS.map((s) => {
       const p = at(s.coords);

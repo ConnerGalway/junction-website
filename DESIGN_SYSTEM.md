@@ -439,10 +439,20 @@ Sections:
 
 `src/app/work/`. Order: hero (headline + RouteMap), service filter, five case chapters, "More on the way" note, closing CTA (Forest). Chapter content lives in `src/lib/workCases.ts`; map stops and clients in `src/lib/routeMap.ts`.
 
-- **Hero (Newsprint):** two columns (45/55) from 1024px; below that the map goes under the intro, full width. The H1 "Real regions. / Real numbers." is exactly two lines from 1024px (explicit break). The intro is `type-lead`.
+- **Hero (Newsprint):** two columns (45/55) from 1024px; below that the map goes under the intro, full width.
+  - **From 1024px the map is wider than its column.** It overflows to the left: at 1024 it's the column's width, growing to 60vw at 1280 and up. At 1280 and up it's anchored to the viewport's right edge; between 1024 and 1280 the right offset grows from 0 to the gutter. It's vertically centred on the copy.
+  - **Placement:** the copy keeps its width and sits above the map's land layer. The section clips overflow sideways (`overflow-x: clip`), so the land can run to the viewport edge without a sideways scroll. The H1 "Real regions. / Real numbers." is exactly two lines from 1024px (explicit break). The intro is `type-lead`.
 - **RouteMap** (`RouteMap.tsx`, geometry in `routeMapGeometry.ts`):
-  - **Map data:** Natural Earth via `world-atlas` (countries-110m), `topojson-client` and `d3-geo`, all pinned. Canada and the United States only, in `geoConicConformal().parallels([42, 68]).rotate([102, 0]).center([0, 52])`, fitted (`fitExtent`, 10px padding) to the `FRAME` points. The SVG paths and points are built at build time on the server, drawn at 700 × 480 and scaled to the column.
-  - **Fills:** Canada Carbon 5%, the US Carbon 3.5%, no strokes. The land layer (with the other-client routes and dots) fades out from 78% of its height.
+  - **Map data:** Natural Earth via `world-atlas` (countries-110m), `topojson-client` and `d3-geo`, all pinned. Canada and the United States only (Hawaii is left out: it sits far off the frame), in `geoConicConformal().parallels([42, 68]).rotate([102, 0]).center([0, 52])`, fitted (`fitExtent`, 10px padding) to the `FRAME` points. The SVG paths and points are built at build time on the server, drawn at 700 × 480 and scaled to the column.
+  - **Fills:** Canada Carbon 5%, the US Carbon 3.5%, no strokes.
+  - **No hard edges:** land outside the fitted box (the Arctic islands, Alaska, Labrador, the south) isn't clipped. The land layer (land, other-client arcs and dots) is drawn in its own SVG, larger than the box by `landPad`, the land's measured overflow plus a margin. A mask (`.work-map-land`) fades it on every side:
+    - **left:** fully transparent until 16px past the widest line of the copy (`data-map-avoid`), then a 160px ramp. When the map sits under the intro (phones), the left fade covers the first 10% of the viewport and the top fade starts below the intro.
+    - **right:** the last 10% of the viewport.
+    - **top:** from the hero's top to 15% into the map.
+    - **bottom:** from 78% to 100% of the map, as before.
+
+    RouteMap measures these stops from the layout (on resize and once the fonts load). Stops, arcs and labels aren't masked.
+  - **Pixel sizes:** dots and line widths keep the pixel size they had when the map filled its grid column (14px case dots at 1440), so a wider map doesn't enlarge them. Labels are HTML at fixed sizes.
   - **Hub** (Vancouver): break-pink dot (r 7) in a 50% break-pink ring (r 14); decorative (see Pink means clickable). Labelled to its left "JUNCTION" (Bebas 20px, Carbon; see Hard rules) over "VANCOUVER" (small caps, Flint).
   - **Case stops:** Newsprint dot with a 3px Canopy ring (r 7) and a 2.4px Canopy arc from the hub. Arcs are quadratic curves bowing upward by 22% of their length. Labels are plain text: the number (Bebas 24px, gold-on-light) over the name (DM Sans 500, 11.5px, Carbon), placed per stop (`placement`). Kootenay's number "[ # ]" is a placeholder.
   - **Next stop** (Okotoks): dashed ring and a thin dashed arc, no label; its name is in a tooltip.

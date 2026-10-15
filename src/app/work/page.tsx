@@ -18,9 +18,10 @@ export default function WorkPage() {
   return (
     <WorkFilterProvider services={Object.fromEntries(WORK_CASES.map((c) => [c.id, c.service]))}>
       {/* Hero: headline and intro, with the route map */}
-      <Section spacing="tight" flush="bottom">
+      {/* overflow-x-clip: the map's land reaches the viewport edge without a sideways scroll */}
+      <Section spacing="tight" flush="bottom" className="overflow-x-clip">
         <Container className="grid items-center gap-x-12 gap-y-10 lg:grid-cols-[minmax(0,45fr)_minmax(0,55fr)]">
-          <div>
+          <div data-map-avoid className="relative z-10">
             {/* Exactly two lines from 1024px (explicit break) */}
             <h1 className="type-display m-0">
               <span className="lg:whitespace-nowrap">Real regions.</span>
@@ -32,7 +33,13 @@ export default function WorkPage() {
               the deliverables too.
             </p>
           </div>
-          <RouteMap geo={routeMap} />
+          {/* From 1024px the map overflows its column to the left: its column's
+              width at 1024, growing to 60vw at 1280 and up, where it's anchored
+              to the viewport's right edge (the right offset grows with it). */}
+          <RouteMap
+            geo={routeMap}
+            className="lg:mr-[calc((100vw-1024px)*-0.2)] lg:w-[min(60vw,calc(107.4vw-607px))] lg:justify-self-end xl:mr-[calc(-1*max(var(--spacing-gutter),(100vw-var(--container-wide))/2))]"
+          />
         </Container>
       </Section>
 

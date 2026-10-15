@@ -1065,6 +1065,28 @@
     );
   }
 
+  /* Work RouteMap land layer: soft fades on all sides (no hard edges). The
+     stops are set by RouteMap from the layout (px); the defaults fade at the
+     map box's own edges. */
+  .work-map-land {
+    --fade-x: linear-gradient(
+      to right,
+      transparent var(--fl0),
+      black var(--fl1),
+      black var(--fr0),
+      transparent var(--fr1)
+    );
+    --fade-y: linear-gradient(
+      to bottom,
+      transparent var(--ft0),
+      black var(--ft1),
+      black var(--fb0),
+      transparent var(--fb1)
+    );
+    mask-image: var(--fade-x), var(--fade-y);
+    mask-composite: intersect;
+  }
+
   /* Work chapters: even chapters (by visible position) put the stat on the right. */
   @media (min-width: 1024px) {
     .work-chapter[data-flip="true"] .work-chapter-stat {
