@@ -19,6 +19,8 @@ import { CALENDLY_URL } from "@/lib/constants";
 import { SHOW_HERO_WORDMARK } from "@/lib/flags";
 import { homeLogos } from "@/lib/logos";
 import { ProgramOrbit, type OrbitProgram } from "./ProgramOrbit";
+import { CourseShelfThumbnail } from "./custom-training/CourseShelf";
+import { StageThumbnail } from "./speaking/StageThumbnail";
 
 export const metadata: Metadata = {
   title: { absolute: "Junction | Strategy & Capacity Building" },
@@ -78,6 +80,7 @@ const programs: OrbitProgram[] = [
     price: "Keynote · Workshop · Virtual",
     href: "/speaking",
     media: "Speaking photo",
+    preview: <StageThumbnail />,
   },
   {
     title: "Custom Training",
@@ -85,6 +88,7 @@ const programs: OrbitProgram[] = [
     price: "Scoped to you",
     href: "/custom-training",
     media: "Custom Training photo",
+    preview: <CourseShelfThumbnail />,
   },
 ];
 

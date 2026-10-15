@@ -17,6 +17,8 @@ export type OrbitProgram = {
   media: string;
   /** Show a live thumbnail instead of the placeholder. */
   thumbnail?: "dashboard" | "offload";
+  /** A static thumbnail (e.g. <StageThumbnail />), rendered in the same slot. */
+  preview?: ReactNode;
 };
 
 /** Minimum time between two steps, so every input moves exactly one stop. */
@@ -185,7 +187,9 @@ export function ProgramOrbit({
               )}
             >
               <div className="p-3 pb-0">
-                {program.thumbnail ? (
+                {program.preview ? (
+                  <div className="aspect-[16/10] w-full overflow-hidden rounded-card">{program.preview}</div>
+                ) : program.thumbnail ? (
                   <div className="aspect-[16/10] w-full overflow-hidden rounded-card">
                     {program.thumbnail === "dashboard" ? (
                       <DashboardPreview variant="thumbnail" />

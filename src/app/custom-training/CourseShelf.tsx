@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import Image from "next/image";
 import { cx } from "@/components";
+import { ThumbnailFrame } from "@/components/ThumbnailFrame";
 import { COURSES, SHELF, courseSlug, type Course, type CourseVariant } from "@/lib/customCourses";
 
 const variantStyle: Record<CourseVariant, { card: string; bar: string; meta: string }> = {
@@ -67,5 +68,25 @@ export function CourseShelf({ className }: { className?: string }) {
         </ul>
       </div>
     </div>
+  );
+}
+
+/**
+ * Custom Training card thumbnail (homepage orbit): the first three shelf
+ * cards (same variants, posters if set) on Forest, in one row from the left,
+ * cropped by the right edge. Static. Drawn at 640 × 400 and scaled down with
+ * the slot, so the cards are the shelf's own at about 65%.
+ */
+export function CourseShelfThumbnail() {
+  return (
+    <ThumbnailFrame className="bg-forest">
+      <ul className="m-0 flex h-full w-max list-none items-center gap-5 p-0 pl-8">
+        {SHELF.slice(0, 3).map((course, i) => (
+          <li key={i} className="shrink-0">
+            <CoursePoster course={course} />
+          </li>
+        ))}
+      </ul>
+    </ThumbnailFrame>
   );
 }
