@@ -115,6 +115,7 @@ Other ground rules:
 - **Two dark sections of the same colour should never touch.**
 - **Stage** (`.tone-stage`) is a near-black ground for the Speaking hero and its stage thumbnail only. It takes Carbon's roles (Newsprint button, Fern focus, gold numerals, Newsprint 60% prices).
 - **Sage is never a full-width section.** Use it only inside boxes.
+  - **Exception: the About team list** uses 1px Sage dividers between names on Carbon.
   - **Callouts** (`<Callout>`): sage-25 background with Forest text and Forest links (8.3:1).
   - **Quote cards** (`<QuoteCard>`): Sage background, also with Forest text.
 - **Avoid canopy-text links on Sage**, because they're only 4.2:1 there. Links inside callouts and sage boxes are Forest.
@@ -138,7 +139,7 @@ Pink appears only on things you can click. Non-clickable elements never get a pi
 - **Clickable list rows:** the newsprint-hover highlight plus a pink title (see Surfaces).
 - **Exception: `Badge`** (outline and filled). A badge is a status label and isn't clickable, but it may be pink: the outline badge ("Quick check · a general snapshot" on the Accelerator page) and the filled badge ("New" on the Offload hero). Badges are the only non-clickable pink component.
 - **Exception: the Work RouteMap hub.** Junction's Vancouver hub is a break-pink dot inside a 50% break-pink ring. It's decorative and not clickable: the one non-clickable use of the break colour on a map. The case stops around it are links and fill pink on hover and focus.
-- **Exception: the Offload guarantee strip.** A break-on-light strip (radius 14) with "Guaranteed" in Fraunces 900 italic and the promise in Epilogue 600, both Newsprint (4.8:1). It's the only non-clickable pink surface, and the only Fraunces outside pull quotes. Don't reuse it elsewhere.
+- **Exception: the Offload guarantee strip.** A break-on-light strip (radius 14) with "Guaranteed" in Fraunces 900 italic and the promise in Epilogue 600, both Newsprint (4.8:1). It's the only non-clickable pink surface. Don't reuse it elsewhere.
 
 ### Eyebrows are for meta labels only
 
@@ -169,6 +170,7 @@ On landing pages the hero headline is **at most three lines at desktop widths (1
 
 - Choose the breaks per page: explicit breaks for desktop only (`<br className="hidden xl:inline" />` between `xl:whitespace-nowrap` spans) or balanced wrapping with a max width in ch. Tablet and mobile wrap freely.
 - A long line may run over the hero visual if nothing overlaps: start the visual lower with `xl:mt-[calc(var(--hero-line)*N+…)]`, where `--hero-line` is one display line (font size × .94).
+- **Exception: the About H1** is set above the display scale, at `clamp(52px, 8vw, 116px)` with .9 leading (116px at 1440), in three lines. This applies to that page only; other heroes stay within the scale.
 - Accelerator: "A 90-day marketing / plan you'll / actually work." (the preview starts one line lower). Offload: "We automate one of your / bottlenecks in 30 days. / Guaranteed." (the visual starts below the second line).
 
 ## Type scale
@@ -185,7 +187,7 @@ The type classes live in `@layer components`, so a colour utility can still over
 | `type-body` | DM Sans 300 | 17px | 1.5 | — | Max 680px. Ink-soft on Newsprint. |
 | `type-small` | DM Sans 400 | 14px | 1.5 | — | Muted colour |
 | `type-eyebrow` | DM Sans 500 | 13px | 1.4 | .14em, uppercase | Use `<Eyebrow>` |
-| `type-quote` | Fraunces 900 italic | clamp(24px, 2.6vw, 36px) | 1.15 | — | Pull quotes only |
+| `type-quote` | Fraunces 900 italic | clamp(24px, 2.6vw, 36px) | 1.15 | — | Pull quotes. Fraunces has three approved uses: pull quotes, the Offload guarantee strip and the About team names. |
 | `type-button` | DM Sans 500 | 15px | 1.2 | — | Sentence case |
 | `type-wordmark` | Bebas Neue 400 | — | 1 | .08em | Wordmark |
 
@@ -233,8 +235,10 @@ Controls:
 - **Light panels on dark grounds:** `<Card tone="newsprint">`, a Newsprint box with radius 14, no shadow and no top line (for example the homepage program cards on Carbon).
 - **Swappable images:** some images are meant to be replaced on GitHub by uploading a file with the same name, such as the homepage video card cover, `public/images/tourism-talks-cover.png` (16:9). Reference them by that exact path, fill the slot with `object-fit: cover`, and never hardcode their pixel size.
 - **Photos:** never get an outline or the 3px top line. A floating photo may have a soft shadow (`shadow-card`) and radius 14. **Photos are dark, so they never overlap headline text:** when space runs out, the photo shrinks or moves into the flow instead.
+  - **Exception: the About floating portrait.** It follows the cursor over the team names while one is hovered (fine pointer only), so it may pass over them.
 - **Exception: the Offload KitCarousel** dims its side cards to 50% (below the 75% rule): they're previews, the spotlight card is at full opacity, and the live region announces it.
 - **Dimmed rows** (`.dim-row`): rows that sit at 75% and come to full opacity on hover and keyboard focus (200ms). 75% keeps body text above AA (ink-soft at 75% is about Flint, 4.9:1); don't dim text further, such as the Accelerator steps. Pointer devices only: on touch (`hover: none`) they stay at full opacity. Make each row focusable (`tabIndex={0}`) so keyboard users can bring it forward.
+  - **Exception: the About team names** rest at Newsprint 45% on Carbon (large Fraunces, decorative until hovered or focused). This applies with a fine pointer only; touch and reduced motion show them at full Newsprint.
 - **Ghost numerals:** a big Bebas numeral fully inside a card's top-right corner, 16px from the top and right edges and about 70% of the card's height (it scales with the card). Never cropped. Carbon at 6% (Newsprint at 7% on Carbon), behind the text, `aria-hidden`. Drawn as an SVG whose viewBox is the digit's ink box, so its height is the numeral's height. Used on the Accelerator touchpoint cards.
 - **Edge fades:** `.fade-out-left`, `.fade-out-right` and `.fade-out-bottom` (mask). Give a faded element enough padding to keep its shadow inside the mask.
 - **Tables:** use a real `<table className="data-table">` inside `<div className="data-table-frame">`.
@@ -458,6 +462,24 @@ Sections:
   Pages are drawn with container units, so they scale with the column. They have radius 10 and the tone's card shadow or border. Caption: "Sample pages · client details changed for privacy · flip through →". As a mock document it keeps its own colours (a small gold figure). **Swappable:** set `deliverables.images` (cover, spread, spread) in `workCases.ts` and real images fill the same slots. **Not interactive yet. Planned:** clicking "flip through" expands the pages in place to fill the chapter (no modal, no new page); to be designed.
 - **Note:** a `Callout` with the Okotoks line and "Get them first: join the JunctionU list →" (to `/junctionu` until a list signup exists; TODO).
 - **Closing CTA (Forest):** display H2 and the existing "Start a conversation" button (`/contact`).
+
+## About page
+
+`src/app/about/`. Order: hero, statement, What we believe, Who we are (Carbon), closing CTA (Forest). Content (statement, beliefs, team) lives in `src/lib/about.ts`.
+
+- **Hero (Newsprint, default section spacing, no image):** the H1 "A junction is where / routes meet. / So are we." is three lines from 1024px, at up to 116px (see Hero headlines). "So are we." is canopy-text, because canopy is for rules and fills, not text. The lead (`type-lead`, 36ch) sits beside the third line, right-aligned to the content edge with its bottom on that line; below 1024px it stacks under the headline.
+- **Statement:** one centred pull quote (`type-quote` at up to 64px, Forest, 22ch) with a copper meta label under it. Both are placeholders ("[ One line we stand by ]", "[ Attribution or context ]") in the `STATEMENT` constant.
+- **What we believe:** the H2, a 2px Canopy divider, then three columns (stacked under 768px), each with a Bebas gold-on-light number, the title (h3 at 28px) and one short line.
+- **Who we are (Carbon):** the H2 on the left and "A small team in Vancouver, working across North America." (newsprint-muted) on the right, then `TeamList`.
+- **TeamList** (`TeamList.tsx`): rows show the name (Fraunces 900 italic, up to 64px) with the role on the right (small caps). There are 1px Sage dividers between rows only, with none above the first or below the last.
+  - **Fine pointer, motion allowed:**
+    - Names rest at Newsprint 45%. The hovered or focused row's name goes to full Newsprint and its role to Fern (150ms).
+    - A portrait card (220 × 280, radius 14, greyscale, -3°, `shadow-card`) fades in and follows the cursor with a 0.16 lerp (rAF only while moving). It's kept inside the list's width.
+    - Leaving the list hides it (150ms fade).
+    - Each row is focusable; keyboard focus puts the card beside the name instead of at the cursor.
+  - **Touch, coarse pointer or reduced motion:** names at full Newsprint, with a small greyscale portrait (56 × 70, radius 10) beside each, and no floating card. CSS media queries decide this, so there's no flash on load.
+  - **Portraits are swappable by filename:** `public/images/team/conner.jpg`, `brooke.jpg`, `andrea.jpg`. They're cropped from the top to fill their frames. For now all three are copies of Conner's portrait.
+- **Closing CTA (Forest):** "Tell us the goal. We'll be straight with you about the rest." (display, 18ch) and "Start a conversation" (`/contact`).
 
 ## Logo walls
 
