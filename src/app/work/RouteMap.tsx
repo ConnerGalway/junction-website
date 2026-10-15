@@ -17,6 +17,9 @@ const labelPlace: Record<LabelPlacement, string> = {
   right: "translate-x-[14px] -translate-y-1/2",
 };
 
+/** Map units within which a client dot counts as under a case stop. */
+const UNDER_STOP = 16;
+
 const isNarrow = () => window.matchMedia("(max-width: 767px)").matches;
 
 /**
@@ -37,6 +40,9 @@ export function RouteMap({ geo, className }: { geo: RouteMapGeometry; className?
   const [hot, setHot] = useState<string | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   const { width: W, height: H } = geo;
+  // A client dot under a case stop's dot gets no tooltip target, so it never
+  // blocks the stop (e.g. Hamilton next to London, ON).
+  const underStop = (c: { x: number; y: number }) => geo.stops.some((s) => Math.hypot(s.x - c.x, s.y - c.y) < UNDER_STOP);
   const pos = (x: number, y: number) => ({ left: `${(x / W) * 100}%`, top: `${(y / H) * 100}%` });
 
   // Close a tapped tooltip on any tap outside the map.
@@ -147,12 +153,14 @@ export function RouteMap({ geo, className }: { geo: RouteMapGeometry; className?
         <span className="mt-0.5 text-[10px] font-medium tracking-[0.14em] text-flint uppercase">Vancouver</span>
       </div>
 
-      {/* Tooltip targets: other clients and the next stop */}
-      {[...geo.clients.map((c) => ({ ...c, note: undefined })), ...geo.next.map((n) => ({ ...n, note: "Next stop" }))].map((c) => (
+      {/* Tooltip targets: other clients and the next stop. Small, and above the
+          case links, so a nearby case stop's hit area doesn't cover them. */}
+      {[...geo.clients.filter((c) => !underStop(c)).map((c) => ({ ...c, note: undefined })), ...geo.next.map((n) => ({ ...n, note: "Next stop" }))].map((c) => (
         <span
           key={c.name}
           aria-hidden="true"
-          className="absolute size-[18px] -translate-1/2 cursor-default rounded-full"
+          data-tip-target
+          className={cx("absolute z-20 -translate-1/2 cursor-default rounded-full", c.note ? "size-[14px]" : "size-3")}
           style={pos(c.x, c.y)}
           {...hoverTip({ key: c.name, x: c.x, y: c.y, name: c.name, note: c.note })}
         />
@@ -187,7 +195,7 @@ export function RouteMap({ geo, className }: { geo: RouteMapGeometry; className?
         <div
           role={tip.href ? undefined : "tooltip"}
           className={cx(
-            "absolute z-20 -translate-y-[calc(100%+14px)] rounded-control bg-newsprint px-3 py-2 text-[13px] leading-snug whitespace-nowrap text-carbon shadow-card",
+            "absolute z-30 -translate-y-[calc(100%+14px)] rounded-control bg-newsprint px-3 py-2 text-[13px] leading-snug whitespace-nowrap text-carbon shadow-card",
             tip.href ? "pointer-events-auto" : "pointer-events-none",
             tipAlign
           )}
