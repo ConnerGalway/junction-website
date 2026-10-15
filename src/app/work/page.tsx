@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Button, Container, Section } from "@/components";
+import { Button, Callout, Container, Section, TextLink } from "@/components";
 import { WORK_CASES } from "@/lib/workCases";
 import { CaseChapter } from "./CaseChapter";
 import { RouteMap } from "./RouteMap";
@@ -48,17 +48,23 @@ export default function WorkPage() {
         chapters={WORK_CASES.map((item) => ({ id: item.id, node: <CaseChapter item={item} /> }))}
       />
 
-      {/* Note */}
-      <section className="px-gutter py-10">
+      {/* More on the way */}
+      <Section spacing="tight">
         <Container>
-          <p className="type-body m-0 max-w-none">
-            More case studies are on the way, including the Okotoks visitor
-            economy series and its $900,000 in identified local spend.
-          </p>
+          <Callout className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-3">
+            <p className="type-body m-0">
+              More case studies are on the way, including the Okotoks visitor
+              economy series and its $900,000 in identified local spend.
+            </p>
+            {/* TODO: point at the JunctionU list signup once it exists. */}
+            <TextLink href="/junctionu">
+              Get them first: join the JunctionU list →
+            </TextLink>
+          </Callout>
         </Container>
-      </section>
+      </Section>
 
-      {/* CTA */}
+      {/* Closing CTA */}
       <Section id="start" tone="forest" className="scroll-mt-24">
         <Container>
           <h2 className="type-display m-0 max-w-[15ch]">
