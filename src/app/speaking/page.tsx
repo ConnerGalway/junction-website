@@ -8,6 +8,7 @@ import {
   Eyebrow,
   Placeholder,
   Section,
+  Stat,
   TextLink,
   cx,
 } from "@/components";
@@ -193,19 +194,35 @@ export default function SpeakingPage() {
         </Container>
       </Section>
 
-      {/* About Conner */}
+      {/* Conner */}
       <Section tone="forest">
-        <Container className="grid items-center gap-x-20 gap-y-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))]">
-          <Placeholder aspectRatio="4/5">[ photo: Conner on stage ]</Placeholder>
+        <Container className="grid grid-cols-1 items-center gap-x-20 gap-y-10 lg:grid-cols-2">
+          <div className="relative h-[clamp(420px,52vw,620px)] overflow-hidden rounded-card">
+            <Image
+              src="/images/speaking/conner-portrait.jpg"
+              alt="Conner Galway"
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover object-[50%_22%]"
+            />
+          </div>
           <div>
             <h2 className="type-h2 mt-0 mb-6">Conner Galway</h2>
-            <p className="type-body mt-0 mb-7 max-w-[52ch]">
+            <p className="type-body mt-0 mb-0 max-w-[52ch] text-newsprint/88">
               Founder of Junction. Fourteen years advising organizations on
               marketing and technology, 2,000+ people trained, and a Business in
               Vancouver 40 Under 40. He writes The Brief, a weekly newsletter for
               marketers, and he still runs the programs he talks about.
             </p>
-            <Placeholder>[ Event organizer testimonial ]</Placeholder>
+            <div className="mt-10 grid grid-cols-2 gap-8">
+              <div className="border-t border-newsprint/18 pt-5">
+                <Stat value="14" label="years advising organizations" maxSize="clamp(56px, 6vw, 88px)" />
+              </div>
+              <div className="border-t border-newsprint/18 pt-5">
+                <Stat value="2,000+" label="people trained" maxSize="clamp(56px, 6vw, 88px)" />
+              </div>
+            </div>
+            <Placeholder className="mt-10">[ Event organizer testimonial ]</Placeholder>
           </div>
         </Container>
       </Section>
