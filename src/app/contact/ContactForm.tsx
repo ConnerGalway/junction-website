@@ -17,8 +17,23 @@ const typeLabels: Record<FormType, string> = {
   other: "Something else",
 };
 
-/** Answers passed in by the Custom Training program sketcher. */
-type TrainingPrefill = { audience?: string; learners?: string; sketch?: string };
+/**
+ * Answers passed in from other pages: the Custom Training program sketcher
+ * (audience, learners, sketch) and the Speaking availability card (org,
+ * date, format, size, note).
+ */
+type Prefill = {
+  audience?: string;
+  learners?: string;
+  sketch?: string;
+  org?: string;
+  date?: string;
+  format?: string;
+  size?: string;
+  note?: string;
+};
+
+const speakingFormats = ["Keynote", "Workshop", "Panel or fireside", "Virtual"];
 
 const sketchAudience: Record<string, string> = {
   operators: "Businesses or operators in our region",
@@ -33,7 +48,7 @@ const sketchLearners: Record<string, string> = {
   "500-plus": "500+",
 };
 
-function ContactFormFields({ initialType, prefill }: { initialType: FormType; prefill?: TrainingPrefill }) {
+function ContactFormFields({ initialType, prefill }: { initialType: FormType; prefill?: Prefill }) {
   const typeLabelId = useId();
   const [selectedType, setSelectedType] = useState<FormType>(initialType);
   const [sent, setSent] = useState(false);
@@ -119,7 +134,7 @@ function ContactFormFields({ initialType, prefill }: { initialType: FormType; pr
           </div>
 
           {/* Organization */}
-          <Input label={orgLabel} name="org" autoComplete="organization" />
+          <Input label={orgLabel} name="org" autoComplete="organization" defaultValue={prefill?.org} />
 
           {/* AI Accelerator fields */}
           {selectedType === "ai" && (
@@ -181,11 +196,14 @@ function ContactFormFields({ initialType, prefill }: { initialType: FormType; pr
           {/* Speaking fields */}
           {selectedType === "speaking" && (
             <div className="flex flex-col gap-4">
+              {/* TODO: no notes field for speaking; answers without a field
+                  (e.g. format "Not sure yet") ride along hidden for now. */}
+              {prefill?.note && <input type="hidden" name="note" value={prefill.note} />}
               <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr))]">
-                <Input label="Event date" name="date" type="date" />
+                <Input label="Event date" name="date" type="date" defaultValue={prefill?.date} />
                 <Input label="City or virtual" name="location" />
-                <Input label="Audience size" name="size" />
-                <Select label="Format" name="format">
+                <Input label="Audience size" name="size" defaultValue={prefill?.size} />
+                <Select label="Format" name="format" defaultValue={prefill?.format}>
                   <option>Keynote</option>
                   <option>Workshop</option>
                   <option>Panel or fireside</option>
@@ -220,11 +238,22 @@ function ContactFormFromParams() {
   const searchParams = useSearchParams();
   const param = searchParams.get("type") as FormType | null;
   const initialType = param && validTypes.includes(param) ? param : "ai";
-  const prefill: TrainingPrefill = {
-    audience: sketchAudience[searchParams.get("who") ?? ""],
-    learners: sketchLearners[searchParams.get("size") ?? ""],
-    sketch: searchParams.get("sketch") ?? undefined,
-  };
+  const get = (key: string) => searchParams.get(key) ?? undefined;
+  const format = get("format");
+  const prefill: Prefill =
+    initialType === "speaking"
+      ? {
+          org: get("event"),
+          date: get("date"),
+          format: format && speakingFormats.includes(format) ? format : undefined,
+          size: get("audience"),
+          note: format && !speakingFormats.includes(format) ? `Format: ${format}` : undefined,
+        }
+      : {
+          audience: sketchAudience[get("who") ?? ""],
+          learners: sketchLearners[get("size") ?? ""],
+          sketch: get("sketch"),
+        };
   return <ContactFormFields initialType={initialType} prefill={prefill} />;
 }
 

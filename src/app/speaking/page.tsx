@@ -14,6 +14,7 @@ import {
 } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
 import { SHOW_SPEAKING_REEL } from "@/lib/flags";
+import { AvailabilityForm } from "./AvailabilityForm";
 import { ReelPill } from "./ReelPill";
 import { SpotlightHero } from "./SpotlightHero";
 
@@ -227,22 +228,23 @@ export default function SpeakingPage() {
         </Container>
       </Section>
 
-      {/* CTA */}
+      {/* Got a date? */}
       <Section id="start" className="scroll-mt-24">
-        <Container>
-          <h2 className="type-display m-0 max-w-[15ch]">
-            Got a date? Let&apos;s check it.
-          </h2>
-          <p className="type-body mt-6 mb-0 max-w-[46ch]">
-            Send your event, date and audience. You&apos;ll hear back with availability
-            and a fee for your format.
-          </p>
-          <div className="mt-9 flex flex-wrap items-center gap-7">
-            <Button href="/contact?type=speaking">Check availability</Button>
-            <TextLink href="mailto:conner@wearejunction.com">
+        <Container className="grid grid-cols-1 items-start gap-x-20 gap-y-12 lg:grid-cols-2">
+          <div>
+            <h2 className="type-display m-0">
+              Got a date?
+              <br /> Let&apos;s check it.
+            </h2>
+            <p className="type-body mt-6 mb-0 max-w-[46ch]">
+              Send your event, date and audience. You&apos;ll hear back with availability
+              and a fee for your format.
+            </p>
+            <TextLink href="mailto:conner@wearejunction.com" className="mt-8 inline-block">
               conner@wearejunction.com
             </TextLink>
           </div>
+          <AvailabilityForm />
         </Container>
       </Section>
     </>
