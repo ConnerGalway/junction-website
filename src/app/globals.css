@@ -1018,6 +1018,7 @@
    * 768px it's lower and smaller (52svh), centred right of middle.
    */
   .speaking-conner {
+    aspect-ratio: 1436 / 960;
     bottom: -4%;
     height: 52svh;
     left: calc(62vw - 0.46 * 1.496 * 52svh);
@@ -1041,24 +1042,27 @@
     }
   }
 
-  /* Speaking hero spotlight: a soft radial light and a faint cone from the top. */
-  .spot-glow {
+  /* Speaking hero light: one round, diffused pool (radius = half the box).
+     Also used, scaled down, in the Speaking stage thumbnail. */
+  .spot-pool {
     background: radial-gradient(
-      circle at center,
-      color-mix(in srgb, var(--color-newsprint) 16%, transparent) 0,
-      color-mix(in srgb, var(--color-newsprint) 6%, transparent) 220px,
-      transparent 420px
+      circle closest-side,
+      color-mix(in srgb, var(--color-newsprint) 13%, transparent) 0,
+      color-mix(in srgb, var(--color-newsprint) 7%, transparent) 35%,
+      color-mix(in srgb, var(--color-newsprint) 2%, transparent) 65%,
+      transparent 100%
     );
   }
 
-  .spot-cone {
-    background: linear-gradient(
-      to bottom,
-      color-mix(in srgb, var(--color-newsprint) 7%, transparent),
-      color-mix(in srgb, var(--color-newsprint) 2%, transparent) 70%,
-      transparent
+  /* The brightened cutout, shown only under the light (--mx / --my set by SpotlightHero). */
+  .speaking-conner-lit {
+    filter: brightness(1.2) contrast(1.05);
+    mask-image: radial-gradient(
+      circle 300px at var(--mx, -999px) var(--my, -999px),
+      black 0,
+      rgb(0 0 0 / 0.6) 45%,
+      transparent 100%
     );
-    clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%);
   }
 
   /* Program sketcher: native option lists in Newsprint, and the 200ms text fade. */

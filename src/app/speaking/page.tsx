@@ -79,16 +79,28 @@ export default function SpeakingPage() {
       {/* Hero: the spotlight stage */}
       <section className="tone-stage relative overflow-hidden">
         <SpotlightHero className="relative flex min-h-[max(620px,calc(100svh-84px))] flex-col">
-          {/* Conner at the podium: bottom-anchored, cropped by the section */}
-          <Image
-            src="/images/speaking/hero-conner-stage.webp"
-            alt="Conner Galway speaking at a podium"
-            width={1436}
-            height={960}
-            priority
-            sizes="(min-width: 1024px) 60vw, 100vw"
-            className="speaking-conner pointer-events-none absolute w-auto max-w-none select-none"
-          />
+          {/* Conner at the podium: bottom-anchored, cropped by the section.
+              A 60% base copy, and a brightened copy masked to the light. */}
+          <div data-spot-figure className="speaking-conner pointer-events-none absolute select-none">
+            <Image
+              src="/images/speaking/hero-conner-stage.webp"
+              alt="Conner Galway speaking at a podium"
+              fill
+              priority
+              sizes="(min-width: 1024px) 60vw, 100vw"
+              className="opacity-60"
+            />
+            <Image
+              data-spot-lit
+              src="/images/speaking/hero-conner-stage.webp"
+              alt=""
+              fill
+              priority
+              sizes="(min-width: 1024px) 60vw, 100vw"
+              className="speaking-conner-lit"
+              style={{ opacity: 0 }}
+            />
+          </div>
           {/* Mobile: a dark wash behind the copy */}
           <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-[80%] bg-gradient-to-b from-stage via-stage/85 to-transparent md:hidden" />
 
@@ -100,8 +112,11 @@ export default function SpeakingPage() {
                   <span className="xl:whitespace-nowrap">Talks that send</span>
                   <br className="hidden xl:inline" /> <span className="xl:whitespace-nowrap">the room home</span>
                   <br className="hidden xl:inline" />{" "}
-                  <span data-spot-target className="xl:whitespace-nowrap" style={{ opacity: 0.35 }}>
-                    with a plan.
+                  <span data-spot-target className="xl:whitespace-nowrap">
+                    {/* Each word lights on its own as the light sweeps across. */}
+                    <span data-spot-word style={{ opacity: 0.35 }}>with</span>{" "}
+                    <span data-spot-word style={{ opacity: 0.35 }}>a</span>{" "}
+                    <span data-spot-word style={{ opacity: 0.35 }}>plan.</span>
                   </span>
                 </h1>
                 <p className="type-lead mt-7 mb-9 max-w-[38ch] text-newsprint/85">

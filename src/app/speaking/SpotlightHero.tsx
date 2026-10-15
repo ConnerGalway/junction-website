@@ -3,41 +3,54 @@
 import { useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 
-/** How far the beam moves toward the cursor each frame. */
+/** How far the light moves toward the cursor each frame. */
 const LERP = 0.12;
-/** Distance (px) over which "with a plan." brightens as the beam nears. */
-const FALLOFF = 380;
+/** Distance (px) over which each dimmed word brightens as the light nears its centre. */
+const WORD_FALLOFF = 240;
 /** Resting opacity of the dimmed words. */
 const DIM = 0.35;
+/** Distance (px) over which the lit cutout fades in as the light nears Conner's face. */
+const FACE_FALLOFF = 520;
+/** Conner's face, as a fraction of the cutout's box. */
+const FACE = { x: 0.53, y: 0.32 };
+/** Radius of the light pool (px); matches .spot-pool's size. */
+const POOL_R = 300;
 
 /**
- * The Speaking hero's spotlight. A soft radial light (Newsprint 16% at the
- * centre, gone by ~420px) and a faint cone from the top, both centred on a
- * point that follows the cursor with a smooth lag (rAF only while moving).
- * When the cursor leaves, the point drifts back to rest just right of the
- * dimmed words ([data-spot-target]); as the beam nears them their opacity
- * rises from 35% to 100%.
+ * The Speaking hero's light: one round, diffused pool (.spot-pool) centred on
+ * a point that follows the cursor with a smooth lag (rAF only while moving).
+ * The point starts just right of the dimmed words ([data-spot-target]); when
+ * the cursor leaves it stays where it was, and glides back on re-entry.
  *
- * Touch / no fine pointer / reduced motion: a static beam resting near the
- * headline, the words at 35%.
+ * On the same tick it lights:
+ * - each [data-spot-word]: 35% → 100% as the light nears that word's centre;
+ * - the cutout ([data-spot-figure]): the brightened copy ([data-spot-lit]) is
+ *   masked to the pool (--mx / --my in the image's own coordinates) and fades
+ *   in as the light nears Conner's face.
+ *
+ * Touch / no fine pointer / reduced motion: a static pool at the rest point,
+ * the base cutout only, the words at 35%.
  */
 export function SpotlightHero({ children, className }: { children: ReactNode; className?: string }) {
   const rootRef = useRef<HTMLDivElement>(null);
-  const glowRef = useRef<HTMLDivElement>(null);
-  const coneRef = useRef<HTMLDivElement>(null);
+  const poolRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const root = rootRef.current;
-    const glow = glowRef.current;
-    const cone = coneRef.current;
-    if (!root || !glow || !cone) return;
+    const pool = poolRef.current;
+    if (!root || !pool) return;
     const target = root.querySelector<HTMLElement>("[data-spot-target]");
+    const words = [...root.querySelectorAll<HTMLElement>("[data-spot-word]")];
+    const figure = root.querySelector<HTMLElement>("[data-spot-figure]");
+    const lit = root.querySelector<HTMLElement>("[data-spot-lit]");
     const live = window.matchMedia("(pointer: fine) and (prefers-reduced-motion: no-preference)");
 
     const pos = { x: 0, y: 0 };
     const goal = { x: 0, y: 0 };
     let frame = 0;
     let running = false;
+    // Until the cursor first moves over the hero, the light sits at the rest point.
+    let moved = false;
 
     function restPoint() {
       const r = root!.getBoundingClientRect();
@@ -47,21 +60,27 @@ export function SpotlightHero({ children, className }: { children: ReactNode; cl
     }
 
     function draw() {
-      glow!.style.transform = `translate3d(${pos.x - 420}px, ${pos.y - 420}px, 0)`;
-      cone!.style.transform = `translate3d(${pos.x - 260}px, 0, 0)`;
-      cone!.style.height = `${Math.max(0, pos.y + 160)}px`;
-      if (!target) return;
+      pool!.style.transform = `translate3d(${pos.x - POOL_R}px, ${pos.y - POOL_R}px, 0)`;
       if (!live.matches) {
-        target.style.opacity = String(DIM);
+        for (const w of words) w.style.opacity = String(DIM);
+        if (lit) lit.style.opacity = "0";
         return;
       }
       const r = root!.getBoundingClientRect();
-      const t = target.getBoundingClientRect();
-      // Distance from the beam to the nearest point of the words.
-      const dx = Math.max(t.left - r.left - pos.x, 0, pos.x - (t.right - r.left));
-      const dy = Math.max(t.top - r.top - pos.y, 0, pos.y - (t.bottom - r.top));
-      const near = Math.max(0, 1 - Math.hypot(dx, dy) / FALLOFF);
-      target.style.opacity = String(DIM + (1 - DIM) * near);
+      const lx = r.left + pos.x;
+      const ly = r.top + pos.y;
+      for (const w of words) {
+        const b = w.getBoundingClientRect();
+        const d = Math.hypot(lx - (b.left + b.width / 2), ly - (b.top + b.height / 2));
+        w.style.opacity = String(DIM + (1 - DIM) * Math.max(0, 1 - d / WORD_FALLOFF));
+      }
+      if (figure && lit) {
+        const f = figure.getBoundingClientRect();
+        figure.style.setProperty("--mx", `${lx - f.left}px`);
+        figure.style.setProperty("--my", `${ly - f.top}px`);
+        const d = Math.hypot(lx - (f.left + f.width * FACE.x), ly - (f.top + f.height * FACE.y));
+        lit.style.opacity = String(Math.max(0, 1 - d / FACE_FALLOFF));
+      }
     }
 
     function step() {
@@ -81,51 +100,47 @@ export function SpotlightHero({ children, className }: { children: ReactNode; cl
       frame = requestAnimationFrame(step);
     }
 
-    function rest(snap: boolean) {
+    function snapToRest() {
       const p = restPoint();
-      goal.x = p.x;
-      goal.y = p.y;
-      if (snap) {
-        pos.x = p.x;
-        pos.y = p.y;
-        draw();
-      } else {
-        kick();
-      }
+      goal.x = pos.x = p.x;
+      goal.y = pos.y = p.y;
+      draw();
     }
+
+    // Layout changed: re-place the light if it's still resting, else just redraw.
+    const relayout = () => (moved && live.matches ? draw() : snapToRest());
 
     function onMove(event: PointerEvent) {
       if (!live.matches || event.pointerType === "touch") return;
       const r = root!.getBoundingClientRect();
       goal.x = event.clientX - r.left;
       goal.y = event.clientY - r.top;
+      moved = true;
       kick();
     }
-    const onLeave = () => live.matches && rest(false);
-    const onResize = () => rest(true);
-    const onModeChange = () => rest(true);
+    const onModeChange = () => {
+      moved = false;
+      snapToRest();
+    };
 
-    rest(true);
-    document.fonts?.ready.then(() => rest(true));
+    snapToRest();
+    document.fonts?.ready.then(relayout);
     root.addEventListener("pointermove", onMove);
-    root.addEventListener("pointerleave", onLeave);
-    window.addEventListener("resize", onResize);
+    window.addEventListener("resize", relayout);
     live.addEventListener("change", onModeChange);
     return () => {
       cancelAnimationFrame(frame);
       root.removeEventListener("pointermove", onMove);
-      root.removeEventListener("pointerleave", onLeave);
-      window.removeEventListener("resize", onResize);
+      window.removeEventListener("resize", relayout);
       live.removeEventListener("change", onModeChange);
     };
   }, []);
 
   return (
     <div ref={rootRef} className={className}>
-      {/* Beam layers (decorative) */}
+      {/* The light pool (decorative) */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div ref={coneRef} className="spot-cone absolute top-0 left-0 w-[520px] will-change-transform" />
-        <div ref={glowRef} className="spot-glow absolute top-0 left-0 size-[840px] will-change-transform" />
+        <div ref={poolRef} className="spot-pool absolute top-0 left-0 size-[600px] will-change-transform" />
       </div>
       {children}
     </div>
