@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import {
-  Button,
-  Card,
-  Container,
-  Eyebrow,
-  Section,
-  TextLink,
-} from "@/components";
+import { Button, Container, Eyebrow, Section } from "@/components";
+import { BELIEFS, STATEMENT, TEAM } from "@/lib/about";
+import { TeamList } from "./TeamList";
 
 export const metadata: Metadata = {
   title: "About",
@@ -15,108 +9,71 @@ export const metadata: Metadata = {
     "Junction sits where organizations and technology meet, and where consulting meets training.",
 };
 
-const beliefs = [
-  {
-    num: "01",
-    title: "The best engagement is one you never have to repeat.",
-    description:
-      "Every plan is built for handover. Every program is built to be owned by the people who run it. Your team should need us less every month.",
-  },
-  {
-    num: "02",
-    title: "Independence keeps advice honest.",
-    description:
-      "We only do strategy and training. Nothing we recommend earns us a commission, so everything we recommend is there on merit.",
-  },
-  {
-    num: "03",
-    title: "Plain language, always.",
-    description:
-      "If an idea can't be explained to a busy operator between two guest check-ins, it needs more work. Jargon usually means someone's hiding.",
-  },
-];
-
 export default function AboutPage() {
   return (
     <>
-      {/* Hero */}
-      <Section spacing="tight">
-        <Container>
-          <h1 className="type-display m-0 max-w-[14ch]">
-            A junction is where routes meet. So are we.
+      {/* Hero: the headline at the large end of display type, the lead beside its last line */}
+      <Section>
+        <Container className="relative">
+          <h1 className="type-display m-0 text-[clamp(52px,8vw,116px)] leading-[0.9]">
+            <span className="lg:whitespace-nowrap">A junction is where</span>
+            <br className="hidden lg:inline" /> <span className="lg:whitespace-nowrap">routes meet.</span>
+            <br className="hidden lg:inline" /> <span className="text-canopy-text">So are we.</span>
           </h1>
-          <div className="mt-[clamp(40px,5vw,64px)] grid items-start gap-x-[72px] gap-y-8 [grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))]">
-            <div className="overflow-hidden rounded-card">
-              <Image
-                src="/assets/photo-mountains.png"
-                alt="Mountain town"
-                width={800}
-                height={533}
-                className="w-full object-cover"
-                style={{ aspectRatio: "3/2" }}
-              />
-            </div>
-            <p className="type-lead m-0">
-              Junction sits where organizations and technology meet, and where
-              consulting meets training. We&apos;ve spent fourteen years in the
-              visitor economy, helping destinations and the businesses inside
-              them get measurably better at marketing. In 2026 our training
-              platform, eLearningU, became JunctionU and moved under one roof.
-            </p>
-          </div>
+          <p className="type-lead m-0 mt-8 max-w-[36ch] lg:absolute lg:right-0 lg:bottom-[0.2em] lg:mt-0">
+            Where organizations meet technology, and consulting meets training.
+            Fourteen years in the visitor economy.
+          </p>
         </Container>
       </Section>
 
-      {/* Beliefs */}
-      <Section tone="carbon">
+      {/* Statement (placeholder until the team writes the line) */}
+      <Section spacing="tight" flush="top">
         <Container>
-          <h2 className="type-h2 m-0 mb-10">What we believe</h2>
-          <div className="grid gap-x-12 gap-y-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))]">
-            {beliefs.map((belief) => (
-              <div key={belief.num} className="border-t border-(--tone-hairline) pt-6">
-                <p className="type-numeral m-0 mb-3.5">{belief.num}</p>
-                <h3 className="type-h3 m-0 mb-3.5">{belief.title}</h3>
-                <p className="type-body m-0">{belief.description}</p>
+          <figure className="m-0 text-center">
+            <blockquote className="type-quote mx-auto m-0 max-w-[22ch] text-[clamp(36px,4.4vw,64px)] leading-[1.08] text-forest">
+              {STATEMENT.quote}
+            </blockquote>
+            <figcaption className="mt-6">
+              <Eyebrow as="span">{STATEMENT.attribution}</Eyebrow>
+            </figcaption>
+          </figure>
+        </Container>
+      </Section>
+
+      {/* What we believe */}
+      <Section>
+        <Container>
+          <h2 className="type-h2 m-0 mb-8">What we believe</h2>
+          <div className="grid gap-x-12 gap-y-10 border-t-2 border-(--tone-rule) pt-10 md:grid-cols-3">
+            {BELIEFS.map((belief) => (
+              <div key={belief.num}>
+                <p className="type-numeral m-0 mb-4">{belief.num}</p>
+                <h3 className="type-h3 m-0 mb-3 text-[28px]">{belief.title}</h3>
+                <p className="type-body m-0">{belief.line}</p>
               </div>
             ))}
           </div>
         </Container>
       </Section>
 
-      {/* Team */}
-      <Section>
+      {/* Who we are */}
+      <Section tone="carbon">
         <Container>
-          <div className="grid items-start gap-x-[72px] gap-y-8 border-t-2 border-(--tone-rule) pt-9 [grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))]">
-            {/* Initials placeholder */}
-            <Card
-              tone="forest"
-              aria-hidden="true"
-              className="flex max-w-[420px] items-end"
-              style={{ aspectRatio: "4/5" }}
-            >
-              <span className="type-display text-fern">CG</span>
-            </Card>
-
-            <div>
-              <h2 className="type-h2 m-0 mb-2">Conner Galway</h2>
-              <Eyebrow className="mb-6">Founder &amp; Principal</Eyebrow>
-              <p className="type-body m-0 mb-7">
-                Fourteen years advising destinations, operators and the
-                organizations behind them. Business in Vancouver 40 Under 40.
-                He&apos;s spoken at the Northern BC Tourism Summit, TIABC, Yukon&apos;s Go
-                Digital Summit and the BC Craft Beer Conference, and writes The
-                Brief every week.
-              </p>
-              <TextLink href="/programs">Book Conner to speak →</TextLink>
-            </div>
+          <div className="mb-10 flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
+            <h2 className="type-h2 m-0">Who we are</h2>
+            <p className="type-body m-0 text-newsprint-muted">
+              A small team in Vancouver, working across North America.
+            </p>
           </div>
+          <TeamList team={TEAM} />
         </Container>
       </Section>
 
       {/* CTA */}
       <Section id="start" tone="forest" className="scroll-mt-24">
         <Container>
-          <h2 className="type-display m-0 max-w-[16ch]">
+          <h2 className="type-display m-0 max-w-[18ch]">
             Tell us the goal. We&apos;ll be straight with you about the rest.
           </h2>
           <div className="mt-10 flex flex-wrap items-center gap-7">
