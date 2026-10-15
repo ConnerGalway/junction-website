@@ -25,6 +25,7 @@ Defined directly in `@theme`, so each token generates `bg-*`, `text-*`, `border-
 | `carbon` | `#1C1C1A` | Headings and UI text on Newsprint; dark ground |
 | `ink-soft` | `#3C3C39` | Body copy on Newsprint (Carbon at about 85%) |
 | `flint` | `#6A6862` | Muted text on Newsprint (captions, small print) |
+| `stage` | `#121211` | The Speaking hero's near-black stage only (`.tone-stage`, see Speaking page) |
 | `newsprint` | `#F4F0E8` | Main ground; replaces white |
 | `newsprint-hover` | `#EDE6DA` | Hover and focus fill for clickable list rows |
 | `forest` | `#1A4D2E` | Dark ground (sections and boxes); prices on light; card top rule |
@@ -110,6 +111,7 @@ Other ground rules:
 - **Carbon and Forest are both allowed** for full sections and for boxes.
 - **Neighbouring dark boxes alternate.** If two dark boxes sit side by side, make one Forest and one Carbon, as with the two audience cards on Custom Training.
 - **Two dark sections of the same colour should never touch.**
+- **Stage** (`.tone-stage`) is a near-black ground for the Speaking hero only. It takes Carbon's roles (Newsprint button, Fern focus, gold numerals, Newsprint 60% prices).
 - **Sage is never a full-width section.** Use it only inside boxes.
   - **Callouts** (`<Callout>`): sage-25 background with Forest text and Forest links (8.3:1).
   - **Quote cards** (`<QuoteCard>`): Sage background, also with Forest text.
@@ -374,6 +376,49 @@ Every fact lives in `src/lib/buildingSupplyCase.ts` (areas, numbers, before, cos
 - **CoursePlayer** (`CoursePlayer.tsx`, decorative, `aria-hidden`): the custom course's open state on Forest, inset 48px: a Newsprint frame with a 220px sidebar (Forest header: "Course", "Export readiness", a thin Fern progress bar; Modules 1–6 with Bebas gold-on-light numbers, module 2 on sage-25) and a video area with a slim control bar (Newsprint play button, Fern progress, Bebas time). Drawn at 600 × 340 and scaled to fit. If `formats-custom-course.mp4` exists it plays muted, looped and inline with the jpg as poster; reduced motion shows the still.
 - **Proof:** a copper meta label, the two stats as `<Stat maxSize="112px">` (gold-on-light, they fit their column), the Sage quote card and the placeholder.
 - **Program sketcher** (`ProgramSketcher.tsx`, rules in `src/lib/programSketch.ts`, placeholders): three selects in a row (stacked on mobile), styled for Forest over native `<select>`s: Newsprint 8% fill, 1px Newsprint 16% border, radius 10 (the control token), small caps label (Newsprint 60%) above the value (Epilogue 600, 18px), Fern chevron, Fern border on focus. Under them a Newsprint result card: "Your program, sketched", the program (Epilogue 900, 28px), a week strip (live weeks Canopy, others Sage) and a summary line, updating instantly with a 200ms text fade. "Send this sketch to us" opens `/contact?type=training&who=…&how=…&size=…&sketch=…`, which pre-fills the training audience and learners (the sketch title has no field yet: TODO).
+
+## Speaking page
+
+`src/app/speaking/`. Order: hero (stage), three talks, formats, Conner (Forest), "Got a date?" (Newsprint), footer.
+
+**Images are swappable by filename** in `public/images/speaking/`:
+- `hero-conner-stage.webp`: the hero cutout (transparent).
+- `talk-01.jpg` … `talk-03.jpg`: the talk images. Each one shows when its file exists (checked at build); otherwise the row shows a Placeholder.
+- `reel.mp4`: the speaking reel (see Reel below).
+
+Sections:
+
+- **Hero** (`SpotlightHero.tsx`):
+  - **Ground:** the near-black stage, at least one viewport minus the nav and never under 620px.
+  - **Copy:** max 600px wide. The H1 is "Talks that send the room home with a plan." Its last words "with a plan." rest at **Newsprint 35% on this page** (the beam lifts them; this is the page's design, not a listed exception). The lead is Newsprint 85%, then the existing buttons.
+  - **Cutout** (`.speaking-conner`): bottom-anchored and right-aligned. Its height is capped so it never reaches under the copy column. Below 768px it sits lower (52svh) with a dark gradient behind the copy.
+  - **Beam:** a soft radial glow (Newsprint 16% at the centre, gone by ~420px) and a faint cone from the top, both `aria-hidden`. It follows a fine pointer with a 0.12 lerp (rAF only while moving) and rests 120px right of "with a plan.". As it nears the words, their opacity rises from 35% to 100% over a 380px falloff.
+  - **Touch, coarse pointer or reduced motion:** a static beam at the rest point, the words at 35%.
+  - **"Recent stages" strip:** pinned to the bottom, with a Newsprint 10% top hairline. The label is in small caps at Newsprint 55%, and the stages are separated by "·".
+- **Three talks:** an `<ol>` of editorial rows, with a 2px Canopy rule above the first row and 1px hairlines above the others. Each row has:
+  - a Bebas gold-on-light number (64px);
+  - the title (Epilogue 900, up to 40px);
+  - the description;
+  - the audience as a copper meta label;
+  - on the right, a 16:9 image (radius 14, shadow, 360px column).
+- **Formats:** a centred, wrapping row with an 88px column gap, a 32px row gap and no dividers. Each item has:
+  - the length in `type-price` at 44px (Carbon 60%);
+  - the name (h4);
+  - the description in Flint.
+
+  Format lengths count as durations here, **including "Any time zone"** (allowed on this page). "[ length ]" for Panel or fireside is a placeholder.
+- **Conner (Forest):**
+  - the portrait (radius 14, up to 620px tall, `object-position: 50% 22%`);
+  - the H2 and bio (Newsprint 88%);
+  - two Newsprint `<Stat>`s under a Newsprint 18% rule ("14" years advising organizations, "2,000+" people trained);
+  - the testimonial placeholder.
+- **Got a date?** The display H2, the line and the email link sit on the left. On the right is `AvailabilityForm.tsx`, a Newsprint card with:
+  - the meta label "Check availability";
+  - a 2×2 grid (stacked on mobile) of Event (required, with an inline error), Date, Format and Audience;
+  - the button and a small line under it.
+
+  Submitting opens `/contact?type=speaking&event=…&date=…&format=…&audience=…`. The contact form pre-fills organization/event, date, format and audience size from it. A format the contact form doesn't list ("Not sure yet") goes into a hidden `note` field (TODO: a visible notes field).
+- **Reel:** no video player is shown. A frosted "Watch the reel" pill (`ReelPill.tsx`, round Newsprint play button) sits after the hero buttons. It appears only when `SHOW_SPEAKING_REEL` in `src/lib/flags.ts` is `true` **and** `public/images/speaking/reel.mp4` exists, and it opens the file in a new tab.
 
 ## Logo walls
 
