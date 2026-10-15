@@ -6,8 +6,14 @@
 
 export const CASE_META = "Offload Program · Building supply · 7 people";
 
+export const CASE_TITLE = "A building supplier's 30 days";
+
 export const CASE_INTRO =
   "A family-owned supply yard brought seven people, from the president to accounts payable. Here is where they started, and what they left with.";
+
+/** The short version (Work page chapter). */
+export const CASE_SUMMARY =
+  "A family-owned supply yard brought seven people, from the president to accounts payable. A collections assistant, a material list converter, a business brain and a roadmap for what's next.";
 
 export type CaseArea = {
   id: string;

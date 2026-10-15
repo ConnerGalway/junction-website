@@ -8,6 +8,8 @@ import {
   Stat,
   TextLink,
 } from "@/components";
+import { RouteMap } from "./RouteMap";
+import { buildRouteMap } from "./routeMapGeometry";
 
 export const metadata: Metadata = {
   title: "Work",
@@ -15,23 +17,30 @@ export const metadata: Metadata = {
     "Four engagements, told with the actual results. Each one links to the service that produced it. Soon you'll be able to flip through the deliverables too.",
 };
 
+const routeMap = buildRouteMap();
+
 const caseGrid =
   "grid gap-x-[72px] gap-y-8 [grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr))]";
 
 export default function WorkPage() {
   return (
     <>
-      {/* Hero */}
+      {/* Hero: headline and intro, with the route map */}
       <Section spacing="tight">
-        <Container className="grid items-end gap-x-[72px] gap-y-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))]">
+        <Container className="grid items-center gap-x-12 gap-y-10 lg:grid-cols-[minmax(0,45fr)_minmax(0,55fr)]">
           <div>
-            <h1 className="type-display m-0">Real regions. Real numbers.</h1>
+            {/* Exactly two lines from 1024px (explicit break) */}
+            <h1 className="type-display m-0">
+              <span className="lg:whitespace-nowrap">Real regions.</span>
+              <br className="hidden lg:inline" /> <span className="lg:whitespace-nowrap">Real numbers.</span>
+            </h1>
+            <p className="type-lead mt-7 mb-0">
+              Four engagements, told with the actual results. Each one links to
+              the service that produced it. Soon you&apos;ll be able to flip through
+              the deliverables too.
+            </p>
           </div>
-          <p className="type-body m-0 max-w-[46ch]">
-            Four engagements, told with the actual results. Each one links to
-            the service that produced it. Soon you&apos;ll be able to flip through
-            the deliverables too.
-          </p>
+          <RouteMap geo={routeMap} />
         </Container>
       </Section>
 

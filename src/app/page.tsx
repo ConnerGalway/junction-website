@@ -14,7 +14,7 @@ import {
   LogoWall,
 } from "@/components";
 import { HeroWordmark } from "@/components/HeroWordmark";
-import { CASE_AREAS, CASE_INTRO, CASE_META, CASE_TOOLS } from "@/lib/buildingSupplyCase";
+import { CASE_AREAS, CASE_INTRO, CASE_META, CASE_TITLE, CASE_TOOLS } from "@/lib/buildingSupplyCase";
 import { CALENDLY_URL } from "@/lib/constants";
 import { SHOW_HERO_WORDMARK } from "@/lib/flags";
 import { homeLogos } from "@/lib/logos";
@@ -228,7 +228,7 @@ export default function HomePage() {
             <Eyebrow as="span">{CASE_META}</Eyebrow>
           </div>
           <div className="grid items-end gap-x-16 gap-y-5 lg:grid-cols-2">
-            <h2 className="type-h2 m-0">A building supplier&apos;s 30 days.</h2>
+            <h2 className="type-h2 m-0">{CASE_TITLE}.</h2>
             <p className="type-body m-0 max-w-[50ch]">{CASE_INTRO}</p>
           </div>
 
