@@ -1100,8 +1100,8 @@
   }
 
   /* About "Who we are": touch / coarse pointer shows every name at full
-     Newsprint with a small portrait; a fine pointer dims them to 45% (About-only
-     exception) and uses the in-row portrait card instead. */
+     Newsprint with a small portrait; a fine pointer dims the inactive ones to
+     45% (About-only exception) and shows the fixed portrait card instead. */
   .team-name {
     color: var(--color-newsprint);
     transition: color 150ms ease;

@@ -235,10 +235,10 @@ Controls:
 - **Light panels on dark grounds:** `<Card tone="newsprint">`, a Newsprint box with radius 14, no shadow and no top line (for example the homepage program cards on Carbon).
 - **Swappable images:** some images are meant to be replaced on GitHub by uploading a file with the same name, such as the homepage video card cover, `public/images/tourism-talks-cover.png` (16:9). Reference them by that exact path, fill the slot with `object-fit: cover`, and never hardcode their pixel size.
 - **Photos:** never get an outline or the 3px top line. A floating photo may have a soft shadow (`shadow-card`) and radius 14. **Photos are dark, so they never overlap headline text:** when space runs out, the photo shrinks or moves into the flow instead.
-  - **Exception: the About portrait card.** It sits in the hovered or focused team row (fine pointer only) and may overlap the rows above and below and their dividers. When the gap after a name is too narrow, it may cover that row's role.
+  - **Exception: the About portrait card.** It sits in the gap between the team names and their roles (fine pointer only), across the rows and their dividers. It shrinks to fit the gap rather than covering text.
 - **Exception: the Offload KitCarousel** dims its side cards to 50% (below the 75% rule): they're previews, the spotlight card is at full opacity, and the live region announces it.
 - **Dimmed rows** (`.dim-row`): rows that sit at 75% and come to full opacity on hover and keyboard focus (200ms). 75% keeps body text above AA (ink-soft at 75% is about Flint, 4.9:1); don't dim text further, such as the Accelerator steps. Pointer devices only: on touch (`hover: none`) they stay at full opacity. Make each row focusable (`tabIndex={0}`) so keyboard users can bring it forward.
-  - **Exception: the About team names** rest at Newsprint 45% on Carbon (large Fraunces, decorative until hovered or focused). This applies with a fine pointer only; touch and coarse pointers show them at full Newsprint.
+  - **Exception: the inactive About team names** are at Newsprint 45% on Carbon (large Fraunces; one name is always active at full Newsprint). This applies with a fine pointer only; touch and coarse pointers show them at full Newsprint.
 - **Ghost numerals:** a big Bebas numeral fully inside a card's top-right corner, 16px from the top and right edges and about 70% of the card's height (it scales with the card). Never cropped. Carbon at 6% (Newsprint at 7% on Carbon), behind the text, `aria-hidden`. Drawn as an SVG whose viewBox is the digit's ink box, so its height is the numeral's height. Used on the Accelerator touchpoint cards.
 - **Edge fades:** `.fade-out-left`, `.fade-out-right` and `.fade-out-bottom` (mask). Give a faded element enough padding to keep its shadow inside the mask.
 - **Tables:** use a real `<table className="data-table">` inside `<div className="data-table-frame">`.
@@ -483,15 +483,13 @@ Sections:
 - **Who we are (Carbon):** the H2 on the left and "A small team in Vancouver, working across North America." (newsprint-muted) on the right, then `TeamList`.
 - **TeamList** (`TeamList.tsx`): rows show the name (Fraunces 900 italic, up to 64px) with the role on the right (small caps). There are 1px Sage dividers between rows only, with none above the first or below the last.
   - **Fine pointer:**
-    - Names rest at Newsprint 45%. The hovered or focused row's name goes to full Newsprint and its role to Fern (150ms).
-    - **Card placement:** a portrait card (180 × 225, radius 14, greyscale, -3°, `shadow-card`) sits in that row. It's centred in the gap between the end of the name and the start of the role, and vertically centred on the row. It may overlap the rows above and below; it's layered above the dividers and has no pointer events.
-    - **Narrow gap:** when the gap is narrower than the card plus 24px on each side, the card goes 24px right of the name instead, kept inside the list.
-    - **Motion:**
-      - **Between names:** the card glides to the new row (transform, 300ms ease-out) and the image cross-fades (200ms).
-      - **Entering the list:** fade and scale in (0.96 → 1, 200ms).
-      - **Leaving the list** (or keyboard focus leaving it): fade out (150ms).
-      - **Reduced motion:** the card appears in place, with no glide, scale or fades.
-    - **Keyboard:** each row is focusable, and focus places the card exactly as hover does.
+    - **One portrait card that never moves.** It's horizontally centred in the gap between the names (the widest one's end) and the roles (the leftmost one's start), and vertically centred on the whole list.
+    - **Size:** 240 × 300 at 1440, scaling to 200 × 250 at 1024 (4:5). If the gap is narrower than the card plus 24px on each side, it shrinks to fit, but never below 160px wide.
+    - **Look:** the homepage hero photo treatment (-1.5°, radius 14, `shadow-card`), greyscale, above the Sage dividers.
+    - **One person is always active:** Conner at rest, or whoever is hovered or keyboard-focused. Leaving the list, or focus leaving it, returns to Conner.
+      - The active name is full Newsprint and its role Fern; inactive names are at Newsprint 45%.
+      - The card's image cross-fades to the active person (250ms; instant with reduced motion). The card itself doesn't move, scale or re-animate.
+      - All three portraits load up front, so the swap never flashes.
   - **Touch or coarse pointer:** names at full Newsprint, with a small greyscale portrait (56 × 70, radius 10) beside each, and no card. CSS media queries decide this, so there's no flash on load.
   - **Portraits are swappable by filename:** `public/images/team/conner.jpg`, `brooke.jpg`, `andrea.jpg`. They're cropped from the top to fill their frames. For now all three are copies of Conner's portrait.
 - **Closing CTA (Forest):** "Tell us the goal. We'll be straight with you about the rest." (display, 18ch) and "Start a conversation" (`/contact`).
