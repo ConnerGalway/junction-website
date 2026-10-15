@@ -1,5 +1,6 @@
 import { Container, Eyebrow, QuoteCard, Stat, TextLink } from "@/components";
 import type { WorkCase } from "@/lib/workCases";
+import { DeliverablesPreview } from "./DeliverablesPreview";
 
 /**
  * One case chapter's content. Its ground and side come from <ChapterList>
@@ -43,6 +44,7 @@ export function CaseChapter({ item }: { item: WorkCase }) {
           <QuoteCard quote={quote.text} caption={quote.caption} className="quote-adapt w-full" />
         )}
         {link && <TextLink href={link.href}>{link.label}</TextLink>}
+        <DeliverablesPreview title={item.title} {...item.deliverables} className="mt-4 w-full max-w-[560px]" />
       </div>
     </Container>
   );
