@@ -33,7 +33,7 @@ type Prefill = {
   note?: string;
 };
 
-const speakingFormats = ["Keynote", "Workshop", "Panel or fireside", "Virtual"];
+const speakingFormats = ["Keynote", "Workshop", "Panel or fireside", "Virtual", "Not sure yet"];
 
 const sketchAudience: Record<string, string> = {
   operators: "Businesses or operators in our region",
@@ -197,17 +197,16 @@ function ContactFormFields({ initialType, prefill }: { initialType: FormType; pr
           {selectedType === "speaking" && (
             <div className="flex flex-col gap-4">
               {/* TODO: no notes field for speaking; answers without a field
-                  (e.g. format "Not sure yet") ride along hidden for now. */}
+                  (e.g. a format not in the list) ride along hidden for now. */}
               {prefill?.note && <input type="hidden" name="note" value={prefill.note} />}
               <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr))]">
                 <Input label="Event date" name="date" type="date" defaultValue={prefill?.date} />
                 <Input label="City or virtual" name="location" />
                 <Input label="Audience size" name="size" defaultValue={prefill?.size} />
                 <Select label="Format" name="format" defaultValue={prefill?.format}>
-                  <option>Keynote</option>
-                  <option>Workshop</option>
-                  <option>Panel or fireside</option>
-                  <option>Virtual</option>
+                  {speakingFormats.map((f) => (
+                    <option key={f}>{f}</option>
+                  ))}
                 </Select>
               </div>
               <Select label="Topic you're interested in" name="topic">
