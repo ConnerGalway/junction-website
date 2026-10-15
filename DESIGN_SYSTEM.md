@@ -12,9 +12,11 @@ This file explains the rules behind them. If you're adding a page, compose it fr
 
 - **Never use pure white.** Newsprint (`#F4F0E8`) replaces white everywhere: cards, inputs, badges and text. The default Tailwind palette is cleared, so `bg-white` and `text-white` don't exist.
 - **Bebas Neue is for the `JUNCTION_` wordmark and numerals only.** Numerals here means stats, index numbers, prices and durations. Use `<Wordmark>` / `<LogoLockup>`, `type-stat`, `type-numeral` and `type-price`.
+  - **Exception: the Work RouteMap's hub label** "JUNCTION" (Bebas, 20px, Carbon, no underscore). It's a map label naming the hub, not the logo; the logo itself always keeps its underscore.
 - **No hex or rgba values in pages, and no inline font styles.** Use tokens and type classes.
 - **No hard edges.** Every box, control and media frame is rounded.
 - **Examples use one of two businesses:** "Conner's Cabins" (the example small business) or the building-supply case. No other client names in mock-ups, sample data or placeholders.
+  - **Exception: the Work page's sample deliverable covers** show each case's own title, client names included (e.g. "Accelerator across ITBC members"). They illustrate that client's real case, captioned "client details changed for privacy".
 
 ## Colour tokens
 
@@ -135,6 +137,7 @@ Pink appears only on things you can click. Non-clickable elements never get a pi
 - **Clickable cards:** the whole card is the link (`<Card href>`), with no button or second link inside. On hover and keyboard focus it gets a 2px break-pink outline, offset 4px.
 - **Clickable list rows:** the newsprint-hover highlight plus a pink title (see Surfaces).
 - **Exception: `Badge`** (outline and filled). A badge is a status label and isn't clickable, but it may be pink: the outline badge ("Quick check · a general snapshot" on the Accelerator page) and the filled badge ("New" on the Offload hero). Badges are the only non-clickable pink component.
+- **Exception: the Work RouteMap hub.** Junction's Vancouver hub is a break-pink dot inside a 50% break-pink ring. It's decorative and not clickable: the one non-clickable use of the break colour on a map. The case stops around it are links and fill pink on hover and focus.
 - **Exception: the Offload guarantee strip.** A break-on-light strip (radius 14) with "Guaranteed" in Fraunces 900 italic and the promise in Epilogue 600, both Newsprint (4.8:1). It's the only non-clickable pink surface, and the only Fraunces outside pull quotes. Don't reuse it elsewhere.
 
 ### Eyebrows are for meta labels only
@@ -254,7 +257,7 @@ Controls:
 | `Eyebrow` | Meta labels only (never above a heading). Tone eyebrow colour. `variant="highlight"` adds a break dot and pink text. |
 | `Stat` | `value`, `label` and `maxSize`. A Bebas number with the label below in body size, and no rule. Gold on Newsprint and Carbon, Newsprint on Forest. **It always fits:** as large as `maxSize` (default the `type-stat` clamp) but never wider than its container, via a container query and the value's width from Bebas glyph widths. Set a smaller size with `maxSize`, never a `text-*` class. |
 | `Card` | See Surfaces. `tone`, `href` and `padded` (`true`, `"sm"` for 20px compact padding, or `false`). |
-| `QuoteCard` | Sage fill, radius 14, `type-quote` with a Forest caption. No headshots (faces rule). |
+| `QuoteCard` | Sage fill, radius 14, `type-quote` with a Forest caption. No headshots (faces rule). With `className="quote-adapt"` it becomes a Newsprint card (still Forest text) when it sits on Forest; used by the Work chapters, whose ground is set by position. |
 | `Callout` | sage-25 box, radius 14, Forest text and links. For a short highlighted statement. |
 | `Badge` | `outline` (2px break border, pink text, dot) or `filled` (break-on-light fill). Radius 10. Badges are the one non-clickable pink component (see Pink means clickable). |
 | `Tabs` | Underlined tabs: `items` (`id`, `label`, `panel`) and a `label`. Large titles (Epilogue 600, 22px) on a 1px rule; active Carbon with a 3px Canopy underline, inactive Flint with a pink hover. `tablist`/`tab`/`tabpanel`, ← → Home End; panels cross-fade in 250ms (instant with reduced motion); the tab row scrolls sideways on narrow screens. |
@@ -339,7 +342,7 @@ Toggle pills are `<button aria-pressed>` elements inside a labelled `role="group
 
 ### Building-supply case study
 
-Every fact lives in `src/lib/buildingSupplyCase.ts` (areas, numbers, before, cost, what we built, measures, tools). The Offload page tells the full story (`#case-study`); the homepage shows a teaser built from the same data: chip and meta, "A building supplier's 30 days.", the intro, the four numbers (area label in Newsprint 65%, 4.6:1; Bebas number; label; 2px Fern line above), the four tools under thin Newsprint rules, and "See the full story →". Change the data file, never one page.
+Every fact lives in `src/lib/buildingSupplyCase.ts` (areas, numbers, before, cost, what we built, measures, tools). The Offload page tells the full story (`#case-study`); the Work page's supplier chapter takes its meta, title (`CASE_TITLE`), summary (`CASE_SUMMARY`) and the Collections number from it; the homepage shows a teaser built from the same data: chip and meta, "A building supplier's 30 days.", the intro, the four numbers (area label in Newsprint 65%, 4.6:1; Bebas number; label; 2px Fern line above), the four tools under thin Newsprint rules, and "See the full story →". Change the data file, never one page.
 
 ### Quick score
 
@@ -427,6 +430,34 @@ Sections:
   Submitting opens `/contact?type=speaking&event=…&date=…&format=…&audience=…`. The contact form pre-fills organization/event, date, format and audience size from it. Its Format list matches the availability form's, including "Not sure yet". A format it doesn't list would go into a hidden `note` field (TODO: a visible notes field).
 - **Stage thumbnail** (`StageThumbnail.tsx`, the Speaking card in the homepage orbit): the stage ground, a `.spot-pool` at half size (150px radius) upper-right of centre near his face, and the cutout at 80%, bottom-anchored and right-aligned, slightly cropped by the right and bottom edges. No text, static. See program thumbnails under Components.
 - **Reel:** no video player is shown. A frosted "Watch the reel" pill (`ReelPill.tsx`, round Newsprint play button) sits after the hero buttons. It appears only when `SHOW_SPEAKING_REEL` in `src/lib/flags.ts` is `true` **and** `public/images/speaking/reel.mp4` exists, and it opens the file in a new tab.
+
+## Work page
+
+`src/app/work/`. Order: hero (headline + RouteMap), service filter, five case chapters, "More on the way" note, closing CTA (Forest). Chapter content lives in `src/lib/workCases.ts`; map stops and clients in `src/lib/routeMap.ts`.
+
+- **Hero (Newsprint):** two columns (45/55) from 1024px; below that the map goes under the intro, full width. The H1 "Real regions. / Real numbers." is exactly two lines from 1024px (explicit break). The intro is `type-lead`.
+- **RouteMap** (`RouteMap.tsx`, geometry in `routeMapGeometry.ts`):
+  - **Map data:** Natural Earth via `world-atlas` (countries-110m), `topojson-client` and `d3-geo`, all pinned. Canada and the United States only, in `geoConicConformal().parallels([42, 68]).rotate([102, 0]).center([0, 52])`, fitted (`fitExtent`, 10px padding) to the `FRAME` points. The SVG paths and points are built at build time on the server, drawn at 700 × 480 and scaled to the column.
+  - **Fills:** Canada Carbon 5%, the US Carbon 3.5%, no strokes. The land layer (with the other-client routes and dots) fades out from 78% of its height.
+  - **Hub** (Vancouver): break-pink dot (r 7) in a 50% break-pink ring (r 14); decorative (see Pink means clickable). Labelled to its left "JUNCTION" (Bebas 20px, Carbon; see Hard rules) over "VANCOUVER" (small caps, Flint).
+  - **Case stops:** Newsprint dot with a 3px Canopy ring (r 7) and a 2.4px Canopy arc from the hub. Arcs are quadratic curves bowing upward by 22% of their length. Labels are plain text: the number (Bebas 24px, gold-on-light) over the name (DM Sans 500, 11.5px, Carbon), placed per stop (`placement`). Kootenay's number "[ # ]" is a placeholder.
+  - **Next stop** (Okotoks): dashed ring and a thin dashed arc, no label; its name is in a tooltip.
+  - **Other clients:** Canopy dots (r 3, 40%) with very faint arcs (1.2px, 14%); names in tooltips. Destination BC and the Vancouver clients sit at the hub. A client right under a case stop (Hamilton, Fernie) gets no tooltip target, so it never blocks the stop; all clients are listed in a visually hidden sentence.
+  - **Interaction:** each case stop is a link to its chapter (`#case-…`). Hover and focus fill its dot break pink; a click smooth-scrolls (instant with reduced motion) and first clears a service filter that would hide the chapter. Tooltips (Newsprint, radius 10, shadow) open on mouse hover or a tap; a tap outside closes them.
+  - **Under 768px:** the names are hidden (numbers stay); the first tap on a stop shows its name as a link to the chapter.
+- **Service filter** (`WorkFilter.tsx`): "Filter by service" (Flint) and toggle chips All · Training · Accelerator · Research · Strategy, `<button aria-pressed>` in a labelled group. Selected: Carbon fill, Newsprint text; others newsprint-hover with a pink text hover; radius 10, 44px tall. (The Brief and JunctionU filter pills use the older Forest-outline style.) Filtering fades the chapter list out and back in (200ms each way, instant with reduced motion).
+- **Case chapters** (`ChapterList` + `CaseChapter.tsx`):
+  - **Grounds and sides by visible position:** Forest, Newsprint, Carbon, Newsprint, then the pattern repeats; with a filter on, the visible chapters are renumbered. Odd chapters put the stat on the left, even ones on the right (from 1024px; stacked below with the stat first). Equal columns, vertically centred.
+  - **Stat side:** `<Stat maxSize="clamp(120px, 16vw, 230px)">`, line-height .8, label 18px. Newsprint on Forest, gold-on-light on Newsprint, gold on Carbon (the tone's numeral colour).
+  - **Story side:** meta label (copper on Newsprint, Fern on dark), title (h2 at up to 44px), description, the quote card where there is one (`quote-adapt`: Sage on Newsprint and Carbon, Newsprint card on Forest), the service link, then the DeliverablesPreview.
+  - **No stat (Kootenay Rockies):** the quote leads on the stat side (Fraunces 900 italic, up to 36px, tone text, caption under it) and isn't repeated in the story.
+- **DeliverablesPreview** (`DeliverablesPreview.tsx`): three sample pages in a row with equal heights, `aria-hidden`:
+  - a report cover (3:4, Forest, small JUNCTION_ wordmark, a Fern rule and the case title);
+  - two inside spreads (3:2, Newsprint, with abstract text lines, a Bebas figure and a few bars). On the second spread the figure and bars are blurred and one line is a solid redaction bar.
+
+  Pages are drawn with container units, so they scale with the column. They have radius 10 and the tone's card shadow or border. Caption: "Sample pages · client details changed for privacy · flip through →". As a mock document it keeps its own colours (a small gold figure). **Swappable:** set `deliverables.images` (cover, spread, spread) in `workCases.ts` and real images fill the same slots. **Not interactive yet. Planned:** clicking "flip through" expands the pages in place to fill the chapter (no modal, no new page); to be designed.
+- **Note:** a `Callout` with the Okotoks line and "Get them first: join the JunctionU list →" (to `/junctionu` until a list signup exists; TODO).
+- **Closing CTA (Forest):** display H2 and the existing "Start a conversation" button (`/contact`).
 
 ## Logo walls
 
