@@ -1,20 +1,29 @@
+import fs from "node:fs";
+import path from "node:path";
 import type { Metadata } from "next";
+import Image from "next/image";
 import {
   Button,
   Card,
   Container,
-  Eyebrow,
   Placeholder,
   Section,
   TextLink,
 } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
+import { SHOW_SPEAKING_REEL } from "@/lib/flags";
+import { ReelPill } from "./ReelPill";
+import { SpotlightHero } from "./SpotlightHero";
 
 export const metadata: Metadata = {
   title: "Speaking",
   description:
     "Keynotes, workshops and virtual sessions on AI, marketing trends and tourism strategy.",
 };
+
+/** The 60-second reel: shown only with the flag on and the file in place. */
+const REEL = "/images/speaking/reel.mp4";
+const showReel = SHOW_SPEAKING_REEL && fs.existsSync(path.join(process.cwd(), "public", REEL));
 
 const stages = [
   "Northern BC Tourism Summit",
@@ -57,49 +66,70 @@ const formats = [
 export default function SpeakingPage() {
   return (
     <>
-      {/* Hero */}
-      <Section tone="carbon" spacing="tight">
-        <Container className="grid items-center gap-[clamp(32px,5vw,72px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr))]">
-          <div>
-            <h1 className="type-display m-0">
-              Talks that send the room home with a plan.
-            </h1>
-            <p className="type-lead mt-7 mb-9">
-              Keynotes, workshops and virtual sessions on AI, marketing trends
-              and tourism strategy. Every talk ends with actions people can take
-              that week.
-            </p>
-            <div className="flex flex-wrap items-center gap-6">
-              <Button href="/contact?type=speaking">
-                Check availability for your date
-              </Button>
-              <TextLink href={CALENDLY_URL} className="whitespace-nowrap">
-                Book a 20-min call →
-              </TextLink>
-            </div>
+      {/* Hero: the spotlight stage */}
+      <section className="tone-stage relative overflow-hidden">
+        <SpotlightHero className="relative flex min-h-[max(620px,calc(100svh-84px))] flex-col">
+          {/* Conner at the podium: bottom-anchored, cropped by the section */}
+          <Image
+            src="/images/speaking/hero-conner-stage.webp"
+            alt="Conner Galway speaking at a podium"
+            width={1436}
+            height={960}
+            priority
+            sizes="(min-width: 1024px) 60vw, 100vw"
+            className="speaking-conner pointer-events-none absolute w-auto max-w-none select-none"
+          />
+          {/* Mobile: a dark wash behind the copy */}
+          <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-[80%] bg-gradient-to-b from-stage via-stage/85 to-transparent md:hidden" />
+
+          <div className="relative z-10 flex-1 px-gutter pt-[clamp(48px,11svh,128px)] pb-[clamp(48px,9svh,96px)]">
+            <Container>
+              <div className="max-w-[600px]">
+                {/* Three lines from 1280px (explicit breaks) */}
+                <h1 className="type-display m-0 text-newsprint">
+                  <span className="xl:whitespace-nowrap">Talks that send</span>
+                  <br className="hidden xl:inline" /> <span className="xl:whitespace-nowrap">the room home</span>
+                  <br className="hidden xl:inline" />{" "}
+                  <span data-spot-target className="xl:whitespace-nowrap" style={{ opacity: 0.35 }}>
+                    with a plan.
+                  </span>
+                </h1>
+                <p className="type-lead mt-7 mb-9 max-w-[38ch] text-newsprint/85">
+                  Keynotes, workshops and virtual sessions on AI, marketing trends
+                  and tourism strategy. Every talk ends with actions people can take
+                  that week.
+                </p>
+                <div className="flex flex-wrap items-center gap-6">
+                  <Button href="/contact?type=speaking">Check availability for your date</Button>
+                  <TextLink href={CALENDLY_URL} className="whitespace-nowrap">
+                    Book a 20-min call →
+                  </TextLink>
+                  {showReel && <ReelPill href={REEL} />}
+                </div>
+              </div>
+            </Container>
           </div>
 
-          {/* Video placeholder */}
-          <Placeholder aspectRatio="16/9">
-            [ video: 60-second speaker reel ]
-          </Placeholder>
-        </Container>
-
-        {/* Recent stages */}
-        <Container className="mt-14 flex flex-wrap items-center gap-x-9 gap-y-3 border-t-2 border-(--tone-rule) pt-6">
-          <Eyebrow as="span">Recent stages</Eyebrow>
-          <ul className="m-0 flex list-none flex-wrap items-center gap-x-4 gap-y-3 p-0">
-            {stages.map((s, i) => (
-              <li key={s} className="flex items-center gap-4">
-                {i > 0 && (
-                  <span aria-hidden="true" className="size-1.5 shrink-0 rounded-full bg-flint" />
-                )}
-                <span className="font-sans text-[17px] font-medium">{s}</span>
-              </li>
-            ))}
-          </ul>
-        </Container>
-      </Section>
+          {/* Recent stages, pinned to the bottom of the hero */}
+          <div className="relative z-10 border-t border-newsprint/10 bg-gradient-to-t from-stage to-stage/70 px-gutter py-5">
+            <Container className="flex flex-wrap items-baseline gap-x-6 gap-y-2">
+              <span className="text-[12px] font-medium tracking-[0.14em] text-newsprint/55 uppercase">Recent stages</span>
+              <ul className="m-0 flex list-none flex-wrap items-baseline gap-x-3 gap-y-1 p-0 text-[16px] font-medium text-newsprint">
+                {stages.map((s, i) => (
+                  <li key={s} className="flex items-baseline gap-3">
+                    {i > 0 && (
+                      <span aria-hidden="true" className="text-newsprint/40">
+                        ·
+                      </span>
+                    )}
+                    {s}
+                  </li>
+                ))}
+              </ul>
+            </Container>
+          </div>
+        </SpotlightHero>
+      </section>
 
       {/* Topics */}
       <Section>

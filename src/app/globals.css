@@ -25,6 +25,7 @@
   --color-*: initial;
 
   --color-carbon: #1C1C1A;
+  --color-stage: #121211;          /* near-black stage (Speaking hero) */
   --color-flint: #6A6862;          /* muted text on Newsprint */
   --color-newsprint: #F4F0E8;      /* replaces white everywhere */
 
@@ -215,6 +216,27 @@
     --tone-card-shadow-hover: none;
   }
 
+  /* Stage: the near-black Speaking hero. Carbon's roles on a darker ground. */
+  .tone-stage {
+    --tone-bg: var(--color-stage);
+    --tone-text: var(--color-newsprint);
+    --tone-muted: var(--color-newsprint-muted);
+    --tone-eyebrow: var(--color-fern);
+    --tone-link: var(--color-newsprint);
+    --tone-link-hover: var(--color-break-on-dark);
+    --tone-focus: var(--color-fern);
+    --tone-rule: var(--color-fern);
+    --tone-hairline: var(--color-hairline-dark);
+    --tone-highlight: var(--color-break-on-dark);
+    --tone-btn-bg: var(--color-newsprint);
+    --tone-btn-text: var(--color-carbon);
+    --tone-btn-hover-bg: var(--color-sage);
+    --tone-btn-line: var(--color-newsprint);
+    --tone-numeral: var(--color-accent-1);
+    --tone-price: var(--color-price-on-dark);
+    --tone-body: var(--color-newsprint-muted);
+  }
+
   /* Forest: sections and boxes. Numerals are Newsprint here (no accent-1). */
   .tone-forest {
     --tone-bg: var(--color-forest);
@@ -281,6 +303,7 @@
 
   .tone-newsprint,
   .tone-carbon,
+  .tone-stage,
   .tone-forest,
   .tone-sage,
   .tone-callout {
@@ -985,6 +1008,57 @@
     outline: 2px solid var(--tone-focus);
     outline-offset: 4px;
     border-radius: 999px;
+  }
+
+  /*
+   * Speaking hero cutout (1436 × 960): bottom-anchored and cropped by the
+   * section. From 1024px its height is the smaller of 88svh and what fits
+   * right of the 600px text column (its transparent upper-left may tuck in
+   * a little), so it never sits under the headline or buttons. Below
+   * 768px it's lower and smaller (52svh), centred right of middle.
+   */
+  .speaking-conner {
+    bottom: -4%;
+    height: 52svh;
+    left: calc(62vw - 0.46 * 1.496 * 52svh);
+  }
+
+  @media (min-width: 768px) {
+    .speaking-conner {
+      left: auto;
+      right: -6vw;
+      height: min(70svh, calc((100vw - var(--spacing-gutter) - 600px + 6vw) / 1.496 * 1.12));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .speaking-conner {
+      right: -4vw;
+      height: min(
+        88svh,
+        calc((100vw - max(var(--spacing-gutter), (100vw - var(--container-wide)) / 2) - 600px + 4vw) / 1.496 * 1.18)
+      );
+    }
+  }
+
+  /* Speaking hero spotlight: a soft radial light and a faint cone from the top. */
+  .spot-glow {
+    background: radial-gradient(
+      circle at center,
+      color-mix(in srgb, var(--color-newsprint) 16%, transparent) 0,
+      color-mix(in srgb, var(--color-newsprint) 6%, transparent) 220px,
+      transparent 420px
+    );
+  }
+
+  .spot-cone {
+    background: linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-newsprint) 7%, transparent),
+      color-mix(in srgb, var(--color-newsprint) 2%, transparent) 70%,
+      transparent
+    );
+    clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%);
   }
 
   /* Program sketcher: native option lists in Newsprint, and the 200ms text fade. */
