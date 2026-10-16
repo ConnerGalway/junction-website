@@ -1138,6 +1138,27 @@
     }
   }
 
+  /* The Brief: issue numbers set sideways (reading bottom to top) in the
+     left margin of the reading column. Decorative; hidden under 768px. */
+  .brief-margin-num {
+    position: absolute;
+    right: calc(100% + 28px);
+    display: none;
+    font-family: var(--font-wordmark);
+    line-height: 0.8;
+    white-space: nowrap;
+    color: color-mix(in srgb, var(--color-carbon) 7%, transparent);
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    transition: color 200ms ease;
+  }
+
+  @media (min-width: 768px) {
+    .brief-margin-num {
+      display: block;
+    }
+  }
+
   /* Program sketcher: native option lists in Newsprint, and the 200ms text fade. */
   .sketch-select option {
     background-color: var(--color-newsprint);

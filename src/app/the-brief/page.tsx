@@ -1,98 +1,85 @@
 import type { Metadata } from "next";
-import { Card, Container, Eyebrow, NewsletterSignup, Section } from "@/components";
-import { ArticleList, type Article } from "./ArticleList";
+import { Eyebrow, NewsletterSignup, TextLink } from "@/components";
+import { getIssues, type Issue } from "@/lib/brief";
+import { formatDay, issueHref } from "./format";
 
 export const metadata: Metadata = {
   title: "The Brief",
   description: "Thinking you can use by Friday. Weekly ideas on marketing, AI and tourism.",
 };
 
-const allArticles: Article[] = [
-  {
-    title: "Maybe the algorithm isn't the problem",
-    cat: "Marketing",
-    date: "Jul 14",
-    teaser:
-      "Before you blame the platform, check the three things the algorithm actually rewards.",
-  },
-  {
-    title: "The year of the creator economy",
-    cat: "Trends",
-    date: "Jul 6",
-    teaser:
-      "What tourism brands should copy from creators, and what to leave alone.",
-  },
-  {
-    title: "The four phases of AI adoption",
-    cat: "AI",
-    date: "Jun 8",
-    teaser:
-      "Most teams stall at phase two. Here is what the jump to three looks like.",
-  },
-  {
-    title: "The hidden 80% of your visitor economy",
-    cat: "Tourism",
-    date: "May 26",
-    teaser:
-      "The businesses that never call themselves tourism businesses, and why they matter most.",
-  },
-  {
-    title: "They remember the interaction",
-    cat: "Marketing",
-    date: "May 12",
-    teaser:
-      "What 4,500 visitors taught one small town about word of mouth.",
-  },
-  {
-    title: "Your Google profile is your homepage now",
-    cat: "Marketing",
-    date: "Apr 28",
-    teaser:
-      "More travellers see it than your website. Sixty minutes fixes it.",
-  },
-  {
-    title: "What a DMO can actually promise its board",
-    cat: "Tourism",
-    date: "Apr 14",
-    teaser: "Capacity built is measurable. Here is how partners report it.",
-  },
-];
+/**
+ * The Brief: one centred reading column on Newsprint, issue numbers in the
+ * left margin. All data comes from src/lib/brief.ts (Mailchimp, or sample
+ * issues until it's configured).
+ */
+export default async function TheBriefPage() {
+  const issues = await getIssues();
+  const [latest] = issues;
 
-const filters = ["All", "Marketing", "AI", "Tourism", "Trends"];
-
-export default function TheBriefPage() {
   return (
-    <>
-      {/* Hero + newsletter signup */}
-      <Section spacing="tight">
-        <Container className="grid items-end gap-x-[72px] gap-y-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))]">
-          <div>
-            <h1 className="type-display m-0">Thinking you can use by Friday.</h1>
-            <p className="type-small m-0 mt-5">100+ articles</p>
-          </div>
+    <div className="px-gutter pt-section-tight pb-section">
+      {/* Top: the wordmark, headline, lead and signup are the subscribe block */}
+      <header className="mx-auto max-w-[900px] text-center">
+        <p className="m-0 font-wordmark text-[30px] leading-none tracking-[0.16em] text-carbon">The Brief</p>
+        <h1 className="type-display mx-auto mt-6 mb-0 text-[clamp(48px,6.1vw,88px)] text-balance">
+          Thinking you can use by Friday.
+        </h1>
+        <p className="type-lead mx-auto mt-6 mb-0 max-w-[34ch]">
+          Weekly ideas on marketing, AI and tourism. One feature, two short reads, every Monday.
+        </p>
+        <div id="subscribe" className="mx-auto mt-9 max-w-[520px] scroll-mt-32">
+          <NewsletterSignup
+            centered
+            hideLabel
+            helper={<span className="text-flint">Free · award-winning · 500+ articles · unsubscribe anytime</span>}
+          />
+        </div>
+      </header>
 
-          <Card tone="carbon">
-            <Eyebrow className="mb-3">The Brief · weekly</Eyebrow>
-            <p className="type-h3 m-0 mb-6">
-              Start every week knowing something your competitors don&apos;t.
-            </p>
-            <NewsletterSignup />
-            <p className="type-small m-0 mt-3">Award-winning. Free. Unsubscribe anytime.</p>
-          </Card>
-        </Container>
-      </Section>
+      <div className="relative mx-auto mt-[clamp(72px,9vw,128px)] max-w-[720px]">
+        {latest && <ThisWeek issue={latest} />}
+      </div>
+    </div>
+  );
+}
 
-      {/* Article list */}
-      <Section flush="top">
-        <Container>
-          <ArticleList articles={allArticles} filters={filters} />
-          <p className="type-small m-0 mt-7 max-w-body">
-            Every article ends with one next step matched to its topic: a
-            course, a tool, or a conversation. The full archive lands here at
-            launch.
-          </p>
-        </Container>
-      </Section>
-    </>
+/** "Nº 544", or nothing without a number. */
+const no = (n: number | null) => (n === null ? null : `Nº ${n}`);
+
+function ThisWeek({ issue }: { issue: Issue }) {
+  const meta = [no(issue.number), formatDay(issue.date)].filter(Boolean).join(" · ");
+  return (
+    <section aria-labelledby="this-week" className="relative">
+      {issue.number !== null && (
+        <span aria-hidden="true" className="brief-margin-num top-0 text-[clamp(110px,10.4vw,150px)]">
+          {no(issue.number)}
+        </span>
+      )}
+      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-t-2 border-carbon pt-4">
+        <h2 id="this-week" className="type-eyebrow m-0 text-carbon">
+          This week
+        </h2>
+        <p className="type-small m-0 text-flint">{meta}</p>
+      </div>
+      <h3 className="mt-8 mb-0 font-display text-[clamp(34px,4.2vw,54px)] leading-[1.02] font-black tracking-[-0.035em] text-balance text-carbon">
+        {issue.feature}
+      </h3>
+      {issue.sections && (
+        <div className="mt-10 grid gap-x-10 gap-y-6 border-t border-carbon pt-6 md:grid-cols-2">
+          {issue.sections.map((section) => (
+            <div key={section}>
+              <Eyebrow className="m-0">Also in this issue</Eyebrow>
+              <p className="m-0 mt-2 font-display text-[21px] leading-[1.2] font-semibold tracking-[-0.015em] text-carbon">
+                {section}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+      <TextLink href={issueHref(issue.url)} className="mt-8 inline-block">
+        Read this issue →
+      </TextLink>
+    </section>
   );
 }

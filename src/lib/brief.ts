@@ -169,7 +169,7 @@ function sendDate(iso: string) {
 
 const ENTITIES: Record<string, string> = {
   amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " ", rsquo: "’", lsquo: "‘",
-  rdquo: "”", ldquo: "“", mdash: "—", ndash: "–", hellip: "…",
+  rdquo: "”", ldquo: "“", mdash: "—", ndash: "–", hellip: "…", ordm: "º",
 };
 
 /** Heading text: tags stripped, entities decoded, whitespace collapsed. */
