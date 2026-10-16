@@ -9,8 +9,11 @@
  * pricing are TODOs.
  */
 
-/** TODO: link to the Scan subscription / checkout (no Scan sign-up exists in the codebase yet). */
-export const SCAN_SUBSCRIBE_URL = "/contact";
+/** TODO: fill with the current Industry Scan sign-up page. */
+export const SCAN_SIGNUP_URL = "";
+
+/** "Start your free month": the sign-up page when set, else the contact form pre-filled for a free month. */
+export const SCAN_SUBSCRIBE_URL = SCAN_SIGNUP_URL || "/contact?type=other&topic=scan-trial";
 export const SCAN_LATEST = { label: "Read August's issue →", href: "https://scan.elearningu.com/august-2026/" };
 export const SCAN_PRICE = "$30";
 

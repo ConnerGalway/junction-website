@@ -121,7 +121,7 @@ export default function IndustryScanPage() {
                 Start your free month
               </JuButton>
               {/* TODO: team and association pricing */}
-              <a href="/contact" className="link text-[15px]">
+              <a href="/contact?type=other&topic=scan-team" className="link text-[15px]">
                 Buying for a team or association? Talk to us →
               </a>
             </div>

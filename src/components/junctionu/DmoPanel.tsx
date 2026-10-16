@@ -24,7 +24,7 @@ export function DmoPanel() {
             Partners cover 25% to 100% of course costs for their operators. We handle delivery, support and progress
             reporting. Travel Yukon has run it for four years, and 300+ businesses came through.
           </p>
-          <JuButton variant="outline" href="/contact">
+          <JuButton variant="outline" href="/contact?type=training&from=region">
             Talk to us about a region
           </JuButton>
         </div>

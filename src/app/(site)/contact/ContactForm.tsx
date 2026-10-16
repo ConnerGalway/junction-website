@@ -36,6 +36,8 @@ type Prefill = {
   size?: string;
   note?: string;
   message?: string;
+  /** The note at the top of step 2, e.g. "We've filled this in from your program sketch." */
+  note2?: string;
 };
 
 const speakingFormats = ["Keynote", "Workshop", "Panel or fireside", "Virtual", "Not sure yet"];
@@ -44,6 +46,12 @@ const sketchAudience: Record<string, string> = {
   operators: "Businesses or operators in our region",
   leadership: "Our leadership team",
   staff: "Our staff",
+};
+
+/** ?type=other&topic=… messages (Industry Scan pricing links). */
+const otherTopics: Record<string, string> = {
+  "scan-team": "Industry Scan — team or association pricing",
+  "scan-trial": "Industry Scan — free month",
 };
 
 const sketchLearners: Record<string, string> = {
@@ -133,6 +141,11 @@ function ContactFormFields({ initialType, prefill }: { initialType: FormType | n
             <h2 id={detailsLabelId} className="m-0 mb-5 type-eyebrow">
               2 · A few details
             </h2>
+            {prefill?.note2 && selectedType === initialType && (
+              <p data-prefill-note className="type-small m-0 mb-6 rounded-[10px] bg-sage-25 px-4 py-3 text-forest">
+                {prefill.note2}
+              </p>
+            )}
             {!selectedType && (
               <p className="type-small m-0 mb-6 text-flint">Pick a program above and its questions appear here.</p>
             )}
@@ -266,20 +279,33 @@ function ContactFormFromParams() {
   const initialType = param && validTypes.includes(param) ? param : null;
   const get = (key: string) => searchParams.get(key) ?? undefined;
   const format = get("format");
-  const prefill: Prefill =
-    initialType === "speaking"
-      ? {
-          org: get("event"),
-          date: get("date"),
-          format: format && speakingFormats.includes(format) ? format : undefined,
-          size: get("audience"),
-          note: format && !speakingFormats.includes(format) ? `Format: ${format}` : undefined,
-        }
-      : {
-          audience: sketchAudience[get("who") ?? ""],
-          learners: sketchLearners[get("size") ?? ""],
-          sketch: get("sketch"),
-        };
+  let prefill: Prefill = {};
+  if (initialType === "speaking") {
+    prefill = {
+      org: get("event"),
+      date: get("date"),
+      format: format && speakingFormats.includes(format) ? format : undefined,
+      size: get("audience"),
+      note: format && !speakingFormats.includes(format) ? `Format: ${format}` : undefined,
+    };
+  } else if (initialType === "training" && get("from") === "region") {
+    prefill = { audience: sketchAudience.operators, note2: "Funded seats for your region." };
+  } else if (initialType === "training") {
+    prefill = {
+      audience: sketchAudience[get("who") ?? ""],
+      learners: sketchLearners[get("size") ?? ""],
+      sketch: get("sketch"),
+    };
+  } else if (initialType === "other") {
+    prefill = { message: otherTopics[get("topic") ?? ""] };
+  }
+  // The source note shows only when something was actually filled in.
+  if (initialType === "speaking" && (prefill.org || prefill.date || prefill.format || prefill.size || prefill.note)) {
+    prefill.note2 = "We've filled this in from your availability check.";
+  }
+  if (initialType === "training" && (prefill.audience || prefill.learners || prefill.sketch) && !prefill.note2) {
+    prefill.note2 = "We've filled this in from your program sketch.";
+  }
   return <ContactFormFields initialType={initialType} prefill={prefill} />;
 }
 
