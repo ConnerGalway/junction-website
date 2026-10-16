@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { Button, Container, Eyebrow, Section, Stat, TextLink } from "@/components";
+import { Button, Container, Eyebrow, LogoWall, Section, Stat, TextLink } from "@/components";
 import { JuButton } from "@/components/junctionu";
 import { CALENDLY_URL } from "@/lib/constants";
 import { JU_SCAN_THUMBNAIL } from "@/lib/junctionuImages";
+import { dmoLogos } from "@/lib/logos";
 import { ENGAGEMENT_LINE, MONTHS, PHASES, PROOF, YEAR_LEGEND, type YearPhase } from "@/lib/marketingStrategy";
+import { AlsoFor } from "./AlsoFor";
 import { DeliverablesShelf } from "./DeliverablesShelf";
 
 export const metadata: Metadata = {
@@ -47,6 +49,23 @@ export default function MarketingStrategyPage() {
         </Container>
         <DeliverablesShelf className="-mx-gutter mt-[72px]" />
       </Section>
+
+      {/* Destinations we work with (the shared LogoWall, DMO logos only) */}
+      <section className="px-gutter py-8">
+        <Container className="flex flex-col gap-4 md:flex-row md:items-center md:gap-10">
+          <p className="m-0 shrink-0 text-[15px] font-medium text-flint">
+            Destinations we work with
+            <span className="block text-[13px] font-normal">Across Canada and the US</span>
+          </p>
+          <LogoWall
+            variant="auto"
+            logos={dmoLogos}
+            label="Destinations we work with"
+            className="min-w-0 flex-1"
+            marqueeClassName="[-webkit-mask-image:linear-gradient(to_right,transparent,black_10%,black_92%,transparent)] [mask-image:linear-gradient(to_right,transparent,black_10%,black_92%,transparent)]"
+          />
+        </Container>
+      </section>
 
       {/* How a strategy engagement works: a four-phase timeline (vertical on phones) */}
       <Section>
@@ -151,6 +170,14 @@ export default function MarketingStrategyPage() {
               </JuButton>
             </div>
           </div>
+        </Container>
+      </Section>
+
+      {/* Also for destinations */}
+      <Section>
+        <Container className="grid gap-x-16 gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+          <h2 className="type-h2 m-0 max-w-[10ch]">Also for destinations</h2>
+          <AlsoFor />
         </Container>
       </Section>
 

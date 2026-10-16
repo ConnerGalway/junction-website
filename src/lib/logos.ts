@@ -106,3 +106,21 @@ export const clientLogos: Logo[] = [
   logo.southCanadianRockies,
   logo.okotoks,
 ];
+
+/** Marketing strategy: "Destinations we work with" (DMOs and destination organizations only). */
+export const dmoLogos: Logo[] = [
+  logo.destinationBC,
+  logo.travelAlberta,
+  logo.travelYukon,
+  logo.travelMaine,
+  logo.visitMississippi,
+  logo.oregonDestination,
+  logo.ontariosSouthwest,
+  logo.northernBC,
+  logo.fourVI,
+  logo.kootenayRockies,
+  logo.tourismRedDeer,
+  logo.tourismGolden,
+  logo.southCanadianRockies,
+  logo.okotoks,
+];
