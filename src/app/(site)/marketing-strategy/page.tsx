@@ -1,13 +1,21 @@
 import type { Metadata } from "next";
 import { Button, Container, Section, TextLink } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
-import { ENGAGEMENT_LINE, PHASES } from "@/lib/marketingStrategy";
+import { ENGAGEMENT_LINE, MONTHS, PHASES, YEAR_LEGEND, type YearPhase } from "@/lib/marketingStrategy";
 import { DeliverablesShelf } from "./DeliverablesShelf";
 
 export const metadata: Metadata = {
   title: "Marketing strategy",
   description:
     "Research-led strategy for destinations and the organizations behind them. Traveller research, positioning, investment priorities, and an operating model your team runs after handover.",
+};
+
+/** Year-bar colours: research Canopy, board reporting gold, season Fern, funding copper. */
+const phaseColor: Record<YearPhase, string> = {
+  research: "bg-canopy",
+  board: "bg-accent-1",
+  season: "bg-fern",
+  funding: "bg-accent-2",
 };
 
 /**
@@ -67,6 +75,37 @@ export default function MarketingStrategyPage() {
             })}
           </ol>
           <p className="type-price m-0 mt-14 text-[28px]">{ENGAGEMENT_LINE}</p>
+        </Container>
+      </Section>
+
+      {/* Built around your year: a 12-month bar and its legend */}
+      <Section tone="carbon">
+        <Container>
+          <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-3">
+            <h2 className="type-h2 m-0">Built around your year</h2>
+            <p className="type-small m-0">Timing shown is typical; we fit your fiscal year.</p>
+          </div>
+          {/* Scrolls sideways inside its container on narrow screens */}
+          <div className="relative mt-12 overflow-x-auto pb-2">
+            <ol aria-label="A typical year, month by month" className="m-0 grid min-w-[600px] list-none grid-cols-12 gap-1.5 p-0">
+              {MONTHS.map((m) => (
+                <li key={m.label}>
+                  <span className="type-eyebrow block text-newsprint-muted">{m.label}</span>
+                  <span aria-hidden="true" className={`mt-2.5 block h-1.5 rounded-full ${phaseColor[m.phase]}`} />
+                  <span className="sr-only">: {YEAR_LEGEND.find((l) => l.phase === m.phase)?.title}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <ul className="m-0 mt-12 grid list-none gap-x-10 gap-y-8 p-0 sm:grid-cols-2 lg:grid-cols-4">
+            {YEAR_LEGEND.map((l) => (
+              <li key={l.phase}>
+                <span aria-hidden="true" className={`block h-1.5 w-10 rounded-full ${phaseColor[l.phase]}`} />
+                <h3 className="type-h4 mt-4 mb-0">{l.title}</h3>
+                <p className="type-body mt-2 mb-0">{l.line}</p>
+              </li>
+            ))}
+          </ul>
         </Container>
       </Section>
 
