@@ -1357,6 +1357,27 @@
     filter: brightness(1.08);
   }
 
+  /* ScanPreview (Industry Scan page): fades out at the bottom; panels fade in. */
+  .scan-preview {
+    mask-image: linear-gradient(to bottom, black 72%, transparent);
+  }
+
+  .scan-panel {
+    animation: scan-panel-in 200ms ease-out;
+  }
+
+  @keyframes scan-panel-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scan-panel {
+      animation: none;
+    }
+  }
+
   /* Program sketcher: native option lists in Newsprint, and the 200ms text fade. */
   .sketch-select option {
     background-color: var(--color-newsprint);

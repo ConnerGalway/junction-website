@@ -9,3 +9,5 @@ export { DmoPanel } from "./DmoPanel";
 export { ScanTeaser } from "./ScanTeaser";
 export { EmailBand } from "./EmailBand";
 export { PlayBadge } from "./PlayBadge";
+export { ScanPreview } from "./ScanPreview";
+export { BriefingVideo } from "./BriefingVideo";
