@@ -12,6 +12,7 @@ This file explains the rules behind them. If you're adding a page, compose it fr
 
 - **Never use pure white.** Newsprint (`#F4F0E8`) replaces white everywhere: cards, inputs, badges and text. The default Tailwind palette is cleared, so `bg-white` and `text-white` don't exist.
 - **Bebas Neue is for the `JUNCTION_` wordmark and numerals only.** Numerals here means stats, index numbers, prices and durations. Use `<Wordmark>` / `<LogoLockup>`, `type-stat`, `type-numeral` and `type-price`.
+  - **Exception: "THE BRIEF" wordmark** at the top of /the-brief (Bebas, 30px, .16em tracking, Carbon). It's the newsletter's wordmark; Bebas is used there and nowhere else for words.
   - **Exception: the Work RouteMap's hub label** "JUNCTION" (Bebas, 20px, Carbon, no underscore). It's a map label naming the hub, not the logo; the logo itself always keeps its underscore.
 - **No hex or rgba values in pages, and no inline font styles.** Use tokens and type classes.
 - **No hard edges.** Every box, control and media frame is rounded.
@@ -120,6 +121,7 @@ Other ground rules:
   - **Quote cards** (`<QuoteCard>`): Sage background, also with Forest text.
 - **Avoid canopy-text links on Sage**, because they're only 4.2:1 there. Links inside callouts and sage boxes are Forest.
 - **Section dividers:** one weight everywhere, 2px (`border-t-2 border-(--tone-rule)`). Canopy on Newsprint, Fern on Carbon and Forest.
+  - **Exception: The Brief** uses solid Carbon rules for its editorial look: 2px above This week and under the Archive header row, and 1px under each month heading and above the section headlines. There are no grey hairlines on that page.
 
 ### Accent hierarchy
 
@@ -137,6 +139,7 @@ Pink appears only on things you can click. Non-clickable elements never get a pi
 - **Links:** pink text (and underline) on hover, as below.
 - **Clickable cards:** the whole card is the link (`<Card href>`), with no button or second link inside. On hover and keyboard focus it gets a 2px break-pink outline, offset 4px.
 - **Clickable list rows:** the newsprint-hover highlight plus a pink title (see Surfaces).
+  - **Exception: The Brief archive rows** have no fill. On hover and focus the headline turns break-on-light and the margin number goes from Carbon 7% to 50%.
 - **Exception: `Badge`** (outline and filled). A badge is a status label and isn't clickable, but it may be pink: the outline badge ("Quick check · a general snapshot" on the Accelerator page) and the filled badge ("New" on the Offload hero). Badges are the only non-clickable pink component.
 - **Exception: the Work RouteMap hub.** Junction's Vancouver hub is a break-pink dot inside a 50% break-pink ring. It's decorative and not clickable: the one non-clickable use of the break colour on a map. The case stops around it are links and fill pink on hover and focus.
 - **Exception: the Offload guarantee strip.** A break-on-light strip (radius 14) with "Guaranteed" in Fraunces 900 italic and the promise in Epilogue 600, both Newsprint (4.8:1). It's the only non-clickable pink surface. Don't reuse it elsewhere.
@@ -147,6 +150,7 @@ Use `<Eyebrow>` only for meta labels: case-study meta ("Travel Yukon · Training
 
 - **Card and box labels are meta labels and stay:** the Custom Training audience cards, "The guarantee" and "The Brief · weekly". Mock-UI labels inside product mockups also stay.
 - **Section headings are always real headings** (`<h2 className="type-h2">`), never eyebrow-styled. Examples: "Questions", "What we believe", "Formats".
+  - **Exception: The Brief.** "This week" and "Archive" are real `<h2>`s set in the small caps meta style (Carbon), because the feature headline below them is the visual lead.
 - **Hero meta without eyebrows:** put durations and audiences under the lead as a price line (`type-price`, for example "90 days · small businesses"). Put other facts in a small muted caption (`type-small`, for example "Formerly eLearningU", "100+ articles").
 
 ### Faces
@@ -271,7 +275,7 @@ Controls:
 | `ChevronButton` | Carousel previous / next: a thin 20px chevron (1.6px rounded stroke), no box, tone text at 70%, the tone's pink on hover and focus, 40% when disabled at the ends of a non-looping carousel. Needs an `aria-label`. Used by the program orbit and the KitCarousel. |
 | `Chip` | `sage` (sage fill, Forest text), `outline` (1.5px Forest) or `fern-outline` (1.5px Fern border and text, for dark grounds). Radius 10. |
 | `Input`, `Select`, `Textarea` | Always labelled. 48px, with a Flint border and a canopy-text focus. |
-| `NewsletterSignup` | One row (email and Subscribe), labelled "Get The Brief in your inbox", with the helper line "[ Frequency ] · unsubscribe anytime". Submission is a TODO. |
+| `NewsletterSignup` | One row (email and Subscribe), labelled "Get The Brief in your inbox", with the helper line "[ Frequency ] · unsubscribe anytime". Optional `label`, `hideLabel` (screen readers only), `helper` and `centered` (The Brief page). Submission is a TODO. |
 | `Placeholder` | Dashed stand-in for missing media or content |
 | `Wordmark` | `JUNCTION_` in Bebas with a Canopy underscore. The underscore is part of the logo. |
 | `LogoLockup` | Wordmark, a 1px divider (20% of the text colour, 34px tall) and the tagline "Strategy & / Capacity Building" (DM Sans 400, 14px, muted, .04em). Links to `/`. With `collapseOnSmall`, the divider and tagline are dropped under 420px. |
@@ -493,6 +497,36 @@ Sections:
   - **Touch or coarse pointer:** names at full Newsprint, with a small greyscale portrait (56 × 70, radius 10) beside each, and no card. CSS media queries decide this, so there's no flash on load.
   - **Portraits are swappable by filename:** `public/images/team/conner.jpg`, `brooke.jpg`, `andrea.jpg`. They're cropped from the top to fill their frames. For now all three are copies of Conner's portrait.
 - **Closing CTA (Forest):** "Tell us the goal. We'll be straight with you about the rest." (display, 18ch) and "Start a conversation" (`/contact`).
+
+## The Brief page
+
+`src/app/the-brief/`. One centred reading column (720px) on Newsprint, with issue numbers in the left margin. There are no cards or boxes, and every rule is Carbon (see Section dividers).
+
+- **Data** (`src/lib/brief.ts`, the page's only data source): `getIssues()` and `getLatestIssue()` return `{ number, date, feature, sections?, topics, url }`, newest first.
+  - **Mailchimp:** when the three server-only env vars are set, it reads sent campaigns for The Brief's audience from the Marketing API (`GET /3.0/campaigns?status=sent&list_id=…&sort_field=send_time&sort_dir=DESC`, 100 per page). The feature is `settings.subject_line` (never rewritten), the date is `send_time` (Vancouver time) and the link is `archive_url`.
+    - **Issue number:** the number after "Brief" in `settings.title`, else the first 3–4 digit number there. With none, the issue shows no number.
+    - **Sections:** for the latest issue only, two headlines parsed from its HTML (`GET /3.0/campaigns/{id}/content`). The rules live in `SECTION_PARSER` (heading tags, ignore patterns), so they can be tuned to the real template. If extraction fails, This week shows no "Also in this issue" row.
+  - **Env vars** (set in Netlify, never exposed to the client):
+    - `MAILCHIMP_API_KEY`
+    - `MAILCHIMP_SERVER_PREFIX` (e.g. `us21`)
+    - `MAILCHIMP_BRIEF_LIST_ID`
+  - **Without them:** `SAMPLE_ISSUES` (marked SAMPLE CONTENT), whose links go to the signup (`#subscribe`).
+  - **Refresh:** `"use cache"` with an hourly revalidate, so new issues appear on their own. A failed refresh serves the last good result held by that server instance, or the sample, and retries within minutes. The page never breaks on a Mailchimp error.
+  - **Topics:** `TOPIC_RULES`, keyword patterns per topic (AI, Search, Social, Advertising, Tourism), matched case-insensitively against the feature and section headlines. An issue can have several topics. Topics with no issues are hidden from the tabs.
+- **Top (centred):** "THE BRIEF" wordmark (see Hard rules), the H1 "Thinking you can use by Friday." (display, up to 88px, two lines from 1024px), the lead (34ch) and the centred `NewsletterSignup` (520px, label for screen readers only, helper "Free · award-winning · 500+ articles · unsubscribe anytime" in Flint). These form the subscribe block (`#subscribe`); there's no box.
+- **This week:**
+  - a 2px Carbon rule, with "This week" (meta, Carbon) on the left and "Nº 544 · October 12, 2026" (small, Flint) on the right;
+  - the feature (Epilogue 900, up to 54px);
+  - when there are sections, a 1px Carbon rule and two columns, each with "Also in this issue" (copper) over the headline (Epilogue 600, 21px);
+  - "Read this issue →".
+- **Margin numbers** (`.brief-margin-num`): the issue number set sideways (`writing-mode: vertical-rl`, rotated 180° so it reads bottom to top), 28px left of the column and top-aligned with its block. It's Bebas, Carbon 7%, `aria-hidden`. This week shows "Nº 544" at up to 150px (110px at 1024); archive rows show the number alone at 56px. Shown from 1024px.
+- **Archive** (`BriefArchive.tsx`, every issue but the latest):
+  - **Header row on a 2px Carbon rule:** "Archive" (meta), then the topic tabs: All plus the topics in use. They're a real tablist (← → Home End) in 16px text; active is Carbon 600 with a 3px Canopy underline sitting on the rule, inactive is Flint 400 with a pink hover. Then "⌕ Search", which opens an inline field matching the feature headline (case-insensitive; Escape or × closes and clears it). Topic and search combine.
+  - **Month groups:** a copper small caps month heading ("October 2026", not Bebas) over a 1px Carbon rule. Months with no matches are hidden.
+  - **Rows:** only the feature headline (Epilogue 900, up to 26px), with the whole row as the link. On hover and focus the headline turns pink and the margin number goes to 50% (see Pink means clickable).
+  - **Paging:** the newest 10 issues, then "Older issues" (secondary button) loads 10 more. With a filter or search active, every match shows. With none: "No issues match that yet." and a "Clear filters" link.
+- **Below 1024px:** archive numbers move inline above each headline ("Nº 543", Bebas 28px, Carbon 30%, `aria-hidden`; the link text carries the number and date for screen readers). This week keeps its number beside the date.
+- **Phones:** the column is full width. The header row wraps, with Archive and Search on the first line and the tabs on a sideways-scrolling line below.
 
 ## Logo walls
 
