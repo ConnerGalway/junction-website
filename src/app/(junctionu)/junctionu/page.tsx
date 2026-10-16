@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CourseCard, DmoPanel, EmailBand, JuHero, ScanTeaser, Shelf, TalkCard, WorkshopCard } from "@/components/junctionu";
 import { COURSES, JU_SEE_ALL, WORKSHOPS } from "@/lib/junctionu";
+import { withStills } from "@/lib/junctionuImages";
 import { getTalks } from "@/lib/junctionuTalks";
 
 export const metadata: Metadata = {
@@ -21,7 +22,7 @@ export default async function JunctionUPage() {
       {/* The catalogue: "Start free" and Browse land here */}
       <div id="catalogue" className="scroll-mt-16 pt-6">
         <Shelf id="courses" title="Start here" seeAll={{ href: JU_SEE_ALL.courses }}>
-          {COURSES.map((course, i) => (
+          {withStills(COURSES).map((course, i) => (
             <li key={course.title}>
               <CourseCard course={course} index={i} />
             </li>

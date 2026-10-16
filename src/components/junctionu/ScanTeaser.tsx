@@ -1,20 +1,21 @@
 import Image from "next/image";
 import { JU_SCAN_URL } from "@/lib/junctionu";
+import { JU_SCAN_THUMBNAIL } from "@/lib/junctionuImages";
 import { JuButton } from "./JuButton";
 
 /**
- * Industry Scan teaser: the month's video still as a card (the card is the
- * link) and the pitch with one Fern outline action. The still, month and
- * line are placeholders for team review.
+ * Industry Scan teaser: the Scan thumbnail (images/junctionu/
+ * industry-scan-thumbnail.jpg) as a card (the card is the link) and the
+ * pitch with one Fern outline action. The month and line are placeholders
+ * for team review.
  */
 export function ScanTeaser() {
   return (
     <section aria-labelledby="scan-heading" className="px-gutter py-[clamp(72px,9vw,128px)]">
       <div className="mx-auto grid max-w-wide items-center gap-x-16 gap-y-10 lg:grid-cols-2">
         <a href={JU_SCAN_URL} className="ju-card group relative block aspect-video overflow-hidden rounded-card no-underline">
-          {/* TODO: the Scan's own video still (placeholder) */}
           <Image
-            src="/images/custom-training/formats-custom-course.jpg"
+            src={JU_SCAN_THUMBNAIL}
             alt=""
             fill
             sizes="(min-width: 1024px) 50vw, 100vw"

@@ -539,6 +539,23 @@ Sections:
 
 `/junctionu` is a sub-brand with its own layout: the `(junctionu)` route group renders without the main site's nav and footer, on the same domain and deploy. Page code is in `src/app/(junctionu)/`, components in `src/components/junctionu/`, and content (courses, workshops, talks, nav, URLs) in `src/lib/junctionu.ts`.
 
+**Images by filename** (`src/lib/junctionuImages.ts`). Upload a file with the right name to `public/images/junctionu/` and it's used on the next deploy (checked at build time); no code change needed. Sizes don't matter (images fill their slots with `object-fit: cover`), but keep the shape.
+
+| File | Used for | Without it |
+|---|---|---|
+| `hero.jpg` | The hero still (landscape; the subject sits right of centre) | The custom course still |
+| `industry-scan-thumbnail.jpg` | The Industry Scan thumbnail: the ScanTeaser card, and the video poster on the Scan page once it's built (`JU_SCAN_THUMBNAIL`) | The custom course still |
+| `courses/<slug>.jpg` | A course card's 16:9 still | The placeholder gradient |
+
+Course slugs (set in `src/lib/junctionu.ts`):
+- `elevated-tourism-marketing-masterclass`
+- `tourism-digital-marketing-essentials`
+- `idea-to-experience`
+- `trailhead-tourism-culture-bootcamp`
+- `sustainable-tourism`
+
+A new course gets a `slug` and its still the same way.
+
 **Foundations**
 
 - **Tokens** live on `.ju` (the JunctionU layout), so these utilities only resolve inside it:
@@ -593,7 +610,7 @@ Sections:
   - **Header row:** the title (Oswald 700, up to 30px), then ‹ › (Fern circles; they scroll one page and dim at the ends) and "See all →".
   - **The row:** it starts at the content edge and bleeds off the right edge of the viewport (`.ju-shelf`), with scroll-snap and no scrollbar. Touch and trackpads scroll natively; keyboard focus brings a card fully into view.
   - **Start here:** courses only. Thumbnail cards (400px):
-    - a 16:9 still, or a placeholder gradient (`.ju-still`, three variants) until the course has one;
+    - a 16:9 still (`courses/<slug>.jpg`, see Images by filename), or a placeholder gradient (`.ju-still`, three variants) until the file exists;
     - the length in Bebas 22px top-left, with a soft shadow;
     - a Certificate tag and the price in Bebas;
     - the title (Oswald, 24px) and the module count.
@@ -608,9 +625,9 @@ Sections:
   - **Map:** the Work RouteMap's land layer (`src/lib/routeMapGeometry.ts`; no dots or arcs), with Canada Fern 38% and the US Fern 16%. It's larger than the section and spills above and below it, faded by a closest-side radial mask (solid to 55%) so it's never cut on a straight line. It drifts at 0.15 like the HeroWordmark: anchored where the section is centred and kept within 160px of that; static with reduced motion. It sits behind the page content (the layout is `isolate`).
   - **Glass panel** (`.ju-glass`): radius 20, Newsprint 7%, `backdrop-filter: blur(14px) saturate(160%)`, an inset 1px Newsprint-18% border, the white top highlight (see Hard rules) and a soft shadow.
   - **Two columns:** "For DMOs and associations" (Fern), the H2 in Oswald capitals, the copy and the Fern outline "Talk to us about a region" (`/contact`). Then, after a thin divider, "300+" in Fern Bebas (up to 116px) and its line. They stack on phones.
-- **Industry Scan teaser** (`ScanTeaser`): the month's video still as a linked card (play button, "This month's Industry Scan" in Oswald capitals, "Conner Galway · [ Month Year ]"). Beside it, the pitch and one Fern outline action, "Try a month free". Both go to the Scan page. The still and the month are placeholders.
+- **Industry Scan teaser** (`ScanTeaser`): the Scan thumbnail (`industry-scan-thumbnail.jpg`) as a linked card (play button, "This month's Industry Scan" in Oswald capitals, "Conner Galway · [ Month Year ]"). Beside it, the pitch and one Fern outline action, "Try a month free". Both go to the Scan page. The month is a placeholder.
 - **The JunctionU email** (`EmailBand`, `#email`): a Sage band (radius 18) with the headline (Oswald capitals, ground text), the line (Forest), an email field (Newsprint) and Subscribe (`ground`). This is the list the Work page links to. TODO: wire it to the eLearningU / JunctionU list (none exists in the codebase).
-- **Placeholders for team review:** course prices "[ $ ]", course lengths (all "6 HRS"), workshop lengths "[ x HRS ]", course links (eLearningU home), "See all" catalogue URLs, the sign-in URL and the Scan teaser line and still.
+- **Placeholders for team review:** course prices "[ $ ]", course lengths (all "6 HRS"), workshop lengths "[ x HRS ]", course links (eLearningU home), "See all" catalogue URLs, the sign-in URL and the Scan teaser line.
 
 ## Logo walls
 

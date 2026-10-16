@@ -3,7 +3,11 @@ import Link from "next/link";
 
 export const metadata: Metadata = { title: "Industry Scan · JunctionU" };
 
-/** TODO: the Industry Scan page (video briefing + monthly report). Placeholder until it's built. */
+/**
+ * TODO: the Industry Scan page (video briefing + monthly report). Placeholder
+ * until it's built. Use JU_SCAN_THUMBNAIL (src/lib/junctionuImages.ts) as the
+ * video's poster.
+ */
 export default function IndustryScanPage() {
   return (
     <section className="px-gutter py-section">

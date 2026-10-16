@@ -37,17 +37,21 @@ export type JuCourse = {
   /** Price, set in Bebas. */
   price: string;
   url: string;
-  /** 16:9 still under /public (courses); a placeholder gradient without one. */
-  still?: string;
+  /**
+   * Courses: the still's filename, public/images/junctionu/courses/<slug>.jpg
+   * (checked at build time; without the file the card shows a placeholder
+   * gradient). See src/lib/junctionuImages.ts.
+   */
+  slug?: string;
 };
 
 export const COURSES: JuCourse[] = [
   // TODO: link each course to its own page (eLearningU for now, then JunctionU's platform).
-  { title: "Elevated Tourism Marketing Masterclass", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: ELEARNINGU, still: "/images/custom-training/formats-custom-course.jpg" },
-  { title: "Tourism Digital Marketing Essentials", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: ELEARNINGU },
-  { title: "Idea to Experience", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: ELEARNINGU },
-  { title: "Trailhead: Tourism & Culture Bootcamp for Entrepreneurs", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: ELEARNINGU },
-  { title: "Sustainable Tourism", kind: "course", length: "6 HRS", modules: 8, price: "[ $ ]", url: ELEARNINGU },
+  { title: "Elevated Tourism Marketing Masterclass", slug: "elevated-tourism-marketing-masterclass", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: ELEARNINGU },
+  { title: "Tourism Digital Marketing Essentials", slug: "tourism-digital-marketing-essentials", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: ELEARNINGU },
+  { title: "Idea to Experience", slug: "idea-to-experience", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: ELEARNINGU },
+  { title: "Trailhead: Tourism & Culture Bootcamp for Entrepreneurs", slug: "trailhead-tourism-culture-bootcamp", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: ELEARNINGU },
+  { title: "Sustainable Tourism", slug: "sustainable-tourism", kind: "course", length: "6 HRS", modules: 8, price: "[ $ ]", url: ELEARNINGU },
 ];
 
 export const WORKSHOPS: JuCourse[] = [

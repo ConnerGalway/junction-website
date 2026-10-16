@@ -1,10 +1,12 @@
 import Image from "next/image";
 import { SHOW_JU_TRAILER } from "@/lib/flags";
 import { JU_START_URL, JU_TRAILER_URL } from "@/lib/junctionu";
+import { JU_HERO_IMAGE } from "@/lib/junctionuImages";
 import { JuButton } from "./JuButton";
 
 /**
- * JunctionU hero (cinematic): the course still on the right 64%, faded into
+ * JunctionU hero (cinematic): the hero still (public/images/junctionu/hero.jpg
+ * if it exists, else the custom course still) on the right 64%, faded into
  * the ground (solid to 36% of the width, clear by 82%, plus a bottom fade),
  * never behind the copy. On phones the still sits on top, faded at the bottom.
  */
@@ -14,7 +16,7 @@ export function JuHero() {
       {/* The still */}
       <div aria-hidden="true" className="relative aspect-[16/10] w-full lg:absolute lg:inset-y-0 lg:right-0 lg:aspect-auto lg:w-[64%]">
         <Image
-          src="/images/custom-training/formats-custom-course.jpg"
+          src={JU_HERO_IMAGE}
           alt=""
           fill
           priority

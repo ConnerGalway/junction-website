@@ -11,11 +11,11 @@ function Tag({ children }: { children: string }) {
 }
 
 /**
- * Course card ("Start here"): a 16:9 still (a placeholder gradient until the
- * course has one) with its length in Bebas, then the Certificate tag and the
+ * Course card ("Start here"): a 16:9 still (courses/<slug>.jpg, resolved by
+ * withStills; a placeholder gradient until the file exists) with its length in Bebas, then the Certificate tag and the
  * price, the title and the module count. The whole card is the link.
  */
-export function CourseCard({ course, index }: { course: JuCourse; index: number }) {
+export function CourseCard({ course, index }: { course: JuCourse & { still?: string }; index: number }) {
   return (
     <a href={course.url} className="ju-card group block w-[min(400px,78vw)] no-underline">
       <div className="ju-still relative aspect-video overflow-hidden rounded-card" data-variant={index % 3}>
