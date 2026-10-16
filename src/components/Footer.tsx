@@ -1,35 +1,19 @@
 import Link from "next/link";
 import { CALENDLY_URL } from "@/lib/constants";
 import type { NavGroup } from "@/lib/navigation";
+import { DROPDOWN_GROUPS, programsIn } from "@/lib/programs";
 import { Container, LogoLockup, NewsletterSignup } from "./ui";
 
+/** Program columns from the shared list (page names), then Company. */
 const footerGroups: NavGroup[] = [
-  {
-    title: "Programs",
-    links: [
-      { label: "The Accelerator", href: "/accelerator" },
-      { label: "Offload Program (AI Accelerator)", href: "/ai-accelerator" },
-      { label: "Speaking", href: "/speaking" },
-      { label: "See all programs", href: "/programs" },
-    ],
-  },
-  {
-    title: "Strategy",
-    links: [
-      { label: "Marketing strategy", href: "/marketing-strategy" },
-      { label: "Destination partnerships", href: "/custom-training#for-dmos" },
-    ],
-  },
-  {
-    title: "Training",
-    links: [
-      { label: "Custom Training", href: "/custom-training" },
-      { label: "JunctionU", href: "/junctionu" },
-    ],
-  },
+  ...DROPDOWN_GROUPS.map((group) => ({
+    title: group.label,
+    links: programsIn(group.id).map((p) => ({ label: p.name, href: p.href })),
+  })),
   {
     title: "Company",
     links: [
+      { label: "All programs", href: "/programs" },
       { label: "Work", href: "/work" },
       { label: "About", href: "/about" },
       { label: "The Brief", href: "/the-brief" },

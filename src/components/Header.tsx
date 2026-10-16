@@ -336,27 +336,34 @@ export function Header() {
           className="max-h-[calc(100dvh-76px)] overflow-y-auto pb-8 lg:hidden"
         >
           <div className="mx-auto flex max-w-wide flex-col gap-8 pt-6">
-            <div className="flex flex-col gap-5">
-              <Link href="/programs" className="link-plain type-h4">
+            {/* Programs: the dropdown's groups as an indented list, no panel. */}
+            <div className="flex flex-col gap-4">
+              <Link href="/programs" className="link-plain type-h4 self-start">
                 Programs
               </Link>
-              {DROPDOWN_GROUPS.map((group) => (
-                <div key={group.id} className="flex flex-col gap-2">
-                  <p className="type-eyebrow m-0">{group.label}</p>
-                  <ul className="m-0 flex list-none flex-col p-0">
-                    {programsIn(group.id).map((program) => (
-                      <li key={program.id}>
-                        <Link href={program.href} className="link-plain block py-2 text-[17px]">
-                          <MenuName program={program} />
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-              <Link href="/programs" className="link type-button self-start">
-                See all programs →
-              </Link>
+              <div className="flex flex-col gap-5 pl-4">
+                {DROPDOWN_GROUPS.map((group) => (
+                  <div key={group.id} className="flex flex-col gap-1">
+                    <p className="type-eyebrow m-0">{group.label}</p>
+                    <ul className="m-0 flex list-none flex-col p-0">
+                      {programsIn(group.id).map((program) => (
+                        <li key={program.id}>
+                          <Link
+                            href={program.href}
+                            aria-current={isActive(program.href) ? "page" : undefined}
+                            className="link-plain block py-2 text-[17px]"
+                          >
+                            <MenuName program={program} />
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+                <Link href="/programs" className="link type-button self-start">
+                  All programs →
+                </Link>
+              </div>
             </div>
             <ul className="m-0 flex list-none flex-col border-t border-hairline p-0 pt-4">
               {primaryNav.map((item) => (
