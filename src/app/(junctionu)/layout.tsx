@@ -1,5 +1,6 @@
 import { Oswald } from "next/font/google";
 import { SkipLink } from "@/components";
+import { JuFooter, JuNav } from "@/components/junctionu";
 
 /** Oswald: JunctionU's lead font (headlines and titles). Loaded for JunctionU pages only. */
 const oswald = Oswald({
@@ -16,9 +17,11 @@ export default function JunctionULayout({ children }: { children: React.ReactNod
   return (
     <div className={`ju ${oswald.variable} flex flex-1 flex-col`}>
       <SkipLink />
+      <JuNav />
       <main id="main" tabIndex={-1} className="flex-1 focus:outline-none">
         {children}
       </main>
+      <JuFooter />
     </div>
   );
 }

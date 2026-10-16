@@ -1208,6 +1208,36 @@
     display: none;
   }
 
+  /* JunctionU type: Oswald 700. ju-display is capitals (headlines and big
+     statements); ju-title is sentence case (card and row titles). Size each
+     use with a text-* class. */
+  .ju-display {
+    font-family: var(--nf-oswald), "Arial Narrow", ui-sans-serif, sans-serif;
+    font-weight: 700;
+    line-height: 0.98;
+    letter-spacing: -0.005em;
+    text-transform: uppercase;
+  }
+
+  .ju-title {
+    font-family: var(--nf-oswald), "Arial Narrow", ui-sans-serif, sans-serif;
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: 0;
+  }
+
+  /* JunctionU nav: the active link gets a 2px Fern underline. */
+  .ju-nav-link {
+    text-decoration-line: none;
+  }
+
+  .ju-nav-link[aria-current] {
+    text-decoration-line: underline;
+    text-decoration-color: var(--color-fern);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 8px;
+  }
+
   /* Program sketcher: native option lists in Newsprint, and the 200ms text fade. */
   .sketch-select option {
     background-color: var(--color-newsprint);
