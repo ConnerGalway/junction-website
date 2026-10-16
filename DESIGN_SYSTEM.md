@@ -273,7 +273,7 @@ Controls:
 | `Callout` | sage-25 box, radius 14, Forest text and links. For a short highlighted statement. |
 | `Badge` | `outline` (2px break border, pink text, dot) or `filled` (break-on-light fill). Radius 10. Badges are the one non-clickable pink component (see Pink means clickable). |
 | `Tabs` | Underlined tabs: `items` (`id`, `label`, `panel`) and a `label`. Large titles (Epilogue 600, 22px) on a 1px rule; active Carbon with a 3px Canopy underline, inactive Flint with a pink hover. `tablist`/`tab`/`tabpanel`, ← → Home End; panels cross-fade in 250ms (instant with reduced motion); the tab row scrolls sideways on narrow screens. |
-| `Accordion` | Questions sections, everywhere. `items` (`q`, `a`). Each question is a full-width button row (`aria-expanded`, `aria-controls`) under a 2px divider, all collapsed by default (any number can be open). A gold chevron (accent-1-on-light, 20px, 2px stroke; a UI graphic, so 3:1 is enough) on the right turns 180° when open; the answer opens with a 250ms height animation (instant with reduced motion). The question turns pink on hover. No "+" icons. |
+| `Accordion` | Questions sections, everywhere. `items` (`q`, `a`). Each question is a full-width button row (`aria-expanded`, `aria-controls`) under a 2px divider, all collapsed by default (any number can be open). A gold chevron (accent-1-on-light, 20px, 2px stroke; a UI graphic, so 3:1 is enough) on the right turns 180° when open (JunctionU uses Fern: `chevronClassName="text-fern"`). `single` keeps one open at a time; the answer opens with a 250ms height animation (instant with reduced motion). The question turns pink on hover. No "+" icons. |
 | `DashboardPreview`, `OffloadPreview` | Product previews (`src/components/`), each with a `thumbnail` variant for program cards: scaled to fill the slot's width, top-aligned, bottom faded, `inert` and `aria-hidden`. `OffloadPreview` is the Offload hero visual (journey track + Session 3 quote generator); its thumbnail is drawn at 560px. Used on the homepage orbit (The Accelerator, Offload Program) and the Programs dropdown (The Accelerator). |
 | `ThumbnailFrame` | Static program-card thumbnails (`src/components/ThumbnailFrame.tsx`): children drawn at a design size (default 640 × 400, the 16:10 slot) and scaled to the slot's width, top-aligned; `inert`, `aria-hidden`, no pointer events (the card stays the link). Takes the ground as `className`. Used by the homepage orbit's two static previews, passed as a program's `preview`: **`StageThumbnail`** (Speaking; see Speaking page) and **`CourseShelfThumbnail`** (Custom Training; see Custom Training page). Same slot as the other thumbnails (16:10, radius 14). |
 | `ChevronButton` | Carousel previous / next: a thin 20px chevron (1.6px rounded stroke), no box, tone text at 70%, the tone's pink on hover and focus, 40% when disabled at the ends of a non-looping carousel. Needs an `aria-label`. Used by the program orbit and the KitCarousel. |
@@ -582,8 +582,8 @@ A new course gets a `slug` and its still the same way.
 - **Numbers:** there's no gold in the sub-brand. Lengths and ghost numbers are Fern, prices are Newsprint, and the DMO "300+" is Fern Bebas.
 - **Wordmark:** `<SubBrandWordmark suffix="U" />` renders JUNCTION_U in Bebas, letter-spaced, with the underscore as a Fern bar between JUNCTION and the suffix (sitting on the baseline). Every sub-brand uses JUNCTION_ + suffix.
 - **CTA rule:**
-  - One Mint button per page (here: "Start free" in the hero).
-  - Every other section has exactly one action, each going somewhere different.
+  - **One main action per page, in Mint.** It may repeat (the same action more than once, e.g. in the hero and the pricing panel), but there's never a second, different Mint action. On /junctionu it's "Start free"; on the Industry Scan page, "Start your free month".
+  - Every other section has exactly one action, each going somewhere different. A repeat of the main action doesn't count toward that one.
   - Cards are links, with no buttons inside them.
   - Shelf arrows and "See all →" are row controls, not section actions.
 - **Buttons** (`JuButton`):
@@ -591,13 +591,19 @@ A new course gets a `slug` and its still the same way.
   - `outline`: every other button (1.5px Fern border and text).
   - `glass`: a secondary hero action (Newsprint 12% fill).
   - `ground`: on the Sage band (ju-ground fill, Newsprint text).
+- **Video cards** (Tourism Talks, the Scan teaser, the Scan briefing) use `PlayBadge`:
+  - a 44px Newsprint (92%) circle with a Carbon ▶, 16px from the bottom-left corner;
+  - followed by the length in Bebas (Newsprint 80%) when known, or a short byline;
+  - **hover:** the circle scales to 1.08 and the image brightens slightly (`.ju-video-image`);
+  - the whole card is the click target, and there's never a centred play button.
+- **Accordion:** the site's `Accordion` with Fern chevrons (the JunctionU version of the gold-chevron rule), one open at a time.
 - **Cards** (`.ju-card`): on hover and focus they lift 5px (no lift with reduced motion) and get a 2px Fern outline (offset 4px); the title turns break-on-dark, and stills zoom to 1.04. Tags: Fern on Fern 18% (Certificate, Workshop) or Sage with ground text (Free); small caps, radius 10.
 
 **Nav and footer**
 
 - **Top bar** (`JuNav`, ju-ground, sticky, 1px Fern-20% rule under it):
   - **left:** JUNCTION_U (to `/junctionu`) and "← Junction" (to `/`);
-  - **centre:** Browse · Courses · Workshops · Tourism Talks · For DMOs · Industry Scan, which are anchors on the page except Industry Scan (`/junctionu/industry-scan`, a placeholder page for now). The active link (section in view, or current page) is Newsprint with a 2px Fern underline;
+  - **centre:** Browse · Courses · Workshops · Tourism Talks · For DMOs · Industry Scan, which are anchors on the page except Industry Scan (`/junctionu/industry-scan`, see Industry Scan page). The active link (section in view, or current page) is Newsprint with a 2px Fern underline;
   - **right:** "Sign in" (eLearningU for now; TODO: confirm the URL, then JunctionU's own platform);
   - **under 1024px:** a Menu button.
 - **Footer** (`JuFooter`, ju-deep): JUNCTION_U, the same links, and "Part of Junction →" to the main site.
@@ -622,14 +628,35 @@ A new course gets a `slug` and its still the same way.
     - the title in Oswald capitals at the bottom, over a Fern-35% rule with "Workshop" and the price.
   - **Tourism Talks · free:** four YouTube talks (`TALK_IDS`).
     - Titles and thumbnails come from YouTube's oEmbed on the server, cached a week; if YouTube can't be reached the card shows "Tourism Talk" and the standard thumbnail.
-    - Thumbnails are served through next/image (`i.ytimg.com` is allowed in next.config). The card is a lite embed: pressing play swaps the thumbnail for the youtube-nocookie player in place (autoplay), so nothing loads from YouTube before that.
+    - Thumbnails are served through next/image (`i.ytimg.com` is allowed in next.config). The card is a lite embed with the corner play button: pressing play swaps the thumbnail for the youtube-nocookie player in place (autoplay), so nothing loads from YouTube before that.
 - **For DMOs** (`DmoPanel`):
   - **Map:** the Work RouteMap's land layer (`src/lib/routeMapGeometry.ts`; no dots or arcs), with Canada Fern 38% and the US Fern 16%. It's larger than the section and spills above and below it, faded by a closest-side radial mask (solid to 55%) so it's never cut on a straight line. It drifts at 0.15 like the HeroWordmark: anchored where the section is centred and kept within 160px of that; static with reduced motion. It sits behind the page content (the layout is `isolate`).
   - **Glass panel** (`.ju-glass`): radius 20, Newsprint 7%, `backdrop-filter: blur(14px) saturate(160%)`, an inset 1px Newsprint-18% border, the white top highlight (see Hard rules) and a soft shadow.
   - **Two columns:** "For DMOs and associations" (Fern), the H2 in Oswald capitals, the copy and the Fern outline "Talk to us about a region" (`/contact`). Then, after a thin divider, "300+" in Fern Bebas (up to 116px) and its line. They stack on phones.
-- **Industry Scan teaser** (`ScanTeaser`): the Scan thumbnail (`industry-scan-thumbnail.<ext>`) as a linked card (play button, "This month's Industry Scan" in Oswald capitals, "Conner Galway · [ Month Year ]"). Beside it, the pitch and one Fern outline action, "Try a month free". Both go to the Scan page. The month is a placeholder.
+- **Industry Scan teaser** (`ScanTeaser`): the Scan thumbnail (`industry-scan-thumbnail.<ext>`) as a linked card, with the corner play button and "Conner Galway · [ Month Year ]" beside it. There's no title caption, because the thumbnail already says it. Beside it, the pitch and one Fern outline action, "Try a month free". Both go to the Scan page. The month is a placeholder.
 - **The JunctionU email** (`EmailBand`, `#email`): a Sage band (radius 18) with the headline (Oswald capitals, ground text), the line (Forest), an email field (Newsprint) and Subscribe (`ground`). This is the list the Work page links to. TODO: wire it to the eLearningU / JunctionU list (none exists in the codebase).
 - **Placeholders for team review:** course prices "[ $ ]", course lengths (all "6 HRS"), workshop lengths "[ x HRS ]", course links (eLearningU home), "See all" catalogue URLs, the sign-in URL and the Scan teaser line.
+
+### Industry Scan page
+
+`/junctionu/industry-scan` (JunctionU layout; the nav shows Industry Scan as active). All content and links are in `src/lib/industryScan.ts`. The preview reflects the August 2026 issue and will be updated when the Scan is redesigned. Order: hero, briefing, Built for the boardroom, pricing, Questions.
+
+- **Hero** (two columns, 40/60 from 1024px; stacked below that):
+  - **Copy:** the Fern meta "Monthly · for Canadian DMO leaders", the H1 "Tourism Industry Scan" (Oswald capitals, up to 84px, three lines) and the lead.
+  - **Actions:** the Mint "Start your free month" (`SCAN_SUBSCRIBE_URL`: `/contact` until the subscription checkout exists; TODO) and "Read August's issue →". The small price line sits under them.
+- **ScanPreview** (`ScanPreview.tsx`): a display-only replica of the Scan, built like the Accelerator DashboardPreview, about 560px tall.
+  - **Window:** Newsprint, radius 14. A browser bar with three dots, the issue title and "⌘K Search".
+  - **Placement:** from 1024px it bleeds off the viewport's right edge (square right corners); it fades out at the bottom (`.scan-preview`).
+  - **Inside:** the meta (canopy-text), the title (Oswald capitals) and tabs: Overview, Key trends, Insights, Stats, Actions, Reading. They're a real tablist (← → Home End), with 200ms panel fades (instant with reduced motion).
+  - **Colours:** as a product mock it keeps its own colour coding: Forest Bebas numbers on sage-25 tiles, a Canopy tab underline.
+  - **Under 768px:** the Overview only, with no tabs.
+- **The briefing** (`BriefingVideo`): a 16:9 card on the Scan thumbnail (`JU_SCAN_THUMBNAIL`) with the corner play button and "Conner Galway · latest issue". Pressing it swaps in the Descript embed (`SCAN_VIDEO.embed`) in place; nothing loads from Descript before that. Beside it: "Executive briefing", "Short on time? Watch it." and the line. No action.
+- **Built for the boardroom:** the H2 and four columns, each under a 1px Fern-35% rule, with a mark, a title (Oswald 700, 22px) and a line. Marks are Fern: the symbols (⌘K, ●●○, →) in Oswald 700, the numeral (2025) in Bebas, all in a fixed-height box so the titles line up.
+- **Pricing** (ju-moss panel, radius 18, no eyebrow):
+  - **left:** "First month free." (Oswald capitals, up to 56px) and the line;
+  - **right:** "$30" (Bebas, up to 96px) with "/ MONTH" (Bebas, 60%), the same Mint action, and "Buying for a team or association? Talk to us →" (`/contact`; team pricing is a TODO).
+- **Questions:** "Questions" (Oswald capitals) beside the Accordion (one open at a time, Fern chevrons). The answers are "[ Answer to come ]".
+- **Copy for team review:** the lead, the section lines and the FAQ are new. Three Insights labels (340%, 82%, 34 pts) and the 34 PTS Overview tile label are "[ label ]" placeholders.
 
 ## Logo walls
 
