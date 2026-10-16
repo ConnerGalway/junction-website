@@ -1346,6 +1346,17 @@
       0 30px 70px -30px color-mix(in srgb, var(--ju-deep) 85%, transparent);
   }
 
+  /* JunctionU video cards: the image brightens slightly on hover and focus
+     (with PlayBadge's circle scaling to 1.08). */
+  .ju-video-image {
+    transition: filter 200ms ease-out;
+  }
+
+  .group:hover .ju-video-image,
+  .group:focus-visible .ju-video-image {
+    filter: brightness(1.08);
+  }
+
   /* Program sketcher: native option lists in Newsprint, and the 200ms text fade. */
   .sketch-select option {
     background-color: var(--color-newsprint);

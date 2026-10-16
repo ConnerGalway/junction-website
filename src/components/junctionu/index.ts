@@ -8,3 +8,4 @@ export { TalkCard } from "./TalkCard";
 export { DmoPanel } from "./DmoPanel";
 export { ScanTeaser } from "./ScanTeaser";
 export { EmailBand } from "./EmailBand";
+export { PlayBadge } from "./PlayBadge";

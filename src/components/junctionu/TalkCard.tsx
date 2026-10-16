@@ -3,10 +3,11 @@
 import Image from "next/image";
 import { useState } from "react";
 import type { Talk } from "@/lib/junctionuTalks";
+import { PlayBadge } from "./PlayBadge";
 
 /**
- * Tourism Talk card with a lite embed: a 16:9 thumbnail with a Newsprint play
- * button; pressing it swaps the thumbnail for the youtube-nocookie player in
+ * Tourism Talk card with a lite embed: a 16:9 thumbnail with the corner play
+ * button (PlayBadge); pressing it swaps the thumbnail for the youtube-nocookie player in
  * place (autoplay). Nothing loads from YouTube before that.
  */
 export function TalkCard({ talk }: { talk: Talk }) {
@@ -39,14 +40,10 @@ export function TalkCard({ talk }: { talk: Talk }) {
                 fill
                 sizes="360px"
                 onError={() => setThumbFailed(true)}
-                className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04] motion-reduce:transition-none"
+                className="ju-video-image object-cover"
               />
             )}
-            <span aria-hidden="true" className="absolute top-1/2 left-1/2 flex size-14 -translate-1/2 items-center justify-center rounded-full bg-newsprint">
-              <svg width="18" height="20" viewBox="0 0 18 20" className="ml-1 fill-ju-ground">
-                <path d="M0 0 18 10 0 20Z" />
-              </svg>
-            </span>
+            <PlayBadge />
           </button>
         )}
       </div>

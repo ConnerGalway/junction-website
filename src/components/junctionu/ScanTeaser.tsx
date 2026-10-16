@@ -2,6 +2,7 @@ import Image from "next/image";
 import { JU_SCAN_URL } from "@/lib/junctionu";
 import { JU_SCAN_THUMBNAIL } from "@/lib/junctionuImages";
 import { JuButton } from "./JuButton";
+import { PlayBadge } from "./PlayBadge";
 
 /**
  * Industry Scan teaser: the Scan thumbnail (images/junctionu/
@@ -19,20 +20,12 @@ export function ScanTeaser() {
             alt=""
             fill
             sizes="(min-width: 1024px) 50vw, 100vw"
-            className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04] motion-reduce:transition-none"
+            className="ju-video-image object-cover"
           />
-          <span aria-hidden="true" className="absolute inset-0 bg-linear-to-t from-ju-deep/90 via-ju-deep/20 to-transparent" />
-          <span aria-hidden="true" className="absolute top-[38%] left-1/2 flex size-12 -translate-1/2 items-center justify-center rounded-full bg-newsprint sm:top-1/2 sm:size-16">
-            <svg width="20" height="22" viewBox="0 0 18 20" className="ml-1 fill-ju-ground">
-              <path d="M0 0 18 10 0 20Z" />
-            </svg>
-          </span>
-          <span className="absolute inset-x-6 bottom-5 block">
-            <span className="ju-display block text-[clamp(20px,2vw,26px)] text-newsprint transition-colors duration-150 group-hover:text-break-on-dark group-focus-visible:text-break-on-dark">
-              This month&apos;s Industry Scan
-            </span>
-            <span className="type-small mt-1 block text-newsprint-muted">Conner Galway · [ Month Year ]</span>
-          </span>
+          <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-ju-deep/80 to-transparent" />
+          {/* The thumbnail already says "Tourism Industry Scan": just the byline beside the play button */}
+          <PlayBadge label="Conner Galway · [ Month Year ]" />
+          <span className="sr-only">This month&apos;s Industry Scan</span>
         </a>
         <div>
           <p className="type-eyebrow m-0 text-fern">Industry Scan</p>
