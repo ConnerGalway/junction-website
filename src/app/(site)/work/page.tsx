@@ -3,7 +3,7 @@ import { Button, Callout, Container, Section, TextLink } from "@/components";
 import { WORK_CASES } from "@/lib/workCases";
 import { CaseChapter } from "./CaseChapter";
 import { RouteMap } from "./RouteMap";
-import { buildRouteMap } from "./routeMapGeometry";
+import { buildRouteMap } from "@/lib/routeMapGeometry";
 import { ChapterList, ServiceFilter, WorkFilterProvider } from "./WorkFilter";
 
 export const metadata: Metadata = {

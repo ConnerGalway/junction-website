@@ -15,7 +15,7 @@ const oswald = Oswald({
  */
 export default function JunctionULayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className={`ju ${oswald.variable} flex flex-1 flex-col`}>
+    <div className={`ju ${oswald.variable} isolate flex flex-1 flex-col overflow-x-clip`}>
       <SkipLink />
       <JuNav />
       <main id="main" tabIndex={-1} className="flex-1 focus:outline-none">

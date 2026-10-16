@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, MouseEvent, PointerEvent } from "react";
 import { cx } from "@/components";
 import type { LabelPlacement } from "@/lib/routeMap";
-import type { RouteMapGeometry } from "./routeMapGeometry";
+import type { RouteMapGeometry } from "@/lib/routeMapGeometry";
 import { useRevealCase } from "./WorkFilter";
 
 type Tip = { key: string; x: number; y: number; name: string; note?: string; href?: string };

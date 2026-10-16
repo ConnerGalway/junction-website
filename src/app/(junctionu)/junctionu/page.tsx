@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CourseCard, JuHero, Shelf, TalkCard, WorkshopCard } from "@/components/junctionu";
+import { CourseCard, DmoPanel, JuHero, Shelf, TalkCard, WorkshopCard } from "@/components/junctionu";
 import { COURSES, JU_SEE_ALL, WORKSHOPS } from "@/lib/junctionu";
 import { getTalks } from "@/lib/junctionuTalks";
 
@@ -50,6 +50,8 @@ export default async function JunctionUPage() {
           ))}
         </Shelf>
       </div>
+
+      <DmoPanel />
     </>
   );
 }
