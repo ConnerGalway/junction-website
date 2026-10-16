@@ -12,8 +12,20 @@ export type AccordionItem = { q: string; a: ReactNode };
  * be open. A gold chevron on the right turns 180° when open, and the
  * answer opens with a 250ms height animation (instant with reduced motion).
  * The question text turns pink on hover, like any clickable element.
+ * `single` keeps one open at a time; `chevronClassName` recolours the chevron
+ * (JunctionU uses Fern).
  */
-export function Accordion({ items, className }: { items: AccordionItem[]; className?: string }) {
+export function Accordion({
+  items,
+  className,
+  single,
+  chevronClassName = "text-accent-1-on-light",
+}: {
+  items: AccordionItem[];
+  className?: string;
+  single?: boolean;
+  chevronClassName?: string;
+}) {
   const [open, setOpen] = useState<boolean[]>(() => items.map(() => false));
   const baseId = useId();
 
@@ -31,7 +43,7 @@ export function Accordion({ items, className }: { items: AccordionItem[]; classN
                 id={buttonId}
                 aria-expanded={isOpen}
                 aria-controls={panelId}
-                onClick={() => setOpen((prev) => prev.map((v, j) => (j === i ? !v : v)))}
+                onClick={() => setOpen((prev) => prev.map((v, j) => (j === i ? !v : single ? false : v)))}
                 className="accordion-trigger type-h4 flex w-full cursor-pointer items-center justify-between gap-6 border-0 bg-transparent py-5 text-left text-(--tone-text)"
               >
                 <span className="accordion-question transition-colors duration-150">{item.q}</span>
@@ -41,7 +53,8 @@ export function Accordion({ items, className }: { items: AccordionItem[]; classN
                   height="20"
                   viewBox="0 0 20 20"
                   className={cx(
-                    "shrink-0 text-accent-1-on-light transition-transform duration-[250ms] ease-out",
+                    "shrink-0 transition-transform duration-[250ms] ease-out",
+                    chevronClassName,
                     isOpen && "rotate-180"
                   )}
                 >
