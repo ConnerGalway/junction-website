@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { JuHero } from "@/components/junctionu";
+import { CourseCard, JuHero, Shelf, WorkshopCard } from "@/components/junctionu";
+import { COURSES, JU_SEE_ALL, WORKSHOPS } from "@/lib/junctionu";
 
 export const metadata: Metadata = {
   title: "JunctionU",
@@ -15,8 +16,23 @@ export default function JunctionUPage() {
   return (
     <>
       <JuHero />
-      {/* Anchor for "Start free" and Browse until the shelves land */}
-      <div id="catalogue" className="scroll-mt-20" />
+      {/* The catalogue: "Start free" and Browse land here */}
+      <div id="catalogue" className="scroll-mt-16 pt-6">
+        <Shelf id="courses" title="Start here" seeAll={{ href: JU_SEE_ALL.courses }}>
+          {COURSES.map((course, i) => (
+            <li key={course.title}>
+              <CourseCard course={course} index={i} />
+            </li>
+          ))}
+        </Shelf>
+        <Shelf id="workshops" title="Workshops" seeAll={{ href: JU_SEE_ALL.workshops }}>
+          {WORKSHOPS.map((workshop, i) => (
+            <li key={workshop.title}>
+              <WorkshopCard workshop={workshop} index={i} />
+            </li>
+          ))}
+        </Shelf>
+      </div>
     </>
   );
 }

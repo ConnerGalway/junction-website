@@ -62,3 +62,10 @@ export const TALK_IDS = ["KVe_7-ov7yI", "Z4Co4xD436I", "c8OyR70XEJg", "1eaLkk6s1
 
 /** TODO: the JunctionU trailer (shown when SHOW_JU_TRAILER is on). */
 export const JU_TRAILER_URL = "#";
+
+/** "See all →" for each shelf; each goes somewhere different. TODO: confirm the eLearningU catalogue URLs. */
+export const JU_SEE_ALL = {
+  courses: `${ELEARNINGU}/courses`,
+  workshops: `${ELEARNINGU}/workshops`,
+  talks: "https://youtube.com/playlist?list=PLUvaA_x2Z8df8djNodScqE1XZTFz8a16f",
+};

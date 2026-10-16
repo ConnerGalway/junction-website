@@ -1238,6 +1238,74 @@
     text-underline-offset: 8px;
   }
 
+  /* JunctionU shelves: the row starts at the content edge and bleeds off the
+     right edge of the viewport; scroll-snap, no scrollbar. */
+  .ju-shelf {
+    --ju-inset: max(var(--spacing-gutter), (100% - var(--container-wide)) / 2);
+    padding-left: var(--ju-inset);
+    padding-right: var(--spacing-gutter);
+    scroll-padding-left: var(--ju-inset);
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .ju-shelf::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ju-shelf > li {
+    flex: none;
+    scroll-snap-align: start;
+  }
+
+  /* JunctionU cards (links): lift 5px, a 2px Fern outline and (in each card) a
+     pink title on hover and keyboard focus. */
+  .ju-card {
+    outline: 2px solid transparent;
+    outline-offset: 4px;
+    border-radius: var(--radius-card);
+    transition:
+      transform 200ms ease-out,
+      outline-color 200ms ease-out;
+  }
+
+  .ju-card:hover,
+  .ju-card:focus-visible {
+    outline-color: var(--color-fern);
+    transform: translateY(-5px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ju-card:hover,
+    .ju-card:focus-visible {
+      transform: none;
+    }
+  }
+
+  /* Course still placeholders (until each course has a still) and the length
+     label on a still. */
+  .ju-still {
+    background:
+      radial-gradient(120% 90% at 85% 15%, color-mix(in srgb, var(--color-fern) 28%, transparent), transparent 60%),
+      linear-gradient(135deg, var(--ju-moss), var(--ju-deep));
+  }
+
+  .ju-still[data-variant="1"] {
+    background:
+      radial-gradient(110% 90% at 15% 85%, color-mix(in srgb, var(--color-sage) 22%, transparent), transparent 60%),
+      linear-gradient(160deg, var(--ju-deep), var(--ju-moss));
+  }
+
+  .ju-still[data-variant="2"] {
+    background:
+      radial-gradient(100% 80% at 50% 0%, color-mix(in srgb, var(--color-fern) 22%, transparent), transparent 65%),
+      linear-gradient(200deg, var(--ju-moss), var(--ju-ground));
+  }
+
+  .ju-still-label {
+    text-shadow: 0 1px 10px color-mix(in srgb, var(--ju-deep) 80%, transparent);
+  }
+
   /* Program sketcher: native option lists in Newsprint, and the 200ms text fade. */
   .sketch-select option {
     background-color: var(--color-newsprint);
