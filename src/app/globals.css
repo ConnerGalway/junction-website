@@ -1378,6 +1378,11 @@
     }
   }
 
+  /* Marketing strategy hero shelf: starts at the content edge, bleeds off the right. */
+  .deliverables-shelf {
+    padding-left: max(var(--spacing-gutter), (100% - var(--container-wide)) / 2);
+  }
+
   /* Program sketcher: native option lists in Newsprint, and the 200ms text fade. */
   .sketch-select option {
     background-color: var(--color-newsprint);
