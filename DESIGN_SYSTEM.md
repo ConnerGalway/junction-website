@@ -31,7 +31,7 @@ Defined directly in `@theme`, so each token generates `bg-*`, `text-*`, `border-
 | `carbon` | `#1C1C1A` | Headings and UI text on Newsprint; dark ground |
 | `ink-soft` | `#3C3C39` | Body copy on Newsprint (Carbon at about 85%) |
 | `flint` | `#6A6862` | Muted text on Newsprint (captions, small print) |
-| `stage` | `#121211` | The Speaking near-black stage only: the Speaking hero (`.tone-stage`) and Speaking's thumbnails (the homepage card, the Marketing strategy "Also for destinations" item) |
+| `stage` | `#121211` | The Speaking near-black stage only: the Speaking hero (`.tone-stage`) and Speaking's thumbnails (the homepage card, the Marketing strategy "Also for destinations" item, the contact form's Speaking `ProgramThumb`) |
 | `newsprint` | `#F4F0E8` | Main ground; replaces white |
 | `newsprint-hover` | `#EDE6DA` | Hover and focus fill for clickable list rows |
 | `forest` | `#1A4D2E` | Dark ground (sections and boxes); prices on light; card top rule |
@@ -196,7 +196,7 @@ The type classes live in `@layer components`, so a colour utility can still over
 | `type-body` | DM Sans 300 | 17px | 1.5 | — | Max 680px. Ink-soft on Newsprint. |
 | `type-small` | DM Sans 400 | 14px | 1.5 | — | Muted colour |
 | `type-eyebrow` | DM Sans 500 | 13px | 1.4 | .14em, uppercase | Use `<Eyebrow>` |
-| `type-quote` | Fraunces 900 italic | clamp(24px, 2.6vw, 36px) | 1.15 | — | Pull quotes. Fraunces has three approved uses: pull quotes, the Offload guarantee strip and the About team names. |
+| `type-quote` | Fraunces 900 italic | clamp(24px, 2.6vw, 36px) | 1.15 | — | Pull quotes. Fraunces has four approved uses: pull quotes, the Offload guarantee strip, the About team names and the "?" on the "Something else" `ProgramThumb`. |
 | `type-button` | DM Sans 500 | 15px | 1.2 | — | Sentence case |
 | `type-wordmark` | Bebas Neue 400 | — | 1 | .08em | Wordmark |
 
@@ -241,6 +241,7 @@ Controls:
   - The shadow and 3px Forest top line are **only** for boxes and cards on a ground of their own colour.
   - Linked cards (`href`) get the 2px break-pink outline (offset 4px) on hover and focus. Nothing inside them is a button or another link.
 - **Dark panels:** `<Card tone="carbon">` and `<Card tone="forest">`. Neighbouring dark panels alternate.
+- **Exception: the contact form card.** Newsprint on Newsprint with radius 18, 36px padding and `shadow-card`, but no 3px top rule. Below `md` it's flat (no shadow, radius or padding). Don't reuse it elsewhere.
 - **Light panels on dark grounds:** `<Card tone="newsprint">`, a Newsprint box with radius 14, no shadow and no top line (for example the homepage program cards on Carbon).
 - **Swappable images:** some images are meant to be replaced on GitHub by uploading a file with the same name, such as the homepage video card cover, `public/images/tourism-talks-cover.png` (16:9). Reference them by that exact path, fill the slot with `object-fit: cover`, and never hardcode their pixel size.
 - **Photos:** never get an outline or the 3px top line. A floating photo may have a soft shadow (`shadow-card`) and radius 14. **Photos are dark, so they never overlap headline text:** when space runs out, the photo shrinks or moves into the flow instead.
@@ -284,7 +285,8 @@ Controls:
 | `ThumbnailFrame` | Static program-card thumbnails (`src/components/ThumbnailFrame.tsx`): children drawn at a design size (default 640 × 400, the 16:10 slot) and scaled to the slot's width, top-aligned; `inert`, `aria-hidden`, no pointer events (the card stays the link). Takes the ground as `className`. Used by the homepage orbit's two static previews, passed as a program's `preview`: **`StageThumbnail`** (Speaking; see Speaking page) and **`CourseShelfThumbnail`** (Custom Training; see Custom Training page). Same slot as the other thumbnails (16:10, radius 14). |
 | `ChevronButton` | Carousel previous / next: a thin 20px chevron (1.6px rounded stroke), no box, tone text at 70%, the tone's pink on hover and focus, 40% when disabled at the ends of a non-looping carousel. Needs an `aria-label`. Used by the program orbit and the KitCarousel. |
 | `Chip` | `sage` (sage fill, Forest text), `outline` (1.5px Forest) or `fern-outline` (1.5px Fern border and text, for dark grounds). Radius 10. |
-| `Input`, `Select`, `Textarea` | Always labelled. 48px, with a Flint border and a canopy-text focus. |
+| `Input`, `Select`, `Textarea` | Always labelled. 48px, with a Flint border and a canopy-text focus. The contact form alone uses the editorial fields instead (see Contact page). |
+| `ProgramThumb` | `program="accelerator" \| "offload" \| "training" \| "strategy" \| "speaking" \| "other"`. A 56px designed SVG thumbnail (radius 8, `aria-hidden`, no faces or text): Accelerator sage with a Canopy progress ring; Offload Carbon with a row of gold dots; Training Forest with three course cards; Strategy Newsprint with Canopy bars; Speaking the stage with a soft glow and a tiny slide; Something else sage with a Forest Fraunces "?". Used by the contact form's program tiles; meant for the Programs dropdown next. |
 | `NewsletterSignup` | One row (email and Subscribe), labelled "Get The Brief in your inbox", with the helper line "[ Frequency ] · unsubscribe anytime". Optional `label`, `hideLabel` (screen readers only), `helper` and `centered` (The Brief page). Submission is a TODO. |
 | `Placeholder` | Dashed stand-in for missing media or content |
 | `Wordmark` | `JUNCTION_` in Bebas with a Canopy underscore. The underscore is part of the logo. |
@@ -638,7 +640,7 @@ A new course gets a `slug` and its still the same way.
 - **For DMOs** (`DmoPanel`):
   - **Map:** the Work RouteMap's land layer (`src/lib/routeMapGeometry.ts`; no dots or arcs), with Canada Fern 38% and the US Fern 16%. It's larger than the section and spills above and below it, faded by a closest-side radial mask (solid to 55%) so it's never cut on a straight line. It drifts at 0.15 like the HeroWordmark: anchored where the section is centred and kept within 160px of that; static with reduced motion. It sits behind the page content (the layout is `isolate`).
   - **Glass panel** (`.ju-glass`): radius 20, Newsprint 7%, `backdrop-filter: blur(14px) saturate(160%)`, an inset 1px Newsprint-18% border, the white top highlight (see Hard rules) and a soft shadow.
-  - **Two columns:** "For DMOs and associations" (Fern), the H2 in Oswald capitals, the copy and the Fern outline "Talk to us about a region" (`/contact`). Then, after a thin divider, "300+" in Fern Bebas (up to 116px) and its line. They stack on phones.
+  - **Two columns:** "For DMOs and associations" (Fern), the H2 in Oswald capitals, the copy and the Fern outline "Talk to us about a region" (`/contact?type=training&from=region`). Then, after a thin divider, "300+" in Fern Bebas (up to 116px) and its line. They stack on phones.
 - **Industry Scan teaser** (`ScanTeaser`): the Scan thumbnail (`industry-scan-thumbnail.<ext>`) as a linked card, with the corner play button and "Conner Galway · [ Month Year ]" beside it. There's no title caption, because the thumbnail already says it. Beside it, the pitch and one Fern outline action, "Try a month free". Both go to the Scan page. The month is a placeholder.
 - **The JunctionU email** (`EmailBand`, `#email`): a Sage band (radius 18) with the headline (Oswald capitals, ground text), the line (Forest), an email field (Newsprint) and Subscribe (`ground`). This is the list the Work page links to. TODO: wire it to the eLearningU / JunctionU list (none exists in the codebase).
 - **Placeholders for team review:** course prices "[ $ ]", course lengths (all "6 HRS"), workshop lengths "[ x HRS ]", course links (eLearningU home), "See all" catalogue URLs, the sign-in URL and the Scan teaser line.
@@ -649,7 +651,7 @@ A new course gets a `slug` and its still the same way.
 
 - **Hero** (two columns, 40/60 from 1024px; stacked below that):
   - **Copy:** the Fern meta "Monthly · for Canadian DMO leaders", the H1 "Tourism Industry Scan" (Oswald capitals, up to 84px, three lines) and the lead.
-  - **Actions:** the Mint "Start your free month" (`SCAN_SUBSCRIBE_URL`: `/contact` until the subscription checkout exists; TODO) and "Read August's issue →". The small price line sits under them.
+  - **Actions:** the Mint "Start your free month" (`SCAN_SUBSCRIBE_URL`: `SCAN_SIGNUP_URL` when set, else `/contact?type=other&topic=scan-trial`; TODO: the sign-up page) and "Read August's issue →". The small price line sits under them.
 - **ScanPreview** (`ScanPreview.tsx`): a display-only replica of the Scan, built like the Accelerator DashboardPreview, about 560px tall.
   - **Window:** Newsprint, radius 14. A browser bar with three dots, the issue title and "⌘K Search".
   - **Placement:** from 1024px it bleeds off the viewport's right edge (square right corners); it fades out at the bottom (`.scan-preview`).
@@ -660,7 +662,7 @@ A new course gets a `slug` and its still the same way.
 - **Built for the boardroom:** the H2 and four columns, each under a 1px Fern-35% rule, with a mark, a title (Oswald 700, 22px) and a line. Marks are Fern: the symbols (⌘K, ●●○, →) in Oswald 700, the numeral (2025) in Bebas, all in a fixed-height box so the titles line up.
 - **Pricing** (ju-moss panel, radius 18, no eyebrow):
   - **left:** "First month free." (Oswald capitals, up to 56px) and the line;
-  - **right:** "$30" (Bebas, up to 96px) with "/ MONTH" (Bebas, 60%), the same Mint action, and "Buying for a team or association? Talk to us →" (`/contact`; team pricing is a TODO).
+  - **right:** "$30" (Bebas, up to 96px) with "/ MONTH" (Bebas, 60%), the same Mint action, and "Buying for a team or association? Talk to us →" (`/contact?type=other&topic=scan-team`; team pricing is a TODO).
 - **Questions:** "Questions" (Oswald capitals) beside the Accordion (one open at a time, Fern chevrons). The answers are "[ Answer to come ]".
 - **Copy for team review:** the lead, the section lines and the FAQ are new.
 
@@ -695,6 +697,34 @@ A new course gets a `slug` and its still the same way.
     - JunctionU: the `.ju` ground with a small JUNCTION_U;
     - Speaking: the stage with a soft spotlight over a tiny Newsprint slide.
 - **Closing CTA (Forest):** "Let's talk about your region." and "Book a 20-min call".
+
+## Contact page
+
+`src/app/(site)/contact/`. Newsprint, one section. The form still doesn't submit anywhere (pre-launch TODO).
+
+- **Layout:** two columns from `lg` (`minmax(0,1fr) / 320px`, 64px gap). The H1 "Tell us what you're after." (display) and the lead sit in row 1, so the aside top-aligns with the form card in row 2. Below `lg` it's one column: heading, form, aside.
+- **Form card:** see Surfaces (the contact form card exception).
+- **Step 1, "1 · What are you interested in?"** (copper small caps legend): a radio group of six program tiles, 3 × 2 from `xl` (2 from `sm`, 1 on phones). Native radios (sr-only), so arrow keys move between them and a choice is required.
+  - **Tile** (`.contact-tile`): radius 12, a 1px Carbon-16% inset outline (32% on hover); a `ProgramThumb`, the title (Epilogue 600, 15.5px) and a line (Flint, 12.5px).
+  - **Selected:** sage-25 fill, a 2px Canopy inset outline and the title in Forest. Keyboard focus adds the canopy-text focus ring.
+  - **`SHOW_CONTACT_TILE_ART`** in `src/lib/flags.ts` (default `true`): off, the tiles show the title and line only.
+- **Step 2, "2 · A few details":** Name, Work email and the organization, then the chosen program's fields, in two columns from `md`; long text fields span both. Until a program is chosen, a Flint hint says the questions appear there.
+  - **Editorial fields** (`fields.tsx`, `.contact-field`; **contact page only**, every other form keeps the boxed `Input`/`Select`/`Textarea`): a copper small caps label above; the value in Epilogue 600, 20px; no box, a 1.5px Carbon bottom rule; placeholders at Carbon 32%. On focus the rule turns Canopy and 2px. Selects use the same style with a Carbon chevron.
+  - **Field sets:** The Accelerator (website, 90-day goal, the partner checkbox), Offload (team size, bottleneck), Custom Training (audience, learners, timing), Marketing strategy (region, "What do you want your strategy to solve?", ideal timing, optional budget range), Speaking (date, city, size, format, topic), Something else (message).
+  - **Send:** the primary button. No reply-time promise anywhere on the page.
+- **Aside:** a sage-25 box (radius 14) with "Rather just talk?" (Epilogue 600, 20px, Forest), "Twenty minutes with Conner, no pitch deck." and "Book a 20-min call" (`tone-sage`: Forest fill, Newsprint text). Under it, plain text: the email, phone and address.
+- **Support line:** under a 1px Carbon rule at the bottom, existing JunctionU learners and Industry Scan subscribers are sent to support. The address is a placeholder ("[ support email ]", TODO).
+- **Pre-filled arrivals** (`?type=`): select the tile and fill fields. When something was filled from another page, a sage-25 note (radius 10, Forest) sits at the top of step 2 while that program stays selected.
+
+  | Arrival | Selects | Fills / note |
+  |---|---|---|
+  | `type=speaking&event=&date=&format=&audience=` | Speaking | From the Speaking availability check; "We've filled this in from your availability check." |
+  | `type=training&who=&size=&sketch=` | Custom Training | From the program sketcher; "We've filled this in from your program sketch." |
+  | `type=training&from=region` | Custom Training | "Who's the training for?" = operators in our region; "Funded seats for your region." (JunctionU "Talk to us about a region") |
+  | `type=strategy` | Marketing strategy | — |
+  | `type=other&topic=scan-team` | Something else | Message "Industry Scan — team or association pricing" (Scan pricing, "Buying for a team or association?") |
+  | `type=other&topic=scan-trial` | Something else | Message "Industry Scan — free month". Only a fallback: "Start your free month" uses `SCAN_SIGNUP_URL` (`src/lib/industryScan.ts`, TODO) when it's set. |
+  | `type=accelerator`, `type=ai`, `type=other` | That tile | — |
 
 ## Logo walls
 
@@ -733,6 +763,24 @@ A new course gets a `slug` and its still the same way.
     - **Training:** Custom Training, JunctionU
     - **Company:** Work, About, The Brief, Contact
     - **Talk to us:** Calendly, email, LinkedIn
+
+### Every CTA reaches "done" in at most 4 steps
+
+Done means booked, sent, subscribed or purchased. Count the click on the CTA as step 1. Never route a visitor to a page that can't complete their action (for example, a "free month" button never lands on a generic contact page when a sign-up page exists).
+
+| Journey | Steps |
+|---|---|
+| Any "Book a 20-min call" → Calendly | 2 |
+| Speaking availability → Contact pre-filled → Send | 3 |
+| Custom Training sketch → Contact pre-filled → Send | 3 |
+| JunctionU course/workshop card → eLearningU course page → buy | 3 |
+| Tourism Talk → plays in place | 1 |
+| Work "join the JunctionU list" → email band → Subscribe | 2 |
+| Homepage carousel → program page → its CTA → done | 3–4 |
+| JunctionU "Talk to us about a region" → Contact pre-filled → Send | 3 |
+| Scan "Start your free month" → sign-up | 2, or 3 via the fallback |
+
+New CTAs get a row here.
 
 ## Motion
 
