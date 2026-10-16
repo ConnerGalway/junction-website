@@ -1446,6 +1446,43 @@
     font-weight: 400;
   }
 
+  /* Programs dropdown links: DM Sans 16px Carbon, 9 × 12px padding, radius 8;
+     hover and focus fill newsprint-hover and turn the text break-on-light. */
+  .menu-link {
+    display: block;
+    padding: 9px 12px;
+    border-radius: 8px;
+    color: var(--color-carbon);
+    font-size: 16px;
+    line-height: 1.35;
+    text-decoration: none;
+    white-space: nowrap;
+    transition:
+      background-color 150ms ease,
+      color 150ms ease;
+  }
+
+  .menu-link:hover,
+  .menu-link:focus-visible {
+    background-color: var(--color-newsprint-hover);
+    color: var(--color-break-on-light);
+  }
+
+  /* The dropdown's footer links: canopy-text, pink on hover and focus. */
+  .menu-foot-link {
+    color: var(--color-canopy-text);
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 4px;
+  }
+
+  .menu-foot-link:hover,
+  .menu-foot-link:focus-visible {
+    color: var(--color-break-on-light);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
   /* Program sketcher: native option lists in Newsprint, and the 200ms text fade. */
   .sketch-select option {
     background-color: var(--color-newsprint);

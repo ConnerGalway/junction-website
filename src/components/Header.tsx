@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
-import type { KeyboardEvent, PointerEvent } from "react";
+import { flushSync } from "react-dom";
+import type { FocusEvent, KeyboardEvent, PointerEvent } from "react";
 import { CALENDLY_URL } from "@/lib/constants";
-import { flagshipProgram, primaryNav, programGroups } from "@/lib/navigation";
-import { DashboardPreview } from "./DashboardPreview";
+import { primaryNav } from "@/lib/navigation";
+import { DROPDOWN_GROUPS, PROGRAMS, programsIn, type Program } from "@/lib/programs";
 import { Button, Dot, LogoLockup, cx } from "./ui";
 
 function Chevron({ open }: { open: boolean }) {
@@ -23,50 +24,51 @@ function Chevron({ open }: { open: boolean }) {
   );
 }
 
-/** Static content of the Programs menu (desktop dropdown). */
+/** A program's name in the dropdown and mobile menu: the short Accelerators name with the page name after it in Flint (temporary bridge). */
+function MenuName({ program }: { program: Program }) {
+  if (!program.dropdownName) return <>{program.name}</>;
+  return (
+    <>
+      {program.dropdownName}
+      <span className="text-flint"> · {program.name}</span>
+    </>
+  );
+}
+
+/**
+ * The Programs dropdown: three short columns from src/lib/programs.ts and a
+ * footer row. Links are reached with the arrow keys (tabIndex -1, so Tab
+ * moves on to the next nav item and the panel closes).
+ */
 function ProgramsPanel({ onNavigate }: { onNavigate: () => void }) {
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)]">
-      <Link
-        href={flagshipProgram.href}
-        onClick={onNavigate}
-        className="tone-carbon group flex flex-col gap-3 rounded-card p-6"
-      >
-        <span className="type-price text-[28px]">{flagshipProgram.meta}</span>
-        <span className="type-h3 group-hover:text-(--tone-link-hover)">
-          {flagshipProgram.title}
+    <div className="flex flex-col gap-4">
+      <div className="grid grid-cols-[repeat(3,max-content)] gap-x-4">
+        {DROPDOWN_GROUPS.map((group) => (
+          <div key={group.id} className="flex flex-col gap-1.5">
+            <p className="type-eyebrow m-0 px-3 pt-1">{group.label}</p>
+            <ul className="m-0 flex list-none flex-col p-0">
+              {programsIn(group.id).map((program) => (
+                <li key={program.id}>
+                  <Link href={program.href} onClick={onNavigate} tabIndex={-1} data-menu-item className="menu-link">
+                    <MenuName program={program} />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+      <div className="flex items-center justify-between gap-6 px-3 pb-1 text-[15px]">
+        <Link href="/programs" onClick={onNavigate} tabIndex={-1} data-menu-item className="menu-foot-link">
+          All programs →
+        </Link>
+        <span className="text-ink-soft">
+          Not sure?{" "}
+          <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" tabIndex={-1} data-menu-item className="menu-foot-link">
+            Book a 20-min call
+          </a>
         </span>
-        <span className="type-small">{flagshipProgram.description}</span>
-        <span className="mt-2 block aspect-[16/9] overflow-hidden rounded-control">
-          <DashboardPreview variant="thumbnail" />
-        </span>
-      </Link>
-      <div className="flex flex-col justify-between gap-6">
-        <div className="grid grid-cols-3 gap-6">
-          {programGroups.map((group) => (
-            <div key={group.title} className="flex flex-col gap-3">
-              <p className="type-eyebrow m-0">{group.title}</p>
-              <ul className="m-0 flex list-none flex-col gap-1 p-0">
-                {group.links.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      onClick={onNavigate}
-                      className="link-plain -mx-2 block rounded-control px-2 py-2 text-[16px] leading-snug hover:bg-sage/50"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-        <div className="flex justify-end">
-          <Link href="/programs" onClick={onNavigate} className="link type-button">
-            See all programs →
-          </Link>
-        </div>
       </div>
     </div>
   );
@@ -84,7 +86,9 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const programsRef = useRef<HTMLLIElement>(null);
   const chevronRef = useRef<HTMLButtonElement>(null);
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const programsLinkRef = useRef<HTMLAnchorElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const panelId = useId();
   const mobileId = useId();
 
@@ -133,37 +137,81 @@ export function Header() {
   }, []);
 
   useEffect(() => () => {
-    if (closeTimer.current) clearTimeout(closeTimer.current);
+    if (hoverTimer.current) clearTimeout(hoverTimer.current);
   }, []);
 
-  function cancelClose() {
-    if (closeTimer.current) {
-      clearTimeout(closeTimer.current);
-      closeTimer.current = null;
+  function clearHoverTimer() {
+    if (hoverTimer.current) {
+      clearTimeout(hoverTimer.current);
+      hoverTimer.current = null;
     }
   }
 
+  // Hover: open after a 120ms intent delay, close 120ms after the pointer
+  // leaves the item and its panel (the panel is inside the item, so moving
+  // into it keeps it open).
   function onPointerEnter(event: PointerEvent) {
     if (event.pointerType !== "mouse") return;
-    cancelClose();
-    setProgramsOpen(true);
+    clearHoverTimer();
+    hoverTimer.current = setTimeout(() => setProgramsOpen(true), 120);
   }
 
   function onPointerLeave(event: PointerEvent) {
     if (event.pointerType !== "mouse") return;
-    cancelClose();
-    closeTimer.current = setTimeout(() => setProgramsOpen(false), 120);
+    clearHoverTimer();
+    hoverTimer.current = setTimeout(() => setProgramsOpen(false), 120);
+  }
+
+  const menuItems = () =>
+    Array.from(panelRef.current?.querySelectorAll<HTMLElement>("[data-menu-item]") ?? []);
+
+  function focusItem(index: number) {
+    const items = menuItems();
+    if (!items.length) return;
+    items[(index + items.length) % items.length].focus();
   }
 
   function onProgramsKeyDown(event: KeyboardEvent) {
-    if (event.key === "Escape" && programsOpen) {
-      event.stopPropagation();
-      setProgramsOpen(false);
-      chevronRef.current?.focus();
+    const items = menuItems();
+    const current = items.indexOf(document.activeElement as HTMLElement);
+    const inPanel = current !== -1;
+    switch (event.key) {
+      case "Escape":
+        if (!programsOpen) return;
+        event.stopPropagation();
+        setProgramsOpen(false);
+        chevronRef.current?.focus();
+        break;
+      case "ArrowDown":
+      case "ArrowRight":
+        if (!inPanel && event.key === "ArrowRight") return;
+        event.preventDefault();
+        flushSync(() => setProgramsOpen(true));
+        focusItem(inPanel ? current + 1 : 0);
+        break;
+      case "ArrowUp":
+      case "ArrowLeft":
+        if (!inPanel) return;
+        event.preventDefault();
+        focusItem(current - 1);
+        break;
+      case "Home":
+      case "End":
+        if (!inPanel) return;
+        event.preventDefault();
+        focusItem(event.key === "Home" ? 0 : -1);
+        break;
     }
   }
 
-  function onProgramsBlur(event: React.FocusEvent) {
+  // Focusing the trigger opens the panel; focus leaving the item closes it.
+  function onProgramsFocus(event: FocusEvent) {
+    if (event.target === programsLinkRef.current && programsLinkRef.current?.matches(":focus-visible")) {
+      setProgramsOpen(true);
+    }
+  }
+
+  function onProgramsBlur(event: FocusEvent) {
     if (!programsRef.current?.contains(event.relatedTarget as Node | null)) {
       setProgramsOpen(false);
     }
@@ -174,10 +222,7 @@ export function Header() {
   }
 
   const isActive = (href: string) => pathname === href;
-  const programsActive =
-    pathname === "/programs" ||
-    pathname === flagshipProgram.href ||
-    programGroups.some((g) => g.links.some((l) => l.href === pathname));
+  const programsActive = pathname === "/programs" || PROGRAMS.some((p) => p.href === pathname);
 
   return (
     <>
@@ -202,16 +247,19 @@ export function Header() {
 
           {/* Desktop navigation */}
           <nav aria-label="Main" className="hidden lg:block">
-            <ul className="m-0 flex list-none items-center gap-7 p-0 text-[17px] font-normal text-carbon">
+            <ul className="m-0 flex list-none items-center gap-5 p-0 text-[17px] font-normal whitespace-nowrap text-carbon xl:gap-7">
               <li
                 ref={programsRef}
                 onPointerEnter={onPointerEnter}
                 onPointerLeave={onPointerLeave}
                 onKeyDown={onProgramsKeyDown}
+                onFocus={onProgramsFocus}
                 onBlur={onProgramsBlur}
+                className="relative"
               >
                 <div className="flex items-center gap-1">
                   <Link
+                    ref={programsLinkRef}
                     href="/programs"
                     aria-current={pathname === "/programs" ? "page" : undefined}
                     className={cx(
@@ -235,10 +283,11 @@ export function Header() {
                 </div>
                 <div
                   id={panelId}
+                  ref={panelRef}
                   hidden={!programsOpen}
-                  className="absolute right-0 top-full pt-2"
+                  className="absolute -left-[30px] top-full pt-2"
                 >
-                  <div className="tone-newsprint w-[min(920px,calc(100vw-2*var(--spacing-gutter)))] rounded-card border border-hairline p-6 shadow-[0_24px_48px_-24px_color-mix(in_srgb,var(--color-carbon)_35%,transparent)]">
+                  <div className="tone-newsprint rounded-card bg-newsprint p-[18px] shadow-card">
                     <ProgramsPanel onNavigate={() => setProgramsOpen(false)} />
                   </div>
                 </div>
@@ -291,22 +340,14 @@ export function Header() {
               <Link href="/programs" className="link-plain type-h4">
                 Programs
               </Link>
-              <Link
-                href={flagshipProgram.href}
-                className="tone-carbon flex flex-col gap-2 rounded-card p-5"
-              >
-                <span className="type-price text-[28px]">{flagshipProgram.meta}</span>
-                <span className="type-h4">{flagshipProgram.title}</span>
-                <span className="type-small">{flagshipProgram.description}</span>
-              </Link>
-              {programGroups.map((group) => (
-                <div key={group.title} className="flex flex-col gap-2">
-                  <p className="type-eyebrow m-0">{group.title}</p>
+              {DROPDOWN_GROUPS.map((group) => (
+                <div key={group.id} className="flex flex-col gap-2">
+                  <p className="type-eyebrow m-0">{group.label}</p>
                   <ul className="m-0 flex list-none flex-col p-0">
-                    {group.links.map((link) => (
-                      <li key={link.href}>
-                        <Link href={link.href} className="link-plain block py-2 text-[17px]">
-                          {link.label}
+                    {programsIn(group.id).map((program) => (
+                      <li key={program.id}>
+                        <Link href={program.href} className="link-plain block py-2 text-[17px]">
+                          <MenuName program={program} />
                         </Link>
                       </li>
                     ))}
