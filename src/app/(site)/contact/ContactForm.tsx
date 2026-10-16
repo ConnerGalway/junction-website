@@ -2,20 +2,23 @@
 
 import { Suspense, useId, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Button, Input, Select, Textarea, cx } from "@/components";
+import { Button, Input, ProgramThumb, Select, Textarea, type ProgramKey } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
+import { SHOW_CONTACT_TILE_ART } from "@/lib/flags";
 
-type FormType = "ai" | "accelerator" | "training" | "speaking" | "other";
+type FormType = "accelerator" | "ai" | "training" | "strategy" | "speaking" | "other";
 
-const validTypes: FormType[] = ["ai", "accelerator", "training", "speaking", "other"];
+/** The program tiles, in order (3 × 2). `thumb` picks the ProgramThumb art. */
+const PROGRAMS: { type: FormType; title: string; line: string; thumb: ProgramKey }[] = [
+  { type: "accelerator", title: "The Accelerator", line: "A plan you'll work", thumb: "accelerator" },
+  { type: "ai", title: "Offload Program", line: "Automate a bottleneck", thumb: "offload" },
+  { type: "training", title: "Custom Training", line: "Train your people", thumb: "training" },
+  { type: "strategy", title: "Marketing strategy", line: "For destinations", thumb: "strategy" },
+  { type: "speaking", title: "Speaking", line: "For your event", thumb: "speaking" },
+  { type: "other", title: "Something else", line: "In your own words", thumb: "other" },
+];
 
-const typeLabels: Record<FormType, string> = {
-  ai: "AI Accelerator",
-  accelerator: "The Accelerator",
-  training: "Custom Training",
-  speaking: "Speaking",
-  other: "Something else",
-};
+const validTypes = PROGRAMS.map((p) => p.type);
 
 /**
  * Answers passed in from other pages: the Custom Training program sketcher
@@ -48,9 +51,9 @@ const sketchLearners: Record<string, string> = {
   "500-plus": "500+",
 };
 
-function ContactFormFields({ initialType, prefill }: { initialType: FormType; prefill?: Prefill }) {
+function ContactFormFields({ initialType, prefill }: { initialType: FormType | null; prefill?: Prefill }) {
   const typeLabelId = useId();
-  const [selectedType, setSelectedType] = useState<FormType>(initialType);
+  const [selectedType, setSelectedType] = useState<FormType | null>(initialType);
   const [sent, setSent] = useState(false);
   const [firstName, setFirstName] = useState("");
 
@@ -66,16 +69,9 @@ function ContactFormFields({ initialType, prefill }: { initialType: FormType; pr
   const orgLabel =
     selectedType === "speaking"
       ? "Event or organization"
-      : selectedType === "training"
+      : selectedType === "training" || selectedType === "strategy"
       ? "Organization"
       : "Company";
-
-  const submitLabel =
-    selectedType === "speaking"
-      ? "Check availability"
-      : selectedType === "training"
-      ? "Scope my program"
-      : "Send";
 
   return (
     <>
@@ -99,33 +95,35 @@ function ContactFormFields({ initialType, prefill }: { initialType: FormType; pr
 
       {!sent && (
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-          <input type="hidden" name="type" value={selectedType} />
 
-          {/* Type selector */}
-          <div>
-            <p id={typeLabelId} className="m-0 mb-3 text-[15px] font-medium">
-              What are you interested in?
-            </p>
-            <div role="group" aria-labelledby={typeLabelId} className="flex flex-wrap gap-2">
-              {validTypes.map((t) => {
-                const active = selectedType === t;
-                return (
-                  <button
-                    key={t}
-                    type="button"
-                    aria-pressed={active}
-                    onClick={() => setSelectedType(t)}
-                    className={cx(
-                      "inline-flex min-h-11 cursor-pointer items-center rounded-control border-[1.5px] border-forest px-4 text-[15px] font-medium",
-                      active ? "bg-forest text-newsprint" : "bg-transparent text-forest hover:bg-sage"
-                    )}
-                  >
-                    {typeLabels[t]}
-                  </button>
-                );
-              })}
+          {/* 1 · Program tiles: a radio group (arrow keys move between them), required */}
+          <fieldset className="m-0 min-w-0 border-0 p-0">
+            <legend id={typeLabelId} className="m-0 mb-4 p-0 type-eyebrow">
+              1 · What are you interested in?
+            </legend>
+            <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-3">
+              {PROGRAMS.map((p) => (
+                <label key={p.type} className="contact-tile flex cursor-pointer items-center gap-3 rounded-[12px] p-2.5">
+                  <input
+                    type="radio"
+                    name="type"
+                    value={p.type}
+                    required
+                    checked={selectedType === p.type}
+                    onChange={() => setSelectedType(p.type)}
+                    className="sr-only"
+                  />
+                  {SHOW_CONTACT_TILE_ART && <ProgramThumb program={p.thumb} />}
+                  <span className="min-w-0">
+                    <span className="contact-tile-title block font-display text-[15.5px] leading-tight font-semibold text-carbon">
+                      {p.title}
+                    </span>
+                    <span className="mt-0.5 block text-[12.5px] leading-snug text-flint">{p.line}</span>
+                  </span>
+                </label>
+              ))}
             </div>
-          </div>
+          </fieldset>
 
           {/* Name and Email */}
           <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))]">
@@ -218,13 +216,37 @@ function ContactFormFields({ initialType, prefill }: { initialType: FormType; pr
             </div>
           )}
 
+          {/* Marketing strategy fields */}
+          {selectedType === "strategy" && (
+            <div className="flex flex-col gap-4">
+              <Input label="Region" name="region" placeholder="e.g. Kootenay Rockies" />
+              <Textarea label="What do you want your strategy to solve?" name="goal" rows={3} />
+              <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr))]">
+                <Select label="Ideal timing" name="timing">
+                  <option>Before our next fiscal year</option>
+                  <option>In the next 3 months</option>
+                  <option>In the next 6 months</option>
+                  <option>Just exploring</option>
+                </Select>
+                <Select label="Budget range (optional)" name="budget" defaultValue="">
+                  <option value="">Choose a range</option>
+                  <option>Under $25K</option>
+                  <option>$25K–$50K</option>
+                  <option>$50K–$100K</option>
+                  <option>$100K+</option>
+                  <option>Not sure yet</option>
+                </Select>
+              </div>
+            </div>
+          )}
+
           {/* Other fields */}
           {selectedType === "other" && (
             <Textarea label="What can we help with?" name="message" rows={4} />
           )}
 
           <Button type="submit" className="self-start">
-            {submitLabel}
+            Send
           </Button>
         </form>
       )}
@@ -236,7 +258,7 @@ function ContactFormFields({ initialType, prefill }: { initialType: FormType; pr
 function ContactFormFromParams() {
   const searchParams = useSearchParams();
   const param = searchParams.get("type") as FormType | null;
-  const initialType = param && validTypes.includes(param) ? param : "ai";
+  const initialType = param && validTypes.includes(param) ? param : null;
   const get = (key: string) => searchParams.get(key) ?? undefined;
   const format = get("format");
   const prefill: Prefill =
@@ -262,7 +284,7 @@ function ContactFormFromParams() {
  */
 export function ContactForm() {
   return (
-    <Suspense fallback={<ContactFormFields initialType="ai" />}>
+    <Suspense fallback={<ContactFormFields initialType={null} />}>
       <ContactFormFromParams />
     </Suspense>
   );

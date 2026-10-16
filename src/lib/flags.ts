@@ -14,3 +14,6 @@ export const SHOW_SPEAKING_REEL = false;
  * TODO: switch on (and set JU_TRAILER_URL in src/lib/junctionu.ts) once the trailer exists.
  */
 export const SHOW_JU_TRAILER = false;
+
+/** The small designed thumbnails (ProgramThumb) on the contact form's program tiles. Off: title + line only. */
+export const SHOW_CONTACT_TILE_ART = true;

@@ -1383,6 +1383,33 @@
     padding-left: max(var(--spacing-gutter), (100% - var(--container-wide)) / 2);
   }
 
+  /* Contact form program tiles: a 1px Carbon-16% inset outline; selected,
+     sage-25 with a 2px Canopy inset outline and a Forest title. */
+  .contact-tile {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-carbon) 16%, transparent);
+    transition:
+      background-color 150ms ease,
+      box-shadow 150ms ease;
+  }
+
+  .contact-tile:hover {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-carbon) 32%, transparent);
+  }
+
+  .contact-tile:has(:checked) {
+    background-color: var(--color-sage-25);
+    box-shadow: inset 0 0 0 2px var(--color-canopy);
+  }
+
+  .contact-tile:has(:checked) .contact-tile-title {
+    color: var(--color-forest);
+  }
+
+  .contact-tile:has(:focus-visible) {
+    outline: 2px solid var(--color-canopy-text);
+    outline-offset: 2px;
+  }
+
   /* Program sketcher: native option lists in Newsprint, and the 200ms text fade. */
   .sketch-select option {
     background-color: var(--color-newsprint);
