@@ -13,6 +13,7 @@ export { NewsletterSignup } from "./NewsletterSignup";
 export { SkipLink } from "./SkipLink";
 export { cx } from "./cx";
 export { Wordmark } from "./Wordmark";
+export { SubBrandWordmark } from "./SubBrandWordmark";
 export { LogoLockup } from "./LogoLockup";
 export { LogoWall } from "./LogoWall";
 export { Callout } from "./Callout";

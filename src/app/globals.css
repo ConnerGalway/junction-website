@@ -66,6 +66,15 @@
   --font-display: var(--nf-epilogue), ui-sans-serif, system-ui, sans-serif;
   --font-quote: var(--nf-fraunces), ui-serif, Georgia, serif;
   --font-wordmark: var(--nf-bebas), ui-sans-serif, system-ui, sans-serif;
+  /* JunctionU's lead font (loaded by the JunctionU layout only). */
+  --font-ju: var(--nf-oswald), "Arial Narrow", ui-sans-serif, sans-serif;
+
+  /* JunctionU sub-brand colours. The values live on .ju (the JunctionU layout),
+     so these utilities only resolve inside it. */
+  --color-ju-ground: var(--ju-ground);
+  --color-ju-moss: var(--ju-moss);
+  --color-ju-deep: var(--ju-deep);
+  --color-mint: var(--ju-mint);
 }
 
 @theme {
@@ -299,6 +308,30 @@
     --tone-hairline: var(--color-hairline);
     --tone-numeral: var(--color-forest);
     --tone-price: var(--color-forest);
+  }
+
+  /* JunctionU sub-brand (the (junctionu) layout): its own ground and colours,
+     with the tone variables set so shared components (links, inputs, focus
+     rings) read correctly on it. */
+  .ju {
+    --ju-ground: #16241c;
+    --ju-moss: #20352a;
+    --ju-deep: #101a14;
+    --ju-mint: #b6f0c9;
+    --tone-bg: var(--ju-ground);
+    --tone-text: var(--color-newsprint);
+    --tone-muted: var(--color-newsprint-muted);
+    --tone-body: var(--color-newsprint-muted);
+    --tone-eyebrow: var(--color-fern);
+    --tone-link: var(--color-fern);
+    --tone-link-hover: var(--color-break-on-dark);
+    --tone-focus: var(--color-fern);
+    --tone-rule: color-mix(in srgb, var(--color-fern) 35%, transparent);
+    --tone-hairline: color-mix(in srgb, var(--color-fern) 20%, transparent);
+    --tone-numeral: var(--color-fern);
+    --tone-price: var(--color-newsprint);
+    background-color: var(--ju-ground);
+    color: var(--color-newsprint);
   }
 
   .tone-newsprint,
