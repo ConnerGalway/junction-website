@@ -165,11 +165,11 @@ export function BriefArchive({ issues, topics }: { issues: Issue[]; topics: stri
                     <a href={issueHref(issue.url)} className="brief-row group relative block py-7">
                       {issue.number !== null && (
                         <>
-                          {/* Sideways in the margin from 768px; inline above the headline on phones */}
+                          {/* Sideways in the margin from 1024px; inline above the headline below that */}
                           <span aria-hidden="true" className="brief-margin-num top-7 text-[56px]">
                             {issue.number}
                           </span>
-                          <span aria-hidden="true" className="mb-2 block font-wordmark text-[28px] leading-none text-carbon/30 md:hidden">
+                          <span aria-hidden="true" className="mb-2 block font-wordmark text-[28px] leading-none text-carbon/30 lg:hidden">
                             Nº {issue.number}
                           </span>
                         </>

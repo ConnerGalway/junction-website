@@ -1139,7 +1139,8 @@
   }
 
   /* The Brief: issue numbers set sideways (reading bottom to top) in the
-     left margin of the reading column. Decorative; hidden under 768px. */
+     left margin of the reading column. Decorative. Below 1024px the margin is
+     too narrow, so archive rows show the number inline instead. */
   .brief-margin-num {
     position: absolute;
     right: calc(100% + 28px);
@@ -1153,7 +1154,7 @@
     transition: color 200ms ease;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     .brief-margin-num {
       display: block;
     }
