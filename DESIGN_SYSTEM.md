@@ -4,8 +4,8 @@ The design system lives in code:
 
 - **Tokens, tones and type classes:** `src/app/globals.css`
 - **Components:** `src/components/ui/`, exported from `@/components`
-- **Navigation data** (shared by the header dropdown, mobile menu and `/programs`): `src/lib/navigation.ts`
-- **Program pages, no audience hubs:** each program has its own page, and there are no audience hub pages. Marketing strategy is `/marketing-strategy`. Destination partnerships (funded seats) has **no page**: it lives in the Custom Training DMO tab (`/custom-training#for-dmos`, which the menus, the footer and `/programs` link to) and in the JunctionU "Fund seats" panel.
+- **Programs list** (`src/lib/programs.ts`): every program once, read by the Programs dropdown, the mobile menu, the footer and `/programs`, so they can't disagree. Never copy the list elsewhere. The other nav items are in `src/lib/navigation.ts`.
+- **Program pages, no audience hubs:** each program has its own page, and there are no audience hub pages. Marketing strategy is `/marketing-strategy`. Destination partnerships (funded seats) has **no page**: it lives in the Custom Training DMO tab (`/custom-training#for-dmos`; it isn't a program entry, so the menus, the footer and `/programs` don't list it) and in the JunctionU "Fund seats" panel.
 - **Layouts:** the root layout (`src/app/layout.tsx`) holds only `<html>`, `<body>` and the fonts. The main site's pages live in the `(site)` route group, whose layout adds the nav and footer. JunctionU lives in `(junctionu)` with its own layout (see JunctionU sub-brand).
 
 This file explains the rules behind them. If you're adding a page, compose it from `Section`, `Container` and the components below. Don't hand-roll colours, font styles or spacing.
@@ -281,12 +281,12 @@ Controls:
 | `Badge` | `outline` (2px break border, pink text, dot) or `filled` (break-on-light fill). Radius 10. Badges are the one non-clickable pink component (see Pink means clickable). |
 | `Tabs` | Underlined tabs: `items` (`id`, `label`, `panel`) and a `label`. Large titles (Epilogue 600, 22px) on a 1px rule; active Carbon with a 3px Canopy underline, inactive Flint with a pink hover. `tablist`/`tab`/`tabpanel`, ← → Home End; panels cross-fade in 250ms (instant with reduced motion); the tab row scrolls sideways on narrow screens. |
 | `Accordion` | Questions sections, everywhere. `items` (`q`, `a`). Each question is a full-width button row (`aria-expanded`, `aria-controls`) under a 2px divider, all collapsed by default (any number can be open). A gold chevron (accent-1-on-light, 20px, 2px stroke; a UI graphic, so 3:1 is enough) on the right turns 180° when open (JunctionU uses Fern: `chevronClassName="text-fern"`). `single` keeps one open at a time; the answer opens with a 250ms height animation (instant with reduced motion). The question turns pink on hover. No "+" icons. |
-| `DashboardPreview`, `OffloadPreview` | Product previews (`src/components/`), each with a `thumbnail` variant for program cards: scaled to fill the slot's width, top-aligned, bottom faded, `inert` and `aria-hidden`. `OffloadPreview` is the Offload hero visual (journey track + Session 3 quote generator); its thumbnail is drawn at 560px. Used on the homepage orbit (The Accelerator, Offload Program) and the Programs dropdown (The Accelerator). |
+| `DashboardPreview`, `OffloadPreview` | Product previews (`src/components/`), each with a `thumbnail` variant for program cards: scaled to fill the slot's width, top-aligned, bottom faded, `inert` and `aria-hidden`. `OffloadPreview` is the Offload hero visual (journey track + Session 3 quote generator); its thumbnail is drawn at 560px. Used on the homepage orbit (The Accelerator, Offload Program). |
 | `ThumbnailFrame` | Static program-card thumbnails (`src/components/ThumbnailFrame.tsx`): children drawn at a design size (default 640 × 400, the 16:10 slot) and scaled to the slot's width, top-aligned; `inert`, `aria-hidden`, no pointer events (the card stays the link). Takes the ground as `className`. Used by the homepage orbit's two static previews, passed as a program's `preview`: **`StageThumbnail`** (Speaking; see Speaking page) and **`CourseShelfThumbnail`** (Custom Training; see Custom Training page). Same slot as the other thumbnails (16:10, radius 14). |
 | `ChevronButton` | Carousel previous / next: a thin 20px chevron (1.6px rounded stroke), no box, tone text at 70%, the tone's pink on hover and focus, 40% when disabled at the ends of a non-looping carousel. Needs an `aria-label`. Used by the program orbit and the KitCarousel. |
 | `Chip` | `sage` (sage fill, Forest text), `outline` (1.5px Forest) or `fern-outline` (1.5px Fern border and text, for dark grounds). Radius 10. |
 | `Input`, `Select`, `Textarea` | Always labelled. 48px, with a Flint border and a canopy-text focus. The contact form alone uses the editorial fields instead (see Contact page). |
-| `ProgramThumb` | `program="accelerator" \| "offload" \| "training" \| "strategy" \| "speaking" \| "other"`. A 56px designed SVG thumbnail (radius 8, `aria-hidden`, no faces or text): Accelerator sage with a Canopy progress ring; Offload Carbon with a row of gold dots; Training Forest with three course cards; Strategy Newsprint with Canopy bars; Speaking the stage with a soft glow and a tiny slide; Something else sage with a Forest Fraunces "?". Used by the contact form's program tiles; meant for the Programs dropdown next. |
+| `ProgramThumb` | `program="accelerator" \| "offload" \| "training" \| "strategy" \| "speaking" \| "other"`. A 56px designed SVG thumbnail (radius 8, `aria-hidden`, no faces or text): Accelerator sage with a Canopy progress ring; Offload Carbon with a row of gold dots; Training Forest with three course cards; Strategy Newsprint with Canopy bars; Speaking the stage with a soft glow and a tiny slide; Something else sage with a Forest Fraunces "?". Used by the contact form's program tiles. |
 | `NewsletterSignup` | One row (email and Subscribe), labelled "Get The Brief in your inbox", with the helper line "[ Frequency ] · unsubscribe anytime". Optional `label`, `hideLabel` (screen readers only), `helper` and `centered` (The Brief page). Submission is a TODO. |
 | `Placeholder` | Dashed stand-in for missing media or content |
 | `Wordmark` | `JUNCTION_` in Bebas with a Canopy underscore. The underscore is part of the logo. |
@@ -384,7 +384,7 @@ Every fact lives in `src/lib/buildingSupplyCase.ts` (areas, numbers, before, cos
 - **It's the product's UI, not the site's:** its own small type sizes and layout, drawn at its design size (1280×760) and scaled to its container's width with a CSS transform. Colours, fonts and radii map to site tokens (`.dp-*` in globals.css). As a product mock-up it keeps the product's own colour coding (gold and copper grades and metrics, Bebas metric values) and its own subtle hovers, never the site's pink.
 - **Display only:** the sidebar and the tactic tabs switch views; nothing navigates, nothing saves, and the checkboxes aren't interactive.
 - **Accessible:** a region labelled "Interactive Accelerator dashboard preview, example business"; `tablist`/`tab`/`tabpanel` roles with arrow keys (↑ ↓ in the sidebar, ← → in the tactic tabs).
-- **Thumbnail** (`<DashboardPreview variant="thumbnail" />`): the Dashboard screen only, scaled to fill its container's width, top-aligned, with the bottom faded out (`.fade-out-bottom`). Not interactive at all: `inert`, `aria-hidden` and no pointer events; the card around it carries the accessible name and the link. Put it in a slot with its own size, radius and `overflow: hidden`. Used in the Accelerator card of the Programs dropdown (16:9, radius 10) and on The Accelerator card in the homepage orbit (16:10, radius 14).
+- **Thumbnail** (`<DashboardPreview variant="thumbnail" />`): the Dashboard screen only, scaled to fill its container's width, top-aligned, with the bottom faded out (`.fade-out-bottom`). Not interactive at all: `inert`, `aria-hidden` and no pointer events; the card around it carries the accessible name and the link. Put it in a slot with its own size, radius and `overflow: hidden`. Used on The Accelerator card in the homepage orbit (16:10, radius 14).
 
 ## Custom Training page
 
@@ -698,6 +698,16 @@ A new course gets a `slug` and its still the same way.
     - Speaking: the stage with a soft spotlight over a tiny Newsprint slide.
 - **Closing CTA (Forest):** "Let's talk about your region." and "Book a 20-min call".
 
+## Programs page
+
+`src/app/(site)/programs/`. An editorial index of `src/lib/programs.ts`. No prices and no images anywhere on the page.
+
+- **Two label sets:** each program has a dropdown group (Accelerators · Training and strategy · Learn; used by the dropdown, mobile menu and footer) and a page group (For businesses · For destinations and organizations · Learn on your own; used here). Each program's promise is its own page's headline.
+- **Intro (two columns from `lg`):** the H1 "Every way we work together." (display) on the left; on the right the lead with "Book a 20-min call" as an inline canopy-text link (Calendly).
+- **Groups:** each under the standard 2px Canopy divider, in two columns from `lg` (300px / 1fr): the group heading (h3 style at 32px, as an `<h2>`) and its one line on the left; the program rows on the right.
+- **Rows** (`.row-link`; the whole row is the link): the name (Epilogue 900, up to 30px), the promise (body, ink-soft) and a "→" at the far right. Hover and focus give the row the newsprint-hover fill (radius 10), turn the name and arrow break-on-light and nudge the arrow 4px right. Under `md` the name and promise stack, with the arrow still on the right.
+- **No lines between rows** on this index: rows are separated by 20px of padding above and below, never by hairlines (unlike the Speaking talks list).
+
 ## Contact page
 
 `src/app/(site)/contact/`. Newsprint, one section. The form still doesn't submit anywhere (pre-launch TODO).
@@ -750,18 +760,20 @@ A new course gets a `slug` and its still the same way.
   - **Seamless at the top of the page:** no border and no shadow. Once the page scrolls, the header gets slightly more compact (84px → 64px), with Newsprint at about 92% opacity, a light backdrop blur and a soft shadow.
   - **No jumping:** the header is `position: fixed`, over an 84px spacer in the page flow that never changes size, so the shrink can't move the page content.
   - **Hysteresis:** the header switches to compact when `scrollY > 48px`, and back to expanded only when `scrollY < 16px`; between the two it keeps its state. Scroll position is read in a passive listener throttled with `requestAnimationFrame`.
-  - Programs links to `/programs`. Hover or the chevron opens the static dropdown, with `aria-expanded`; Escape and an outside tap close it.
+  - Programs links to `/programs`; the chevron beside it (`aria-expanded`) opens the Programs dropdown (see below). Under `xl` the items sit 20px apart (28px from `xl`) and never wrap.
   - The Brief has a break dot.
-  - The dropdown's Accelerator card shows "90 days" as a price line (Bebas, Newsprint 60%), not an eyebrow.
   - The Calendly CTA is 44px.
-  - The groups live in `src/lib/navigation.ts`.
+- **Programs dropdown** (desktop): a Newsprint panel (radius 14, `shadow-card`, 18px padding, no border) under the Programs item, from `src/lib/programs.ts` in the dropdown groups.
+  - **Three short columns:** Accelerators · Training and strategy · Learn. Copper small caps labels; links (`.menu-link`) in DM Sans 16px Carbon, 9 × 12px padding, radius 8; hover and focus fill newsprint-hover and turn the text break-on-light. No descriptions, no pictures.
+  - **Footer row** (spacing only, no divider): "All programs →" (canopy-text) on the left; "Not sure? Book a 20-min call" on the right (the link part canopy-text, Calendly).
+  - **Behaviour:** hover opens it after a 120ms intent delay, and it closes 120ms after the pointer leaves the item and panel. Keyboard focus on Programs opens it too. ↓ (on Programs or the chevron) moves into it; ↑ ↓ ← → move through the links, Home and End jump; the links are `tabIndex={-1}`, so Tab moves on to the next nav item and closes it. Escape closes it and returns focus to the chevron; an outside tap closes it.
+  - **Temporary Accelerators naming (dropdown and mobile menu only):** "Marketing" and "AI", each followed by the page name in Flint as a bridge ("· The Accelerator", "· Offload Program"), via `dropdownName`. Once the team settles the copy, these names change site-wide and the bridge names go. Everywhere else uses the page names.
+- **Mobile menu:** "Programs" (links to `/programs`), then the same groups as an indented list (no panel, no cards) and "All programs →", then the other nav items and the Calendly button.
 - **Footer** (on Carbon):
   - The `LogoLockup` in Newsprint, plus the NewsletterSignup.
   - Columns:
-    - **Programs:** The Accelerator, Offload Program (AI Accelerator), Speaking, See all programs
-    - **Strategy:** Marketing strategy, Destination partnerships
-    - **Training:** Custom Training, JunctionU
-    - **Company:** Work, About, The Brief, Contact
+    - **Accelerators**, **Training and strategy**, **Learn:** the dropdown groups from `src/lib/programs.ts`, with page names
+    - **Company:** All programs, Work, About, The Brief, Contact
     - **Talk to us:** Calendly, email, LinkedIn
 
 ### Every CTA reaches "done" in at most 4 steps
