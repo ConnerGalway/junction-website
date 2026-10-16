@@ -59,12 +59,15 @@ const programs: Program[] = [
     title: "Marketing strategy",
     description:
       "Research-led strategy for destinations and the organizations behind them. Traveller research, positioning, investment priorities, and an operating model your team runs after handover.",
+    href: "/marketing-strategy",
   },
   {
     id: "destination-partnerships",
     title: "Destination partnerships",
     description:
       "Fund JunctionU seats for every operator in your region, from 25% to fully covered. We handle delivery, support and reporting, so your board sees exactly what capacity you built.",
+    // No page of its own: it lives in the Custom Training DMO tab.
+    href: "/custom-training#for-dmos",
   },
   {
     id: "junctionu",

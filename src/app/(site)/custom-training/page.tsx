@@ -105,8 +105,8 @@ export default function CustomTrainingPage() {
         <CourseShelf className="-mx-gutter mt-[72px]" />
       </Section>
 
-      {/* Who it's for */}
-      <Section>
+      {/* Who it's for (#for-dmos: destination partnerships link here; the DMO tab is the default) */}
+      <Section id="for-dmos" className="scroll-mt-24">
         <Container>
           <h2 className="type-h2 m-0 mb-9">Who it&apos;s for.</h2>
           <Tabs

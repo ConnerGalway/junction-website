@@ -22,8 +22,9 @@ export const programGroups: NavGroup[] = [
   {
     title: "Strategy",
     links: [
-      { label: "Marketing strategy", href: "/programs#marketing-strategy" },
-      { label: "Destination partnerships", href: "/programs#destination-partnerships" },
+      { label: "Marketing strategy", href: "/marketing-strategy" },
+      // No page of its own: funded seats live in the Custom Training DMO tab (and JunctionU's "Fund seats" panel).
+      { label: "Destination partnerships", href: "/custom-training#for-dmos" },
     ],
   },
   {

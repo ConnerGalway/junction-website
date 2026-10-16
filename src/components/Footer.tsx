@@ -16,8 +16,8 @@ const footerGroups: NavGroup[] = [
   {
     title: "Strategy",
     links: [
-      { label: "Marketing strategy", href: "/programs#marketing-strategy" },
-      { label: "Destination partnerships", href: "/programs#destination-partnerships" },
+      { label: "Marketing strategy", href: "/marketing-strategy" },
+      { label: "Destination partnerships", href: "/custom-training#for-dmos" },
     ],
   },
   {
