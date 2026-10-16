@@ -59,3 +59,6 @@ export const WORKSHOPS: JuCourse[] = [
 
 /** Tourism Talks: YouTube video IDs. Titles and thumbnails come from YouTube's oEmbed at build time. */
 export const TALK_IDS = ["KVe_7-ov7yI", "Z4Co4xD436I", "c8OyR70XEJg", "1eaLkk6s1TU"];
+
+/** TODO: the JunctionU trailer (shown when SHOW_JU_TRAILER is on). */
+export const JU_TRAILER_URL = "#";

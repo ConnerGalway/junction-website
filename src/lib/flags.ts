@@ -8,3 +8,9 @@ export const SHOW_HERO_WORDMARK = true;
  * this is true AND public/images/speaking/reel.mp4 exists.
  */
 export const SHOW_SPEAKING_REEL = false;
+
+/**
+ * The "▶ Watch the trailer" button in the JunctionU hero.
+ * TODO: switch on (and set JU_TRAILER_URL in src/lib/junctionu.ts) once the trailer exists.
+ */
+export const SHOW_JU_TRAILER = false;
