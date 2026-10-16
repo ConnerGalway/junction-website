@@ -5,6 +5,7 @@ The design system lives in code:
 - **Tokens, tones and type classes:** `src/app/globals.css`
 - **Components:** `src/components/ui/`, exported from `@/components`
 - **Navigation data** (shared by the header dropdown, mobile menu and `/programs`): `src/lib/navigation.ts`
+- **Program pages, no audience hubs:** each program has its own page, and there are no audience hub pages. Marketing strategy is `/marketing-strategy`. Destination partnerships (funded seats) has **no page**: it lives in the Custom Training DMO tab (`/custom-training#for-dmos`, which the menus, the footer and `/programs` link to) and in the JunctionU "Fund seats" panel.
 - **Layouts:** the root layout (`src/app/layout.tsx`) holds only `<html>`, `<body>` and the fonts. The main site's pages live in the `(site)` route group, whose layout adds the nav and footer. JunctionU lives in `(junctionu)` with its own layout (see JunctionU sub-brand).
 
 This file explains the rules behind them. If you're adding a page, compose it from `Section`, `Container` and the components below. Don't hand-roll colours, font styles or spacing.
@@ -30,7 +31,7 @@ Defined directly in `@theme`, so each token generates `bg-*`, `text-*`, `border-
 | `carbon` | `#1C1C1A` | Headings and UI text on Newsprint; dark ground |
 | `ink-soft` | `#3C3C39` | Body copy on Newsprint (Carbon at about 85%) |
 | `flint` | `#6A6862` | Muted text on Newsprint (captions, small print) |
-| `stage` | `#121211` | The Speaking near-black stage only: the Speaking hero (`.tone-stage`) and the Speaking card's stage thumbnail (see Speaking page) |
+| `stage` | `#121211` | The Speaking near-black stage only: the Speaking hero (`.tone-stage`) and Speaking's thumbnails (the homepage card, the Marketing strategy "Also for destinations" item) |
 | `newsprint` | `#F4F0E8` | Main ground; replaces white |
 | `newsprint-hover` | `#EDE6DA` | Hover and focus fill for clickable list rows |
 | `forest` | `#1A4D2E` | Dark ground (sections and boxes); prices on light; card top rule |
@@ -116,7 +117,7 @@ Other ground rules:
 - **Carbon and Forest are both allowed** for full sections and for boxes.
 - **Neighbouring dark boxes alternate.** If two dark boxes sit side by side, make one Forest and one Carbon, as with the two audience cards on Custom Training.
 - **Two dark sections of the same colour should never touch.**
-- **Stage** (`.tone-stage`) is a near-black ground for the Speaking hero and its stage thumbnail only. It takes Carbon's roles (Newsprint button, Fern focus, gold numerals, Newsprint 60% prices).
+- **Stage** (`.tone-stage`) is a near-black ground for the Speaking hero and its thumbnails only. It takes Carbon's roles (Newsprint button, Fern focus, gold numerals, Newsprint 60% prices).
 - **Sage is never a full-width section.** Use it only inside boxes.
   - **Exception: the About team list** uses 1px Sage dividers between names on Carbon.
   - **Callouts** (`<Callout>`): sage-25 background with Forest text and Forest links (8.3:1).
@@ -130,7 +131,7 @@ Other ground rules:
 - **Gold (accent-1) is the primary accent.** Every numeral uses it: index numbers, stats and highlighted figures. On Newsprint that means `accent-1-on-light`, and only at 24px and up. On Carbon it's `accent-1`.
   - **The JunctionU sub-brand has no gold:** its numbers are Fern or Newsprint (see JunctionU sub-brand).
 - **On Forest, numerals and stats are Newsprint.** accent-1 is not used on Forest. Revisit this if the accents change.
-  - **Exception: the gold course card in the Custom Training CourseShelf** (a filled card, not a numeral) on the Forest hero. Nothing else on Forest is gold.
+  - **Exception: gold filled cards in the Forest hero shelves.** These are the gold course card in the Custom Training CourseShelf and the gold "Destination Marketing Strategy" report cover in the Marketing strategy DeliverablesShelf. They're filled surfaces, not numerals. Nothing else on Forest is gold.
 - **Copper (accent-2) is the secondary accent.** It's for eyebrows on Newsprint. Never set numerals in copper.
 - **Exception: copper editable values in the Offload calculator** ("What is that job costing you?") **only.** The four values in its sentence are copper (Epilogue 900, 3px copper underline) and turn break-on-light while their popover is open. This is a one-off, not a general rule for editable values.
 - **Exception: score bands on the quick score card** (Accelerator page) **only.** Area bars and their Bebas grade letters are coloured by band: healthy (65+) Canopy (letters in canopy-text), middling (45–64) accent-1-on-light, weak (under 45) copper. The two weakest area names in "Your biggest gaps" are copper too. Grade letters count as numerals here. No pink on the card.
@@ -247,6 +248,11 @@ Controls:
 - **Exception: the Offload KitCarousel** dims its side cards to 50% (below the 75% rule): they're previews, the spotlight card is at full opacity, and the live region announces it.
 - **Dimmed rows** (`.dim-row`): rows that sit at 75% and come to full opacity on hover and keyboard focus (200ms). 75% keeps body text above AA (ink-soft at 75% is about Flint, 4.9:1); don't dim text further, such as the Accelerator steps. Pointer devices only: on touch (`hover: none`) they stay at full opacity. Make each row focusable (`tabIndex={0}`) so keyboard users can bring it forward.
   - **Exception: the inactive About team names** are at Newsprint 45% on Carbon (large Fraunces; one name is always active at full Newsprint). This applies with a fine pointer only; touch and coarse pointers show them at full Newsprint.
+- **Data numbers are never ghost or low-opacity numbers.** A stat or result is always at full strength:
+  - boxed numbers use the Accelerator proof card style;
+  - unboxed numbers use the stat-list style (copper meta, gold-on-light Bebas `<Stat>`, one line and a link), as on Custom Training and Marketing strategy.
+
+  Ghost and low-opacity numerals are only for index or issue numbers (touchpoint cards, The Brief margin numbers).
 - **Ghost numerals:** a big Bebas numeral fully inside a card's top-right corner, 16px from the top and right edges and about 70% of the card's height (it scales with the card). Never cropped. Carbon at 6% (Newsprint at 7% on Carbon), behind the text, `aria-hidden`. Drawn as an SVG whose viewBox is the digit's ink box, so its height is the numeral's height. Used on the Accelerator touchpoint cards.
 - **Edge fades:** `.fade-out-left`, `.fade-out-right` and `.fade-out-bottom` (mask). Give a faded element enough padding to keep its shadow inside the mask.
 - **Tables:** use a real `<table className="data-table">` inside `<div className="data-table-frame">`.
@@ -560,7 +566,7 @@ A new course gets a `slug` and its still the same way.
 
 **Foundations**
 
-- **Tokens** live on `.ju` (the JunctionU layout), so these utilities only resolve inside it:
+- **Tokens** live on `.ju` (the JunctionU layout), so these utilities only resolve inside it. The one place they appear outside the sub-brand is the Industry Scan entry panel on Marketing strategy: a `.ju`-scoped panel (ground, Fern, Newsprint text) in main-site type, a pointer to the sub-brand rather than part of it.
 
   | Token | Value | Use |
   |---|---|---|
@@ -657,6 +663,38 @@ A new course gets a `slug` and its still the same way.
   - **right:** "$30" (Bebas, up to 96px) with "/ MONTH" (Bebas, 60%), the same Mint action, and "Buying for a team or association? Talk to us →" (`/contact`; team pricing is a TODO).
 - **Questions:** "Questions" (Oswald capitals) beside the Accordion (one open at a time, Fern chevrons). The answers are "[ Answer to come ]".
 - **Copy for team review:** the lead, the section lines and the FAQ are new.
+
+## Marketing strategy page
+
+`src/app/(site)/marketing-strategy/`. The DMO-facing sister of Custom Training, with the same family of hero and section treatments. Content is in `src/lib/marketingStrategy.ts`. Order: hero (Forest), logo wall, How a strategy engagement works, Built around your year (Carbon), Real regions. Real numbers., Scan entry, Also for destinations, closing CTA (Forest).
+
+- **Hero (Forest):** the H1 (display, three lines) on the left. On the right, the lead, "Book a 20-min call" (Calendly) and "See our work →".
+- **DeliverablesShelf** (`DeliverablesShelf.tsx`, about 72px below): one static row that starts at the content edge and bleeds off the right edge (`.deliverables-shelf`). Decorative (`aria-hidden`); the content is illustrative, with no client details.
+  - **Report covers** (230 × 310, radius 10): a small JUNCTION_ wordmark at the top, a meta line and the title at the bottom. They come in Newsprint, gold (Carbon text; see Accent hierarchy) and Carbon.
+  - **Inside spreads** (420 × 290, Newsprint), alternating with the covers: the left page has a copper meta, a title and text lines; the right page has a small bar chart or a big gold-on-light Bebas figure.
+  - **Swappable:** `public/images/marketing-strategy/<n>.jpg` (n = position, from 1) replaces item n with a designed image (checked at build time).
+- **Logo wall:** "Destinations we work with", the shared `LogoWall` (`auto`) with `dmoLogos`.
+- **How a strategy engagement works:** a four-phase timeline under a 2px Canopy line, with a stop per phase: a Newsprint dot with a Canopy ring, and the last stop copper.
+  - **Each phase:** "PHASE N" (Bebas price style, 60%), the title (h4), one line and an Output box (sage-25, radius 10, a Forest small caps "Output" label and the output in Forest).
+  - **Below it:** the engagement line in the price style ("[ TYPICAL LENGTH ] · SCOPED TO YOU", a placeholder).
+  - **Phones:** the timeline turns vertical, with the line on the left.
+- **Built around your year (Carbon):** the H2 with the note "Timing shown is typical; we fit your fiscal year." on the right.
+  - **The bar:** 12 months as small caps labels (not Bebas: they're words) over 6px rounded segments. Jan–Feb and Nov–Dec are Canopy (research and planning), Mar–Apr gold (board reporting), May–Sep Fern (season in market) and Oct copper (funding and RFPs).
+  - **Legend:** four columns, each with a swatch, an h4 and a line.
+  - **Narrow screens:** the bar scrolls inside its container, and the legend stacks.
+- **Real regions. Real numbers.:** the H2 with "All our work →". Three unboxed stats (see Surfaces: data numbers), each with a copper meta, `<Stat maxSize="120px">` in gold-on-light, one line and "Read the case →" to its Work chapter. The Kootenay Rockies number is a placeholder.
+- **Scan entry:** a `.ju` panel (JunctionU ground, radius 18; see JunctionU sub-brand).
+  - **Left:** the Scan thumbnail (`JU_SCAN_THUMBNAIL`, radius 12).
+  - **Right:** "Not ready for a strategy yet?" (Fern meta), the H2 "Start with the Industry Scan." (Epilogue, Newsprint), the line and a Fern outline "Try a month free".
+  - It uses main-site fonts, not Oswald.
+- **Also for destinations:** the H2 in a narrow left column and three items on the right (`AlsoFor.tsx`), each under a 2px Canopy rule.
+  - **Each item:** a 96px designed thumbnail (radius 12, no faces), the title (Epilogue 600, 22px) with "→" and one line.
+  - **Link:** the whole item is the link, and the title turns pink on hover and focus.
+  - **Thumbnails:**
+    - Custom Training: Forest with three small overlapping course cards;
+    - JunctionU: the `.ju` ground with a small JUNCTION_U;
+    - Speaking: the stage with a soft spotlight over a tiny Newsprint slide.
+- **Closing CTA (Forest):** "Let's talk about your region." and "Book a 20-min call".
 
 ## Logo walls
 
