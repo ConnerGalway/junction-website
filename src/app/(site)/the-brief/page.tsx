@@ -71,6 +71,7 @@ function ThisWeek({ issue }: { issue: Issue }) {
       <h3 className="mt-8 mb-0 font-display text-[clamp(34px,4.2vw,54px)] leading-[1.02] font-black tracking-[-0.035em] text-balance text-carbon">
         {issue.feature}
       </h3>
+      {issue.tagline && <p className="type-lead mt-5 mb-0 max-w-[52ch] text-ink-soft">{issue.tagline}</p>}
       {issue.sections && (
         <div className="mt-10 grid gap-x-10 gap-y-6 border-t border-carbon pt-6 md:grid-cols-2">
           {issue.sections.map((section) => (

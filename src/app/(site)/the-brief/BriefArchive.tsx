@@ -1,10 +1,14 @@
 "use client";
 
 import { useId, useRef, useState } from "react";
-import type { KeyboardEvent } from "react";
+import type { CSSProperties, KeyboardEvent } from "react";
 import { Button, cx } from "@/components";
 import type { Issue } from "@/lib/brief";
 import { formatDay, formatMonth, issueHref } from "./format";
+
+/** Margin number size (px) and the length of a number set sideways in Bebas (digits are 0.4em wide). */
+const MARGIN_NUM_PX = 56;
+const numberLength = (n: number) => `${Math.ceil(String(n).length * 0.4 * MARGIN_NUM_PX) + 2}px`;
 
 /** Issues shown before "Older issues" (when no filter or search is active). */
 const PAGE = 10;
@@ -31,7 +35,7 @@ export function BriefArchive({ issues, topics }: { issues: Issue[]; topics: stri
   const q = query.trim().toLowerCase();
   const filtering = topic !== "All" || q !== "";
   const matches = issues.filter(
-    (issue) => (topic === "All" || issue.topics.includes(topic)) && (q === "" || issue.feature.toLowerCase().includes(q))
+    (issue) => (topic === "All" || issue.topics.includes(topic)) && (q === "" || `${issue.feature} ${issue.tagline ?? ""}`.toLowerCase().includes(q))
   );
   const visible = filtering ? matches : matches.slice(0, shown);
 
@@ -162,12 +166,16 @@ export function BriefArchive({ issues, topics }: { issues: Issue[]; topics: stri
               <ul className="m-0 list-none p-0">
                 {month.issues.map((issue) => (
                   <li key={`${issue.number}-${issue.date}`}>
-                    <a href={issueHref(issue.url)} className="brief-row group relative block py-7">
+                    <a
+                      href={issueHref(issue.url)}
+                      className="brief-row group relative block py-7"
+                      style={issue.number !== null ? { "--num-len": numberLength(issue.number) } as CSSProperties : undefined}
+                    >
                       {issue.number !== null && (
                         <>
-                          {/* Sideways in the margin from 1024px; inline above the headline below that */}
-                          <span aria-hidden="true" className="brief-margin-num top-7 text-[56px]">
-                            {issue.number}
+                          {/* Sideways in the margin from 1024px, clipped to this row; inline above the headline below that */}
+                          <span aria-hidden="true" className="brief-margin-clip">
+                            <span className="brief-margin-num top-7 text-[56px]">{issue.number}</span>
                           </span>
                           <span aria-hidden="true" className="mb-2 block font-wordmark text-[28px] leading-none text-carbon/30 lg:hidden">
                             Nº {issue.number}
@@ -177,6 +185,9 @@ export function BriefArchive({ issues, topics }: { issues: Issue[]; topics: stri
                       <span className="block font-display text-[clamp(22px,2.2vw,26px)] leading-[1.15] font-black tracking-[-0.03em] text-carbon transition-colors duration-200 group-hover:text-break-on-light group-focus-visible:text-break-on-light">
                         {issue.feature}
                       </span>
+                      {issue.tagline && (
+                        <span className="type-body mt-2 block max-w-[60ch] text-ink-soft">{issue.tagline}</span>
+                      )}
                       <span className="sr-only">
                         {issue.number !== null ? `, issue ${issue.number}` : ""}, {formatDay(issue.date)}
                       </span>

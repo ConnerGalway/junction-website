@@ -23,6 +23,11 @@ export type Issue = {
   date: string;
   /** The feature headline (the campaign subject line; never rewritten). */
   feature: string;
+  /**
+   * One line under the headline: the campaign's preview text, else the first
+   * sentence of the feature (up to ~180 characters). Omitted when neither exists.
+   */
+  tagline?: string;
   /** The two section headlines. Fetched for the latest issue only. */
   sections?: [string, string];
   topics: string[];
@@ -89,23 +94,25 @@ export function topicsIn(issues: Issue[]): string[] {
  * Newest first. Sections are kept for every issue, though only the latest
  * one's are shown.
  */
-const SAMPLE: [number, string, string, string, string][] = [
-  [544, "2026-10-12", "Someone else is buying ads on your name", "Apple just made your iPhone customers harder to see", "The Russian bots didn't disappear"],
-  [543, "2026-10-05", "McDonald's is getting ready for the recommendation era", "Wyndham made 15x more ads with AI", "Influencer agencies are taking 30% off the top"],
-  [542, "2026-09-28", "The robots want to do your customers' shopping. Amazon just slammed the door.", "ChatGPT isn't the only AI you need to worry about anymore", "You're spending more on Meta ads. Are you getting more?"],
-  [541, "2026-09-21", "The link in your bio now costs $50 a month", "Content marketing just posted its worst year in twelve", "People will take a robot's recommendation, if a human is behind it"],
-  [538, "2026-08-31", "The AI traffic \"trade\" isn't a trade at all", "LinkedIn's \"AI slop\" button got a million clicks in two weeks", "Google called its August update routine. The ranking data disagrees."],
-  [536, "2026-08-17", "Aéropostale made a six-episode show for less than one commercial costs", "Turning your staff into creators is harder than the LinkedIn posts make it sound", "Instagram redesigned its wordmark and everyone read it as Instagzam"],
-  [535, "2026-08-10", "I've spent two years telling clients not to build their website with AI. Last month I changed my mind.", "AI shopping assistants just got their ads, and way faster than anyone expected", "Four holiday-shopping reports just told me four different stories about AI"],
+const SAMPLE: [number, string, string, string, string, string?][] = [
+  [544, "2026-10-12", "Someone else is buying ads on your name", "Apple just made your iPhone customers harder to see", "The Russian bots didn't disappear", "1.1 million ads hijacked hotel searches in one month. Here's the 30-second check."],
+  [543, "2026-10-05", "McDonald's is getting ready for the recommendation era", "Wyndham made 15x more ads with AI", "Influencer agencies are taking 30% off the top", "Why the best-marketed brand on earth is backing away from promos."],
+  [542, "2026-09-28", "The robots want to do your customers' shopping. Amazon just slammed the door.", "ChatGPT isn't the only AI you need to worry about anymore", "You're spending more on Meta ads. Are you getting more?", "The first real fight over who gets to shop for your customers."],
+  [541, "2026-09-21", "The link in your bio now costs $50 a month", "Content marketing just posted its worst year in twelve", "People will take a robot's recommendation, if a human is behind it", "$50 a month to put a link in your own post."],
+  [538, "2026-08-31", "The AI traffic \"trade\" isn't a trade at all", "LinkedIn's \"AI slop\" button got a million clicks in two weeks", "Google called its August update routine. The ranking data disagrees.", "54 advertisers lost 10.5% of their organic search traffic. AI search sent back 1.3% of it."],
+  [536, "2026-08-17", "Aéropostale made a six-episode show for less than one commercial costs", "Turning your staff into creators is harder than the LinkedIn posts make it sound", "Instagram redesigned its wordmark and everyone read it as Instagzam", "And the reason it worked was sitting in their HR department."],
+  [535, "2026-08-10", "I've spent two years telling clients not to build their website with AI. Last month I changed my mind.", "AI shopping assistants just got their ads, and way faster than anyone expected", "Four holiday-shopping reports just told me four different stories about AI", "What actually changed my mind, and where I'd still pump the brakes."],
+  // 534–532 have no tagline: the line is simply omitted.
   [534, "2026-08-03", "Meta just let ChatGPT and Claude into your ad account — here's what to actually try first.", "LinkedIn just added a \"seems like AI slop\" button, and honestly, take my money", "2x. That's the number AI skeptics have been waiting for."],
   [533, "2026-07-27", "Nobody's won AI search yet — but someone will", "The AI backlash isn't coming. It's already here.", "Reddit built you a free analytics dashboard. Most brands don't know it exists."],
   [532, "2026-07-20", "The simplest way to increase your sales", "Do people care if your content is AI-generated?", "Google and Meta are hiding AI labels on ads"],
 ];
 
-export const SAMPLE_ISSUES: Issue[] = SAMPLE.map(([number, date, feature, a, b]) => ({
+export const SAMPLE_ISSUES: Issue[] = SAMPLE.map(([number, date, feature, a, b, tagline]) => ({
   number,
   date,
   feature,
+  ...(tagline ? { tagline } : {}),
   sections: [a, b],
   topics: tagTopics([feature, a, b]),
   url: null,
@@ -126,13 +133,15 @@ export const SECTION_PARSER = {
   tags: ["h1", "h2", "h3"],
   ignore: [/^the brief\b/i, /^this week\b/i, /^also in this issue\b/i, /^nº?\s*\d+$/i, /^read (more|on)\b/i, /^subscribe\b/i],
   minLength: 8,
+  /** Tagline fallback: the first sentence after the feature heading, cut at a word beyond this many characters. */
+  leadMaxLength: 180,
 };
 
 type MailchimpCampaign = {
   id: string;
   send_time: string;
   archive_url: string;
-  settings: { subject_line: string; title: string };
+  settings: { subject_line: string; title: string; preview_text?: string };
 };
 
 const PAGE_SIZE = 100;
@@ -197,10 +206,49 @@ export function extractSections(html: string, subject: string): [string, string]
   return next.length === 2 ? [next[0], next[1]] : undefined;
 }
 
+/** "First sentence…" of a text, cut at a word (with "…") if longer than `max`. */
+function firstSentence(text: string, max: number) {
+  const sentence = (text.match(/^.+?[.!?](?=["”’)]*(?:\s|$))["”’)]*/)?.[0] ?? text).trim();
+  if (sentence.length <= max) return sentence;
+  const cut = sentence.slice(0, max + 1).replace(/\s+\S*$/, "").replace(/[\s,;:–—-]+$/, "");
+  return `${cut}…`;
+}
+
+/**
+ * Tagline fallback: the first sentence of the feature's body, i.e. the text
+ * between the feature heading (see SECTION_PARSER) and the next heading.
+ * Undefined if the feature heading isn't found or has no text after it.
+ */
+export function extractLead(html: string, subject: string): string | undefined {
+  const tags = SECTION_PARSER.tags.join("|");
+  const headings = [...html.matchAll(new RegExp(`<(${tags})\\b[^>]*>([\\s\\S]*?)</\\1>`, "gi"))];
+  const subj = normalize(subject);
+  const i = headings.findIndex((m) => {
+    const t = normalize(textOf(m[2]));
+    return t.length > 0 && (t === subj || t.includes(subj));
+  });
+  if (i < 0) return undefined;
+  const start = headings[i].index! + headings[i][0].length;
+  const end = headings[i + 1]?.index ?? html.length;
+  const body = textOf(html.slice(start, end).replace(/<(style|script)\b[\s\S]*?<\/\1>/gi, " "));
+  return body ? firstSentence(body, SECTION_PARSER.leadMaxLength) : undefined;
+}
+
+/** Run `fn` over `items`, at most `limit` at a time. */
+async function mapLimit<T>(items: T[], limit: number, fn: (item: T) => Promise<void>) {
+  let next = 0;
+  await Promise.all(
+    Array.from({ length: Math.min(limit, items.length) }, async () => {
+      while (next < items.length) await fn(items[next++]);
+    })
+  );
+}
+
 /** All sent campaigns for The Brief's audience, newest first. Throws on any API error. */
 async function fetchFromMailchimp(cfg: { key: string; prefix: string; list: string }): Promise<Issue[]> {
   const campaigns: MailchimpCampaign[] = [];
-  const fields = "campaigns.id,campaigns.send_time,campaigns.archive_url,campaigns.settings.subject_line,campaigns.settings.title,total_items";
+  const fields =
+    "campaigns.id,campaigns.send_time,campaigns.archive_url,campaigns.settings.subject_line,campaigns.settings.title,campaigns.settings.preview_text,total_items";
   for (let offset = 0; offset < MAX_CAMPAIGNS; offset += PAGE_SIZE) {
     const page = await mailchimpGet<{ campaigns: MailchimpCampaign[]; total_items: number }>(
       cfg,
@@ -214,20 +262,29 @@ async function fetchFromMailchimp(cfg: { key: string; prefix: string; list: stri
     number: issueNumberFrom(c.settings.title ?? ""),
     date: sendDate(c.send_time),
     feature: c.settings.subject_line,
+    ...(c.settings.preview_text?.trim() ? { tagline: c.settings.preview_text.trim() } : {}),
     topics: [],
     url: c.archive_url || null,
   }));
 
-  // Sections for the latest issue only. Never fatal: without them the page
-  // shows "This week" without "Also in this issue".
-  if (campaigns[0]) {
-    try {
-      const content = await mailchimpGet<{ html?: string }>(cfg, `/campaigns/${campaigns[0].id}/content?fields=html`);
-      issues[0].sections = content.html ? extractSections(content.html, campaigns[0].settings.subject_line) : undefined;
-    } catch {
-      issues[0].sections = undefined;
+  // Campaign HTML: for the latest issue's sections, and for the tagline of any
+  // issue without preview text. Each fetch is optional: a failure only drops
+  // that issue's sections or tagline, never the page.
+  const content = (id: string) =>
+    mailchimpGet<{ html?: string }>(cfg, `/campaigns/${id}/content?fields=html`).then((c) => c.html ?? "", () => "");
+  await mapLimit(
+    campaigns.map((c, i) => ({ c, i })).filter(({ i }) => i === 0 || !issues[i].tagline),
+    5,
+    async ({ c, i }) => {
+      const html = await content(c.id);
+      if (!html) return;
+      if (i === 0) issues[0].sections = extractSections(html, c.settings.subject_line);
+      if (!issues[i].tagline) {
+        const lead = extractLead(html, c.settings.subject_line);
+        if (lead) issues[i].tagline = lead;
+      }
     }
-  }
+  );
 
   for (const issue of issues) issue.topics = tagTopics([issue.feature, ...(issue.sections ?? [])]);
   return issues;

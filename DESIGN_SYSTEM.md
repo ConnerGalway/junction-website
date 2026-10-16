@@ -506,9 +506,10 @@ Sections:
 
 `src/app/the-brief/`. One centred reading column (720px) on Newsprint, with issue numbers in the left margin. There are no cards or boxes, and every rule is Carbon (see Section dividers).
 
-- **Data** (`src/lib/brief.ts`, the page's only data source): `getIssues()` and `getLatestIssue()` return `{ number, date, feature, sections?, topics, url }`, newest first.
+- **Data** (`src/lib/brief.ts`, the page's only data source): `getIssues()` and `getLatestIssue()` return `{ number, date, feature, tagline?, sections?, topics, url }`, newest first.
   - **Mailchimp:** when the three server-only env vars are set, it reads sent campaigns for The Brief's audience from the Marketing API (`GET /3.0/campaigns?status=sent&list_id=…&sort_field=send_time&sort_dir=DESC`, 100 per page). The feature is `settings.subject_line` (never rewritten), the date is `send_time` (Vancouver time) and the link is `archive_url`.
     - **Issue number:** the number after "Brief" in `settings.title`, else the first 3–4 digit number there. With none, the issue shows no number.
+    - **Tagline:** the campaign's `settings.preview_text`. If it's empty, the first sentence of the feature's body: the text between the feature heading and the next heading in the campaign HTML, cut at a word with "…" past 180 characters (`SECTION_PARSER.leadMaxLength`). Those HTML fetches run five at a time and are optional: a failure only drops that tagline. In sample mode, 534–532 have none, so the line is simply omitted.
     - **Sections:** for the latest issue only, two headlines parsed from its HTML (`GET /3.0/campaigns/{id}/content`). The rules live in `SECTION_PARSER` (heading tags, ignore patterns), so they can be tuned to the real template. If extraction fails, This week shows no "Also in this issue" row.
   - **Env vars** (set in Netlify, never exposed to the client):
     - `MAILCHIMP_API_KEY`
@@ -521,13 +522,15 @@ Sections:
 - **This week:**
   - a 2px Carbon rule, with "This week" (meta, Carbon) on the left and "Nº 544 · October 12, 2026" (small, Flint) on the right;
   - the feature (Epilogue 900, up to 54px);
+  - the tagline as a lead line (`type-lead`, ink-soft, 52ch), when there is one;
   - when there are sections, a 1px Carbon rule and two columns, each with "Also in this issue" (copper) over the headline (Epilogue 600, 21px);
   - "Read this issue →".
 - **Margin numbers** (`.brief-margin-num`): the issue number set sideways (`writing-mode: vertical-rl`, rotated 180° so it reads bottom to top), 28px left of the column and top-aligned with its block. It's Bebas, Carbon 7%, `aria-hidden`. This week shows "Nº 544" at up to 150px (110px at 1024); archive rows show the number alone at 56px. Shown from 1024px.
 - **Archive** (`BriefArchive.tsx`, every issue but the latest):
-  - **Header row on a 2px Carbon rule:** "Archive" (meta), then the topic tabs: All plus the topics in use. They're a real tablist (← → Home End) in 16px text; active is Carbon 600 with a 3px Canopy underline sitting on the rule, inactive is Flint 400 with a pink hover. Then "⌕ Search", which opens an inline field matching the feature headline (case-insensitive; Escape or × closes and clears it). Topic and search combine.
+  - **Header row on a 2px Carbon rule:** "Archive" (meta), then the topic tabs: All plus the topics in use. They're a real tablist (← → Home End) in 16px text; active is Carbon 600 with a 3px Canopy underline sitting on the rule, inactive is Flint 400 with a pink hover. Then "⌕ Search", which opens an inline field matching the feature headline and the tagline (case-insensitive; Escape or × closes and clears it). Topic and search combine.
   - **Month groups:** a copper small caps month heading ("October 2026", not Bebas) over a 1px Carbon rule. Months with no matches are hidden.
-  - **Rows:** only the feature headline (Epilogue 900, up to 26px), with the whole row as the link. On hover and focus the headline turns pink and the margin number goes to 50% (see Pink means clickable).
+  - **Rows:** the feature headline (Epilogue 900, up to 26px) and, 8px below it, the tagline (body, ink-soft, 60ch) when there is one. The whole row is the link.
+  - **Margin numbers never overlap.** From 1024px each row is at least as tall as its sideways number: `--num-len` is digits × 0.4em at 56px, plus the row's 28px top and bottom padding. The number also sits in a clip box (`.brief-margin-clip`) that spans exactly its row in the left margin. It stays top-aligned with the headline. On hover and focus the headline turns pink and the margin number goes to 50% (see Pink means clickable).
   - **Paging:** the newest 10 issues, then "Older issues" (secondary button) loads 10 more. With a filter or search active, every match shows. With none: "No issues match that yet." and a "Clear filters" link.
 - **Below 1024px:** archive numbers move inline above each headline ("Nº 543", Bebas 28px, Carbon 30%, `aria-hidden`; the link text carries the number and date for screen readers). This week keeps its number beside the date.
 - **Phones:** the column is full width. The header row wraps, with Archive and Search on the first line and the tabs on a sideways-scrolling line below.

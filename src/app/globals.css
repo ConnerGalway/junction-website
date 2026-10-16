@@ -1193,6 +1193,34 @@
     }
   }
 
+  /* The Brief archive rows: each row is at least as tall as its sideways
+     number (top padding + --num-len + bottom padding), and the number sits in
+     a clip box spanning exactly the row in the left margin, so it can never
+     reach the next row's number. */
+  .brief-margin-clip {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 100%;
+    display: none;
+    width: 120px;
+    overflow: hidden;
+  }
+
+  .brief-margin-clip > .brief-margin-num {
+    right: 28px;
+  }
+
+  @media (min-width: 1024px) {
+    .brief-margin-clip {
+      display: block;
+    }
+
+    .brief-row {
+      min-height: calc(var(--num-len, 0px) + 56px);
+    }
+  }
+
   /* The Brief archive rows: hover and focus lift the margin number to 50%. */
   .brief-row:hover .brief-margin-num,
   .brief-row:focus-visible .brief-margin-num {
