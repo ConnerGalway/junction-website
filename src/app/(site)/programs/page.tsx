@@ -1,141 +1,74 @@
 import type { Metadata } from "next";
-import {
-  Badge,
-  Button,
-  Container,
-  Section,
-} from "@/components";
 import Link from "next/link";
+import { Container, Section } from "@/components";
+import { CALENDLY_URL } from "@/lib/constants";
+import { PAGE_GROUPS, programsOnPage } from "@/lib/programs";
 
 export const metadata: Metadata = {
   title: "Programs",
   description:
-    "Every Junction program in one place: The Accelerator, the Offload Program (AI Accelerator), Custom Training, Speaking, Marketing strategy, Destination partnerships and JunctionU.",
+    "Every Junction program in one place. Not sure which fits? Book a 20-min call and we'll point you to the right one.",
 };
 
-type Program = {
-  id: string;
-  title: string;
-  description: string;
-  href?: string;
-  price?: string;
-  isNew?: boolean;
-};
-
-const programs: Program[] = [
-  {
-    id: "accelerator",
-    title: "The Accelerator",
-    description:
-      "A full digital assessment, a one-to-one coaching session, and a three-page plan you can start Monday. 25–100% covered through a destination partnership.",
-    href: "/accelerator",
-    price: "$2,500 · 90 days",
-  },
-  {
-    id: "offload-program",
-    title: "Offload Program (AI Accelerator)",
-    description:
-      "The 30-day program: 4 live sessions, a custom dashboard, a prompt library, a 90-day plan, and at least one bottleneck automated before day 30. Open to teams beyond tourism.",
-    href: "/ai-accelerator",
-    price: "30 days",
-    isNew: true,
-  },
-  {
-    id: "custom-training",
-    title: "Custom Training",
-    description:
-      "Workshops, webinar series and custom programs. Plain language, and every action doable in under an hour, like the Okotoks series that prepped a town for 4,500 visitors.",
-    href: "/custom-training",
-  },
-  {
-    id: "speaking",
-    title: "Speaking",
-    description:
-      "Keynotes, workshops, conference sessions and virtual talks on AI, tourism innovation and marketing trends. Recent stages: Northern BC Tourism Summit, TIABC, Yukon Go Digital Summit.",
-    href: "/speaking",
-  },
-  {
-    id: "marketing-strategy",
-    title: "Marketing strategy",
-    description:
-      "Research-led strategy for destinations and the organizations behind them. Traveller research, positioning, investment priorities, and an operating model your team runs after handover.",
-    href: "/marketing-strategy",
-  },
-  {
-    id: "destination-partnerships",
-    title: "Destination partnerships",
-    description:
-      "Fund JunctionU seats for every operator in your region, from 25% to fully covered. We handle delivery, support and reporting, so your board sees exactly what capacity you built.",
-    // No page of its own: it lives in the Custom Training DMO tab.
-    href: "/custom-training#for-dmos",
-  },
-  {
-    id: "junctionu",
-    title: "JunctionU",
-    description:
-      "Certificate courses, workshops and free Tourism Talks, built for tourism professionals. Lessons run under an hour and every one ends in something you can do today. 2,000+ people are in.",
-    href: "/junctionu",
-  },
-];
-
+/**
+ * Programs: an editorial index of src/lib/programs.ts in its page groups. No
+ * prices, no images, and no lines between rows (padding only).
+ */
 export default function ProgramsPage() {
   return (
     <>
-      {/* Hero */}
+      {/* Intro */}
       <Section spacing="tight">
-        <Container
-          className="grid items-end gap-x-[72px] gap-y-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))]"
-        >
-          <div>
-            <h1 className="type-display m-0">We build the plan. We train the people.</h1>
-          </div>
-          <p className="type-body m-0">
-            Every engagement ends with your team holding the keys. We only do
-            strategy and training, so no websites, ad buying or social
-            management. Every recommendation is there because it works for you.
+        <Container className="grid items-end gap-x-16 gap-y-6 lg:grid-cols-2">
+          <h1 className="type-display m-0">Every way we work together.</h1>
+          <p className="type-lead m-0">
+            Every Junction program in one place. Not sure which fits?{" "}
+            <a href={CALENDLY_URL} target="_blank" rel="noopener noreferrer" className="link">
+              Book a 20-min call
+            </a>{" "}
+            and we&apos;ll point you to the right one.
           </p>
         </Container>
       </Section>
 
-      {/* Program list: two-column rows (stacked on mobile) */}
+      {/* Groups */}
       <Section flush="top">
-        <Container as="ol" className="m-0 list-none border-t-2 border-canopy p-0">
-          {programs.map((program, i) => (
-            <li
-              key={program.id}
-              id={program.id}
-              className="scroll-mt-28 border-b border-hairline"
+        <Container className="flex flex-col gap-16">
+          {PAGE_GROUPS.map((group) => (
+            <section
+              key={group.id}
+              aria-labelledby={`group-${group.id}`}
+              className="grid gap-x-12 gap-y-6 border-t-2 border-canopy pt-8 lg:grid-cols-[300px_minmax(0,1fr)]"
             >
-              {/* Programs without their own page jump to the closing CTA, as on the old Services page. */}
-              <Link
-                href={program.href ?? "#start"}
-                className="row-link grid gap-x-12 gap-y-4 py-9 md:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)]"
-              >
-                <div className="flex flex-col items-start gap-3">
-                  <span className="type-numeral">{String(i + 1).padStart(2, "0")}</span>
-                  <h2 className="row-title type-h3 m-0">{program.title}</h2>
-                  {program.isNew && <Badge variant="filled">New</Badge>}
-                </div>
-                <div className="flex flex-col gap-4">
-                  <p className="type-body m-0">{program.description}</p>
-                  {program.price && <p className="type-price m-0">{program.price}</p>}
-                </div>
-              </Link>
-            </li>
+              <div>
+                <h2 id={`group-${group.id}`} className="type-h3 m-0 lg:text-[32px]">
+                  {group.label}
+                </h2>
+                <p className="type-body m-0 mt-3 max-w-[32ch]">{group.line}</p>
+              </div>
+              <ul className="m-0 flex list-none flex-col p-0 lg:-mt-5">
+                {programsOnPage(group.id).map((program) => (
+                  <li key={program.id} id={program.id} className="scroll-mt-28">
+                    <Link
+                      href={program.href}
+                      className="row-link group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-6 py-5"
+                    >
+                      <span className="grid gap-x-8 gap-y-1.5 md:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] md:items-baseline">
+                        <span className="row-title type-h3">{program.name}</span>
+                        <span className="type-body text-ink-soft">{program.promise}</span>
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        className="row-title text-[22px] transition-transform duration-150 group-hover:translate-x-1 group-focus-visible:translate-x-1"
+                      >
+                        →
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
           ))}
-        </Container>
-      </Section>
-
-      {/* CTA */}
-      <Section id="start" tone="forest" className="scroll-mt-24">
-        <Container>
-          <h2 className="type-h2 m-0 max-w-[15ch]">
-            Not sure which route? That&apos;s what the call is for.
-          </h2>
-          <div className="mt-10 flex flex-wrap items-center gap-7">
-            <Button href="/contact">Start a conversation</Button>
-            <span className="type-small">Thirty minutes, no pitch deck.</span>
-          </div>
         </Container>
       </Section>
     </>
