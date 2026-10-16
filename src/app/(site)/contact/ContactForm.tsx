@@ -2,9 +2,10 @@
 
 import { Suspense, useId, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Button, Input, ProgramThumb, Select, Textarea, type ProgramKey } from "@/components";
+import { Button, ProgramThumb, type ProgramKey } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
 import { SHOW_CONTACT_TILE_ART } from "@/lib/flags";
+import { EdInput, EdSelect, EdTextarea } from "./fields";
 
 type FormType = "accelerator" | "ai" | "training" | "strategy" | "speaking" | "other";
 
@@ -34,6 +35,7 @@ type Prefill = {
   format?: string;
   size?: string;
   note?: string;
+  message?: string;
 };
 
 const speakingFormats = ["Keynote", "Workshop", "Panel or fireside", "Virtual", "Not sure yet"];
@@ -53,6 +55,7 @@ const sketchLearners: Record<string, string> = {
 
 function ContactFormFields({ initialType, prefill }: { initialType: FormType | null; prefill?: Prefill }) {
   const typeLabelId = useId();
+  const detailsLabelId = useId();
   const [selectedType, setSelectedType] = useState<FormType | null>(initialType);
   const [sent, setSent] = useState(false);
   const [firstName, setFirstName] = useState("");
@@ -125,127 +128,129 @@ function ContactFormFields({ initialType, prefill }: { initialType: FormType | n
             </div>
           </fieldset>
 
-          {/* Name and Email */}
-          <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))]">
-            <Input label="Name" name="name" required autoComplete="name" />
-            <Input label="Work email" name="email" type="email" required autoComplete="email" />
-          </div>
+          {/* 2 · The fields for the chosen program, in the editorial style (fields.tsx) */}
+          <section aria-labelledby={detailsLabelId} className="mt-6">
+            <h2 id={detailsLabelId} className="m-0 mb-5 type-eyebrow">
+              2 · A few details
+            </h2>
+            {!selectedType && (
+              <p className="type-small m-0 mb-6 text-flint">Pick a program above and its questions appear here.</p>
+            )}
+            <div className="grid gap-x-8 gap-y-7 md:grid-cols-2">
+              <EdInput label="Name" name="name" required autoComplete="name" />
+              <EdInput label="Work email" name="email" type="email" required autoComplete="email" />
+              <EdInput label={orgLabel} name="org" autoComplete="organization" defaultValue={prefill?.org} />
 
-          {/* Organization */}
-          <Input label={orgLabel} name="org" autoComplete="organization" defaultValue={prefill?.org} />
+              {/* Offload Program */}
+              {selectedType === "ai" && (
+                <>
+                  <EdSelect label="How many people would take part?" name="team">
+                    <option>1–3</option>
+                    <option>4–8</option>
+                    <option>9–15</option>
+                    <option>16+</option>
+                  </EdSelect>
+                  <EdTextarea
+                    label="What's eating your team's week?"
+                    name="bottleneck"
+                    placeholder="e.g. quotes typed in by hand, chasing invoices, weekly reports"
+                    className="md:col-span-2"
+                  />
+                </>
+              )}
 
-          {/* AI Accelerator fields */}
-          {selectedType === "ai" && (
-            <div className="flex flex-col gap-4">
-              <Select label="How many people would take part?" name="team">
-                <option>1–3</option>
-                <option>4–8</option>
-                <option>9–15</option>
-                <option>16+</option>
-              </Select>
-              <Textarea
-                label="What's eating your team's week?"
-                name="bottleneck"
-                rows={3}
-                placeholder="e.g. quotes typed in by hand, chasing invoices, weekly reports"
-              />
-            </div>
-          )}
+              {/* The Accelerator */}
+              {selectedType === "accelerator" && (
+                <>
+                  <EdInput label="Website" name="website" placeholder="yourbusiness.com" />
+                  <EdTextarea
+                    label="What should marketing do for you in the next 90 days?"
+                    name="goal"
+                    className="md:col-span-2"
+                  />
+                  <label className="flex cursor-pointer items-center gap-2.5 text-[15px] md:col-span-2">
+                    <input type="checkbox" name="partner" className="size-[18px] shrink-0 accent-canopy-text" />
+                    My association or region may cover part of the cost
+                  </label>
+                </>
+              )}
 
-          {/* Accelerator fields */}
-          {selectedType === "accelerator" && (
-            <div className="flex flex-col gap-4">
-              <Input label="Website" name="website" placeholder="yourbusiness.com" />
-              <Textarea
-                label="What should marketing do for you in the next 90 days?"
-                name="goal"
-                rows={3}
-              />
-              <label className="flex cursor-pointer items-center gap-2.5 text-[15px]">
-                <input
-                  type="checkbox"
-                  name="partner"
-                  className="size-[18px] shrink-0 accent-canopy-text"
+              {/* Custom Training */}
+              {selectedType === "training" && (
+                <>
+                  {/* TODO: the training form has no message field, so the sketch title
+                      (prefill.sketch) isn't shown yet; add one if the form gets it. */}
+                  {prefill?.sketch && <input type="hidden" name="sketch" value={prefill.sketch} />}
+                  <EdSelect label="Who's the training for?" name="audience" defaultValue={prefill?.audience}>
+                    <option>Businesses or operators in our region</option>
+                    <option>Our leadership team</option>
+                    <option>Our staff</option>
+                    <option>Our members</option>
+                  </EdSelect>
+                  <EdInput label="Roughly how many learners?" name="learners" defaultValue={prefill?.learners} />
+                  <EdInput label="Ideal timing" name="timing" placeholder="e.g. spring 2027" />
+                </>
+              )}
+
+              {/* Speaking */}
+              {selectedType === "speaking" && (
+                <>
+                  {/* TODO: no notes field for speaking; answers without a field
+                      (e.g. a format not in the list) ride along hidden for now. */}
+                  {prefill?.note && <input type="hidden" name="note" value={prefill.note} />}
+                  <EdInput label="Event date" name="date" type="date" defaultValue={prefill?.date} />
+                  <EdInput label="City or virtual" name="location" placeholder="e.g. Kelowna" />
+                  <EdInput label="Audience size" name="size" defaultValue={prefill?.size} placeholder="e.g. 250" />
+                  <EdSelect label="Format" name="format" defaultValue={prefill?.format}>
+                    {speakingFormats.map((f) => (
+                      <option key={f}>{f}</option>
+                    ))}
+                  </EdSelect>
+                  <EdSelect label="Topic you're interested in" name="topic">
+                    <option>AI and the work only people can do</option>
+                    <option>Marketing trends worth acting on</option>
+                    <option>Tourism strategy and marketing</option>
+                    <option>Not sure yet</option>
+                  </EdSelect>
+                </>
+              )}
+
+              {/* Marketing strategy */}
+              {selectedType === "strategy" && (
+                <>
+                  <EdInput label="Region" name="region" placeholder="e.g. Kootenay Rockies" />
+                  <EdTextarea label="What do you want your strategy to solve?" name="goal" className="md:col-span-2" />
+                  <EdSelect label="Ideal timing" name="timing">
+                    <option>Before our next fiscal year</option>
+                    <option>In the next 3 months</option>
+                    <option>In the next 6 months</option>
+                    <option>Just exploring</option>
+                  </EdSelect>
+                  <EdSelect label="Budget range (optional)" name="budget" defaultValue="">
+                    <option value="">Choose a range</option>
+                    <option>Under $25K</option>
+                    <option>$25K–$50K</option>
+                    <option>$50K–$100K</option>
+                    <option>$100K+</option>
+                    <option>Not sure yet</option>
+                  </EdSelect>
+                </>
+              )}
+
+              {/* Something else */}
+              {selectedType === "other" && (
+                <EdTextarea
+                  label="What can we help with?"
+                  name="message"
+                  rows={4}
+                  defaultValue={prefill?.message}
+                  className="md:col-span-2"
                 />
-                My association or region may cover part of the cost
-              </label>
+              )}
             </div>
-          )}
+          </section>
 
-          {/* Training fields */}
-          {selectedType === "training" && (
-            <div className="flex flex-col gap-4">
-              {/* TODO: the training form has no message field, so the sketch title
-                  (prefill.sketch) isn't shown yet; add one if the form gets it. */}
-              {prefill?.sketch && <input type="hidden" name="sketch" value={prefill.sketch} />}
-              <Select label="Who's the training for?" name="audience" defaultValue={prefill?.audience}>
-                <option>Businesses or operators in our region</option>
-                <option>Our leadership team</option>
-                <option>Our staff</option>
-                <option>Our members</option>
-              </Select>
-              <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr))]">
-                <Input label="Roughly how many learners?" name="learners" defaultValue={prefill?.learners} />
-                <Input label="Ideal timing" name="timing" placeholder="e.g. spring 2027" />
-              </div>
-            </div>
-          )}
-
-          {/* Speaking fields */}
-          {selectedType === "speaking" && (
-            <div className="flex flex-col gap-4">
-              {/* TODO: no notes field for speaking; answers without a field
-                  (e.g. a format not in the list) ride along hidden for now. */}
-              {prefill?.note && <input type="hidden" name="note" value={prefill.note} />}
-              <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr))]">
-                <Input label="Event date" name="date" type="date" defaultValue={prefill?.date} />
-                <Input label="City or virtual" name="location" />
-                <Input label="Audience size" name="size" defaultValue={prefill?.size} />
-                <Select label="Format" name="format" defaultValue={prefill?.format}>
-                  {speakingFormats.map((f) => (
-                    <option key={f}>{f}</option>
-                  ))}
-                </Select>
-              </div>
-              <Select label="Topic you're interested in" name="topic">
-                <option>AI and the work only people can do</option>
-                <option>Marketing trends worth acting on</option>
-                <option>Tourism strategy and marketing</option>
-                <option>Not sure yet</option>
-              </Select>
-            </div>
-          )}
-
-          {/* Marketing strategy fields */}
-          {selectedType === "strategy" && (
-            <div className="flex flex-col gap-4">
-              <Input label="Region" name="region" placeholder="e.g. Kootenay Rockies" />
-              <Textarea label="What do you want your strategy to solve?" name="goal" rows={3} />
-              <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr))]">
-                <Select label="Ideal timing" name="timing">
-                  <option>Before our next fiscal year</option>
-                  <option>In the next 3 months</option>
-                  <option>In the next 6 months</option>
-                  <option>Just exploring</option>
-                </Select>
-                <Select label="Budget range (optional)" name="budget" defaultValue="">
-                  <option value="">Choose a range</option>
-                  <option>Under $25K</option>
-                  <option>$25K–$50K</option>
-                  <option>$50K–$100K</option>
-                  <option>$100K+</option>
-                  <option>Not sure yet</option>
-                </Select>
-              </div>
-            </div>
-          )}
-
-          {/* Other fields */}
-          {selectedType === "other" && (
-            <Textarea label="What can we help with?" name="message" rows={4} />
-          )}
-
-          <Button type="submit" className="self-start">
+          <Button type="submit" className="mt-4 self-start">
             Send
           </Button>
         </form>
