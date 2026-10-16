@@ -1,27 +1,20 @@
+import { cx } from "./ui/cx";
+
 interface PlaceholderProps {
   children: React.ReactNode;
   aspectRatio?: string;
   className?: string;
 }
 
-export function Placeholder({
-  children,
-  aspectRatio,
-  className = "",
-}: PlaceholderProps) {
+/** Dashed stand-in for media or content that doesn't exist yet. */
+export function Placeholder({ children, aspectRatio, className }: PlaceholderProps) {
   return (
     <div
-      className={`border-[1.5px] border-dashed rounded flex items-center justify-center text-center ${className}`}
-      style={{
-        borderColor: "currentColor",
-        opacity: 0.4,
-        aspectRatio,
-        padding: "20px",
-        fontSize: "13px",
-        fontWeight: 500,
-        letterSpacing: "0.08em",
-        textTransform: "uppercase",
-      }}
+      className={cx(
+        "flex items-center justify-center rounded-card border-[1.5px] border-dashed border-current p-5 text-center text-[13px] font-medium uppercase tracking-[0.08em] text-(--tone-muted)",
+        className
+      )}
+      style={{ aspectRatio }}
     >
       {children}
     </div>

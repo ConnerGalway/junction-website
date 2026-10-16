@@ -3,32 +3,35 @@ import { DM_Sans, Bebas_Neue, Fraunces, Epilogue } from "next/font/google";
 import "./globals.css";
 
 const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+  variable: "--nf-dm-sans",
   subsets: ["latin"],
   weight: ["300", "400", "500"],
 });
 
 const bebasNeue = Bebas_Neue({
-  variable: "--font-bebas",
+  variable: "--nf-bebas",
   subsets: ["latin"],
   weight: "400",
 });
 
 const fraunces = Fraunces({
-  variable: "--font-fraunces",
+  variable: "--nf-fraunces",
   subsets: ["latin"],
   weight: "900",
   style: "italic",
 });
 
 const epilogue = Epilogue({
-  variable: "--font-epilogue",
+  variable: "--nf-epilogue",
   subsets: ["latin"],
-  weight: "900",
+  weight: ["600", "900"],
 });
 
 export const metadata: Metadata = {
-  title: "Junction | Strategy & Capacity Building",
+  title: {
+    default: "Junction | Strategy & Capacity Building",
+    template: "%s | Junction",
+  },
   description:
     "Junction is where organizations and technology meet. We build marketing strategy for destinations, and we train the people who deliver it.",
 };
@@ -39,7 +42,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${dmSans.variable} ${bebasNeue.variable} ${fraunces.variable} ${epilogue.variable} antialiased`}
     >
-      <body className="min-h-screen bg-newsprint text-carbon">{children}</body>
+      {/* The nav, footer and <main> come from each route group's layout:
+          (site) for the main site, (junctionu) for the JunctionU sub-brand. */}
+      <body className="flex min-h-screen flex-col bg-newsprint font-sans text-carbon">{children}</body>
     </html>
   );
 }

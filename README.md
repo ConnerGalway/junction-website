@@ -20,6 +20,20 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Environment variables
+
+### The Brief (Mailchimp)
+
+`/the-brief` lists issues of The Brief from Mailchimp. Set these three in Netlify (Site configuration → Environment variables), then redeploy. All three are **server-only**; never prefix them with `NEXT_PUBLIC_`.
+
+| Variable | Value |
+|---|---|
+| `MAILCHIMP_API_KEY` | A Mailchimp API key (Profile → Extras → API keys → Create a key). |
+| `MAILCHIMP_SERVER_PREFIX` | The data centre, e.g. `us21`: the part after the dash at the end of the API key, or the subdomain when you're logged in (`us21.admin.mailchimp.com`). |
+| `MAILCHIMP_BRIEF_LIST_ID` | The Brief's audience ID (Audience → Settings → Audience name and defaults → Audience ID). |
+
+Until all three are set, the page shows sample issues (`src/lib/brief.ts`). Once they're set, it reads sent campaigns for that audience, refreshes hourly, and falls back to the last good result (or the sample) if Mailchimp can't be reached. Issue numbers come from the campaign name (e.g. "Brief 544"). The latest issue's two section headlines are parsed from its HTML; if they don't show up, adjust `SECTION_PARSER` in `src/lib/brief.ts` to the real template.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
