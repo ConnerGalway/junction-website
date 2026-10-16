@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { CourseCard, JuHero, Shelf, WorkshopCard } from "@/components/junctionu";
+import { CourseCard, JuHero, Shelf, TalkCard, WorkshopCard } from "@/components/junctionu";
 import { COURSES, JU_SEE_ALL, WORKSHOPS } from "@/lib/junctionu";
+import { getTalks } from "@/lib/junctionuTalks";
 
 export const metadata: Metadata = {
   title: "JunctionU",
@@ -12,7 +13,8 @@ export const metadata: Metadata = {
  * JunctionU (sub-brand; see DESIGN_SYSTEM.md "JunctionU sub-brand").
  * One Mint button on the page (Start free); every other section has one action.
  */
-export default function JunctionUPage() {
+export default async function JunctionUPage() {
+  const talks = await getTalks();
   return (
     <>
       <JuHero />
@@ -29,6 +31,21 @@ export default function JunctionUPage() {
           {WORKSHOPS.map((workshop, i) => (
             <li key={workshop.title}>
               <WorkshopCard workshop={workshop} index={i} />
+            </li>
+          ))}
+        </Shelf>
+        <Shelf
+          id="talks"
+          title={
+            <>
+              Tourism Talks <span className="text-sage">· free</span>
+            </>
+          }
+          seeAll={{ href: JU_SEE_ALL.talks }}
+        >
+          {talks.map((talk) => (
+            <li key={talk.id}>
+              <TalkCard talk={talk} />
             </li>
           ))}
         </Shelf>
