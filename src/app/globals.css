@@ -1159,6 +1159,21 @@
     }
   }
 
+  /* The Brief archive rows: hover and focus lift the margin number to 50%. */
+  .brief-row:hover .brief-margin-num,
+  .brief-row:focus-visible .brief-margin-num {
+    color: color-mix(in srgb, var(--color-carbon) 50%, transparent);
+  }
+
+  /* The Brief topic tabs scroll sideways on narrow screens, without a scrollbar. */
+  .brief-tabs {
+    scrollbar-width: none;
+  }
+
+  .brief-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Program sketcher: native option lists in Newsprint, and the 200ms text fade. */
   .sketch-select option {
     background-color: var(--color-newsprint);

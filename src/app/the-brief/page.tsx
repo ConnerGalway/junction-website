@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Eyebrow, NewsletterSignup, TextLink } from "@/components";
-import { getIssues, type Issue } from "@/lib/brief";
+import { getIssues, topicsIn, type Issue } from "@/lib/brief";
+import { BriefArchive } from "./BriefArchive";
 import { formatDay, issueHref } from "./format";
 
 export const metadata: Metadata = {
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
  */
 export default async function TheBriefPage() {
   const issues = await getIssues();
-  const [latest] = issues;
+  const [latest, ...archive] = issues;
 
   return (
     <div className="px-gutter pt-section-tight pb-section">
@@ -39,6 +40,11 @@ export default async function TheBriefPage() {
 
       <div className="relative mx-auto mt-[clamp(72px,9vw,128px)] max-w-[720px]">
         {latest && <ThisWeek issue={latest} />}
+        {archive.length > 0 && (
+          <div className="mt-[clamp(72px,8vw,112px)]">
+            <BriefArchive issues={archive} topics={topicsIn(archive)} />
+          </div>
+        )}
       </div>
     </div>
   );
