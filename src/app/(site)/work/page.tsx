@@ -63,8 +63,8 @@ export default function WorkPage() {
               More case studies are on the way, including the Okotoks visitor
               economy series and its $900,000 in identified local spend.
             </p>
-            {/* TODO: point at the JunctionU list signup once it exists. */}
-            <TextLink href="/junctionu">
+            {/* The JunctionU email band (TODO: its signup isn't wired to a list yet). */}
+            <TextLink href="/junctionu#email">
               Get them first: join the JunctionU list →
             </TextLink>
           </Callout>
