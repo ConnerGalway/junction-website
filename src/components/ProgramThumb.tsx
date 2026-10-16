@@ -6,7 +6,7 @@ export type ProgramKey = "accelerator" | "offload" | "training" | "strategy" | "
  * A small designed visual for each program, in that program's language (no
  * photos, no faces). Drawn as a 56 × 56 SVG that scales to its box (size it
  * with width/height classes). Decorative: aria-hidden. Used by the contact
- * form's program tiles; the Programs dropdown will reuse it.
+ * form's program tiles (the Programs dropdown has no pictures).
  *
  * - accelerator: a sage panel with a mini score ring
  * - offload: Carbon with five journey dots (three gold, two grey)
