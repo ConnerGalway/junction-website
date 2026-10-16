@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
-import { Button, Container, Section, TextLink } from "@/components";
+import Image from "next/image";
+import { Button, Container, Eyebrow, Section, Stat, TextLink } from "@/components";
+import { JuButton } from "@/components/junctionu";
 import { CALENDLY_URL } from "@/lib/constants";
-import { ENGAGEMENT_LINE, MONTHS, PHASES, YEAR_LEGEND, type YearPhase } from "@/lib/marketingStrategy";
+import { JU_SCAN_THUMBNAIL } from "@/lib/junctionuImages";
+import { ENGAGEMENT_LINE, MONTHS, PHASES, PROOF, YEAR_LEGEND, type YearPhase } from "@/lib/marketingStrategy";
 import { DeliverablesShelf } from "./DeliverablesShelf";
 
 export const metadata: Metadata = {
@@ -106,6 +109,48 @@ export default function MarketingStrategyPage() {
               </li>
             ))}
           </ul>
+        </Container>
+      </Section>
+
+      {/* Real regions. Real numbers. (unboxed stat list: no boxes, no ghost numbers) */}
+      <Section>
+        <Container>
+          <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
+            <h2 className="type-h2 m-0">Real regions. Real numbers.</h2>
+            <TextLink href="/work">All our work →</TextLink>
+          </div>
+          <ul className="m-0 mt-12 grid list-none gap-x-12 gap-y-12 p-0 md:grid-cols-3">
+            {PROOF.map((p) => (
+              <li key={p.meta} className="min-w-0">
+                <Eyebrow className="m-0 mb-4">{p.meta}</Eyebrow>
+                <Stat value={p.value} label={p.line} maxSize="120px" />
+                <TextLink href={p.href} className="mt-4 inline-block">
+                  Read the case →
+                </TextLink>
+              </li>
+            ))}
+          </ul>
+        </Container>
+      </Section>
+
+      {/* Scan entry: a pointer to JunctionU's Industry Scan, in the JunctionU colours (.ju) with main-site type */}
+      <Section spacing="tight" flush="top">
+        <Container>
+          <div className="ju grid items-center gap-x-12 gap-y-8 rounded-[18px] p-[clamp(24px,4vw,56px)] md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+            <div className="relative aspect-video overflow-hidden rounded-[12px]">
+              <Image src={JU_SCAN_THUMBNAIL} alt="The Tourism Industry Scan" fill sizes="(min-width: 768px) 45vw, 100vw" className="object-cover" />
+            </div>
+            <div>
+              <Eyebrow className="m-0">Not ready for a strategy yet?</Eyebrow>
+              <h2 className="type-h2 mt-4 mb-0 text-newsprint">Start with the Industry Scan.</h2>
+              <p className="type-body mt-5 mb-7 max-w-[46ch] text-newsprint-muted">
+                A monthly briefing for DMO leaders: the trends, stats and actions worth taking. First month free.
+              </p>
+              <JuButton variant="outline" href="/junctionu/industry-scan">
+                Try a month free
+              </JuButton>
+            </div>
+          </div>
         </Container>
       </Section>
 
