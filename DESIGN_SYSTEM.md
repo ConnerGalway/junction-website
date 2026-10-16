@@ -5,12 +5,14 @@ The design system lives in code:
 - **Tokens, tones and type classes:** `src/app/globals.css`
 - **Components:** `src/components/ui/`, exported from `@/components`
 - **Navigation data** (shared by the header dropdown, mobile menu and `/programs`): `src/lib/navigation.ts`
+- **Layouts:** the root layout (`src/app/layout.tsx`) holds only `<html>`, `<body>` and the fonts. The main site's pages live in the `(site)` route group, whose layout adds the nav and footer. JunctionU lives in `(junctionu)` with its own layout (see JunctionU sub-brand).
 
 This file explains the rules behind them. If you're adding a page, compose it from `Section`, `Container` and the components below. Don't hand-roll colours, font styles or spacing.
 
 ## Hard rules
 
 - **Never use pure white.** Newsprint (`#F4F0E8`) replaces white everywhere: cards, inputs, badges and text. The default Tailwind palette is cleared, so `bg-white` and `text-white` don't exist.
+  - **Exception: the JunctionU glass panel's 1px top highlight** (`inset 0 1px 0 rgba(255,255,255,.35)`, in `.ju-glass`). It's the only white on the site.
 - **Bebas Neue is for the `JUNCTION_` wordmark and numerals only.** Numerals here means stats, index numbers, prices and durations. Use `<Wordmark>` / `<LogoLockup>`, `type-stat`, `type-numeral` and `type-price`.
   - **Exception: "THE BRIEF" wordmark** at the top of /the-brief (Bebas, 30px, .16em tracking, Carbon). It's the newsletter's wordmark; Bebas is used there and nowhere else for words.
   - **Exception: the Work RouteMap's hub label** "JUNCTION" (Bebas, 20px, Carbon, no underscore). It's a map label naming the hub, not the logo; the logo itself always keeps its underscore.
@@ -126,6 +128,7 @@ Other ground rules:
 ### Accent hierarchy
 
 - **Gold (accent-1) is the primary accent.** Every numeral uses it: index numbers, stats and highlighted figures. On Newsprint that means `accent-1-on-light`, and only at 24px and up. On Carbon it's `accent-1`.
+  - **The JunctionU sub-brand has no gold:** its numbers are Fern or Newsprint (see JunctionU sub-brand).
 - **On Forest, numerals and stats are Newsprint.** accent-1 is not used on Forest. Revisit this if the accents change.
   - **Exception: the gold course card in the Custom Training CourseShelf** (a filled card, not a numeral) on the Forest hero. Nothing else on Forest is gold.
 - **Copper (accent-2) is the secondary accent.** It's for eyebrows on Newsprint. Never set numerals in copper.
@@ -138,6 +141,7 @@ Pink appears only on things you can click. Non-clickable elements never get a pi
 
 - **Links:** pink text (and underline) on hover, as below.
 - **Clickable cards:** the whole card is the link (`<Card href>`), with no button or second link inside. On hover and keyboard focus it gets a 2px break-pink outline, offset 4px.
+  - **JunctionU cards** use a 2px Fern outline instead, with a 5px lift and a pink title (see JunctionU sub-brand).
 - **Clickable list rows:** the newsprint-hover highlight plus a pink title (see Surfaces).
   - **Exception: The Brief archive rows** have no fill. On hover and focus the headline turns break-on-light and the margin number goes from Carbon 7% to 50%.
 - **Exception: `Badge`** (outline and filled). A badge is a status label and isn't clickable, but it may be pink: the outline badge ("Quick check · a general snapshot" on the Accelerator page) and the filled badge ("New" on the Offload hero). Badges are the only non-clickable pink component.
@@ -203,7 +207,7 @@ The type classes live in `@layer components`, so a colour utility can still over
 | `type-numeral` | clamp(40px, 3.4vw, 48px) | .9 | Index numbers (01, 02…) in lists and cards |
 | `type-price` | 40px | 1 | Prices and durations ("$2,500 · 90 days", "30 days"). Carbon 60% on light, Newsprint 60% on dark. In a program hero the price may be set larger (`type-price text-[56px]`) with the duration and audience beside it at 28px; both keep the 60% colour. |
 
-Fonts are loaded in `src/app/layout.tsx` with `next/font/google` and exposed as `--nf-*` variables. They map to the `font-sans` (DM Sans 300/400/500), `font-display` (Epilogue 600/900), `font-quote` (Fraunces 900 italic) and `font-wordmark` (Bebas Neue 400) utilities.
+Fonts are loaded in `src/app/layout.tsx` with `next/font/google` and exposed as `--nf-*` variables. They map to the `font-sans` (DM Sans 300/400/500), `font-display` (Epilogue 600/900), `font-quote` (Fraunces 900 italic) and `font-wordmark` (Bebas Neue 400) utilities. Oswald 600/700 is JunctionU's lead font, loaded by the JunctionU layout only (see JunctionU sub-brand).
 
 Use real heading elements in order: h1, then h2, then h3, with no skipped levels. The visual class is independent of the element.
 
@@ -446,7 +450,7 @@ Sections:
 - **Hero (Newsprint):** two columns (45/55) from 1024px; below that the map goes under the intro, full width.
   - **From 1024px the map is wider than its column.** It overflows to the left: at 1024 it's the column's width, growing to 60vw at 1280 and up. At 1280 and up it's anchored to the viewport's right edge; between 1024 and 1280 the right offset grows from 0 to the gutter. It's vertically centred on the copy.
   - **Placement:** the copy keeps its width and sits above the map's land layer. The section clips overflow sideways (`overflow-x: clip`), so the land can run to the viewport edge without a sideways scroll. The H1 "Real regions. / Real numbers." is exactly two lines from 1024px (explicit break). The intro is `type-lead`.
-- **RouteMap** (`RouteMap.tsx`, geometry in `routeMapGeometry.ts`):
+- **RouteMap** (`RouteMap.tsx`, geometry in `src/lib/routeMapGeometry.ts`, shared with the JunctionU DMO map):
   - **Map data:** Natural Earth via `world-atlas` (countries-110m), `topojson-client` and `d3-geo`, all pinned. Canada and the United States only (Hawaii is left out: it sits far off the frame), in `geoConicConformal().parallels([42, 68]).rotate([102, 0]).center([0, 52])`, fitted (`fitExtent`, 10px padding) to the `FRAME` points. The SVG paths and points are built at build time on the server, drawn at 700 × 480 and scaled to the column.
   - **Fills:** Canada Carbon 5%, the US Carbon 3.5%, no strokes.
   - **No hard edges:** land outside the fitted box (the Arctic islands, Alaska, Labrador, the south) isn't clipped. The land layer (land, other-client arcs and dots) is drawn in its own SVG, larger than the box by `landPad`, the land's measured overflow plus a margin. A mask (`.work-map-land`) fades it on every side:
@@ -474,7 +478,7 @@ Sections:
   - two inside spreads (3:2, Newsprint, with abstract text lines, a Bebas figure and a few bars). On the second spread the figure and bars are blurred and one line is a solid redaction bar.
 
   Pages are drawn with container units, so they scale with the column. They have radius 10 and the tone's card shadow or border. Caption: "Sample pages · client details changed for privacy · flip through →". As a mock document it keeps its own colours (a small gold figure). **Swappable:** set `deliverables.images` (cover, spread, spread) in `workCases.ts` and real images fill the same slots. **Not interactive yet. Planned:** clicking "flip through" expands the pages in place to fill the chapter (no modal, no new page); to be designed.
-- **Note:** a `Callout` with the Okotoks line and "Get them first: join the JunctionU list →" (to `/junctionu` until a list signup exists; TODO).
+- **Note:** a `Callout` with the Okotoks line and "Get them first: join the JunctionU list →" (to the JunctionU email band, `/junctionu#email`; its signup isn't wired to a list yet, TODO).
 - **Closing CTA (Forest):** display H2 and the existing "Start a conversation" button (`/contact`).
 
 ## About page
@@ -527,6 +531,83 @@ Sections:
   - **Paging:** the newest 10 issues, then "Older issues" (secondary button) loads 10 more. With a filter or search active, every match shows. With none: "No issues match that yet." and a "Clear filters" link.
 - **Below 1024px:** archive numbers move inline above each headline ("Nº 543", Bebas 28px, Carbon 30%, `aria-hidden`; the link text carries the number and date for screen readers). This week keeps its number beside the date.
 - **Phones:** the column is full width. The header row wraps, with Archive and Search on the first line and the tabs on a sideways-scrolling line below.
+
+## JunctionU sub-brand
+
+`/junctionu` is a sub-brand with its own layout: the `(junctionu)` route group renders without the main site's nav and footer, on the same domain and deploy. Page code is in `src/app/(junctionu)/`, components in `src/components/junctionu/`, and content (courses, workshops, talks, nav, URLs) in `src/lib/junctionu.ts`.
+
+**Foundations**
+
+- **Tokens** live on `.ju` (the JunctionU layout), so these utilities only resolve inside it:
+
+  | Token | Value | Use |
+  |---|---|---|
+  | `ju-ground` | `#16241C` | The whole page background |
+  | `ju-moss` | `#20352A` | Cards and surfaces |
+  | `ju-deep` | `#101A14` | The footer |
+  | `fern` | `#7FC99A` | The accent: labels, tags, active states, outline buttons, rules at 35% (hairlines at 20%) |
+  | `sage` | `#C8E8D4` | "Free" tags and the email band |
+  | `mint` | `#B6F0C9` | **Only** the one main action per page |
+  | `newsprint` | | Text (body at newsprint-muted) |
+  | break-on-dark | | Link and card-title hover, as site-wide |
+
+  `.ju` also sets the tone variables, so shared components (links, focus rings, eyebrows) read correctly on the ground.
+- **Type:**
+  - **Oswald 700** (`ju-display`): headlines and big statements in CAPITALS.
+  - **Oswald 700** (`ju-title`): card and row titles in sentence case. Size each with a `text-*` class.
+  - **DM Sans:** body copy.
+  - **Bebas:** numbers, lengths and prices, as site-wide.
+- **Numbers:** there's no gold in the sub-brand. Lengths and ghost numbers are Fern, prices are Newsprint, and the DMO "300+" is Fern Bebas.
+- **Wordmark:** `<SubBrandWordmark suffix="U" />` renders JUNCTION_U in Bebas, letter-spaced, with the underscore as a Fern bar between JUNCTION and the suffix (sitting on the baseline). Every sub-brand uses JUNCTION_ + suffix.
+- **CTA rule:**
+  - One Mint button per page (here: "Start free" in the hero).
+  - Every other section has exactly one action, each going somewhere different.
+  - Cards are links, with no buttons inside them.
+  - Shelf arrows and "See all →" are row controls, not section actions.
+- **Buttons** (`JuButton`):
+  - `mint`: the main action.
+  - `outline`: every other button (1.5px Fern border and text).
+  - `glass`: a secondary hero action (Newsprint 12% fill).
+  - `ground`: on the Sage band (ju-ground fill, Newsprint text).
+- **Cards** (`.ju-card`): on hover and focus they lift 5px (no lift with reduced motion) and get a 2px Fern outline (offset 4px); the title turns break-on-dark, and stills zoom to 1.04. Tags: Fern on Fern 18% (Certificate, Workshop) or Sage with ground text (Free); small caps, radius 10.
+
+**Nav and footer**
+
+- **Top bar** (`JuNav`, ju-ground, sticky, 1px Fern-20% rule under it):
+  - **left:** JUNCTION_U (to `/junctionu`) and "← Junction" (to `/`);
+  - **centre:** Browse · Courses · Workshops · Tourism Talks · For DMOs · Industry Scan, which are anchors on the page except Industry Scan (`/junctionu/industry-scan`, a placeholder page for now). The active link (section in view, or current page) is Newsprint with a 2px Fern underline;
+  - **right:** "Sign in" (eLearningU for now; TODO: confirm the URL, then JunctionU's own platform);
+  - **under 1024px:** a Menu button.
+- **Footer** (`JuFooter`, ju-deep): JUNCTION_U, the same links, and "Part of Junction →" to the main site.
+
+**Page sections** (in order)
+
+- **Hero** (`JuHero`, about 600px tall):
+  - **Still:** the course still on the right 64%, faded into the ground (solid to 36% of the width, clear by 82%, plus a bottom fade) and kept clear of the copy, which is capped at 46vw.
+  - **Copy:** the H1 in Oswald capitals (up to 80px, three lines), the lead, "Start free" (Mint), "▶ Watch the trailer" (glass; hidden behind `SHOW_JU_TRAILER` until the trailer exists) and the small line.
+  - **Phones:** the still sits on top, faded at the bottom.
+- **Shelves** (`Shelf`, inside `#catalogue`):
+  - **Header row:** the title (Oswald 700, up to 30px), then ‹ › (Fern circles; they scroll one page and dim at the ends) and "See all →".
+  - **The row:** it starts at the content edge and bleeds off the right edge of the viewport (`.ju-shelf`), with scroll-snap and no scrollbar. Touch and trackpads scroll natively; keyboard focus brings a card fully into view.
+  - **Start here:** courses only. Thumbnail cards (400px):
+    - a 16:9 still, or a placeholder gradient (`.ju-still`, three variants) until the course has one;
+    - the length in Bebas 22px top-left, with a soft shadow;
+    - a Certificate tag and the price in Bebas;
+    - the title (Oswald, 24px) and the module count.
+  - **Workshops:** workshops only. Poster cards (240 × 360, ju-moss):
+    - the length in Fern Bebas and a Workshop tag at the top;
+    - a ghost number (Bebas 180px, Fern 10%) behind;
+    - the title in Oswald capitals at the bottom, over a Fern-35% rule with "Workshop" and the price.
+  - **Tourism Talks · free:** four YouTube talks (`TALK_IDS`).
+    - Titles and thumbnails come from YouTube's oEmbed on the server, cached a week; if YouTube can't be reached the card shows "Tourism Talk" and the standard thumbnail.
+    - Thumbnails are served through next/image (`i.ytimg.com` is allowed in next.config). The card is a lite embed: pressing play swaps the thumbnail for the youtube-nocookie player in place (autoplay), so nothing loads from YouTube before that.
+- **For DMOs** (`DmoPanel`):
+  - **Map:** the Work RouteMap's land layer (`src/lib/routeMapGeometry.ts`; no dots or arcs), with Canada Fern 38% and the US Fern 16%. It's larger than the section and spills above and below it, faded by a closest-side radial mask (solid to 55%) so it's never cut on a straight line. It drifts at 0.15 like the HeroWordmark: anchored where the section is centred and kept within 160px of that; static with reduced motion. It sits behind the page content (the layout is `isolate`).
+  - **Glass panel** (`.ju-glass`): radius 20, Newsprint 7%, `backdrop-filter: blur(14px) saturate(160%)`, an inset 1px Newsprint-18% border, the white top highlight (see Hard rules) and a soft shadow.
+  - **Two columns:** "For DMOs and associations" (Fern), the H2 in Oswald capitals, the copy and the Fern outline "Talk to us about a region" (`/contact`). Then, after a thin divider, "300+" in Fern Bebas (up to 116px) and its line. They stack on phones.
+- **Industry Scan teaser** (`ScanTeaser`): the month's video still as a linked card (play button, "This month's Industry Scan" in Oswald capitals, "Conner Galway · [ Month Year ]"). Beside it, the pitch and one Fern outline action, "Try a month free". Both go to the Scan page. The still and the month are placeholders.
+- **The JunctionU email** (`EmailBand`, `#email`): a Sage band (radius 18) with the headline (Oswald capitals, ground text), the line (Forest), an email field (Newsprint) and Subscribe (`ground`). This is the list the Work page links to. TODO: wire it to the eLearningU / JunctionU list (none exists in the codebase).
+- **Placeholders for team review:** course prices "[ $ ]", course lengths (all "6 HRS"), workshop lengths "[ x HRS ]", course links (eLearningU home), "See all" catalogue URLs, the sign-in URL and the Scan teaser line and still.
 
 ## Logo walls
 
