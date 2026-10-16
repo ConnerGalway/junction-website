@@ -5,7 +5,7 @@
  * shows lives here.
  *
  * NEW COPY for team review: the page lead, section lines and FAQ.
- * PLACEHOLDERS: "[ … ]" labels and answers; the subscription link and team
+ * PLACEHOLDERS: "[ … ]" FAQ answers; the subscription link and team
  * pricing are TODOs.
  */
 
@@ -41,7 +41,7 @@ export const SCAN_OVERVIEW = {
     { value: "70%", label: "find destinations through short video" },
     { value: "$6", label: "ROI per $1 on micro-influencers" },
     { value: "94%", label: "of social messages unanswered" },
-    { value: "34 PTS", label: "[ label ]" },
+    { value: "34 PTS", label: "drop in DMOs prioritizing awareness" },
   ],
 };
 
@@ -55,10 +55,10 @@ export const SCAN_TRENDS = [
 
 export const SCAN_INSIGHTS = [
   { value: "70%", label: "of Gen Z and Millennials find destinations through TikTok and Reels" },
-  { value: "340%", label: "[ label ]" },
-  { value: "82%", label: "[ label ]" },
+  { value: "340%", label: "reach advantage of a 15-second behind-the-scenes reel over a professional property tour" },
+  { value: "82%", label: "of travellers trust creator recommendations over traditional advertising" },
   { value: "94%", label: "of social messages go unanswered" },
-  { value: "34 pts", label: "[ label ]" },
+  { value: "34 pts", label: "drop in DMOs prioritizing awareness (59% to 25%) in one year" },
 ];
 
 export const SCAN_STATS = [

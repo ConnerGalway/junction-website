@@ -656,7 +656,7 @@ A new course gets a `slug` and its still the same way.
   - **left:** "First month free." (Oswald capitals, up to 56px) and the line;
   - **right:** "$30" (Bebas, up to 96px) with "/ MONTH" (Bebas, 60%), the same Mint action, and "Buying for a team or association? Talk to us →" (`/contact`; team pricing is a TODO).
 - **Questions:** "Questions" (Oswald capitals) beside the Accordion (one open at a time, Fern chevrons). The answers are "[ Answer to come ]".
-- **Copy for team review:** the lead, the section lines and the FAQ are new. Three Insights labels (340%, 82%, 34 pts) and the 34 PTS Overview tile label are "[ label ]" placeholders.
+- **Copy for team review:** the lead, the section lines and the FAQ are new.
 
 ## Logo walls
 
