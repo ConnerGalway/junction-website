@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Button, Eyebrow, cx } from "@/components";
 
-export type WhoCardRow = { title: string; line: string };
+export type WhoCardRow = { title: string; line?: string };
 
 /**
  * One "Who it's for" panel: text and features on the left, and the visual
@@ -18,6 +18,7 @@ export function WhoPanel({
   photo,
   cardMeta,
   cardRows,
+  cardNote,
 }: {
   tone: "carbon" | "forest";
   title: string;
@@ -27,6 +28,8 @@ export function WhoPanel({
   photo: { src: string; alt: string };
   cardMeta: string;
   cardRows: WhoCardRow[];
+  /** One line under the card's list. */
+  cardNote?: string;
 }) {
   return (
     <div
@@ -74,11 +77,12 @@ export function WhoPanel({
                 </span>
                 <span>
                   <span className="block text-[14px] leading-snug font-medium text-carbon">{row.title}</span>
-                  <span className="block text-[12px] leading-snug text-flint">{row.line}</span>
+                  {row.line && <span className="block text-[12px] leading-snug text-flint">{row.line}</span>}
                 </span>
               </li>
             ))}
           </ol>
+          {cardNote && <p className="m-0 mt-3 text-[13px] leading-snug font-medium text-carbon">{cardNote}</p>}
         </div>
       </div>
     </div>

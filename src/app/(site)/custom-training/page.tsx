@@ -124,7 +124,8 @@ export default function CustomTrainingPage() {
                     button={{ label: "Scope a course program", href: "/contact?type=training" }}
                     photo={{ src: "/images/custom-training/who-dmos.jpg", alt: "A Junction workshop for tourism operators" }}
                     cardMeta="Custom courses · on JunctionU"
-                    cardRows={COURSES.map((title) => ({ title, line: "[ x ] operators enrolled" }))}
+                    cardRows={COURSES.map((title) => ({ title }))}
+                    cardNote="Over 2,000 tourism operators trained."
                   />
                 ),
               },
