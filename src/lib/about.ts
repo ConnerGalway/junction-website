@@ -6,10 +6,9 @@
  * the top). For now all three are copies of Conner's portrait.
  */
 
-/** The statement under the hero. PLACEHOLDER until the team writes the line. */
+/** The statement under the hero (no attribution line). */
 export const STATEMENT = {
-  quote: "[ One line we stand by ]",
-  attribution: "[ Attribution or context ]",
+  quote: "Technology should help you to do more of what you're best at.",
 };
 
 export const BELIEFS = [

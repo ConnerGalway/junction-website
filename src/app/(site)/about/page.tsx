@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Button, Container, Eyebrow, Section } from "@/components";
+import { Button, Container, Section } from "@/components";
 import { BELIEFS, STATEMENT, TEAM } from "@/lib/about";
 import { TeamList } from "./TeamList";
 
@@ -27,16 +27,13 @@ export default function AboutPage() {
         </Container>
       </Section>
 
-      {/* Statement (placeholder until the team writes the line) */}
+      {/* Statement */}
       <Section spacing="tight" flush="top">
         <Container>
           <figure className="m-0 text-center">
             <blockquote className="type-quote mx-auto m-0 max-w-[22ch] text-[clamp(36px,4.4vw,64px)] leading-[1.08] text-forest">
               {STATEMENT.quote}
             </blockquote>
-            <figcaption className="mt-6">
-              <Eyebrow as="span">{STATEMENT.attribution}</Eyebrow>
-            </figcaption>
           </figure>
         </Container>
       </Section>
