@@ -69,7 +69,7 @@ const formats = [
   { title: "Keynote", length: "30–60 min", description: "30 to 60 minutes, main stage" },
   { title: "Workshop", length: "½ or full day", description: "Half or full day, hands-on" },
   // TODO: confirm the panel / fireside length.
-  { title: "Panel or fireside", length: "[ length ]", description: "Moderator or panellist" },
+  { title: "Panel or fireside", length: "45–90 min", description: "Moderator or panellist" },
   { title: "Virtual", length: "Any time zone", description: "Live online, any time zone" },
 ];
 
@@ -159,7 +159,7 @@ export default function SpeakingPage() {
       {/* Three talks */}
       <Section>
         <Container>
-          <h2 className="type-h2 m-0 mb-12">Three talks, tailored to your room.</h2>
+          <h2 className="type-h2 m-0 mb-12">Popular topics, tailored to your room.</h2>
           <ol className="m-0 list-none p-0">
             {topics.map((t, i) => {
               const image = talkImage(i + 1);
