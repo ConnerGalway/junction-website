@@ -6,7 +6,7 @@ import { formatDay, issueHref } from "./format";
 
 export const metadata: Metadata = {
   title: "The Brief",
-  description: "Thinking you can use by Friday. Weekly ideas on marketing, AI and tourism.",
+  description: "Ideas you can use this week. Weekly ideas on marketing, AI and tourism.",
 };
 
 /**
@@ -24,7 +24,7 @@ export default async function TheBriefPage() {
       <header className="mx-auto max-w-[900px] text-center">
         <p className="m-0 font-wordmark text-[30px] leading-none tracking-[0.16em] text-carbon">The Brief</p>
         <h1 className="type-display mx-auto mt-6 mb-0 text-[clamp(48px,6.1vw,88px)] text-balance">
-          Thinking you can use by Friday.
+          Ideas you can use this week.
         </h1>
         <p className="type-lead mx-auto mt-6 mb-0 max-w-[34ch]">
           Weekly ideas on marketing, AI and tourism. One feature, two short reads, every Monday.
