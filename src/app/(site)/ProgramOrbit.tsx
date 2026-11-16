@@ -11,7 +11,8 @@ export type OrbitProgram = {
   /** One-line audience description ("For …"). */
   description: string;
   /** Price / duration line, set in Bebas. */
-  price: string;
+  /** Price line (Bebas); optional, and the space stays empty without one. */
+  price?: string;
   href: string;
   /** Label for the image/mockup placeholder. */
   media: string;
@@ -204,7 +205,7 @@ export function ProgramOrbit({
               <div className="card-pad flex flex-1 flex-col gap-3">
                 <h3 className="type-h3 m-0">{program.title}</h3>
                 <p className="type-body m-0">{program.description}</p>
-                <p className="type-price m-0 mt-auto">{program.price}</p>
+                {program.price && <p className="type-price m-0 mt-auto">{program.price}</p>}
               </div>
             </Card>
           );
