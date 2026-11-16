@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { Button, Container, Eyebrow, LogoWall, Section, Stat, TextLink } from "@/components";
+import { Button, Container, Eyebrow, LogoWall, Section, TextLink } from "@/components";
 import { JuButton } from "@/components/junctionu";
 import { CALENDLY_URL } from "@/lib/constants";
 import { JU_SCAN_THUMBNAIL } from "@/lib/junctionuImages";
 import { dmoLogos } from "@/lib/logos";
-import { ENGAGEMENT_LINE, MONTHS, PHASES, PROOF, YEAR_LEGEND, type YearPhase } from "@/lib/marketingStrategy";
+import { ENGAGEMENT_LINE, MONTHS, PHASES, YEAR_LEGEND, type YearPhase } from "@/lib/marketingStrategy";
 import { AlsoFor } from "./AlsoFor";
 import { DeliverablesShelf } from "./DeliverablesShelf";
 
@@ -131,29 +131,8 @@ export default function MarketingStrategyPage() {
         </Container>
       </Section>
 
-      {/* Real regions. Real numbers. (unboxed stat list: no boxes, no ghost numbers) */}
-      <Section>
-        <Container>
-          <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
-            <h2 className="type-h2 m-0">Real regions. Real numbers.</h2>
-            <TextLink href="/work">All our work →</TextLink>
-          </div>
-          <ul className="m-0 mt-12 grid list-none gap-x-12 gap-y-12 p-0 md:grid-cols-3">
-            {PROOF.map((p) => (
-              <li key={p.meta} className="min-w-0">
-                <Eyebrow className="m-0 mb-4">{p.meta}</Eyebrow>
-                <Stat value={p.value} label={p.line} maxSize="120px" />
-                <TextLink href={p.href} className="mt-4 inline-block">
-                  Read the case →
-                </TextLink>
-              </li>
-            ))}
-          </ul>
-        </Container>
-      </Section>
-
       {/* Scan entry: a pointer to JunctionU's Industry Scan, in the JunctionU colours (.ju) with main-site type */}
-      <Section spacing="tight" flush="top">
+      <Section spacing="tight">
         <Container>
           <div className="ju grid items-center gap-x-12 gap-y-8 rounded-[18px] p-[clamp(24px,4vw,56px)] md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
             <div className="relative aspect-video overflow-hidden rounded-[12px]">
