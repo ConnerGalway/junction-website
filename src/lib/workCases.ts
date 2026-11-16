@@ -9,8 +9,6 @@
  * spread 2); they fill the same slots.
  */
 
-import { CASE_AREAS, CASE_META, CASE_SUMMARY, CASE_TITLE } from "./buildingSupplyCase";
-
 export const SERVICES = ["Training", "Accelerator", "Research", "Strategy"] as const;
 export type Service = (typeof SERVICES)[number];
 
@@ -33,8 +31,6 @@ export type WorkCase = {
     images?: [string, string, string];
   };
 };
-
-const collections = CASE_AREAS.find((a) => a.id === "collections")!;
 
 export const WORK_CASES: WorkCase[] = [
   {
@@ -62,16 +58,6 @@ export const WORK_CASES: WorkCase[] = [
       "Assessments, one-to-one coaching and implementation plans, subsidised by ITBC for its member businesses. Engagement landed 300% past goal, with bookings up across the province inside three months.",
     link: { label: "About the Accelerator →", href: "/accelerator" },
     deliverables: { figure: "+300%" },
-  },
-  {
-    id: "case-supplier",
-    service: "Accelerator",
-    meta: CASE_META,
-    stat: { value: collections.number, label: `${collections.numberLabel}, before` },
-    title: CASE_TITLE,
-    description: CASE_SUMMARY,
-    link: { label: "See the full story →", href: "/ai-accelerator#case-study" },
-    deliverables: { figure: collections.number },
   },
   {
     id: "case-osw",
