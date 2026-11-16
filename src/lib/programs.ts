@@ -29,7 +29,7 @@ export const PROGRAMS: Program[] = [
     id: "accelerator",
     name: "The Accelerator",
     href: "/accelerator",
-    promise: "A 90-day marketing plan you'll actually work.",
+    promise: "A 90-day marketing plan that works for you.",
     dropdownGroup: "accelerators",
     pageGroup: "businesses",
     dropdownName: "Marketing",

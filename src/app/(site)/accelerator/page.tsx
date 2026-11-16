@@ -154,8 +154,8 @@ export default function AcceleratorPage() {
                 runs over the preview, which starts one line lower. */}
             <h1 className="type-display m-0">
               <span className="xl:whitespace-nowrap">A 90-day marketing</span>
-              <br className="hidden xl:inline" /> <span className="xl:whitespace-nowrap">plan you&apos;ll</span>
-              <br className="hidden xl:inline" /> <span className="xl:whitespace-nowrap">actually work.</span>
+              <br className="hidden xl:inline" /> <span className="xl:whitespace-nowrap">plan that works</span>
+              <br className="hidden xl:inline" /> <span className="xl:whitespace-nowrap">for you.</span>
             </h1>
             <p className="type-lead mt-7 mb-8">
               We score your digital marketing, build the plan with you, and
@@ -198,7 +198,10 @@ export default function AcceleratorPage() {
           <VideoPlayer duration="[ 0:00 ]" label="See how it works" />
           <div>
             <h2 className="type-h3 m-0 mb-3">See how it works.</h2>
-            <p className="type-body m-0">[ One line about what the video shows ]</p>
+            <p className="type-body m-0">
+              Custom marketing plan built for your business, with the resources
+              that you already have.
+            </p>
           </div>
         </Container>
       </Section>
@@ -315,20 +318,24 @@ export default function AcceleratorPage() {
       <Section flush="top">
         <Container className="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))]">
           <Card tone="carbon" className="flex flex-col gap-2.5">
-            <Stat value="+300%" />
-            <p className="type-h4 m-0">Past the engagement goal</p>
+            <Stat value="15%" />
+            <p className="type-h4 m-0">Increase in bookings</p>
             <p className="type-small m-0">
-              Accelerator rolled out across a provincial association&apos;s member
-              businesses, with bookings up inside three months.
+              Businesses that complete the Accelerator program report a 15%
+              increase in direct bookings within 90 days.
+            </p>
+          </Card>
+          <Card tone="carbon" className="flex flex-col gap-2.5">
+            <Stat value="95%" />
+            <p className="type-h4 m-0">Completion rate</p>
+            <p className="type-small m-0">
+              Our coaches work with you to get you from where you are to where
+              you want to go.
             </p>
           </Card>
           <Placeholder className="min-h-[220px] flex-col gap-6">
-            <span>[ Score change from a recent client, e.g. 58 → 81 ]</span>
-            <span>[ Business name · industry ]</span>
-          </Placeholder>
-          <Placeholder className="min-h-[220px] flex-col gap-6">
             <span>[ Testimonial ]</span>
-            <span>[ Owner name · business ]</span>
+            <span>[ Name · business ]</span>
           </Placeholder>
         </Container>
       </Section>
