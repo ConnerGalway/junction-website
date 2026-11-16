@@ -22,6 +22,11 @@ export type Program = {
    * settles the copy, these names change site-wide and the bridge goes.
    */
   dropdownName?: string;
+  /**
+   * /programs-only name (temporary): the JunctionU row reads "eLearningU"
+   * while the JunctionU/eLearningU question is open with the team.
+   */
+  pageName?: string;
 };
 
 export const PROGRAMS: Program[] = [
@@ -70,6 +75,7 @@ export const PROGRAMS: Program[] = [
   {
     id: "junctionu",
     name: "JunctionU",
+    pageName: "eLearningU",
     href: "/junctionu",
     promise: "Training that fits between two guest check-ins.",
     dropdownGroup: "learn",

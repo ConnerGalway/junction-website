@@ -54,7 +54,7 @@ export default function ProgramsPage() {
                       className="row-link group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-6 py-5"
                     >
                       <span className="grid gap-x-8 gap-y-1.5 md:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)] md:items-baseline">
-                        <span className="row-title type-h3">{program.name}</span>
+                        <span className="row-title type-h3">{program.pageName ?? program.name}</span>
                         <span className="type-body text-ink-soft">{program.promise}</span>
                       </span>
                       <span
