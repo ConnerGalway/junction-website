@@ -4,20 +4,14 @@ import {
   type AccordionItem,
   Badge,
   Button,
-  Chip,
   Container,
-  Eyebrow,
-  Placeholder,
-  QuoteCard,
   Section,
   TextLink,
   LogoWall,
 } from "@/components";
 import { OffloadPreview } from "@/components/OffloadPreview";
 import { CALENDLY_URL } from "@/lib/constants";
-import { CASE_INTRO, CASE_MEASURES, CASE_META } from "@/lib/buildingSupplyCase";
 import { teamLogos } from "@/lib/logos";
-import { CaseSwitcher } from "./CaseSwitcher";
 import {
   BrainArtifact,
   MainBuildArtifact,
@@ -142,9 +136,6 @@ export default function AIAcceleratorPage() {
             <p className="type-small mt-3 mb-8">Per team · on site or Zoom.</p>
             <div className="flex flex-wrap items-center gap-6">
               <Button href={CALENDLY_URL}>Book a 20-min call</Button>
-              <TextLink href="#case-study" className="whitespace-nowrap">
-                See a real build ↓
-              </TextLink>
             </div>
           </div>
 
@@ -192,32 +183,6 @@ export default function AIAcceleratorPage() {
         </Container>
       </Section>
 
-      {/* Case study */}
-      <Section id="case-study" tone="forest" className="scroll-mt-24">
-        <Container>
-          <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2">
-            <Chip variant="fern-outline">Case study</Chip>
-            <Eyebrow as="span">{CASE_META}</Eyebrow>
-          </div>
-          <div className="mb-12 grid items-end gap-x-16 gap-y-5 lg:grid-cols-2">
-            <h2 className="type-h2 m-0">Where they started.</h2>
-            <p className="type-body m-0 max-w-[50ch]">{CASE_INTRO}</p>
-          </div>
-
-          <CaseSwitcher />
-
-          <h3 className="type-h3 m-0 mt-16 mb-6">What we measured</h3>
-          <ul className="m-0 grid list-none gap-6 p-0 sm:grid-cols-3">
-            {CASE_MEASURES.map((label) => (
-              <li key={label} className="border-t-2 border-(--tone-rule) pt-4">
-                <p className="type-small m-0 mb-3">{label}</p>
-                <p className="m-0 font-wordmark text-[56px] leading-none text-newsprint">[ — ]</p>
-              </li>
-            ))}
-          </ul>
-        </Container>
-      </Section>
-
       {/* Thirty days */}
       <ThirtyDays
         sessions={sessions}
@@ -239,28 +204,6 @@ export default function AIAcceleratorPage() {
               bottleneck together in Week 0, with a clear definition of
               &ldquo;working.&rdquo;
             </p>
-          </div>
-        </Container>
-      </Section>
-
-      {/* Testimonials (placeholders; no faces) */}
-      <Section flush="top" aria-label="What teams say">
-        <Container className="grid gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
-          <QuoteCard
-            className="flex min-h-[340px] flex-col justify-between"
-            quote="[ Testimonial from an Offload team ]"
-            caption="[ Name · role · business ]"
-          />
-          <div className="flex flex-col gap-6">
-            {[0, 1].map((i) => (
-              <Placeholder
-                key={i}
-                className="min-h-[158px] flex-1 flex-col items-start justify-between gap-6 text-left"
-              >
-                <span>[ Testimonial + result ]</span>
-                <span>[ Name · business ]</span>
-              </Placeholder>
-            ))}
           </div>
         </Container>
       </Section>
