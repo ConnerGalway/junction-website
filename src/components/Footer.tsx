@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { CALENDLY_URL } from "@/lib/constants";
+import { CALENDLY_URL, JUNCTION_SOCIALS } from "@/lib/constants";
 import type { NavGroup } from "@/lib/navigation";
 import { DROPDOWN_GROUPS, footerProgramsIn } from "@/lib/programs";
-import { Container, LogoLockup, NewsletterSignup } from "./ui";
+import { Container, LogoLockup, NewsletterSignup, SocialLinks } from "./ui";
 
 /** Program columns from the shared list (page names), then Company. */
 const footerGroups: NavGroup[] = [
@@ -25,8 +25,7 @@ const footerGroups: NavGroup[] = [
 const talkLinks = [
   { label: "Book a 20-min call", href: CALENDLY_URL, external: true },
   { label: "conner@wearejunction.com", href: "mailto:conner@wearejunction.com" },
-  // TODO: add the Junction LinkedIn URL.
-  { label: "LinkedIn", href: "#" },
+  { label: "LinkedIn", href: JUNCTION_SOCIALS[1].href, external: true },
 ];
 
 export function Footer() {
@@ -34,8 +33,9 @@ export function Footer() {
     <footer className="tone-carbon px-gutter pb-8 pt-section-tight">
       <Container className="flex flex-col gap-14">
         <div className="grid gap-10 [grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))]">
-          <div>
+          <div className="flex flex-col gap-5">
             <LogoLockup />
+            <SocialLinks links={[...JUNCTION_SOCIALS]} label="Junction on social media" />
           </div>
           <NewsletterSignup className="max-w-[520px]" />
         </div>

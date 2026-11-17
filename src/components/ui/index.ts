@@ -20,3 +20,4 @@ export { Callout } from "./Callout";
 export { Accordion, type AccordionItem } from "./Accordion";
 export { ChevronButton } from "./ChevronButton";
 export { Tabs, type TabItem } from "./Tabs";
+export { SocialLinks, type SocialLink, type SocialNetwork } from "./SocialLinks";
