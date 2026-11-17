@@ -3,7 +3,10 @@ import Image from "next/image";
 import {
   Button,
   Callout,
+  Card,
+  Chip,
   Container,
+  Eyebrow,
   Placeholder,
   QuoteCard,
   Section,
@@ -11,8 +14,16 @@ import {
   LogoWall,
 } from "@/components";
 import { HeroWordmark } from "@/components/HeroWordmark";
+import { CASE_AREAS, CASE_INTRO, CASE_META, CASE_TITLE, CASE_TOOLS } from "@/lib/buildingSupplyCase";
 import { CALENDLY_URL } from "@/lib/constants";
-import { SHOW_HERO_WORDMARK } from "@/lib/flags";
+import {
+  SHOW_AI_CASE_STUDY,
+  SHOW_CAROUSEL_PRICES,
+  SHOW_HERO_WORDMARK,
+  SHOW_HOME_CALL_SECTION,
+  SHOW_HOME_CASE_STUDY,
+  SHOW_PLACEHOLDERS,
+} from "@/lib/flags";
 import { homeLogos } from "@/lib/logos";
 import { ProgramOrbit, type OrbitProgram } from "./ProgramOrbit";
 import { CourseShelfThumbnail } from "./custom-training/CourseShelf";
@@ -62,6 +73,8 @@ const programs: OrbitProgram[] = [
   {
     title: "The Accelerator",
     description: "For small businesses that need a marketing plan they'll work.",
+    // Price line hidden for now (SHOW_CAROUSEL_PRICES); the price stays here.
+    price: SHOW_CAROUSEL_PRICES ? "$2,500 · 90 days" : undefined,
     href: "/accelerator",
     media: "Accelerator dashboard",
     thumbnail: "dashboard",
@@ -70,6 +83,7 @@ const programs: OrbitProgram[] = [
     // Carousel only for now; the page title and elsewhere keep "Offload Program" until the name is confirmed.
     title: "AI Training",
     description: "For any business losing hours to admin.",
+    price: SHOW_CAROUSEL_PRICES ? "$5,000 · 30 days" : undefined,
     href: "/ai-accelerator",
     media: "Offload Program mockup",
     thumbnail: "offload",
@@ -89,6 +103,30 @@ const programs: OrbitProgram[] = [
     href: "/custom-training",
     media: "Custom Training photo",
     preview: <CourseShelfThumbnail />,
+  },
+];
+
+/** "Not ready for a call?" card: the free Tourism Talks sessions on YouTube. */
+const TRAINING_PLAYLIST_URL =
+  "https://youtube.com/playlist?list=PLUvaA_x2Z8df8djNodScqE1XZTFz8a16f";
+
+/** What happens on the call (shown when SHOW_HOME_CALL_SECTION is on). */
+const callSteps = [
+  {
+    num: "01",
+    title: "Pick a time",
+    description: "Twenty minutes with Conner. No prep, no forms.",
+  },
+  {
+    num: "02",
+    title: "Talk about the goal",
+    description: "What you want to change, and what's in the way right now.",
+  },
+  {
+    num: "03",
+    title: "Get a straight answer",
+    description:
+      "Which program fits, what it costs, and when it could start. If none fits, we'll say so.",
   },
 ];
 
@@ -197,9 +235,56 @@ export default function HomePage() {
         </Container>
       </Section>
 
+      {/* Case study teaser (hidden: SHOW_HOME_CASE_STUDY). The full story is on
+          /ai-accelerator#case-study, linked only while that section shows. */}
+      {SHOW_HOME_CASE_STUDY && (
+        <Section tone="forest">
+          <Container>
+            <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2">
+              <Chip variant="fern-outline">Case study</Chip>
+              <Eyebrow as="span">{CASE_META}</Eyebrow>
+            </div>
+            <div className="grid items-end gap-x-16 gap-y-5 lg:grid-cols-2">
+              <h2 className="type-h2 m-0">{CASE_TITLE}.</h2>
+              <p className="type-body m-0 max-w-[50ch]">{CASE_INTRO}</p>
+            </div>
+
+            <ul className="m-0 mt-14 grid list-none gap-x-8 gap-y-10 p-0 sm:grid-cols-2 lg:grid-cols-4">
+              {CASE_AREAS.map((area) => (
+                <li key={area.id} className="border-t-2 border-fern pt-4">
+                  <p className="m-0 text-[12px] font-medium tracking-[0.14em] text-newsprint/65 uppercase">
+                    {area.area}
+                  </p>
+                  <p className="m-0 mt-3 font-wordmark text-[clamp(56px,5vw,72px)] leading-[0.9] text-newsprint">
+                    {area.number}
+                  </p>
+                  <p className="type-body m-0 mt-2">{area.numberLabel}</p>
+                </li>
+              ))}
+            </ul>
+
+            <ul className="m-0 mt-14 grid list-none gap-x-8 gap-y-8 p-0 sm:grid-cols-2 lg:grid-cols-4">
+              {CASE_TOOLS.map((tool) => (
+                <li key={tool.name} className="border-t border-newsprint/40 pt-4">
+                  <h3 className="type-h4 m-0 mb-1.5">{tool.name}</h3>
+                  <p className="type-small m-0">{tool.line}</p>
+                </li>
+              ))}
+            </ul>
+
+            {SHOW_AI_CASE_STUDY && (
+              <TextLink href="/ai-accelerator#case-study" className="mt-12 inline-block">
+                See the full story →
+              </TextLink>
+            )}
+          </Container>
+        </Section>
+      )}
+
       {/* Testimonials */}
       <Section aria-label="What clients say">
-        <Container className="grid gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+        {/* Without the placeholder cards, the quote takes the full width. */}
+        <Container className={SHOW_PLACEHOLDERS ? "grid gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]" : undefined}>
           <QuoteCard
             className="flex min-h-[340px] flex-col justify-between"
             quote={
@@ -210,6 +295,7 @@ export default function HomePage() {
             }
             caption="Kathy Cooper, CEO, Kootenay Rockies Tourism"
           />
+          {SHOW_PLACEHOLDERS && (
           <div className="flex flex-col gap-6">
             <Placeholder className="min-h-[158px] flex-1 flex-col items-start justify-between gap-6 text-left">
               <span>[ Testimonial + result ]</span>
@@ -224,8 +310,66 @@ export default function HomePage() {
               </span>
             </Placeholder>
           </div>
+          )}
         </Container>
       </Section>
+
+      {/* What happens on the call (hidden: SHOW_HOME_CALL_SECTION) */}
+      {SHOW_HOME_CALL_SECTION && (
+        <Section>
+          <Container className="grid items-start gap-x-16 gap-y-12 border-t-2 border-(--tone-rule) pt-12 lg:grid-cols-[minmax(0,1fr)_300px]">
+            <div>
+              <h2 className="type-h2 m-0 mb-10">What happens on the call.</h2>
+              <ol className="m-0 grid list-none gap-x-10 gap-y-9 p-0 md:grid-cols-3">
+                {callSteps.map((step) => (
+                  <li key={step.num}>
+                    <span className="type-numeral mb-3 block">{step.num}</span>
+                    <h3 className="type-h4 m-0 mb-1.5">{step.title}</h3>
+                    <p className="type-body m-0">{step.description}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+
+            {/* Not ready for a call: free training sessions on YouTube */}
+            <Card
+              tone="carbon"
+              href={TRAINING_PLAYLIST_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Not ready for a call? Watch a free training session (opens YouTube in a new tab)"
+              padded="sm"
+              className="flex flex-col gap-4"
+            >
+              {/* Cover image: swap public/images/tourism-talks-cover.png on GitHub
+                  to change it (keep the path and filename; any 16:9 size). */}
+              <div className="relative aspect-video w-full overflow-hidden rounded-control">
+                <Image
+                  src="/images/tourism-talks-cover.png"
+                  alt="Tourism Talks playlist"
+                  fill
+                  sizes="(min-width: 1024px) 260px, (min-width: 640px) 90vw, 100vw"
+                  className="object-cover"
+                />
+                <svg
+                  aria-hidden="true"
+                  width="40"
+                  height="40"
+                  viewBox="0 0 40 40"
+                  className="absolute bottom-3 left-3 text-newsprint"
+                >
+                  <circle cx="20" cy="20" r="19" strokeWidth="1.5" className="fill-carbon/40 stroke-current" />
+                  <path d="M16 13.5v13l11-6.5z" fill="currentColor" />
+                </svg>
+              </div>
+              <p className="type-body m-0 text-newsprint">
+                <span className="font-medium text-fern">Not ready for a call?</span>{" "}
+                Watch a free training session and see how we teach.
+              </p>
+            </Card>
+          </Container>
+        </Section>
+      )}
 
       {/* CTA */}
       <Section id="start" tone="forest" className="scroll-mt-24">

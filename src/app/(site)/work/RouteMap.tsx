@@ -266,7 +266,7 @@ export function RouteMap({ geo, className }: { geo: RouteMapGeometry; className?
         <a
           key={s.caseId}
           href={`#${s.caseId}`}
-          aria-label={`${s.name}: ${s.number}. Go to the case study`}
+          aria-label={s.number ? `${s.name}: ${s.number}. Go to the case study` : `${s.name}. Go to the case study`}
           onClick={(e) => onStopClick(e, s)}
           onPointerEnter={() => setHot(s.caseId)}
           onPointerLeave={() => setHot(null)}
@@ -279,7 +279,9 @@ export function RouteMap({ geo, className }: { geo: RouteMapGeometry; className?
             aria-hidden="true"
             className={cx("absolute top-1/2 left-1/2 flex flex-col", labelPlace[s.placement])}
           >
-            <span className="font-wordmark text-[24px] leading-[0.95] whitespace-nowrap text-accent-1-on-light">{s.number}</span>
+            {s.number && (
+              <span className="font-wordmark text-[24px] leading-[0.95] whitespace-nowrap text-accent-1-on-light">{s.number}</span>
+            )}
             <span className="text-[11.5px] leading-tight font-medium whitespace-nowrap text-carbon max-md:hidden">{s.name}</span>
           </span>
         </a>
