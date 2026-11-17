@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { EluWordmark } from "@/components/junctionu";
+import { ELU_LOGO } from "@/lib/junctionuImages";
 
 /**
  * "Also for destinations": three linked items under 2px Canopy rules, each
@@ -26,8 +27,13 @@ const ITEMS: { href: string; title: string; line: string; thumb: ReactNode }[] =
     line: "Self-paced courses and free Tourism Talks for operators.",
     thumb: (
       <span className="ju flex size-full items-end p-3">
-        {/* Oswald loads on eLearningU pages only; here the name uses its fallback. */}
-        <EluWordmark className="text-[15px] text-newsprint" />
+        {/* Oswald loads on eLearningU pages only, so the name is set in Epilogue
+            (main-site display face) rather than loading a font for one thumbnail. */}
+        <EluWordmark
+          logo={ELU_LOGO}
+          fontClassName="font-display font-semibold tracking-[-0.015em]"
+          className="text-[13px] text-newsprint"
+        />
       </span>
     ),
   },

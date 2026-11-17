@@ -8,9 +8,19 @@ import { SHOW_JU_WORDMARK } from "@/lib/flags";
  *   at build time and passes it in): the official logo.
  * - Otherwise "eLearningU" in the page's Oswald, sentence case, Newsprint.
  * TODO: Andrea to provide the official logo (public/images/elearningu/logo.svg).
- * Size it with a text-* class (the logo is 1.1em tall).
+ * Size it with a text-* class (the logo is 1.1em tall). `fontClassName`
+ * swaps the text face: outside eLearningU pages Oswald isn't loaded, so pass a
+ * main-site face (e.g. the Marketing strategy thumbnail uses Epilogue).
  */
-export function EluWordmark({ logo, className }: { logo?: string | null; className?: string }) {
+export function EluWordmark({
+  logo,
+  className,
+  fontClassName = "ju-title",
+}: {
+  logo?: string | null;
+  className?: string;
+  fontClassName?: string;
+}) {
   if (SHOW_JU_WORDMARK) return <SubBrandWordmark suffix="U" className={className} />;
   if (logo) {
     return (
@@ -20,5 +30,9 @@ export function EluWordmark({ logo, className }: { logo?: string | null; classNa
       </span>
     );
   }
-  return <span className={cx("ju-title inline-block leading-none whitespace-nowrap text-newsprint", className)}>eLearningU</span>;
+  return (
+    <span className={cx(fontClassName, "inline-block leading-none whitespace-nowrap text-newsprint", className)}>
+      eLearningU
+    </span>
+  );
 }

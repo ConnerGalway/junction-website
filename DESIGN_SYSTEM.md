@@ -700,7 +700,7 @@ A new course gets a `slug` and its still the same way.
   - **Link:** the whole item is the link, and the title turns pink on hover and focus.
   - **Thumbnails:**
     - Custom Training: Forest with three small overlapping course cards;
-    - eLearningU: the `.ju` ground with a small `EluWordmark` (Oswald isn't loaded on the main site, so it uses the fallback);
+    - eLearningU: the `.ju` ground with a small `EluWordmark` set in Epilogue 600 (Oswald isn't loaded on the main site, and one thumbnail doesn't justify loading it; the official logo replaces it once uploaded);
     - Speaking: the stage with a soft spotlight over a tiny Newsprint slide.
 - **Closing CTA (Forest):** "Let's talk about your region." and "Book a 20-min call".
 
@@ -833,4 +833,37 @@ The building-supply case data is one file, `src/lib/buildingSupplyCase.ts`, shar
 - **Label only** (the rest still works): eLearningU course prices "[ $ ]" and workshop lengths "[ x HRS ]", the Scan teaser's "[ Month Year ]", the Accelerator video's "[ 0:00 ]", the Offload calculator's draft "What we'd build" lines, the footer signup's "[ Frequency ]" (it reads "Unsubscribe anytime"), the case switcher's "After [ result ]" and the Kootenay "[ # ]" on the Work map and sample spread.
 - **Whole element:** placeholder testimonial cards (homepage: the quote goes full width; Accelerator: the auto-fit proof grid becomes two cards; Custom Training and Speaking), Speaking talk posters (the topic takes the full row until `talk-0N.jpg` exists), the Quick Score "what they'll receive" line, the Marketing strategy "[ TYPICAL LENGTH ]" line and Kootenay proof card, the Contact support line, the Offload "What we measured" results, and the Scan FAQ items answered "[ Answer to come ]" (with none left, the section goes).
 - New placeholders go behind this flag too.
+
+### Content to supply (soft-launch placeholder list)
+
+Every user-visible placeholder, hidden while `SHOW_PLACEHOLDERS` is off. This is the team's content-to-supply list: fill in the content, remove the placeholder from the code, and it shows without the flag. "Label" means only the placeholder text is hidden and the rest stays; "Element" means the whole item is hidden and its layout reflows.
+
+| Page | Placeholder | What it needs | Hidden | Where |
+|---|---|---|---|---|
+| Every page (footer) | "[ Frequency ] · unsubscribe anytime" under The Brief signup | How often The Brief goes out | Label: reads "Unsubscribe anytime" | `src/components/ui/NewsletterSignup.tsx` |
+| Homepage | Two testimonial cards, "[ Testimonial + result ]" (Twin Lions Contracting · AI Accelerator; West Coast Homes · AI Accelerator) | A quote and a result from each client | Element: both cards; the Kootenay Rockies quote runs full width | `src/app/(site)/page.tsx` |
+| Accelerator | Video duration "[ 0:00 ]" | The video's running time (and the video, src and poster: TODO) | Label: the player shows without a time | `src/app/(site)/accelerator/page.tsx` |
+| Accelerator | Proof card "[ Testimonial ] / [ Name · business ]" | A client testimonial with name and business | Element: the card; proof shows two cards (15%, 95%) | `src/app/(site)/accelerator/page.tsx` |
+| Accelerator | Quick Score line "[ What they'll receive: the quick score report and info about the program ]" | One line on what the emailed report contains | Element: the line under the email field | `src/app/(site)/accelerator/QuickScore.tsx` |
+| AI Training | Calculator "What we'd build" lines, seven drafts in brackets: Quotes, Collections, Invoices, Scheduling, Follow-ups, Reporting, Something else | Approved one-liners for each build (drafts are in the file) | Label: the build's name shows, its line doesn't | `src/lib/timeBack.ts` |
+| AI Training (hidden: `SHOW_AI_CASE_STUDY`) | Case study "After [ result ]" for Collections, Quotes and Leadership | The result for each build | Label: the "After" column; the "What we built" box goes single-column | `src/app/(site)/ai-accelerator/CaseSwitcher.tsx` |
+| AI Training (hidden: `SHOW_AI_CASE_STUDY`) | "What we measured": three figures "[ — ]" (Leaders using AI daily · Hours saved per leader, weekly · Quote turnaround) | The three numbers | Element: the whole "What we measured" block | `src/app/(site)/ai-accelerator/page.tsx`, `src/lib/buildingSupplyCase.ts` |
+| AI Training (hidden: `SHOW_AI_TESTIMONIALS`) | Quote "[ Testimonial from an Offload team ]" / "[ Name · role · business ]" and two cards "[ Testimonial + result ] / [ Name · business ]" | Three Offload testimonials | Element: the whole section | `src/app/(site)/ai-accelerator/page.tsx` |
+| Custom Training | Proof card "[ Leadership training testimonial ]" | A leadership-training testimonial | Element: the card; the Travel Yukon quote stands alone | `src/app/(site)/custom-training/page.tsx` |
+| Speaking | Talk posters "[ talk poster ]" on all three topics | 1600×900 posters: `public/images/speaking/talk-01.jpg` … `talk-03.jpg` (no code change) | Element: the poster slot; each topic takes the full row | `src/app/(site)/speaking/page.tsx` |
+| Speaking | Conner section "[ Event organizer testimonial ]" | An event organizer's testimonial | Element: the card under the two stats | `src/app/(site)/speaking/page.tsx` |
+| Marketing strategy | Engagement line "[ TYPICAL LENGTH ] · SCOPED TO YOU" | The typical engagement length | Element: the whole line under the timeline | `src/lib/marketingStrategy.ts` (`ENGAGEMENT_LINE`) |
+| Marketing strategy (hidden: `SHOW_STRATEGY_PROOF`) | Kootenay Rockies proof stat "[ # ]" | The Kootenay Rockies headline number | Element: the card; two cards remain | `src/lib/marketingStrategy.ts` (`PROOF`) |
+| Work | Kootenay Rockies number "[ # ]": the route-map stop and the chapter's sample spread | The same Kootenay Rockies number | Label: the map stop shows the name only; the spread has no figure | `src/lib/routeMap.ts`, `src/lib/workCases.ts` |
+| Contact | Support line "… email support. [ support email ]" | The support email address and label | Element: the whole support line | `src/app/(site)/contact/page.tsx` |
+| eLearningU | Course prices "[ $ ]" on all five courses | Each course's price | Label: the card shows the Certificate tag without a price | `src/lib/junctionu.ts` (`COURSES`) |
+| eLearningU | Workshop lengths "[ x HRS ]" on all four workshops | Each workshop's length | Label: the Workshop tag stays top right | `src/lib/junctionu.ts` (`WORKSHOPS`) |
+| eLearningU | Scan teaser byline "Conner Galway · [ Month Year ]" | The current issue's month and year | Label: reads "Conner Galway" | `src/components/junctionu/ScanTeaser.tsx` |
+| Industry Scan | FAQ answers "[ Answer to come ]": Who is the Scan for? · What sources do you use? · When does each issue come out? · Can my whole team read it? · How do I cancel? | Five answers | Element: each unanswered item; with none answered, the whole Questions section | `src/lib/industryScan.ts` (`SCAN_FAQ`) |
+
+**Also needed, not visible on the page** (links and assets with stand-ins):
+- The five eLearningU course landing page URLs (cards link to https://www.elearningu.com for now) and the official eLearningU logo (`public/images/elearningu/logo.svg`).
+- The eLearningU sign-in URL (a guess) and the "See all" catalogue URLs.
+- Course lengths are all "6 HRS" for now (not bracketed, so they show).
+- The Industry Scan sign-up page and team pricing; the Accelerator video; the guarantee terms link.
 
