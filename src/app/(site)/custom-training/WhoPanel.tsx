@@ -62,12 +62,13 @@ export function WhoPanel({
         </Button>
       </div>
 
-      {/* 1024px+: the card overlaps the photo's top-right corner; below, it sits under the photo */}
-      <div className="relative lg:pt-[70px] lg:pr-[40px]">
+      {/* 1280px+: the card overlaps the photo's top-right corner; below, it sits under the photo
+          (at 1024 the six-row DMO card would cover most of the photo) */}
+      <div className="relative xl:pt-[70px] xl:pr-[40px]">
         <div className="relative aspect-[4/3] overflow-hidden rounded-card">
           <Image src={photo.src} alt={photo.alt} fill sizes="(min-width: 1024px) 560px, 90vw" className="object-cover" />
         </div>
-        <div className="tone-newsprint relative mt-4 rounded-card px-5 py-4 shadow-card-hover lg:absolute lg:top-0 lg:right-0 lg:mt-0 lg:w-[300px]">
+        <div className="tone-newsprint relative mt-4 rounded-card px-5 py-4 shadow-card-hover xl:absolute xl:top-0 xl:right-0 xl:mt-0 xl:w-[300px]">
           <Eyebrow className="m-0 text-[11px] whitespace-nowrap">{cardMeta}</Eyebrow>
           <ol className="m-0 mt-2.5 flex list-none flex-col gap-2 p-0">
             {cardRows.map((row, i) => (

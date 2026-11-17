@@ -17,7 +17,7 @@ import { CALENDLY_URL } from "@/lib/constants";
 import { SHOW_PLACEHOLDERS, SHOW_TRAINING_SKETCHER, SHOW_UNVERIFIED_QUOTES } from "@/lib/flags";
 import { QUOTES, UNVERIFIED, quoted } from "@/lib/testimonials";
 import { clientLogos } from "@/lib/logos";
-import { COURSES } from "@/lib/customCourses";
+import { SHELF } from "@/lib/customCourses";
 import { CourseShelf } from "./CourseShelf";
 import { FormatsAccordion, type Format } from "./FormatsAccordion";
 import { ProgramSketcher } from "./ProgramSketcher";
@@ -125,8 +125,8 @@ export default function CustomTrainingPage() {
                     features={dmoFeatures}
                     button={{ label: "Scope a course program", href: "/contact?type=training" }}
                     photo={{ src: "/images/custom-training/who-dmos.jpg", alt: "A Junction workshop for tourism operators" }}
-                    cardMeta="Custom courses · on eLearningU"
-                    cardRows={COURSES.map((title) => ({ title }))}
+                    cardMeta="Recent custom programs"
+                    cardRows={SHELF.map((c) => ({ title: c.title, line: c.client }))}
                     cardNote="Over 2,000 tourism operators trained."
                   />
                 ),
