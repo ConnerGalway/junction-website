@@ -1,12 +1,12 @@
 /**
- * The building-supply case study (Offload Program). Hidden for now (see
+ * The building-supply case study (AI Training). Hidden for now (see
  * SHOW_AI_CASE_STUDY, SHOW_HOME_CASE_STUDY and SHOW_WORK_SUPPLIER_CASE in
  * src/lib/flags.ts). One source for the
  * full story on /ai-accelerator#case-study and the homepage teaser, so
  * every fact matches.
  */
 
-export const CASE_META = "Offload Program · Building supply · 7 people";
+export const CASE_META = "AI Training · Building supply · 7 people";
 
 export const CASE_TITLE = "A building supplier's 30 days";
 

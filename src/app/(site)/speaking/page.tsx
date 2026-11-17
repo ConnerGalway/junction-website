@@ -7,6 +7,7 @@ import {
   Container,
   Eyebrow,
   Placeholder,
+  QuoteCard,
   Section,
   Stat,
   TextLink,
@@ -14,6 +15,7 @@ import {
 } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
 import { SHOW_PLACEHOLDERS, SHOW_SPEAKING_REEL } from "@/lib/flags";
+import { QUOTES, quoted } from "@/lib/testimonials";
 import { AvailabilityForm } from "./AvailabilityForm";
 import { ReelPill } from "./ReelPill";
 import { SpotlightHero } from "./SpotlightHero";
@@ -241,7 +243,13 @@ export default function SpeakingPage() {
                 <Stat value="2,000+" label="people trained" maxSize="clamp(56px, 6vw, 88px)" />
               </div>
             </div>
-            {SHOW_PLACEHOLDERS && <Placeholder className="mt-10">[ Event organizer testimonial ]</Placeholder>}
+            {/* Event organizer testimonial: a Newsprint card on Forest (quote-adapt) */}
+            <QuoteCard
+              size="sm"
+              className="quote-adapt mt-10"
+              quote={quoted(QUOTES.kellyJosephson)}
+              caption={QUOTES.kellyJosephson.caption}
+            />
           </div>
         </Container>
       </Section>

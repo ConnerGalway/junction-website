@@ -86,7 +86,7 @@ export const homeLogos: Logo[] = [
   logo.visitMississippi,
 ];
 
-/** Offload Program (AI Accelerator): "Teams who've been through it". */
+/** AI Training (/ai-accelerator): "Teams who've been through it". */
 export const teamLogos: Logo[] = [logo.twinLions, logo.westCoastHomes, logo.smr];
 
 /** Custom Training: "Organizations we've trained". */

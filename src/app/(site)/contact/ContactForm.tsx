@@ -12,7 +12,7 @@ type FormType = "accelerator" | "ai" | "training" | "strategy" | "speaking" | "o
 /** The program tiles, in order (3 × 2). `thumb` picks the ProgramThumb art. */
 const PROGRAMS: { type: FormType; title: string; line: string; thumb: ProgramKey }[] = [
   { type: "accelerator", title: "The Accelerator", line: "A plan you'll work", thumb: "accelerator" },
-  { type: "ai", title: "Offload Program", line: "Automate a bottleneck", thumb: "offload" },
+  { type: "ai", title: "AI Training", line: "Automate a bottleneck", thumb: "offload" },
   { type: "training", title: "Custom Training", line: "Train your people", thumb: "training" },
   { type: "strategy", title: "Marketing strategy", line: "For destinations", thumb: "strategy" },
   { type: "speaking", title: "Speaking", line: "For your event", thumb: "speaking" },
@@ -154,7 +154,7 @@ function ContactFormFields({ initialType, prefill }: { initialType: FormType | n
               <EdInput label="Work email" name="email" type="email" required autoComplete="email" />
               <EdInput label={orgLabel} name="org" autoComplete="organization" defaultValue={prefill?.org} />
 
-              {/* Offload Program */}
+              {/* AI Training */}
               {selectedType === "ai" && (
                 <>
                   <EdSelect label="How many people would take part?" name="team">

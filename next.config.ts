@@ -6,7 +6,11 @@ const nextConfig: NextConfig = {
   images: {
     // Tourism Talk thumbnails (eLearningU page), served through next/image so the
     // browser loads nothing from YouTube before a talk is played.
-    remotePatterns: [{ protocol: "https", hostname: "i.ytimg.com", pathname: "/vi/**" }],
+    // The Accelerator video poster (Vimeo's thumbnail), the same way.
+    remotePatterns: [
+      { protocol: "https", hostname: "i.ytimg.com", pathname: "/vi/**" },
+      { protocol: "https", hostname: "i.vimeocdn.com", pathname: "/video/**" },
+    ],
   },
   async redirects() {
     return [

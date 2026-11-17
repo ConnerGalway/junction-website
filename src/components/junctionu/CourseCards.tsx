@@ -27,7 +27,7 @@ export function CourseCard({ course, index }: { course: JuCourse & { still?: str
   const length = shown(course.length);
   const price = shown(course.price);
   return (
-    <a href={course.url} className="ju-card group block w-[min(400px,78vw)] no-underline">
+    <a href={course.url} className="ju-card group relative block w-[min(400px,78vw)] no-underline">
       <div className="ju-still relative aspect-video overflow-hidden rounded-card" data-variant={index % 3}>
         {course.still && (
           <Image

@@ -80,5 +80,13 @@ export const SHOW_ELU_EMAIL_BAND = false;
  */
 export const SHOW_PLACEHOLDERS = false;
 
+/**
+ * Testimonials that haven't been verified (Kathy Cooper, Avery Bramadat and
+ * Joanne Wolnik's short "Invaluable support…" line; src/lib/testimonials.ts).
+ * On: each returns in its original place, after any verified quote that took
+ * that place.
+ */
+export const SHOW_UNVERIFIED_QUOTES = false;
+
 /** Homepage hero: the team photo beside the headline. Off: the headline runs on two lines from 1280px. */
 export const SHOW_HOME_HERO_PHOTO = false;

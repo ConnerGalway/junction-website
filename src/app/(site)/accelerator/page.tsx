@@ -6,16 +6,16 @@ import {
   Chip,
   Card,
   Container,
-  Placeholder,
+  QuoteCard,
   Section,
   Stat,
   TextLink,
   cx,
 } from "@/components";
 import { DashboardPreview } from "@/components/DashboardPreview";
+import { ACCELERATOR_VIDEO, getAcceleratorPoster } from "@/lib/acceleratorVideo";
 import { CALENDLY_URL } from "@/lib/constants";
-import { SHOW_PLACEHOLDERS } from "@/lib/flags";
-import { shown } from "@/lib/placeholders";
+import { QUOTES, quoted } from "@/lib/testimonials";
 import { QuickScore } from "./QuickScore";
 import { TaskChecklist, type Task } from "./TaskChecklist";
 import { VideoPlayer } from "./VideoPlayer";
@@ -114,7 +114,7 @@ const faqs = [
   },
   {
     q: "What happens after day 90?",
-    a: "You keep the plan, the guides and your progress. Many teams follow it with the AI Accelerator.",
+    a: "You keep the plan, the guides and your progress. Many teams follow it with AI Training.",
   },
 ];
 
@@ -145,7 +145,8 @@ function GhostNumeral({ n, className }: { n: number; className?: string }) {
   );
 }
 
-export default function AcceleratorPage() {
+export default async function AcceleratorPage() {
+  const poster = await getAcceleratorPoster();
   return (
     <>
       {/* Hero */}
@@ -196,8 +197,13 @@ export default function AcceleratorPage() {
       {/* Video */}
       <Section flush="top">
         <Container className="grid items-center gap-x-16 gap-y-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
-          {/* TODO: pass src, poster and duration once the video is ready. */}
-          <VideoPlayer duration={shown("[ 0:00 ]")} label="See how it works" />
+          <VideoPlayer
+            embed={ACCELERATOR_VIDEO.embed}
+            poster={poster}
+            duration={ACCELERATOR_VIDEO.duration}
+            label={ACCELERATOR_VIDEO.label}
+            title={ACCELERATOR_VIDEO.title}
+          />
           <div>
             <h2 className="type-h3 m-0 mb-3">See how it works.</h2>
             <p className="type-body m-0">
@@ -335,13 +341,13 @@ export default function AcceleratorPage() {
               you want to go.
             </p>
           </Card>
-          {/* Placeholder card: hidden for now; the auto-fit grid reflows to two cards. */}
-          {SHOW_PLACEHOLDERS && (
-            <Placeholder className="min-h-[220px] flex-col gap-6">
-              <span>[ Testimonial ]</span>
-              <span>[ Name · business ]</span>
-            </Placeholder>
-          )}
+          {/* Third slot: a verified client quote (the two stat cards keep their full-size Stats). */}
+          <QuoteCard
+            size="sm"
+            className="flex flex-col justify-between"
+            quote={quoted(QUOTES.savannah)}
+            caption={QUOTES.savannah.caption}
+          />
         </Container>
       </Section>
 

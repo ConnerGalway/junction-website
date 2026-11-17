@@ -24,15 +24,9 @@ function Chevron({ open }: { open: boolean }) {
   );
 }
 
-/** A program's name in the dropdown and mobile menu: the short Accelerators name with the page name after it in Flint (temporary bridge). */
+/** A program's name in the dropdown and mobile menu: its short name if it has one ("Marketing", "AI Training"). */
 function MenuName({ program }: { program: Program }) {
-  if (!program.dropdownName) return <>{program.name}</>;
-  return (
-    <>
-      {program.dropdownName}
-      <span className="text-flint"> · {program.name}</span>
-    </>
-  );
+  return <>{program.dropdownName ?? program.name}</>;
 }
 
 /**

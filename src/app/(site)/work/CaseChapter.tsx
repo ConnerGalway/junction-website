@@ -9,10 +9,16 @@ import { DeliverablesPreview } from "./DeliverablesPreview";
  * Carbon; the meta line is copper on Newsprint, Fern on dark.
  *
  * Without a stat, the quote leads the chapter (large, on the stat side)
- * and isn't repeated in the story.
+ * and isn't repeated in the story. With neither (Kootenay Rockies while its
+ * quote is unverified), the sample pages move to the lead side, so the
+ * chapter still reads as two balanced columns: pages, then title and copy.
  */
 export function CaseChapter({ item }: { item: WorkCase }) {
-  const { stat, quote, link } = item;
+  const { stat, quote, link, moreQuotes = [] } = item;
+  const hasLead = !!stat || !!quote;
+  const deliverables = (
+    <DeliverablesPreview title={item.title} {...item.deliverables} className="w-full max-w-[560px]" />
+  );
   return (
     <Container className="grid items-center gap-x-[72px] gap-y-10 lg:grid-cols-2">
       <div className="work-chapter-stat min-w-0">
@@ -23,6 +29,8 @@ export function CaseChapter({ item }: { item: WorkCase }) {
             maxSize="clamp(120px, 16vw, 230px)"
             valueClassName="leading-[0.8]"
           />
+        ) : !quote ? (
+          deliverables
         ) : (
           quote && (
             <figure className="m-0">
@@ -43,8 +51,11 @@ export function CaseChapter({ item }: { item: WorkCase }) {
           // Sage on Newsprint and Carbon; a Newsprint card on Forest (.quote-adapt).
           <QuoteCard quote={quote.text} caption={quote.caption} className="quote-adapt w-full" />
         )}
+        {moreQuotes.map((mq) => (
+          <QuoteCard key={mq.caption + mq.text} quote={mq.text} caption={mq.caption} className="quote-adapt w-full" />
+        ))}
         {link && <TextLink href={link.href}>{link.label}</TextLink>}
-        <DeliverablesPreview title={item.title} {...item.deliverables} className="mt-4 w-full max-w-[560px]" />
+        {hasLead && <div className="mt-4 w-full max-w-[560px]">{deliverables}</div>}
       </div>
     </Container>
   );
