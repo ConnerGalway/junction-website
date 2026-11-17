@@ -5,15 +5,14 @@
  * shows lives here.
  *
  * NEW COPY for team review: the page lead, section lines and FAQ.
- * PLACEHOLDERS: "[ … ]" FAQ answers; the subscription link and team
- * pricing are TODOs.
+ * PLACEHOLDERS: "[ … ]" FAQ answers; team pricing is a TODO.
  */
 
 import { SHOW_PLACEHOLDERS } from "./flags";
 import { isPlaceholder } from "./placeholders";
 
-/** TODO: fill with the current Industry Scan sign-up page. */
-export const SCAN_SIGNUP_URL = "";
+/** The Industry Scan sign-up page on eLearningU (both "Start your free month" buttons). */
+export const SCAN_SIGNUP_URL = "https://www.elearningu.com/course/tourism-industry-scan";
 
 /** "Start your free month": the sign-up page when set, else the contact form pre-filled for a free month. */
 export const SCAN_SUBSCRIBE_URL = SCAN_SIGNUP_URL || "/contact?type=other&topic=scan-trial";

@@ -51,12 +51,11 @@ export type JuCourse = {
 };
 
 export const COURSES: JuCourse[] = [
-  // TODO: Andrea to provide the five course landing page URLs. Until set, each links to eLearningU's home.
-  { title: "Elevated Tourism Marketing Masterclass", slug: "elevated-tourism-marketing-masterclass", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: ELEARNINGU },
-  { title: "Tourism Digital Marketing Essentials", slug: "tourism-digital-marketing-essentials", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: ELEARNINGU },
-  { title: "Idea to Experience", slug: "idea-to-experience", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: ELEARNINGU },
-  { title: "Trailhead: Tourism & Culture Bootcamp for Entrepreneurs", slug: "trailhead-tourism-culture-bootcamp", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: ELEARNINGU },
-  { title: "Sustainable Tourism", slug: "sustainable-tourism", kind: "course", length: "6 HRS", modules: 8, price: "[ $ ]", url: ELEARNINGU },
+  { title: "Elevated Tourism Marketing Masterclass", slug: "elevated-tourism-marketing-masterclass", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: `${ELEARNINGU}/course/elevated-tourism-marketing` },
+  { title: "Tourism Digital Marketing Essentials", slug: "tourism-digital-marketing-essentials", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: `${ELEARNINGU}/course/tourism-digital-marketing-essentials` },
+  { title: "Idea to Experience", slug: "idea-to-experience", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: `${ELEARNINGU}/course/idea-to-experience-development-cohort-2` },
+  { title: "Trailhead: Tourism & Culture Bootcamp for Entrepreneurs", slug: "trailhead-tourism-culture-bootcamp", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: `${ELEARNINGU}/course/trailhead` },
+  { title: "Sustainable Tourism", slug: "sustainable-tourism", kind: "course", length: "6 HRS", modules: 8, price: "[ $ ]", url: `${ELEARNINGU}/course/sustainable-tourism-course` },
 ];
 
 export const WORKSHOPS: JuCourse[] = [
