@@ -14,6 +14,7 @@ import {
   LogoWall,
 } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
+import { SHOW_TRAINING_SKETCHER } from "@/lib/flags";
 import { clientLogos } from "@/lib/logos";
 import { COURSES } from "@/lib/customCourses";
 import { CourseShelf } from "./CourseShelf";
@@ -225,13 +226,30 @@ export default function CustomTrainingPage() {
         </Container>
       </Section>
 
-      {/* Program sketcher */}
+      {/* Closing CTA. The program sketcher is hidden (SHOW_TRAINING_SKETCHER);
+          its Contact pre-fill (/contact?type=training&…) still works for when
+          it returns. */}
       <Section id="start" tone="forest" className="scroll-mt-24">
         <Container>
-          <h2 className="type-h2 m-0 mb-10 max-w-[22ch]">
-            Tell us who needs training. We&apos;ll sketch the program.
-          </h2>
-          <ProgramSketcher />
+          {SHOW_TRAINING_SKETCHER ? (
+            <>
+              <h2 className="type-h2 m-0 mb-10 max-w-[22ch]">
+                Tell us who needs training. We&apos;ll sketch the program.
+              </h2>
+              <ProgramSketcher />
+            </>
+          ) : (
+            <>
+              <h2 className="type-display m-0 max-w-[18ch]">
+                Tell us who needs training. We&apos;ll build the program around them.
+              </h2>
+              <div className="mt-10 flex flex-wrap items-center gap-7">
+                {/* Primary on Forest: Newsprint fill, Forest text */}
+                <Button href={CALENDLY_URL}>Book a 20-min call</Button>
+                <TextLink href="/contact?type=training">Or send us the details →</TextLink>
+              </div>
+            </>
+          )}
         </Container>
       </Section>
     </>
