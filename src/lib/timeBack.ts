@@ -1,5 +1,5 @@
 /**
- * "What is that job costing you?" calculator on the Offload page
+ * "What is that job costing you?" calculator on the AI Training page
  * (src/app/ai-accelerator/TimeBackCalculator.tsx).
  *
  * PLACEHOLDERS: the jobs, defaults, ranges and "what we'd build" lines are

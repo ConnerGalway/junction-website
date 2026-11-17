@@ -81,12 +81,11 @@ const programs: OrbitProgram[] = [
     thumbnail: "dashboard",
   },
   {
-    // Carousel only for now; the page title and elsewhere keep "Offload Program" until the name is confirmed.
     title: "AI Training",
     description: "For any business losing hours to admin.",
     price: SHOW_CAROUSEL_PRICES ? "$5,000 · 30 days" : undefined,
     href: "/ai-accelerator",
-    media: "Offload Program mockup",
+    media: "AI Training mockup",
     thumbnail: "offload",
   },
   {
@@ -301,13 +300,13 @@ export default function HomePage() {
             <Placeholder className="min-h-[158px] flex-1 flex-col items-start justify-between gap-6 text-left">
               <span>[ Testimonial + result ]</span>
               <span className="normal-case tracking-normal text-(--tone-text)">
-                Twin Lions Contracting · AI Accelerator
+                Twin Lions Contracting · AI Training
               </span>
             </Placeholder>
             <Placeholder className="min-h-[158px] flex-1 flex-col items-start justify-between gap-6 text-left">
               <span>[ Testimonial + result ]</span>
               <span className="normal-case tracking-normal text-(--tone-text)">
-                West Coast Homes · AI Accelerator
+                West Coast Homes · AI Training
               </span>
             </Placeholder>
           </div>

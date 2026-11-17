@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { CALENDLY_URL } from "@/lib/constants";
 import type { NavGroup } from "@/lib/navigation";
-import { DROPDOWN_GROUPS, programsIn } from "@/lib/programs";
+import { DROPDOWN_GROUPS, footerProgramsIn } from "@/lib/programs";
 import { Container, LogoLockup, NewsletterSignup } from "./ui";
 
 /** Program columns from the shared list (page names), then Company. */
 const footerGroups: NavGroup[] = [
   ...DROPDOWN_GROUPS.map((group) => ({
     title: group.label,
-    links: programsIn(group.id).map((p) => ({ label: p.name, href: p.href })),
+    links: footerProgramsIn(group.id).map((p) => ({ label: p.name, href: p.href })),
   })),
   {
     title: "Company",

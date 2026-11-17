@@ -114,7 +114,7 @@ const faqs = [
   },
   {
     q: "What happens after day 90?",
-    a: "You keep the plan, the guides and your progress. Many teams follow it with the AI Accelerator.",
+    a: "You keep the plan, the guides and your progress. Many teams follow it with AI Training.",
   },
 ];
 

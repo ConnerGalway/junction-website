@@ -14,13 +14,15 @@ export type Program = {
   href: string;
   /** One-line promise: the program page's own headline. */
   promise: string;
-  dropdownGroup: DropdownGroup;
-  pageGroup: PageGroup;
   /**
-   * Dropdown-only name for the Accelerators group (temporary): the short name
-   * leads, with the page name after it in Flint as a bridge. Once the team
-   * settles the copy, these names change site-wide and the bridge goes.
+   * Dropdown, mobile menu and footer group. Speaking has none in the dropdown
+   * and mobile menu (it's its own nav item); `footerOnly` keeps it in the footer.
    */
+  dropdownGroup: DropdownGroup;
+  /** Listed in the footer column but not in the Programs dropdown or mobile menu. */
+  footerOnly?: boolean;
+  pageGroup: PageGroup;
+  /** Short name in the dropdown and mobile menu (the Accelerators group: "Marketing", "AI Training"). */
   dropdownName?: string;
 };
 
@@ -35,13 +37,14 @@ export const PROGRAMS: Program[] = [
     dropdownName: "Marketing",
   },
   {
+    // id and route stay "offload" / /ai-accelerator (code names); the program is "AI Training".
     id: "offload",
-    name: "Offload Program",
+    name: "AI Training",
     href: "/ai-accelerator",
     promise: "We automate one of your bottlenecks in 30 days.",
     dropdownGroup: "accelerators",
     pageGroup: "businesses",
-    dropdownName: "AI",
+    dropdownName: "AI Training",
   },
   {
     id: "custom-training",
@@ -65,6 +68,7 @@ export const PROGRAMS: Program[] = [
     href: "/speaking",
     promise: "Talks that send the room home with a plan.",
     dropdownGroup: "training",
+    footerOnly: true,
     pageGroup: "destinations",
   },
   {
@@ -108,5 +112,8 @@ export const PAGE_GROUPS: { id: PageGroup; label: string; line: string }[] = [
   { id: "learn", label: "Learn on your own", line: "Self-paced, any time, at your own speed." },
 ];
 
-export const programsIn = (group: DropdownGroup) => PROGRAMS.filter((p) => p.dropdownGroup === group);
+/** The Programs dropdown and mobile menu (Speaking is its own nav item, so it's left out). */
+export const programsIn = (group: DropdownGroup) => PROGRAMS.filter((p) => p.dropdownGroup === group && !p.footerOnly);
+/** The footer's program columns (everything in the group, Speaking included). */
+export const footerProgramsIn = (group: DropdownGroup) => PROGRAMS.filter((p) => p.dropdownGroup === group);
 export const programsOnPage = (group: PageGroup) => PROGRAMS.filter((p) => p.pageGroup === group);

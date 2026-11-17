@@ -31,7 +31,7 @@ import { ThirtyDays, type Session } from "./ThirtyDays";
 import { TimeBackCalculator } from "./TimeBackCalculator";
 
 export const metadata: Metadata = {
-  title: "Offload Program (AI Accelerator)",
+  title: "AI Training",
   description:
     "A hands-on program for leadership teams. Four one-hour sessions on your real work. You leave with AI tools already running, and a team that knows how to build the next one.",
 };
@@ -260,7 +260,7 @@ export default function AIAcceleratorPage() {
           <Container className="grid gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
             <QuoteCard
               className="flex min-h-[340px] flex-col justify-between"
-              quote="[ Testimonial from an Offload team ]"
+              quote="[ Testimonial from an AI Training team ]"
               caption="[ Name · role · business ]"
             />
             <div className="flex flex-col gap-6">
