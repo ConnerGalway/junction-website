@@ -57,7 +57,7 @@ export default function ContactPage() {
 
         {/* Existing learners and subscribers go to support, not the form. */}
         <p className="type-small m-0 mt-16 border-t border-carbon pt-5">
-          Already a JunctionU learner or Industry Scan subscriber? For courses,
+          Already an eLearningU learner or Industry Scan subscriber? For courses,
           sign-in, certificates or your subscription, email support.{" "}
           {/* TODO: the team's support address (mailto:) and label. */}
           <TextLink href="mailto:" arrow>[ support email ]</TextLink>

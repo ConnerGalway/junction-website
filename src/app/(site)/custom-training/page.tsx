@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 };
 
 const dmoFeatures = [
-  "Courses on JunctionU, branded for your region",
+  "Courses on eLearningU, branded for your region",
   "Live workshops and webinar series",
   "Delivery, learner support and progress reporting",
   "You fund 25% to 100% of seats",
@@ -61,7 +61,7 @@ const formats: Format[] = [
     id: "course",
     name: "Custom course",
     duration: "Self-paced",
-    description: "Self-paced on JunctionU, with certificates and reporting.",
+    description: "Self-paced on eLearningU, with certificates and reporting.",
   },
   {
     id: "leadership",
@@ -124,7 +124,7 @@ export default function CustomTrainingPage() {
                     features={dmoFeatures}
                     button={{ label: "Scope a course program", href: "/contact?type=training" }}
                     photo={{ src: "/images/custom-training/who-dmos.jpg", alt: "A Junction workshop for tourism operators" }}
-                    cardMeta="Custom courses · on JunctionU"
+                    cardMeta="Custom courses · on eLearningU"
                     cardRows={COURSES.map((title) => ({ title }))}
                     cardNote="Over 2,000 tourism operators trained."
                   />
@@ -177,7 +177,7 @@ export default function CustomTrainingPage() {
         <Container>
           <div className="mb-10 flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
             <h2 className="type-h2 m-0">Formats.</h2>
-            <TextLink href="/junctionu" className="whitespace-nowrap">
+            <TextLink href="/elearningu" className="whitespace-nowrap">
               See how we teach first: watch free →
             </TextLink>
           </div>

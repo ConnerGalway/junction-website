@@ -43,7 +43,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${dmSans.variable} ${bebasNeue.variable} ${fraunces.variable} ${epilogue.variable} antialiased`}
     >
       {/* The nav, footer and <main> come from each route group's layout:
-          (site) for the main site, (junctionu) for the JunctionU sub-brand. */}
+          (site) for the main site, (junctionu) for the eLearningU sub-brand. */}
       <body className="flex min-h-screen flex-col bg-newsprint font-sans text-carbon">{children}</body>
     </html>
   );

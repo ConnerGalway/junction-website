@@ -29,6 +29,14 @@ function findImage(base: string, dirs: string[] = [DIR]) {
   return undefined;
 }
 
+/**
+ * The official eLearningU logo, if uploaded (public/images/elearningu/logo.svg).
+ * TODO: Andrea to provide it. Until then EluWordmark sets "eLearningU" in Oswald.
+ */
+export const ELU_LOGO = fs.existsSync(path.join(process.cwd(), "public/images/elearningu/logo.svg"))
+  ? "/images/elearningu/logo.svg"
+  : null;
+
 export const JU_HERO_IMAGE = findImage("hero") ?? FALLBACK_STILL;
 
 /** The Industry Scan's thumbnail: the ScanTeaser card, and the video poster on the Scan page once it's built. */

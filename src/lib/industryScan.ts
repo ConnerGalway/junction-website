@@ -1,5 +1,5 @@
 /**
- * Tourism Industry Scan: the landing page (/junctionu/industry-scan) and its
+ * Tourism Industry Scan: the landing page (/elearningu/industry-scan) and its
  * ScanPreview. Content is from the August 2026 issue. The Scan itself is
  * being redesigned, so the preview will be updated later; everything it
  * shows lives here.

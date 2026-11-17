@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Button, Callout, Container, Section, TextLink } from "@/components";
+import { SHOW_ELU_EMAIL_BAND } from "@/lib/flags";
 import { WORK_CASES } from "@/lib/workCases";
 import { CaseChapter } from "./CaseChapter";
 import { RouteMap } from "./RouteMap";
@@ -63,10 +64,13 @@ export default function WorkPage() {
               More case studies are on the way, including the Okotoks visitor
               economy series and its $900,000 in identified local spend.
             </p>
-            {/* The JunctionU email band (TODO: its signup isn't wired to a list yet). */}
-            <TextLink href="/junctionu#email">
-              Get them first: join the JunctionU list →
-            </TextLink>
+            {/* The eLearningU email band, hidden with it (SHOW_ELU_EMAIL_BAND).
+                TODO: its signup isn't wired to a list yet. */}
+            {SHOW_ELU_EMAIL_BAND && (
+              <TextLink href="/elearningu#email">
+                Get them first: join the eLearningU list →
+              </TextLink>
+            )}
           </Callout>
         </Container>
       </Section>

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { SubBrandWordmark } from "@/components";
+import { EluWordmark } from "@/components/junctionu";
 
 /**
  * "Also for destinations": three linked items under 2px Canopy rules, each
@@ -21,12 +21,13 @@ const ITEMS: { href: string; title: string; line: string; thumb: ReactNode }[] =
     ),
   },
   {
-    href: "/junctionu",
-    title: "JunctionU",
+    href: "/elearningu",
+    title: "eLearningU",
     line: "Self-paced courses and free Tourism Talks for operators.",
     thumb: (
       <span className="ju flex size-full items-end p-3">
-        <SubBrandWordmark suffix="U" className="text-[13px] text-newsprint" />
+        {/* Oswald loads on eLearningU pages only; here the name uses its fallback. */}
+        <EluWordmark className="text-[15px] text-newsprint" />
       </span>
     ),
   },

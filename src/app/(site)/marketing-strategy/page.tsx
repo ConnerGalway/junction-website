@@ -163,7 +163,7 @@ export default function MarketingStrategyPage() {
         </Section>
       )}
 
-      {/* Scan entry: a pointer to JunctionU's Industry Scan, in the JunctionU colours (.ju) with main-site type */}
+      {/* Scan entry: a pointer to eLearningU's Industry Scan, in the eLearningU colours (.ju) with main-site type */}
       <Section spacing="tight" flush={SHOW_STRATEGY_PROOF ? "top" : undefined}>
         <Container>
           <div className="ju grid items-center gap-x-12 gap-y-8 rounded-[18px] p-[clamp(24px,4vw,56px)] md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
@@ -176,7 +176,7 @@ export default function MarketingStrategyPage() {
               <p className="type-body mt-5 mb-7 max-w-[46ch] text-newsprint-muted">
                 A monthly briefing for DMO leaders: the trends, stats and actions worth taking. First month free.
               </p>
-              <JuButton variant="outline" href="/junctionu/industry-scan">
+              <JuButton variant="outline" href="/elearningu/industry-scan">
                 Try a month free
               </JuButton>
             </div>

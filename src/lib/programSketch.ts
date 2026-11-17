@@ -45,8 +45,8 @@ type Rule = { who?: Who; how?: How; sketch: Sketch };
 
 const RULES: Rule[] = [
   { who: "board", sketch: { title: "A board workshop", weeks: 1, live: [1] } },
-  { how: "self-paced", sketch: { title: "A custom course on JunctionU", weeks: 4, live: [1], course: true } },
-  { who: "operators", how: "mix", sketch: { title: "A webinar series plus a course on JunctionU", weeks: 6, live: [1, 3, 5], course: true } },
+  { how: "self-paced", sketch: { title: "A custom course on eLearningU", weeks: 4, live: [1], course: true } },
+  { who: "operators", how: "mix", sketch: { title: "A webinar series plus a course on eLearningU", weeks: 6, live: [1, 3, 5], course: true } },
   { who: "operators", how: "in-person", sketch: { title: "A live workshop series for your operators", weeks: 4, live: [1, 3] } },
   { who: "operators", how: "live-online", sketch: { title: "A webinar series for your operators", weeks: 4, live: [1, 2, 3, 4] } },
   { who: "leadership", how: "in-person", sketch: { title: "A leadership program, in person", weeks: 8, live: [1, 3, 5, 7] } },
@@ -54,7 +54,7 @@ const RULES: Rule[] = [
   { who: "leadership", how: "mix", sketch: { title: "A leadership program, in person and online", weeks: 8, live: [1, 3, 5, 7] } },
   { who: "staff", how: "live-online", sketch: { title: "A webinar series", weeks: 4, live: [1, 2, 3, 4] } },
   { who: "staff", how: "in-person", sketch: { title: "A live workshop for your staff", weeks: 1, live: [1] } },
-  { who: "staff", how: "mix", sketch: { title: "A webinar series plus a course on JunctionU", weeks: 6, live: [1, 3, 5], course: true } },
+  { who: "staff", how: "mix", sketch: { title: "A webinar series plus a course on eLearningU", weeks: 6, live: [1, 3, 5], course: true } },
 ];
 
 const FALLBACK: Sketch = { title: "A program built around your people", weeks: 6, live: [1, 3, 5] };

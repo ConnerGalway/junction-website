@@ -4,9 +4,9 @@ import { useId } from "react";
 import { JuButton } from "./JuButton";
 
 /**
- * The JunctionU email (the list the Work page links to): a Sage band with
+ * The eLearningU email (the list the Work page links to): a Sage band with
  * the pitch, an email field and Subscribe.
- * TODO: wire to the eLearningU / JunctionU email list (no signup exists in
+ * TODO: wire to the eLearningU email list (no signup exists in
  * the codebase yet); nothing is sent for now.
  */
 export function EmailBand() {
@@ -16,14 +16,14 @@ export function EmailBand() {
       <div className="mx-auto grid max-w-wide items-center gap-x-12 gap-y-8 rounded-[18px] bg-sage p-[clamp(28px,4.5vw,56px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,480px)]">
         <div>
           <h2 id={`${id}-heading`} className="ju-display m-0 text-[clamp(30px,3.2vw,44px)] text-ju-ground">
-            Get the JunctionU email.
+            Get the eLearningU email.
           </h2>
           <p className="type-body mt-3 mb-0 text-forest">Weekly marketing tips, new courses and new Tourism Talks, first.</p>
         </div>
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            // TODO: send to the JunctionU email list.
+            // TODO: send to the eLearningU email list.
           }}
           className="flex flex-wrap gap-3"
         >

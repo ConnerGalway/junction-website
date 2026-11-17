@@ -5,7 +5,7 @@ import { JU_HERO_IMAGE } from "@/lib/junctionuImages";
 import { JuButton } from "./JuButton";
 
 /**
- * JunctionU hero (cinematic): the hero still (public/images/junctionu/hero.jpg
+ * eLearningU hero (cinematic): the hero still (public/images/junctionu/hero.jpg
  * if it exists, else the custom course still) on the right 64%, faded into
  * the ground (solid to 36% of the width, clear by 82%, plus a bottom fade),
  * never behind the copy. On phones the still sits on top, faded at the bottom.
@@ -35,12 +35,13 @@ export function JuHero() {
               Training that fits between two guest check-ins.
             </h1>
             <p className="type-lead mt-7 mb-0 max-w-[40ch] text-newsprint-muted">
-              Certificate courses, workshops and free Tourism Talks, built for tourism professionals. Lessons run
-              under an hour and every one ends in something you can do today.
+              eLearningU is Junction&apos;s online school for tourism: certificate courses, workshops and free
+              Tourism Talks, built for tourism professionals. Lessons run under an hour and every one ends in
+              something you can do today.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-4">
               <JuButton variant="mint" href={JU_START_URL}>
-                Start free
+                Start free<span className="sr-only"> on the eLearningU site</span>
               </JuButton>
               {SHOW_JU_TRAILER && (
                 <JuButton variant="glass" href={JU_TRAILER_URL}>
@@ -49,7 +50,7 @@ export function JuHero() {
               )}
             </div>
             <p className="type-small mt-5 mb-0 text-newsprint-muted">
-              Free account: Tourism Talks plus a starter course. No card. · 2,000+ people are in · Formerly eLearningU
+              Free account: Tourism Talks plus a starter course. No card. · 2,000+ people are in
             </p>
           </div>
         </div>

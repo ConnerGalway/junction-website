@@ -22,11 +22,6 @@ export type Program = {
    * settles the copy, these names change site-wide and the bridge goes.
    */
   dropdownName?: string;
-  /**
-   * /programs-only name (temporary): the JunctionU row reads "eLearningU"
-   * while the JunctionU/eLearningU question is open with the team.
-   */
-  pageName?: string;
 };
 
 export const PROGRAMS: Program[] = [
@@ -73,10 +68,10 @@ export const PROGRAMS: Program[] = [
     pageGroup: "destinations",
   },
   {
+    // id stays "junctionu" (code name); the learning brand on the site is eLearningU.
     id: "junctionu",
-    name: "JunctionU",
-    pageName: "eLearningU",
-    href: "/junctionu",
+    name: "eLearningU",
+    href: "/elearningu",
     promise: "Training that fits between two guest check-ins.",
     dropdownGroup: "learn",
     pageGroup: "learn",
@@ -84,7 +79,7 @@ export const PROGRAMS: Program[] = [
   {
     id: "industry-scan",
     name: "Industry Scan",
-    href: "/junctionu/industry-scan",
+    href: "/elearningu/industry-scan",
     promise: "Every industry report, read for you.",
     dropdownGroup: "learn",
     pageGroup: "learn",

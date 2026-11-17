@@ -12,13 +12,13 @@ import {
 import { JU_SCAN_THUMBNAIL } from "@/lib/junctionuImages";
 
 export const metadata: Metadata = {
-  title: "Tourism Industry Scan · JunctionU",
+  title: "Tourism Industry Scan · eLearningU",
   description:
     "Every month, the industry reports you don't have time to read, synthesized into the trends, stats and actions that matter for your next board meeting.",
 };
 
 /**
- * Tourism Industry Scan landing page (JunctionU sub-brand). The one main
+ * Tourism Industry Scan landing page (eLearningU sub-brand). The one main
  * action is "Start your free month" (Mint; it repeats in Pricing). Content
  * and links: src/lib/industryScan.ts.
  */
