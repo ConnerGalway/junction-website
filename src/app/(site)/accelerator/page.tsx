@@ -6,7 +6,7 @@ import {
   Chip,
   Card,
   Container,
-  Placeholder,
+  QuoteCard,
   Section,
   Stat,
   TextLink,
@@ -15,7 +15,7 @@ import {
 import { DashboardPreview } from "@/components/DashboardPreview";
 import { ACCELERATOR_VIDEO, getAcceleratorPoster } from "@/lib/acceleratorVideo";
 import { CALENDLY_URL } from "@/lib/constants";
-import { SHOW_PLACEHOLDERS } from "@/lib/flags";
+import { QUOTES, quoted } from "@/lib/testimonials";
 import { QuickScore } from "./QuickScore";
 import { TaskChecklist, type Task } from "./TaskChecklist";
 import { VideoPlayer } from "./VideoPlayer";
@@ -341,13 +341,13 @@ export default async function AcceleratorPage() {
               you want to go.
             </p>
           </Card>
-          {/* Placeholder card: hidden for now; the auto-fit grid reflows to two cards. */}
-          {SHOW_PLACEHOLDERS && (
-            <Placeholder className="min-h-[220px] flex-col gap-6">
-              <span>[ Testimonial ]</span>
-              <span>[ Name · business ]</span>
-            </Placeholder>
-          )}
+          {/* Third slot: a verified client quote (the two stat cards keep their full-size Stats). */}
+          <QuoteCard
+            size="sm"
+            className="flex flex-col justify-between"
+            quote={quoted(QUOTES.savannah)}
+            caption={QUOTES.savannah.caption}
+          />
         </Container>
       </Section>
 

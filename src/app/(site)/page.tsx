@@ -7,12 +7,10 @@ import {
   Chip,
   Container,
   Eyebrow,
-  Placeholder,
   QuoteCard,
   Section,
   TextLink,
   LogoWall,
-  cx,
 } from "@/components";
 import { HeroWordmark } from "@/components/HeroWordmark";
 import { CASE_AREAS, CASE_INTRO, CASE_META, CASE_TITLE, CASE_TOOLS } from "@/lib/buildingSupplyCase";
@@ -23,8 +21,9 @@ import {
   SHOW_HERO_WORDMARK,
   SHOW_HOME_CALL_SECTION,
   SHOW_HOME_CASE_STUDY,
-  SHOW_PLACEHOLDERS,
+  SHOW_UNVERIFIED_QUOTES,
 } from "@/lib/flags";
+import { QUOTES, UNVERIFIED, quoted } from "@/lib/testimonials";
 import { homeLogos } from "@/lib/logos";
 import { ProgramOrbit, type OrbitProgram } from "./ProgramOrbit";
 import { CourseShelfThumbnail } from "./custom-training/CourseShelf";
@@ -283,33 +282,30 @@ export default function HomePage() {
 
       {/* Testimonials */}
       <Section aria-label="What clients say">
-        {/* Without the placeholder cards, the quote takes the full width. */}
-        <Container className={SHOW_PLACEHOLDERS ? "grid gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]" : undefined}>
+        <Container className="grid gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
           <QuoteCard
-            className={cx("flex flex-col justify-between", SHOW_PLACEHOLDERS ? "min-h-[340px]" : "gap-10")}
-            quote={
-              <>
-                &quot;We are a stronger, smarter organization today thanks to
-                the work we did with Junction.&quot;
-              </>
-            }
-            caption="Kathy Cooper, CEO, Kootenay Rockies Tourism"
+            className="flex min-h-[340px] flex-col justify-between gap-10"
+            quote={quoted(QUOTES.genevieve)}
+            caption={QUOTES.genevieve.caption}
           />
-          {SHOW_PLACEHOLDERS && (
           <div className="flex flex-col gap-6">
-            <Placeholder className="min-h-[158px] flex-1 flex-col items-start justify-between gap-6 text-left">
-              <span>[ Testimonial + result ]</span>
-              <span className="normal-case tracking-normal text-(--tone-text)">
-                Twin Lions Contracting · AI Training
-              </span>
-            </Placeholder>
-            <Placeholder className="min-h-[158px] flex-1 flex-col items-start justify-between gap-6 text-left">
-              <span>[ Testimonial + result ]</span>
-              <span className="normal-case tracking-normal text-(--tone-text)">
-                West Coast Homes · AI Training
-              </span>
-            </Placeholder>
+            {[QUOTES.chrisTait, QUOTES.monicaFrost].map((q) => (
+              <QuoteCard
+                key={q.caption}
+                size="sm"
+                className="flex flex-1 flex-col justify-between"
+                quote={quoted(q)}
+                caption={q.caption}
+              />
+            ))}
           </div>
+          {/* Unverified (SHOW_UNVERIFIED_QUOTES): the original large quote, full width below. */}
+          {SHOW_UNVERIFIED_QUOTES && (
+            <QuoteCard
+              className="lg:col-span-2"
+              quote={quoted(UNVERIFIED.kathyCooperHome)}
+              caption={UNVERIFIED.kathyCooperHome.caption}
+            />
           )}
         </Container>
       </Section>

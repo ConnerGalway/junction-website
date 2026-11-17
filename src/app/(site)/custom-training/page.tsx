@@ -14,7 +14,8 @@ import {
   LogoWall,
 } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
-import { SHOW_PLACEHOLDERS, SHOW_TRAINING_SKETCHER } from "@/lib/flags";
+import { SHOW_PLACEHOLDERS, SHOW_TRAINING_SKETCHER, SHOW_UNVERIFIED_QUOTES } from "@/lib/flags";
+import { QUOTES, UNVERIFIED, quoted } from "@/lib/testimonials";
 import { clientLogos } from "@/lib/logos";
 import { COURSES } from "@/lib/customCourses";
 import { CourseShelf } from "./CourseShelf";
@@ -212,15 +213,11 @@ export default function CustomTrainingPage() {
             />
           </div>
           <div className="flex flex-col gap-6">
-            <QuoteCard
-              quote={
-                <>
-                  &quot;Functional, accessible, and personalized. Incredibly
-                  valuable education for our tourism sector.&quot;
-                </>
-              }
-              caption="Avery Bramadat, Travel Yukon"
-            />
+            <QuoteCard quote={quoted(QUOTES.joanneWolnik)} caption={QUOTES.joanneWolnik.caption} />
+            {/* Unverified (SHOW_UNVERIFIED_QUOTES): the original Travel Yukon quote. */}
+            {SHOW_UNVERIFIED_QUOTES && (
+              <QuoteCard quote={quoted(UNVERIFIED.averyTraining)} caption={UNVERIFIED.averyTraining.caption} />
+            )}
             {SHOW_PLACEHOLDERS && <Placeholder>[ Leadership training testimonial ]</Placeholder>}
           </div>
         </Container>

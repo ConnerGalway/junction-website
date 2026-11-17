@@ -10,7 +10,11 @@
  */
 
 import { CASE_AREAS, CASE_META, CASE_SUMMARY, CASE_TITLE } from "./buildingSupplyCase";
-import { SHOW_AI_CASE_STUDY, SHOW_PLACEHOLDERS, SHOW_WORK_SUPPLIER_CASE } from "./flags";
+import { SHOW_AI_CASE_STUDY, SHOW_PLACEHOLDERS, SHOW_UNVERIFIED_QUOTES, SHOW_WORK_SUPPLIER_CASE } from "./flags";
+import { QUOTES, UNVERIFIED, quoted, type Testimonial } from "./testimonials";
+
+/** A quote as the chapter shows it (text already in quotation marks). */
+const q = (t: Testimonial) => ({ text: quoted(t), caption: t.caption });
 
 export const SERVICES = ["Training", "Accelerator", "Research", "Strategy"] as const;
 export type Service = (typeof SERVICES)[number];
@@ -26,6 +30,8 @@ export type WorkCase = {
   title: string;
   description: string;
   quote?: { text: string; caption: string };
+  /** Further quotes under the first one (the unverified ones, with SHOW_UNVERIFIED_QUOTES). */
+  moreQuotes?: { text: string; caption: string }[];
   link?: { label: string; href: string };
   deliverables: {
     /** The figure set in Bebas on the first sample spread. */
@@ -67,10 +73,8 @@ export const WORK_CASES: WorkCase[] = [
     title: "Go Digital program",
     description:
       "A territory-wide digital capacity program, from Whitehorse to Dawson City. 300+ businesses came through in four years, and alumni now lead the program themselves.",
-    quote: {
-      text: '"Incredibly valuable insights and education for our tourism sector."',
-      caption: "Avery Bramadat, Travel Yukon",
-    },
+    quote: q(QUOTES.robynGillespie),
+    moreQuotes: SHOW_UNVERIFIED_QUOTES ? [q(UNVERIFIED.averyWork)] : [],
     link: { label: "About Custom Training →", href: "/custom-training" },
     deliverables: { figure: "300+" },
   },
@@ -94,10 +98,8 @@ export const WORK_CASES: WorkCase[] = [
     title: "Traveller Insights Study",
     description:
       "Region-wide research into who visits Southwest Ontario, why they come, and what brings them back. The findings now drive the region's 2026 tourism strategy.",
-    quote: {
-      text: '"Invaluable support to our region, our DMOs and our operators."',
-      caption: "Joanne Wolnik, Ontario's Southwest",
-    },
+    quote: q(QUOTES.joanneWolnik),
+    moreQuotes: SHOW_UNVERIFIED_QUOTES ? [q(UNVERIFIED.joanneShort)] : [],
     deliverables: { figure: "2026" },
   },
   {
@@ -107,10 +109,9 @@ export const WORK_CASES: WorkCase[] = [
     title: "A region running its own playbook",
     description:
       "Destination marketing strategy. Marketing operations restructured around the activities with the most impact, with new investment redirected into responsible travel.",
-    quote: {
-      text: '"We are a stronger, smarter tourism organization today thanks to the work we did with Junction."',
-      caption: "Kathy Cooper, CEO, Kootenay Rockies Tourism",
-    },
+    // Unverified quote (SHOW_UNVERIFIED_QUOTES). Without it the chapter has no
+    // lead, so its sample pages take the lead side (see CaseChapter).
+    quote: SHOW_UNVERIFIED_QUOTES ? q(UNVERIFIED.kathyCooperWork) : undefined,
     // TODO: the Kootenay Rockies number. "[ # ]" shows only with SHOW_PLACEHOLDERS;
     // otherwise the sample spread drops its figure.
     deliverables: { figure: SHOW_PLACEHOLDERS ? "[ # ]" : "" },

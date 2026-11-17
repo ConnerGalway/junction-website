@@ -79,3 +79,11 @@ export const SHOW_ELU_EMAIL_BAND = false;
  * are dropped (with their grids reflowing) where nothing would be left.
  */
 export const SHOW_PLACEHOLDERS = false;
+
+/**
+ * Testimonials that haven't been verified (Kathy Cooper, Avery Bramadat and
+ * Joanne Wolnik's short "Invaluable support…" line; src/lib/testimonials.ts).
+ * On: each returns in its original place, after any verified quote that took
+ * that place.
+ */
+export const SHOW_UNVERIFIED_QUOTES = false;
