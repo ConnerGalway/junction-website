@@ -13,9 +13,9 @@ import {
   cx,
 } from "@/components";
 import { DashboardPreview } from "@/components/DashboardPreview";
+import { ACCELERATOR_VIDEO, getAcceleratorPoster } from "@/lib/acceleratorVideo";
 import { CALENDLY_URL } from "@/lib/constants";
 import { SHOW_PLACEHOLDERS } from "@/lib/flags";
-import { shown } from "@/lib/placeholders";
 import { QuickScore } from "./QuickScore";
 import { TaskChecklist, type Task } from "./TaskChecklist";
 import { VideoPlayer } from "./VideoPlayer";
@@ -145,7 +145,8 @@ function GhostNumeral({ n, className }: { n: number; className?: string }) {
   );
 }
 
-export default function AcceleratorPage() {
+export default async function AcceleratorPage() {
+  const poster = await getAcceleratorPoster();
   return (
     <>
       {/* Hero */}
@@ -196,8 +197,13 @@ export default function AcceleratorPage() {
       {/* Video */}
       <Section flush="top">
         <Container className="grid items-center gap-x-16 gap-y-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
-          {/* TODO: pass src, poster and duration once the video is ready. */}
-          <VideoPlayer duration={shown("[ 0:00 ]")} label="See how it works" />
+          <VideoPlayer
+            embed={ACCELERATOR_VIDEO.embed}
+            poster={poster}
+            duration={ACCELERATOR_VIDEO.duration}
+            label={ACCELERATOR_VIDEO.label}
+            title={ACCELERATOR_VIDEO.title}
+          />
           <div>
             <h2 className="type-h3 m-0 mb-3">See how it works.</h2>
             <p className="type-body m-0">

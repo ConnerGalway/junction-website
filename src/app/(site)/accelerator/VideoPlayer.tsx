@@ -1,61 +1,68 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
+import { PlayBadge } from "@/components/junctionu/PlayBadge";
 
 /**
- * 16:9 inline video player. Shows a poster (or a Carbon placeholder) with a
- * round play button and a Bebas duration label; clicking play swaps in the
- * <video> with visible controls, muted, playing inline.
- *
- * TODO: the Accelerator video isn't ready. Pass `src` (and `poster`,
- * `duration`) once it is; until then the play button is disabled.
+ * 16:9 lite video embed (radius 14). Shows the poster with the corner play
+ * button (PlayBadge) and the duration in Bebas; pressing it swaps in the
+ * embedded player in place (autoplay). Nothing loads from the video host
+ * before that: the poster is served through next/image.
  */
 export function VideoPlayer({
-  src,
+  embed,
   poster,
   duration,
   label,
+  title,
 }: {
-  src?: string;
-  poster?: string;
-  /** Running time, e.g. "2:40". Optional: without it the label is left out. */
+  /** The player URL (iframe src), loaded on click. */
+  embed: string;
+  /** Poster image (a local path or an allowed remote image). */
+  poster: string;
+  /** Running time, e.g. "4:05". */
   duration?: string;
-  /** What the video is, for the play button's accessible name. */
+  /** The play button's accessible name, e.g. "Play: See how it works (4 minutes 5 seconds)". */
   label: string;
+  /** The player's iframe title. */
+  title: string;
 }) {
   const [playing, setPlaying] = useState(false);
-
-  if (playing && src) {
-    return (
-      <video
-        src={src}
-        poster={poster}
-        controls
-        muted
-        autoPlay
-        playsInline
-        className="aspect-video w-full rounded-card bg-carbon"
-      />
-    );
-  }
+  // If the poster can't load, keep the Carbon frame and the play button.
+  const [posterFailed, setPosterFailed] = useState(false);
 
   return (
-    <div
-      className="tone-carbon relative flex aspect-video w-full items-center justify-center overflow-hidden rounded-card bg-cover bg-center"
-      style={poster ? { backgroundImage: `url(${poster})` } : undefined}
-    >
-      <button
-        type="button"
-        onClick={() => setPlaying(true)}
-        disabled={!src}
-        aria-label={src ? `Play video: ${label}` : `Video coming soon: ${label}`}
-        className="flex size-20 cursor-pointer items-center justify-center rounded-full bg-newsprint text-carbon hover:bg-sage disabled:cursor-default disabled:hover:bg-newsprint"
-      >
-        <svg aria-hidden="true" width="26" height="26" viewBox="0 0 26 26">
-          <path d="M8 4.5v17l14-8.5z" fill="currentColor" />
-        </svg>
-      </button>
-      {duration && <span className="type-price absolute right-5 bottom-4 text-[28px]">{duration}</span>}
+    <div className="relative aspect-video w-full overflow-hidden rounded-card bg-carbon">
+      {playing ? (
+        <iframe
+          src={embed}
+          title={title}
+          allow="autoplay; fullscreen; picture-in-picture"
+          allowFullScreen
+          className="absolute inset-0 size-full border-0"
+        />
+      ) : (
+        <button
+          type="button"
+          onClick={() => setPlaying(true)}
+          aria-label={label}
+          className="group absolute inset-0 cursor-pointer border-0 bg-transparent p-0"
+        >
+          {!posterFailed && (
+            <Image
+              src={poster}
+              alt=""
+              fill
+              sizes="(min-width: 1024px) 60vw, 100vw"
+              onError={() => setPosterFailed(true)}
+              className="ju-video-image object-cover"
+            />
+          )}
+          <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-carbon/70 to-transparent" />
+          <PlayBadge length={duration} />
+        </button>
+      )}
     </div>
   );
 }
