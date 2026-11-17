@@ -1357,6 +1357,26 @@
     filter: brightness(1.08);
   }
 
+  /* Homepage hero background (one-off, homepage only). One radial gradient,
+     darkest (--home-hero-glow) at the hero's bottom-right corner, fading to
+     transparent, so plain Newsprint (the body) shows. The layer runs 60vh
+     past the hero; the vertical radius (55vh) is shorter than that, so the
+     fade finishes before the layer ends: no edge, no band. Eased stops keep
+     the falloff smooth. Newsprint sections above it are transparent. */
+  .home-hero-bg {
+    /* newsprint-hover taken a touch darker (5% Carbon): subtle, not flat. */
+    --home-hero-glow: color-mix(in oklab, var(--color-newsprint-hover) 95%, var(--color-carbon));
+    background-image: radial-gradient(
+      ellipse min(1150px, 110vw) 55vh at 100% calc(100% - 60vh),
+      var(--home-hero-glow) 0%,
+      color-mix(in oklab, var(--home-hero-glow) 80%, transparent) 22%,
+      color-mix(in oklab, var(--home-hero-glow) 50%, transparent) 45%,
+      color-mix(in oklab, var(--home-hero-glow) 22%, transparent) 70%,
+      color-mix(in oklab, var(--home-hero-glow) 6%, transparent) 88%,
+      transparent 100%
+    );
+  }
+
   /* ScanPreview (Industry Scan page): fades out at the bottom; panels fade in. */
   .scan-preview {
     mask-image: linear-gradient(to bottom, black 72%, transparent);

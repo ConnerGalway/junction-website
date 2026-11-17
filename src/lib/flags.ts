@@ -87,3 +87,6 @@ export const SHOW_PLACEHOLDERS = false;
  * that place.
  */
 export const SHOW_UNVERIFIED_QUOTES = false;
+
+/** Homepage hero: the team photo beside the headline. Off: the headline runs on two lines from 1280px. */
+export const SHOW_HOME_HERO_PHOTO = false;

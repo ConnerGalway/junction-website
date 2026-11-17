@@ -11,6 +11,7 @@ import {
   Section,
   TextLink,
   LogoWall,
+  cx,
 } from "@/components";
 import { HeroWordmark } from "@/components/HeroWordmark";
 import { CASE_AREAS, CASE_INTRO, CASE_META, CASE_TITLE, CASE_TOOLS } from "@/lib/buildingSupplyCase";
@@ -21,6 +22,7 @@ import {
   SHOW_HERO_WORDMARK,
   SHOW_HOME_CALL_SECTION,
   SHOW_HOME_CASE_STUDY,
+  SHOW_HOME_HERO_PHOTO,
   SHOW_UNVERIFIED_QUOTES,
 } from "@/lib/flags";
 import { QUOTES, UNVERIFIED, quoted } from "@/lib/testimonials";
@@ -134,17 +136,29 @@ export default function HomePage() {
     <>
       {SHOW_HERO_WORDMARK && <HeroWordmark />}
 
-      {/* Hero */}
-      <section className="relative overflow-hidden pb-section-tight">
+      {/* Hero. overflow-x-clip (not hidden): the background layer reaches
+          below the hero into the next sections without a sideways scroll. */}
+      <section className="relative overflow-x-clip pb-section-tight">
+        {/* Background: one radial gradient, darkest at the hero's bottom-right,
+            on a layer that runs 60vh past the hero and fades to plain
+            Newsprint before it ends (.home-hero-bg). Under the wordmark. */}
+        <div aria-hidden="true" className="home-hero-bg pointer-events-none absolute inset-x-0 top-0 -bottom-[60vh] -z-20" />
         <div className="relative pt-[clamp(72px,9vw,128px)]">
           <div className="px-gutter">
             {/* 1024px+: text and photo side by side, at least 48px apart (56px
                 gap, which allows for the photo's tilt); the photo shrinks
                 rather than overlapping the headline. */}
-            <Container className="lg:flex lg:items-center lg:gap-14">
+            <Container className={SHOW_HOME_HERO_PHOTO ? "lg:flex lg:items-center lg:gap-14" : undefined}>
               <div className="lg:shrink-0">
-                {/* 10.3em holds the headline to three lines at display size */}
-                <h1 className="type-display m-0 max-w-[10.3em]">
+                {/* Below 1280px: 10.3em holds it to three lines (balanced).
+                    1280px+: 14.2em, so it breaks as "Feeling stuck? Let's get
+                    your" / "organization moving." (line one is 13.6em). */}
+                <h1
+                  className={cx(
+                    "type-display m-0 max-w-[10.3em]",
+                    !SHOW_HOME_HERO_PHOTO && "xl:max-w-[14.2em] xl:text-wrap"
+                  )}
+                >
                   Feeling stuck? Let&apos;s get your organization moving.
                 </h1>
                 <p className="type-lead mt-7 mb-10 max-w-[40ch]">
@@ -159,19 +173,21 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Team photo: in the flow under the buttons below 1024px */}
-              <div className="lg:flex lg:min-w-0 lg:flex-1 lg:justify-end lg:pr-[4%] xl:pr-[1%]">
-                <div className="relative mt-14 ml-auto h-[240px] w-[200px] -rotate-[1.5deg] overflow-hidden rounded-card shadow-card lg:mt-0 lg:ml-0 lg:aspect-[5/6] lg:h-auto lg:w-full lg:max-w-[220px] xl:max-w-[300px]">
-                  <Image
-                    src="/images/home-hero-team.jpg"
-                    alt="The Junction team working around a table"
-                    fill
-                    sizes="(min-width: 1280px) 300px, (min-width: 1024px) 220px, 200px"
-                    priority
-                    className="object-cover"
-                  />
+              {/* Team photo (hidden: SHOW_HOME_HERO_PHOTO); in the flow under the buttons below 1024px */}
+              {SHOW_HOME_HERO_PHOTO && (
+                <div className="lg:flex lg:min-w-0 lg:flex-1 lg:justify-end lg:pr-[4%] xl:pr-[1%]">
+                  <div className="relative mt-14 ml-auto h-[240px] w-[200px] -rotate-[1.5deg] overflow-hidden rounded-card shadow-card lg:mt-0 lg:ml-0 lg:aspect-[5/6] lg:h-auto lg:w-full lg:max-w-[220px] xl:max-w-[300px]">
+                    <Image
+                      src="/images/home-hero-team.jpg"
+                      alt="The Junction team working around a table"
+                      fill
+                      sizes="(min-width: 1280px) 300px, (min-width: 1024px) 220px, 200px"
+                      priority
+                      className="object-cover"
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
             </Container>
           </div>
         </div>
