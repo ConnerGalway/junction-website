@@ -3,7 +3,7 @@ import path from "node:path";
 import Image from "next/image";
 import { cx } from "@/components";
 import { ThumbnailFrame } from "@/components/ThumbnailFrame";
-import { COURSES, SHELF, courseSlug, type Course, type CourseVariant } from "@/lib/customCourses";
+import { SHELF, type Course, type CourseVariant } from "@/lib/customCourses";
 
 const variantStyle: Record<CourseVariant, { card: string; bar: string; meta: string }> = {
   newsprint: { card: "bg-newsprint text-carbon", bar: "bg-canopy", meta: "text-flint" },
@@ -12,10 +12,10 @@ const variantStyle: Record<CourseVariant, { card: string; bar: string; meta: str
   gold: { card: "bg-accent-1 text-carbon", bar: "bg-carbon", meta: "text-carbon/75" },
 };
 
-/** A poster file for the course, if one has been added (checked at build time). */
+/** A poster file for the program, if one has been added (checked at build time). */
 function posterFor(course: Course) {
   if (course.poster) return course.poster;
-  const rel = `/images/custom-training/posters/${courseSlug(course.title)}.jpg`;
+  const rel = `/images/custom-training/${course.slug}.jpg`;
   return fs.existsSync(path.join(process.cwd(), "public", rel)) ? rel : null;
 }
 
@@ -32,12 +32,15 @@ function CoursePoster({ course }: { course: Course }) {
   return (
     <div className={cx("flex h-[300px] w-[250px] flex-col justify-between rounded-card p-6 shadow-card", s.card)}>
       <div className="flex items-center justify-between gap-3">
-        <span className={cx("text-[11px] font-medium tracking-[0.12em] uppercase", s.meta)}>Built for a client</span>
-        <span className={cx("h-1 w-[18px] rounded-full", s.bar)} />
+        <span className={cx("text-[11px] font-medium tracking-[0.12em] uppercase", s.meta)}>{course.client}</span>
+        <span className={cx("h-1 w-[18px] shrink-0 rounded-full", s.bar)} />
       </div>
       <div>
-        <p className="m-0 font-display text-[28px] leading-[1.02] font-black tracking-[-0.03em]">{course.title}</p>
-        <p className={cx("m-0 mt-3 text-[11px] font-medium tracking-[0.12em] uppercase", s.meta)}>Custom course</p>
+        {/* hyphens: long words ("Micro-Certification") break inside the 202px column */}
+        <p lang="en" className="m-0 font-display text-[28px] leading-[1.02] font-black tracking-[-0.03em] [overflow-wrap:break-word] hyphens-auto">
+          {course.title}
+        </p>
+        <p className={cx("m-0 mt-3 text-[11px] font-medium tracking-[0.12em] uppercase", s.meta)}>{course.format}</p>
       </div>
     </div>
   );
@@ -46,8 +49,9 @@ function CoursePoster({ course }: { course: Course }) {
 /**
  * Hero course shelf: a row of course posters that bleeds off the right edge
  * and drifts left in a seamless 40s loop (the set is duplicated). Static
- * with reduced motion. Display only: aria-hidden, not focusable, no hover;
- * a visually hidden sentence lists the course titles.
+ * with reduced motion. Display only (nothing is a link): aria-hidden,
+ * pointer-events none, no hover or pointer cursor; a visually hidden
+ * sentence lists the programs and clients.
  */
 export function CourseShelf({ className }: { className?: string }) {
   const set = (hidden?: boolean) =>
@@ -59,7 +63,7 @@ export function CourseShelf({ className }: { className?: string }) {
   return (
     <div className={className}>
       <p className="sr-only">
-        Recent custom courses include {COURSES.slice(0, -1).join(", ")} and {COURSES.at(-1)}.
+        Recent custom programs: {SHELF.map((c) => `${c.title} (${c.client}, ${c.format.toLowerCase()})`).join("; ")}.
       </p>
       <div aria-hidden="true" className="course-shelf pointer-events-none overflow-hidden py-6 select-none">
         <ul className="course-shelf-track m-0 flex w-max list-none p-0">
