@@ -300,9 +300,20 @@ Toggle pills are `<button aria-pressed>` elements inside a labelled `role="group
 ## Homepage hero
 
 - **Headline, lead and CTAs** on the left; no dashboard area or other block behind them.
-- **Team photo** on the right, vertically centred on the text (radius 14, soft shadow, -1.5°):
+- **Headline:** two lines from 1280px ("Feeling stuck? Let's get your" / "organization moving."): `max-width: 14.2em` with normal wrapping (line one measures 13.6em). Below 1280px it keeps `max-width: 10.3em` and balanced wrapping, so three lines (more on phones).
+- **Team photo** (hidden: `SHOW_HOME_HERO_PHOTO`, default false). With it on, the photo sits on the right, vertically centred on the text (radius 14, soft shadow, -1.5°), and the headline goes back to three lines:
   - **1024px and wider:** text and photo sit side by side with a 56px gap (48px minimum, plus room for the tilt). The photo is at most 220px wide (300px from 1280px), and shrinks rather than overlapping the headline.
   - **Below 1024px:** the photo sits in the page flow under the buttons, right-aligned.
+
+### Homepage hero background
+
+**One-off, homepage only** (`.home-hero-bg` in `globals.css`, a layer inside the hero in `src/app/(site)/page.tsx`).
+- **Look:** a faint radial gradient from plain Newsprint to a slightly darker Newsprint, darkest at the hero's bottom-right corner. The darkest tone is newsprint-hover taken a touch darker (`color-mix(in oklab, newsprint-hover 95%, carbon)`, about #E2DCD1), because newsprint-hover alone read as flat. No other colours, no texture, no animation.
+- **Shape:** one ellipse, `min(1150px, 110vw)` wide and 55vh tall, anchored at the hero's bottom-right, with eased stops down to transparent, so the body's Newsprint shows through.
+- **No edge:** the layer starts at the top of the hero and runs 60vh below it, into the logo strip and "Where organizations get stuck". The gradient's vertical radius (55vh) is shorter than that, so it has faded out before the layer ends: no band where the hero ends. Those Newsprint sections are transparent (as all Newsprint `Section`s are), so they sit on top of it. The hero uses `overflow-x: clip` (not hidden) so the layer can reach down without a sideways scroll.
+- **Layering:** `-z-20`, under the hero wordmark (`-z-10`) and all content.
+- **Phones:** the dark corner sits behind the lower part of the hero (the buttons), right side.
+- **Contrast:** text sits on Newsprint or the lightest part of the gradient. Body copy (ink-soft) stays above 9:1 even at the darkest point.
 
 ### Hero wordmark
 
@@ -826,6 +837,7 @@ Everything removed or not ready is **hidden behind a flag in `src/lib/flags.ts`,
 | `SHOW_JU_WORDMARK` | false | JUNCTION_U instead of the eLearningU name |
 | `SHOW_ELU_EMAIL_BAND` | false | The eLearningU email band and the Work page's link to it |
 | `SHOW_PLACEHOLDERS` | false | Every user-visible placeholder (below) |
+| `SHOW_HOME_HERO_PHOTO` | false | The team photo in the homepage hero (on: the headline goes back to three lines) |
 
 The building-supply case data is one file, `src/lib/buildingSupplyCase.ts`, shared by the homepage teaser, the Offload case study and the Work chapter.
 
