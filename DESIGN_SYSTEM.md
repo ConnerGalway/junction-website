@@ -5,15 +5,16 @@ The design system lives in code:
 - **Tokens, tones and type classes:** `src/app/globals.css`
 - **Components:** `src/components/ui/`, exported from `@/components`
 - **Programs list** (`src/lib/programs.ts`): every program once, read by the Programs dropdown, the mobile menu, the footer and `/programs`, so they can't disagree. Never copy the list elsewhere. The other nav items are in `src/lib/navigation.ts`.
-- **Program pages, no audience hubs:** each program has its own page, and there are no audience hub pages. Marketing strategy is `/marketing-strategy`. Destination partnerships (funded seats) has **no page**: it lives in the Custom Training DMO tab (`/custom-training#for-dmos`; it isn't a program entry, so the menus, the footer and `/programs` don't list it) and in the JunctionU "Fund seats" panel.
-- **Layouts:** the root layout (`src/app/layout.tsx`) holds only `<html>`, `<body>` and the fonts. The main site's pages live in the `(site)` route group, whose layout adds the nav and footer. JunctionU lives in `(junctionu)` with its own layout (see JunctionU sub-brand).
+- **Program pages, no audience hubs:** each program has its own page, and there are no audience hub pages. Marketing strategy is `/marketing-strategy`. Destination partnerships (funded seats) has **no page**: it lives in the Custom Training DMO tab (`/custom-training#for-dmos`; it isn't a program entry, so the menus, the footer and `/programs` don't list it) and in the eLearningU "Fund seats" panel.
+- **Layouts:** the root layout (`src/app/layout.tsx`) holds only `<html>`, `<body>` and the fonts. The main site's pages live in the `(site)` route group, whose layout adds the nav and footer. eLearningU lives in `(junctionu)` with its own layout (see eLearningU sub-brand).
+- **Flags** (`src/lib/flags.ts`): hidden sections and the soft-launch placeholders are switched there, not deleted. See Flags and hidden sections at the end of this file.
 
 This file explains the rules behind them. If you're adding a page, compose it from `Section`, `Container` and the components below. Don't hand-roll colours, font styles or spacing.
 
 ## Hard rules
 
 - **Never use pure white.** Newsprint (`#F4F0E8`) replaces white everywhere: cards, inputs, badges and text. The default Tailwind palette is cleared, so `bg-white` and `text-white` don't exist.
-  - **Exception: the JunctionU glass panel's 1px top highlight** (`inset 0 1px 0 rgba(255,255,255,.35)`, in `.ju-glass`). It's the only white on the site.
+  - **Exception: the eLearningU glass panel's 1px top highlight** (`inset 0 1px 0 rgba(255,255,255,.35)`, in `.ju-glass`). It's the only white on the site.
 - **Bebas Neue is for the `JUNCTION_` wordmark and numerals only.** Numerals here means stats, index numbers, prices and durations. Use `<Wordmark>` / `<LogoLockup>`, `type-stat`, `type-numeral` and `type-price`.
   - **Exception: "THE BRIEF" wordmark** at the top of /the-brief (Bebas, 30px, .16em tracking, Carbon). It's the newsletter's wordmark; Bebas is used there and nowhere else for words.
   - **Exception: the Work RouteMap's hub label** "JUNCTION" (Bebas, 20px, Carbon, no underscore). It's a map label naming the hub, not the logo; the logo itself always keeps its underscore.
@@ -129,7 +130,7 @@ Other ground rules:
 ### Accent hierarchy
 
 - **Gold (accent-1) is the primary accent.** Every numeral uses it: index numbers, stats and highlighted figures. On Newsprint that means `accent-1-on-light`, and only at 24px and up. On Carbon it's `accent-1`.
-  - **The JunctionU sub-brand has no gold:** its numbers are Fern or Newsprint (see JunctionU sub-brand).
+  - **The eLearningU sub-brand has no gold:** its numbers are Fern or Newsprint (see eLearningU sub-brand).
 - **On Forest, numerals and stats are Newsprint.** accent-1 is not used on Forest. Revisit this if the accents change.
   - **Exception: gold filled cards in the Forest hero shelves.** These are the gold course card in the Custom Training CourseShelf and the gold "Destination Marketing Strategy" report cover in the Marketing strategy DeliverablesShelf. They're filled surfaces, not numerals. Nothing else on Forest is gold.
 - **Copper (accent-2) is the secondary accent.** It's for eyebrows on Newsprint. Never set numerals in copper.
@@ -142,7 +143,7 @@ Pink appears only on things you can click. Non-clickable elements never get a pi
 
 - **Links:** pink text (and underline) on hover, as below.
 - **Clickable cards:** the whole card is the link (`<Card href>`), with no button or second link inside. On hover and keyboard focus it gets a 2px break-pink outline, offset 4px.
-  - **JunctionU cards** use a 2px Fern outline instead, with a 5px lift and a pink title (see JunctionU sub-brand).
+  - **eLearningU cards** use a 2px Fern outline instead, with a 5px lift and a pink title (see eLearningU sub-brand).
 - **Clickable list rows:** the newsprint-hover highlight plus a pink title (see Surfaces).
   - **Exception: The Brief archive rows** have no fill. On hover and focus the headline turns break-on-light and the margin number goes from Carbon 7% to 50%.
 - **Exception: `Badge`** (outline and filled). A badge is a status label and isn't clickable, but it may be pink: the outline badge ("Quick check · a general snapshot" on the Accelerator page) and the filled badge ("New" on the Offload hero). Badges are the only non-clickable pink component.
@@ -208,7 +209,7 @@ The type classes live in `@layer components`, so a colour utility can still over
 | `type-numeral` | clamp(40px, 3.4vw, 48px) | .9 | Index numbers (01, 02…) in lists and cards |
 | `type-price` | 40px | 1 | Prices and durations ("$2,500 · 90 days", "30 days"). Carbon 60% on light, Newsprint 60% on dark. In a program hero the price may be set larger (`type-price text-[56px]`) with the duration and audience beside it at 28px; both keep the 60% colour. |
 
-Fonts are loaded in `src/app/layout.tsx` with `next/font/google` and exposed as `--nf-*` variables. They map to the `font-sans` (DM Sans 300/400/500), `font-display` (Epilogue 600/900), `font-quote` (Fraunces 900 italic) and `font-wordmark` (Bebas Neue 400) utilities. Oswald 600/700 is JunctionU's lead font, loaded by the JunctionU layout only (see JunctionU sub-brand).
+Fonts are loaded in `src/app/layout.tsx` with `next/font/google` and exposed as `--nf-*` variables. They map to the `font-sans` (DM Sans 300/400/500), `font-display` (Epilogue 600/900), `font-quote` (Fraunces 900 italic) and `font-wordmark` (Bebas Neue 400) utilities. Oswald 600/700 is eLearningU's lead font, loaded by the eLearningU layout only (see eLearningU sub-brand).
 
 Use real heading elements in order: h1, then h2, then h3, with no skipped levels. The visual class is independent of the element.
 
@@ -280,7 +281,7 @@ Controls:
 | `Callout` | sage-25 box, radius 14, Forest text and links. For a short highlighted statement. |
 | `Badge` | `outline` (2px break border, pink text, dot) or `filled` (break-on-light fill). Radius 10. Badges are the one non-clickable pink component (see Pink means clickable). |
 | `Tabs` | Underlined tabs: `items` (`id`, `label`, `panel`) and a `label`. Large titles (Epilogue 600, 22px) on a 1px rule; active Carbon with a 3px Canopy underline, inactive Flint with a pink hover. `tablist`/`tab`/`tabpanel`, ← → Home End; panels cross-fade in 250ms (instant with reduced motion); the tab row scrolls sideways on narrow screens. |
-| `Accordion` | Questions sections, everywhere. `items` (`q`, `a`). Each question is a full-width button row (`aria-expanded`, `aria-controls`) under a 2px divider, all collapsed by default (any number can be open). A gold chevron (accent-1-on-light, 20px, 2px stroke; a UI graphic, so 3:1 is enough) on the right turns 180° when open (JunctionU uses Fern: `chevronClassName="text-fern"`). `single` keeps one open at a time; the answer opens with a 250ms height animation (instant with reduced motion). The question turns pink on hover. No "+" icons. |
+| `Accordion` | Questions sections, everywhere. `items` (`q`, `a`). Each question is a full-width button row (`aria-expanded`, `aria-controls`) under a 2px divider, all collapsed by default (any number can be open). A gold chevron (accent-1-on-light, 20px, 2px stroke; a UI graphic, so 3:1 is enough) on the right turns 180° when open (eLearningU uses Fern: `chevronClassName="text-fern"`). `single` keeps one open at a time; the answer opens with a 250ms height animation (instant with reduced motion). The question turns pink on hover. No "+" icons. |
 | `DashboardPreview`, `OffloadPreview` | Product previews (`src/components/`), each with a `thumbnail` variant for program cards: scaled to fill the slot's width, top-aligned, bottom faded, `inert` and `aria-hidden`. `OffloadPreview` is the Offload hero visual (journey track + Session 3 quote generator); its thumbnail is drawn at 560px. Used on the homepage orbit (The Accelerator, Offload Program). |
 | `ThumbnailFrame` | Static program-card thumbnails (`src/components/ThumbnailFrame.tsx`): children drawn at a design size (default 640 × 400, the 16:10 slot) and scaled to the slot's width, top-aligned; `inert`, `aria-hidden`, no pointer events (the card stays the link). Takes the ground as `className`. Used by the homepage orbit's two static previews, passed as a program's `preview`: **`StageThumbnail`** (Speaking; see Speaking page) and **`CourseShelfThumbnail`** (Custom Training; see Custom Training page). Same slot as the other thumbnails (16:10, radius 14). |
 | `ChevronButton` | Carousel previous / next: a thin 20px chevron (1.6px rounded stroke), no box, tone text at 70%, the tone's pink on hover and focus, 40% when disabled at the ends of a non-looping carousel. Needs an `aria-label`. Used by the program orbit and the KitCarousel. |
@@ -384,7 +385,7 @@ Toggle pills are `<button aria-pressed>` elements inside a labelled `role="group
 
 ## Custom Training page
 
-`src/app/custom-training/`. Order: hero (Forest, with the CourseShelf), who it's for, logo strip ("Organizations we've trained", `LogoWall variant="auto"`), formats, proof, program sketcher (Forest).
+`src/app/custom-training/`. Order: hero (Forest, with the CourseShelf), who it's for, logo strip ("Organizations we've trained", `LogoWall variant="auto"`), formats, proof, closing CTA (Forest).
 
 **Every Custom Training image is temporary and swappable by filename** in `public/images/custom-training/`: `who-dmos.jpg`, `who-leadership.jpg`, `formats-live-workshop.jpg`, `formats-webinar-series.jpg`, `formats-leadership-program.jpg`, `formats-custom-course.jpg`, the optional `formats-custom-course.mp4`, and course posters in `posters/<slug>.jpg`. Keep the filenames; sizes don't matter (images fill their slots with `object-fit: cover`).
 
@@ -395,8 +396,9 @@ Toggle pills are `<button aria-pressed>` elements inside a labelled `role="group
 - **Who-panel visual** (`WhoPanel.tsx`): a photo (radius 14) set 70px down and 40px in from the right, with a small Newsprint card (300px, radius 14, shadow) in the top-right corner overlapping the top of the photo: a meta label and three rows (Bebas gold-on-light number, title, an optional small line), and an optional line under the list (the DMO card: "Over 2,000 tourism operators trained.", no per-course lines). Below 1024px the card sits under the photo.
 - **FormatsAccordion:** four panels in one 520px row (12px gaps, radius 14). One open at a time (flex 3 vs 1, 450ms ease-out, instant with reduced motion); hover on pointer devices, or click, tap or Enter, opens a panel (each has a full-panel button with `aria-expanded`). Closed: alternating Carbon and Forest, the duration in Bebas at the top (Newsprint 60%), the name set vertically, reading bottom to top (Epilogue 900, 30px). Open: the photo with a dark bottom gradient, the duration (Bebas 24px, Newsprint 70%), the name (about 40px) and the description. Below 768px: a vertical accordion whose open item shows its image or player at 220px. The durations ("90 min – 1 day", "Several weeks", "Self-paced", "Multi-session") are placeholders taken from the descriptions.
 - **CoursePlayer** (`CoursePlayer.tsx`, decorative, `aria-hidden`): the custom course's open state on Forest, inset 48px: a Newsprint frame with a 220px sidebar (Forest header: "Course", "Export readiness", a thin Fern progress bar; Modules 1–6 with Bebas gold-on-light numbers, module 2 on sage-25) and a video area with a slim control bar (Newsprint play button, Fern progress, Bebas time). Drawn at 600 × 340 and scaled to fit. If `formats-custom-course.mp4` exists it plays muted, looped and inline with the jpg as poster; reduced motion shows the still.
-- **Proof:** a copper meta label, the two stats as `<Stat maxSize="112px">` (gold-on-light, they fit their column), the Sage quote card and the placeholder.
-- **Program sketcher** (`ProgramSketcher.tsx`, rules in `src/lib/programSketch.ts`, placeholders): three selects in a row (stacked on mobile), styled for Forest over native `<select>`s: Newsprint 8% fill, 1px Newsprint 16% border, radius 10 (the control token), small caps label (Newsprint 60%) above the value (Epilogue 600, 18px), Fern chevron, Fern border on focus. Under them a Newsprint result card: "Your program, sketched", the program (Epilogue 900, 28px), a week strip (live weeks Canopy, others Sage) and a summary line, updating instantly with a 200ms text fade. "Send this sketch to us" opens `/contact?type=training&who=…&how=…&size=…&sketch=…`, which pre-fills the training audience and learners (the sketch title has no field yet: TODO).
+- **Proof:** a copper meta label, the two stats as `<Stat maxSize="112px">` (gold-on-light, they fit their column), the Sage quote card and the testimonial placeholder (`SHOW_PLACEHOLDERS`).
+- **Closing CTA (Forest, `#start`):** with `SHOW_TRAINING_SKETCHER` off (default), the display H2 "Tell us who needs training. We'll build the program around them.", "Book a 20-min call" (Newsprint fill, Forest text, Calendly) and "Or send us the details →" (`/contact?type=training`). With it on, the sketcher below replaces them.
+- **Program sketcher** (hidden: `SHOW_TRAINING_SKETCHER`; `ProgramSketcher.tsx`, rules in `src/lib/programSketch.ts`, placeholders): three selects in a row (stacked on mobile), styled for Forest over native `<select>`s: Newsprint 8% fill, 1px Newsprint 16% border, radius 10 (the control token), small caps label (Newsprint 60%) above the value (Epilogue 600, 18px), Fern chevron, Fern border on focus. Under them a Newsprint result card: "Your program, sketched", the program (Epilogue 900, 28px), a week strip (live weeks Canopy, others Sage) and a summary line, updating instantly with a 200ms text fade. "Send this sketch to us" opens `/contact?type=training&who=…&how=…&size=…&sketch=…`, which pre-fills the training audience and learners (the sketch title has no field yet: TODO).
 
 ## Speaking page
 
@@ -454,7 +456,7 @@ Sections:
 - **Hero (Newsprint):** two columns (45/55) from 1024px; below that the map goes under the intro, full width.
   - **From 1024px the map is wider than its column.** It overflows to the left: at 1024 it's the column's width, growing to 60vw at 1280 and up. At 1280 and up it's anchored to the viewport's right edge; between 1024 and 1280 the right offset grows from 0 to the gutter. It's vertically centred on the copy.
   - **Placement:** the copy keeps its width and sits above the map's land layer. The section clips overflow sideways (`overflow-x: clip`), so the land can run to the viewport edge without a sideways scroll. The H1 "Real regions. / Real numbers." is exactly two lines from 1024px (explicit break). The intro is `type-lead`.
-- **RouteMap** (`RouteMap.tsx`, geometry in `src/lib/routeMapGeometry.ts`, shared with the JunctionU DMO map):
+- **RouteMap** (`RouteMap.tsx`, geometry in `src/lib/routeMapGeometry.ts`, shared with the eLearningU DMO map):
   - **Map data:** Natural Earth via `world-atlas` (countries-110m), `topojson-client` and `d3-geo`, all pinned. Canada and the United States only (Hawaii is left out: it sits far off the frame), in `geoConicConformal().parallels([42, 68]).rotate([102, 0]).center([0, 52])`, fitted (`fitExtent`, 10px padding) to the `FRAME` points. The SVG paths and points are built at build time on the server, drawn at 700 × 480 and scaled to the column.
   - **Fills:** Canada Carbon 5%, the US Carbon 3.5%, no strokes.
   - **No hard edges:** land outside the fitted box (the Arctic islands, Alaska, Labrador, the south) isn't clipped. The land layer (land, other-client arcs and dots) is drawn in its own SVG, larger than the box by `landPad`, the land's measured overflow plus a margin. A mask (`.work-map-land`) fades it on every side:
@@ -471,7 +473,7 @@ Sections:
   - **Other clients:** Canopy dots (r 3, 40%) with very faint arcs (1.2px, 14%); names in tooltips. Destination BC and the Vancouver clients sit at the hub. A client right under a case stop (Hamilton, Fernie) gets no tooltip target, so it never blocks the stop; all clients are listed in a visually hidden sentence.
   - **Interaction:** each case stop is a link to its chapter (`#case-…`). Hover and focus fill its dot break pink; a click smooth-scrolls (instant with reduced motion) and first clears a service filter that would hide the chapter. Tooltips (Newsprint, radius 10, shadow) open on mouse hover or a tap; a tap outside closes them.
   - **Under 768px:** the names are hidden (numbers stay); the first tap on a stop shows its name as a link to the chapter.
-- **Service filter** (`WorkFilter.tsx`): "Filter by service" (Flint) and toggle chips All · Training · Accelerator · Research · Strategy, `<button aria-pressed>` in a labelled group. Selected: Carbon fill, Newsprint text; others newsprint-hover with a pink text hover; radius 10, 44px tall. (The Brief and JunctionU filter pills use the older Forest-outline style.) Filtering fades the chapter list out and back in (200ms each way, instant with reduced motion).
+- **Service filter** (`WorkFilter.tsx`): "Filter by service" (Flint) and toggle chips All · Training · Accelerator · Research · Strategy, `<button aria-pressed>` in a labelled group. Selected: Carbon fill, Newsprint text; others newsprint-hover with a pink text hover; radius 10, 44px tall. (The Brief and eLearningU filter pills use the older Forest-outline style.) Filtering fades the chapter list out and back in (200ms each way, instant with reduced motion).
 - **Case chapters** (`ChapterList` + `CaseChapter.tsx`):
   - **Grounds and sides by visible position:** Forest, Newsprint, Carbon, Newsprint, then the pattern repeats; with a filter on, the visible chapters are renumbered. Odd chapters put the stat on the left, even ones on the right (from 1024px; stacked below with the stat first). Equal columns, vertically centred.
   - **Stat side:** `<Stat maxSize="clamp(120px, 16vw, 230px)">`, line-height .8, label 18px. Newsprint on Forest, gold-on-light on Newsprint, gold on Carbon (the tone's numeral colour).
@@ -482,7 +484,9 @@ Sections:
   - two inside spreads (3:2, Newsprint, with abstract text lines, a Bebas figure and a few bars). On the second spread the figure and bars are blurred and one line is a solid redaction bar.
 
   Pages are drawn with container units, so they scale with the column. They have radius 10 and the tone's card shadow or border. Caption: "Sample pages · client details changed for privacy · flip through →". As a mock document it keeps its own colours (a small gold figure). **Swappable:** set `deliverables.images` (cover, spread, spread) in `workCases.ts` and real images fill the same slots. **Not interactive yet. Planned:** clicking "flip through" expands the pages in place to fill the chapter (no modal, no new page); to be designed.
-- **Note:** a `Callout` with the Okotoks line and "Get them first: join the JunctionU list →" (to the JunctionU email band, `/junctionu#email`; its signup isn't wired to a list yet, TODO).
+- **Note:** a `Callout` with the Okotoks line. Its link, "Get them first: join the eLearningU list →" (to the eLearningU email band, `/elearningu#email`; the signup isn't wired to a list yet, TODO), shows only with `SHOW_ELU_EMAIL_BAND`.
+- **Building-supply chapter** (hidden: `SHOW_WORK_SUPPLIER_CASE`): from `src/lib/buildingSupplyCase.ts`, after ITBC. Grounds and sides come from visible position, so they alternate with it on or off. Its "See the full story →" shows only while `SHOW_AI_CASE_STUDY` is on.
+- **Kootenay Rockies** has no number yet: without `SHOW_PLACEHOLDERS` its map stop shows the name alone and its sample spread has no figure.
 - **Closing CTA (Forest):** display H2 and the existing "Start a conversation" button (`/contact`).
 
 ## About page
@@ -539,9 +543,15 @@ Sections:
 - **Below 1024px:** archive numbers move inline above each headline ("Nº 543", Bebas 28px, Carbon 30%, `aria-hidden`; the link text carries the number and date for screen readers). This week keeps its number beside the date.
 - **Phones:** the column is full width. The header row wraps, with Archive and Search on the first line and the tabs on a sideways-scrolling line below.
 
-## JunctionU sub-brand
+## eLearningU sub-brand
 
-`/junctionu` is a sub-brand with its own layout: the `(junctionu)` route group renders without the main site's nav and footer, on the same domain and deploy. Page code is in `src/app/(junctionu)/`, components in `src/components/junctionu/`, and content (courses, workshops, talks, nav, URLs) in `src/lib/junctionu.ts`.
+**Naming:** the learning brand on this site is **eLearningU** (JunctionU is on hold). Every user-facing name says eLearningU; **code names stay JunctionU**: the `(junctionu)` route group, `src/components/junctionu/`, `src/lib/junctionu*.ts`, `Ju*` components, `JU_*` constants, the `ju-*` tokens and `.ju`, `public/images/junctionu/`, and the program id `junctionu`.
+
+**URLs:** `/elearningu` and `/elearningu/industry-scan`, with permanent redirects from `/junctionu` and `/junctionu/industry-scan` (`next.config.ts`).
+
+**A storefront:** every course and workshop card links out to its own eLearningU (LearnWorlds) landing page (`url` in `src/lib/junctionu.ts`), with a screen-reader note that it opens the eLearningU site. Workshops have real URLs; the five courses link to https://www.elearningu.com until their URLs are set (TODO: Andrea). "Start free" and "Sign in" go to eLearningU too (the sign-in URL is still a guess, TODO).
+
+`/elearningu` is a sub-brand with its own layout: the `(junctionu)` route group renders without the main site's nav and footer, on the same domain and deploy. Page code is in `src/app/(junctionu)/`, components in `src/components/junctionu/`, and content (courses, workshops, talks, nav, URLs) in `src/lib/junctionu.ts`.
 
 **Images by filename** (`src/lib/junctionuImages.ts`). Upload a file with the right name to `public/images/junctionu/` and it's used on the next deploy (checked at build time); no code change needed.
 - **Formats:** `.jpg`, `.jpeg`, `.png` and `.webp` all work; the first match in that order wins.
@@ -564,7 +574,7 @@ A new course gets a `slug` and its still the same way.
 
 **Foundations**
 
-- **Tokens** live on `.ju` (the JunctionU layout), so these utilities only resolve inside it. The one place they appear outside the sub-brand is the Industry Scan entry panel on Marketing strategy: a `.ju`-scoped panel (ground, Fern, Newsprint text) in main-site type, a pointer to the sub-brand rather than part of it.
+- **Tokens** live on `.ju` (the eLearningU layout), so these utilities only resolve inside it. The one place they appear outside the sub-brand is the Industry Scan entry panel on Marketing strategy: a `.ju`-scoped panel (ground, Fern, Newsprint text) in main-site type, a pointer to the sub-brand rather than part of it.
 
   | Token | Value | Use |
   |---|---|---|
@@ -584,9 +594,10 @@ A new course gets a `slug` and its still the same way.
   - **DM Sans:** body copy.
   - **Bebas:** numbers, lengths and prices, as site-wide.
 - **Numbers:** there's no gold in the sub-brand. Lengths and ghost numbers are Fern, prices are Newsprint, and the DMO "300+" is Fern Bebas.
-- **Wordmark:** `<SubBrandWordmark suffix="U" />` renders JUNCTION_U in Bebas, letter-spaced, with the underscore as a Fern bar between JUNCTION and the suffix (sitting on the baseline). Every sub-brand uses JUNCTION_ + suffix.
+- **Name** (`EluWordmark`, in the nav, the footer and the Marketing strategy "Also for destinations" thumbnail): "eLearningU" in Oswald 700, sentence case, Newsprint. If `public/images/elearningu/logo.svg` exists (checked at build time; TODO: Andrea to provide the official logo) it's used instead. With `SHOW_JU_WORDMARK` on, the old JUNCTION_U wordmark returns.
+- **Wordmark (hidden):** `<SubBrandWordmark suffix="U" />` renders JUNCTION_U in Bebas, letter-spaced, with the underscore as a Fern bar between JUNCTION and the suffix (sitting on the baseline). Every sub-brand uses JUNCTION_ + suffix.
 - **CTA rule:**
-  - **One main action per page, in Mint.** It may repeat (the same action more than once, e.g. in the hero and the pricing panel), but there's never a second, different Mint action. On /junctionu it's "Start free"; on the Industry Scan page, "Start your free month".
+  - **One main action per page, in Mint.** It may repeat (the same action more than once, e.g. in the hero and the pricing panel), but there's never a second, different Mint action. On /elearningu it's "Start free" (to https://www.elearningu.com); on the Industry Scan page, "Start your free month".
   - Every other section has exactly one action, each going somewhere different. A repeat of the main action doesn't count toward that one.
   - Cards are links, with no buttons inside them.
   - Shelf arrows and "See all →" are row controls, not section actions.
@@ -600,23 +611,23 @@ A new course gets a `slug` and its still the same way.
   - followed by the length in Bebas (Newsprint 80%) when known, or a short byline;
   - **hover:** the circle scales to 1.08 and the image brightens slightly (`.ju-video-image`);
   - the whole card is the click target, and there's never a centred play button.
-- **Accordion:** the site's `Accordion` with Fern chevrons (the JunctionU version of the gold-chevron rule), one open at a time.
+- **Accordion:** the site's `Accordion` with Fern chevrons (the eLearningU version of the gold-chevron rule), one open at a time.
 - **Cards** (`.ju-card`): on hover and focus they lift 5px (no lift with reduced motion) and get a 2px Fern outline (offset 4px); the title turns break-on-dark, and stills zoom to 1.04. Tags: Fern on Fern 18% (Certificate, Workshop) or Sage with ground text (Free); small caps, radius 10.
 
 **Nav and footer**
 
 - **Top bar** (`JuNav`, ju-ground, sticky, 1px Fern-20% rule under it):
-  - **left:** JUNCTION_U (to `/junctionu`) and "← Junction" (to `/`);
-  - **centre:** Browse · Courses · Workshops · Tourism Talks · For DMOs · Industry Scan, which are anchors on the page except Industry Scan (`/junctionu/industry-scan`, see Industry Scan page). The active link (section in view, or current page) is Newsprint with a 2px Fern underline;
-  - **right:** "Sign in" (eLearningU for now; TODO: confirm the URL, then JunctionU's own platform);
+  - **left:** the eLearningU name (`EluWordmark`, to `/elearningu`) and "← Junction" (to `/`);
+  - **centre:** Browse · Courses · Workshops · Tourism Talks · For DMOs · Industry Scan, which are anchors on the page except Industry Scan (`/elearningu/industry-scan`, see Industry Scan page). The active link (section in view, or current page) is Newsprint with a 2px Fern underline;
+  - **right:** "Sign in" (the eLearningU sign-in page; TODO: confirm the URL);
   - **under 1024px:** a Menu button.
-- **Footer** (`JuFooter`, ju-deep): JUNCTION_U, the same links, and "Part of Junction →" to the main site.
+- **Footer** (`JuFooter`, ju-deep): the eLearningU name, the same links, and "Part of Junction →" to the main site.
 
 **Page sections** (in order)
 
 - **Hero** (`JuHero`, about 600px tall):
   - **Still:** the course still on the right 64%, faded into the ground (solid to 36% of the width, clear by 82%, plus a bottom fade) and kept clear of the copy, which is capped at 46vw.
-  - **Copy:** the H1 in Oswald capitals (up to 80px, three lines), the lead, "Start free" (Mint), "▶ Watch the trailer" (glass; hidden behind `SHOW_JU_TRAILER` until the trailer exists) and the small line.
+  - **Copy:** the H1 in Oswald capitals (up to 80px, three lines), the lead ("eLearningU is Junction's online school for tourism: …"), "Start free" (Mint, to eLearningU), "▶ Watch the trailer" (glass; hidden behind `SHOW_JU_TRAILER` until the trailer exists) and the small line (no "Formerly eLearningU").
   - **Phones:** the still sits on top, faded at the bottom.
 - **Shelves** (`Shelf`, inside `#catalogue`):
   - **Header row:** the title (Oswald 700, up to 30px), then ‹ › (Fern circles; they scroll one page and dim at the ends) and "See all →".
@@ -624,10 +635,10 @@ A new course gets a `slug` and its still the same way.
   - **Start here:** courses only. Thumbnail cards (400px):
     - a 16:9 still (`courses/<slug>.<ext>`, see Images by filename), or a placeholder gradient (`.ju-still`, three variants) until the file exists;
     - the length in Bebas 22px top-left, with a soft shadow;
-    - a Certificate tag and the price in Bebas;
+    - a Certificate tag and the price in Bebas (the "[ $ ]" placeholders only with `SHOW_PLACEHOLDERS`);
     - the title (Oswald, 24px) and the module count.
   - **Workshops:** workshops only. Poster cards (240 × 360, ju-moss):
-    - the length in Fern Bebas and a Workshop tag at the top;
+    - the length in Fern Bebas (the "[ x HRS ]" placeholders only with `SHOW_PLACEHOLDERS`) and a Workshop tag, always top right;
     - a ghost number (Bebas 180px, Fern 10%) behind;
     - the title in Oswald capitals at the bottom, over a Fern-35% rule with "Workshop" and the price.
   - **Tourism Talks · free:** four YouTube talks (`TALK_IDS`).
@@ -637,13 +648,13 @@ A new course gets a `slug` and its still the same way.
   - **Map:** the Work RouteMap's land layer (`src/lib/routeMapGeometry.ts`; no dots or arcs), with Canada Fern 38% and the US Fern 16%. It's larger than the section and spills above and below it, faded by a closest-side radial mask (solid to 55%) so it's never cut on a straight line. It drifts at 0.15 like the HeroWordmark: anchored where the section is centred and kept within 160px of that; static with reduced motion. It sits behind the page content (the layout is `isolate`).
   - **Glass panel** (`.ju-glass`): radius 20, Newsprint 7%, `backdrop-filter: blur(14px) saturate(160%)`, an inset 1px Newsprint-18% border, the white top highlight (see Hard rules) and a soft shadow.
   - **Two columns:** "For DMOs and associations" (Fern), the H2 in Oswald capitals, the copy and the Fern outline "Talk to us about a region" (`/contact?type=training&from=region`). Then, after a thin divider, "300+" in Fern Bebas (up to 116px) and its line. They stack on phones.
-- **Industry Scan teaser** (`ScanTeaser`): the Scan thumbnail (`industry-scan-thumbnail.<ext>`) as a linked card, with the corner play button and "Conner Galway · [ Month Year ]" beside it. There's no title caption, because the thumbnail already says it. Beside it, the pitch and one Fern outline action, "Try a month free". Both go to the Scan page. The month is a placeholder.
-- **The JunctionU email** (`EmailBand`, `#email`): a Sage band (radius 18) with the headline (Oswald capitals, ground text), the line (Forest), an email field (Newsprint) and Subscribe (`ground`). This is the list the Work page links to. TODO: wire it to the eLearningU / JunctionU list (none exists in the codebase).
-- **Placeholders for team review:** course prices "[ $ ]", course lengths (all "6 HRS"), workshop lengths "[ x HRS ]", course links (eLearningU home), "See all" catalogue URLs, the sign-in URL and the Scan teaser line.
+- **Industry Scan teaser** (`ScanTeaser`): the Scan thumbnail (`industry-scan-thumbnail.<ext>`) as a linked card, with the corner play button and "Conner Galway" beside it ("· [ Month Year ]" with `SHOW_PLACEHOLDERS`). There's no title caption, because the thumbnail already says it. Beside it, the pitch and one Fern outline action, "Try a month free". Both go to the Scan page. The month is a placeholder.
+- **The eLearningU email** (`EmailBand`, `#email`; hidden: `SHOW_ELU_EMAIL_BAND`): a Sage band (radius 18) with the headline (Oswald capitals, ground text), the line (Forest), an email field (Newsprint) and Subscribe (`ground`). This is the list the Work page links to. TODO: wire it to the eLearningU list (none exists in the codebase).
+- **Open items for team review:** course prices "[ $ ]", course lengths (all "6 HRS"), workshop lengths "[ x HRS ]", the five course URLs (eLearningU home for now), "See all" catalogue URLs, the sign-in URL and the Scan teaser month.
 
 ### Industry Scan page
 
-`/junctionu/industry-scan` (JunctionU layout; the nav shows Industry Scan as active). All content and links are in `src/lib/industryScan.ts`. The preview reflects the August 2026 issue and will be updated when the Scan is redesigned. Order: hero, briefing, Built for the boardroom, pricing, Questions.
+`/elearningu/industry-scan` (eLearningU layout; the nav shows Industry Scan as active). All content and links are in `src/lib/industryScan.ts`. The preview reflects the August 2026 issue and will be updated when the Scan is redesigned. Order: hero, briefing, Built for the boardroom, pricing, Questions.
 
 - **Hero** (two columns, 40/60 from 1024px; stacked below that):
   - **Copy:** the Fern meta "Monthly · for Canadian DMO leaders", the H1 "Tourism Industry Scan" (Oswald capitals, up to 84px, three lines) and the lead.
@@ -659,12 +670,12 @@ A new course gets a `slug` and its still the same way.
 - **Pricing** (ju-moss panel, radius 18, no eyebrow):
   - **left:** "First month free." (Oswald capitals, up to 56px) and the line;
   - **right:** "$30" (Bebas, up to 96px) with "/ MONTH" (Bebas, 60%), the same Mint action, and "Buying for a team or association? Talk to us →" (`/contact?type=other&topic=scan-team`; team pricing is a TODO).
-- **Questions:** "Questions" (Oswald capitals) beside the Accordion (one open at a time, Fern chevrons). The answers are "[ Answer to come ]".
+- **Questions:** "Questions" (Oswald capitals) beside the Accordion (one open at a time, Fern chevrons). Only answered items show; the current ones are all "[ Answer to come ]", so without `SHOW_PLACEHOLDERS` the whole section is left out.
 - **Copy for team review:** the lead, the section lines and the FAQ are new.
 
 ## Marketing strategy page
 
-`src/app/(site)/marketing-strategy/`. The DMO-facing sister of Custom Training, with the same family of hero and section treatments. Content is in `src/lib/marketingStrategy.ts`. Order: hero (Forest), logo wall, How a strategy engagement works, Built around your year (Carbon), Scan entry, Also for destinations, closing CTA (Forest).
+`src/app/(site)/marketing-strategy/`. The DMO-facing sister of Custom Training, with the same family of hero and section treatments. Content is in `src/lib/marketingStrategy.ts`. Order: hero (Forest), logo wall, How a strategy engagement works, Built around your year (Carbon), Real regions. Real numbers. (hidden: `SHOW_STRATEGY_PROOF`; `PROOF`, the Kootenay card only with `SHOW_PLACEHOLDERS`), Scan entry, Also for destinations, closing CTA (Forest).
 
 - **Hero (Forest):** the H1 (display, three lines) on the left. On the right, the lead, "Book a 20-min call" (Calendly) and "See our work →".
 - **DeliverablesShelf** (`DeliverablesShelf.tsx`, about 72px below): one static row that starts at the content edge and bleeds off the right edge (`.deliverables-shelf`). Decorative (`aria-hidden`); the content is illustrative, with no client details.
@@ -674,13 +685,13 @@ A new course gets a `slug` and its still the same way.
 - **Logo wall:** "Destinations we work with", the shared `LogoWall` (`auto`) with `dmoLogos`.
 - **How a strategy engagement works:** a four-phase timeline under a 2px Canopy line, with a stop per phase: a Newsprint dot with a Canopy ring, and the last stop copper.
   - **Each phase:** "PHASE N" (Bebas price style, 60%), the title (h4), one line and an Output box (sage-25, radius 10, a Forest small caps "Output" label and the output in Forest).
-  - **Below it:** the engagement line in the price style ("[ TYPICAL LENGTH ] · SCOPED TO YOU", a placeholder).
+  - **Below it:** the engagement line in the price style ("[ TYPICAL LENGTH ] · SCOPED TO YOU", a placeholder; shown only with `SHOW_PLACEHOLDERS`).
   - **Phones:** the timeline turns vertical, with the line on the left.
 - **Built around your year (Carbon):** the H2 with the note "Timing shown is typical; we fit your fiscal year." on the right.
   - **The bar:** 12 months as small caps labels (not Bebas: they're words) over 6px rounded segments. Jan–Feb and Nov–Dec are Canopy (research and planning), Mar–Apr gold (board reporting), May–Sep Fern (season in market) and Oct copper (funding and RFPs).
   - **Legend:** four columns, each with a swatch, an h4 and a line.
   - **Narrow screens:** the bar scrolls inside its container, and the legend stacks.
-- **Scan entry:** a `.ju` panel (JunctionU ground, radius 18; see JunctionU sub-brand), with tight section padding above it so it clears the Carbon year section.
+- **Scan entry:** a `.ju` panel (eLearningU ground, radius 18; see eLearningU sub-brand), with tight section padding above it so it clears the Carbon year section.
   - **Left:** the Scan thumbnail (`JU_SCAN_THUMBNAIL`, radius 12).
   - **Right:** "Not ready for a strategy yet?" (Fern meta), the H2 "Start with the Industry Scan." (Epilogue, Newsprint), the line and a Fern outline "Try a month free".
   - It uses main-site fonts, not Oswald.
@@ -689,7 +700,7 @@ A new course gets a `slug` and its still the same way.
   - **Link:** the whole item is the link, and the title turns pink on hover and focus.
   - **Thumbnails:**
     - Custom Training: Forest with three small overlapping course cards;
-    - JunctionU: the `.ju` ground with a small JUNCTION_U;
+    - eLearningU: the `.ju` ground with a small `EluWordmark` (Oswald isn't loaded on the main site, so it uses the fallback);
     - Speaking: the stage with a soft spotlight over a tiny Newsprint slide.
 - **Closing CTA (Forest):** "Let's talk about your region." and "Book a 20-min call".
 
@@ -697,7 +708,7 @@ A new course gets a `slug` and its still the same way.
 
 `src/app/(site)/programs/`. An editorial index of `src/lib/programs.ts`. No prices and no images anywhere on the page.
 
-- **Two label sets:** each program has a dropdown group (Accelerators · Training and strategy · Learn; used by the dropdown, mobile menu and footer) and a page group (For businesses · For destinations and organizations · Learn on your own; used here). Each program's promise is its own page's headline. A program can have a temporary `/programs`-only `pageName`: the JunctionU row reads "eLearningU" while that name is open with the team (its link, the dropdown and the footer are unchanged).
+- **Two label sets:** each program has a dropdown group (Accelerators · Training and strategy · Learn; used by the dropdown, mobile menu and footer) and a page group (For businesses · For destinations and organizations · Learn on your own; used here). Each program's promise is its own page's headline. The learning row is eLearningU everywhere (the temporary `pageName` is gone).
 - **Intro (two columns from `lg`):** the H1 "Every way we work together." (display) on the left; on the right the lead with "Book a 20-min call" as an inline canopy-text link (Calendly).
 - **Groups:** each under the standard 2px Canopy divider, in two columns from `lg` (300px / 1fr): the group heading (h3 style at 32px, as an `<h2>`) and its one line on the left; the program rows on the right.
 - **Rows** (`.row-link`; the whole row is the link): the name (Epilogue 900, up to 30px), the promise (body, ink-soft) and a "→" at the far right. Hover and focus give the row the newsprint-hover fill (radius 10), turn the name and arrow break-on-light and nudge the arrow 4px right. Under `md` the name and promise stack, with the arrow still on the right.
@@ -718,14 +729,14 @@ A new course gets a `slug` and its still the same way.
   - **Field sets:** The Accelerator (website, 90-day goal, the partner checkbox), Offload (team size, bottleneck), Custom Training (audience, learners, timing), Marketing strategy (region, "What do you want your strategy to solve?", ideal timing, optional budget range), Speaking (date, city, size, format, topic), Something else (message).
   - **Send:** the primary button. No reply-time promise anywhere on the page.
 - **Aside:** a sage-25 box (radius 14) with "Rather just talk?" (Epilogue 600, 20px, Forest), "Twenty minutes with Conner, no pitch deck." and "Book a 20-min call" (`tone-sage`: Forest fill, Newsprint text). Under it, plain text: the email, phone and address.
-- **Support line:** under a 1px Carbon rule at the bottom, existing JunctionU learners and Industry Scan subscribers are sent to support. The address is a placeholder ("[ support email ]", TODO).
+- **Support line:** under a 1px Carbon rule at the bottom, existing eLearningU learners and Industry Scan subscribers are sent to support. The address is a placeholder ("[ support email ]", TODO), so the line shows only with `SHOW_PLACEHOLDERS`.
 - **Pre-filled arrivals** (`?type=`): select the tile and fill fields. When something was filled from another page, a sage-25 note (radius 10, Forest) sits at the top of step 2 while that program stays selected.
 
   | Arrival | Selects | Fills / note |
   |---|---|---|
   | `type=speaking&event=&date=&format=&audience=` | Speaking | From the Speaking availability check; "We've filled this in from your availability check." |
-  | `type=training&who=&size=&sketch=` | Custom Training | From the program sketcher; "We've filled this in from your program sketch." |
-  | `type=training&from=region` | Custom Training | "Who's the training for?" = operators in our region; "Funded seats for your region." (JunctionU "Talk to us about a region") |
+  | `type=training&who=&size=&sketch=` | Custom Training | From the program sketcher (hidden: `SHOW_TRAINING_SKETCHER`; the pre-fill still works); "We've filled this in from your program sketch." |
+  | `type=training&from=region` | Custom Training | "Who's the training for?" = operators in our region; "Funded seats for your region." (eLearningU "Talk to us about a region") |
   | `type=strategy` | Marketing strategy | — |
   | `type=other&topic=scan-team` | Something else | Message "Industry Scan — team or association pricing" (Scan pricing, "Buying for a team or association?") |
   | `type=other&topic=scan-trial` | Something else | Message "Industry Scan — free month". Only a fallback: "Start your free month" uses `SCAN_SIGNUP_URL` (`src/lib/industryScan.ts`, TODO) when it's set. |
@@ -779,12 +790,13 @@ Done means booked, sent, subscribed or purchased. Count the click on the CTA as 
 |---|---|
 | Any "Book a 20-min call" → Calendly | 2 |
 | Speaking availability → Contact pre-filled → Send | 3 |
-| Custom Training sketch → Contact pre-filled → Send | 3 |
-| JunctionU course/workshop card → eLearningU course page → buy | 3 |
+| Custom Training sketch (hidden) → Contact pre-filled → Send | 3 |
+| Custom Training "Or send us the details →" → Contact (training) → Send | 2 |
+| eLearningU course/workshop card → eLearningU landing page → buy | 3 |
 | Tourism Talk → plays in place | 1 |
-| Work "join the JunctionU list" → email band → Subscribe | 2 |
+| Work "join the eLearningU list" (hidden) → email band → Subscribe | 2 |
 | Homepage carousel → program page → its CTA → done | 3–4 |
-| JunctionU "Talk to us about a region" → Contact pre-filled → Send | 3 |
+| eLearningU "Talk to us about a region" → Contact pre-filled → Send | 3 |
 | Scan "Start your free month" → sign-up | 2, or 3 via the fallback |
 
 New CTAs get a row here.
@@ -796,3 +808,29 @@ New CTAs get a row here.
 - Buttons press down 1px when active.
 - `prefers-reduced-motion` disables transitions.
 - **framer-motion** (pinned) is used only for the hero wordmark's slower scroll and the quick score card swap. Everything else is CSS or small scroll handlers (the Offload calendar).
+
+## Flags and hidden sections
+
+Everything removed or not ready is **hidden behind a flag in `src/lib/flags.ts`, never deleted**. Off means nothing renders: no empty wrappers, no dead anchors, and grids reflow. On means the section returns in its original place.
+
+| Flag | Default | What it shows |
+|---|---|---|
+| `SHOW_HOME_CALL_SECTION` | false | Homepage "What happens on the call" and the "Not ready for a call?" Tourism Talks card |
+| `SHOW_HOME_CASE_STUDY` | false | Homepage building-supply case teaser (its "See the full story →" also needs `SHOW_AI_CASE_STUDY`) |
+| `SHOW_AI_CASE_STUDY` | false | Offload page `#case-study` (CaseSwitcher) and the hero link "See a real build ↓"; every link to `#case-study` follows it |
+| `SHOW_AI_TESTIMONIALS` | false | Offload page testimonials (all placeholders, so it also needs `SHOW_PLACEHOLDERS`) |
+| `SHOW_WORK_SUPPLIER_CASE` | false | Work building-supply chapter |
+| `SHOW_STRATEGY_PROOF` | false | Marketing strategy "Real regions. Real numbers." |
+| `SHOW_CAROUSEL_PRICES` | false | The Accelerator and AI Training price lines in the homepage carousel (the prices stay in the data) |
+| `SHOW_TRAINING_SKETCHER` | false | Custom Training program sketcher (instead of the closing CTA) |
+| `SHOW_JU_WORDMARK` | false | JUNCTION_U instead of the eLearningU name |
+| `SHOW_ELU_EMAIL_BAND` | false | The eLearningU email band and the Work page's link to it |
+| `SHOW_PLACEHOLDERS` | false | Every user-visible placeholder (below) |
+
+The building-supply case data is one file, `src/lib/buildingSupplyCase.ts`, shared by the homepage teaser, the Offload case study and the Work chapter.
+
+**`SHOW_PLACEHOLDERS`** (off for the soft launch). `isPlaceholder()` and `shown()` in `src/lib/placeholders.ts` recognise "[ … ]" labels.
+- **Label only** (the rest still works): eLearningU course prices "[ $ ]" and workshop lengths "[ x HRS ]", the Scan teaser's "[ Month Year ]", the Accelerator video's "[ 0:00 ]", the Offload calculator's draft "What we'd build" lines, the footer signup's "[ Frequency ]" (it reads "Unsubscribe anytime"), the case switcher's "After [ result ]" and the Kootenay "[ # ]" on the Work map and sample spread.
+- **Whole element:** placeholder testimonial cards (homepage: the quote goes full width; Accelerator: the auto-fit proof grid becomes two cards; Custom Training and Speaking), Speaking talk posters (the topic takes the full row until `talk-0N.jpg` exists), the Quick Score "what they'll receive" line, the Marketing strategy "[ TYPICAL LENGTH ]" line and Kootenay proof card, the Contact support line, the Offload "What we measured" results, and the Scan FAQ items answered "[ Answer to come ]" (with none left, the section goes).
+- New placeholders go behind this flag too.
+
