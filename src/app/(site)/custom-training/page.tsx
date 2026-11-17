@@ -14,7 +14,7 @@ import {
   LogoWall,
 } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
-import { SHOW_TRAINING_SKETCHER } from "@/lib/flags";
+import { SHOW_PLACEHOLDERS, SHOW_TRAINING_SKETCHER } from "@/lib/flags";
 import { clientLogos } from "@/lib/logos";
 import { COURSES } from "@/lib/customCourses";
 import { CourseShelf } from "./CourseShelf";
@@ -221,7 +221,7 @@ export default function CustomTrainingPage() {
               }
               caption="Avery Bramadat, Travel Yukon"
             />
-            <Placeholder>[ Leadership training testimonial ]</Placeholder>
+            {SHOW_PLACEHOLDERS && <Placeholder>[ Leadership training testimonial ]</Placeholder>}
           </div>
         </Container>
       </Section>

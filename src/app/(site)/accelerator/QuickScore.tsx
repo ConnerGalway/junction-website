@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useId, useRef, useState } from "react";
 import type { FormEvent } from "react";
 import { Button, Eyebrow, Input, cx } from "@/components";
+import { SHOW_PLACEHOLDERS } from "@/lib/flags";
 import {
   QUESTIONS,
   answersFor,
@@ -363,9 +364,11 @@ function ScoreCard({
             Enter a valid email address, like name@business.com
           </p>
         )}
-        <p className="type-small mt-3 mb-0">
-          [ What they&apos;ll receive: the quick score report and info about the program ]
-        </p>
+        {SHOW_PLACEHOLDERS && (
+          <p className="type-small mt-3 mb-0">
+            [ What they&apos;ll receive: the quick score report and info about the program ]
+          </p>
+        )}
       </form>
     </div>
   );

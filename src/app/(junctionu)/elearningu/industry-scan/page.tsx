@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Accordion } from "@/components";
 import { BriefingVideo, JuButton, ScanPreview } from "@/components/junctionu";
 import {
-  SCAN_FAQ,
+  SCAN_FAQ_VISIBLE,
   SCAN_FEATURES,
   SCAN_LATEST,
   SCAN_PRICE,
@@ -129,15 +129,17 @@ export default function IndustryScanPage() {
         </div>
       </section>
 
-      {/* Questions */}
-      <section aria-labelledby="faq-heading" className="px-gutter py-[clamp(56px,7vw,104px)]">
-        <div className="mx-auto grid max-w-wide gap-x-16 gap-y-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
-          <h2 id="faq-heading" className="ju-display m-0 text-[clamp(32px,3.6vw,50px)]">
-            Questions
-          </h2>
-          <Accordion items={SCAN_FAQ} single chevronClassName="text-fern" />
-        </div>
-      </section>
+      {/* Questions (answered ones only; none yet, so hidden for the soft launch) */}
+      {SCAN_FAQ_VISIBLE.length > 0 && (
+        <section aria-labelledby="faq-heading" className="px-gutter py-[clamp(56px,7vw,104px)]">
+          <div className="mx-auto grid max-w-wide gap-x-16 gap-y-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+            <h2 id="faq-heading" className="ju-display m-0 text-[clamp(32px,3.6vw,50px)]">
+              Questions
+            </h2>
+            <Accordion items={SCAN_FAQ_VISIBLE} single chevronClassName="text-fern" />
+          </div>
+        </section>
+      )}
     </>
   );
 }

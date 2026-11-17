@@ -2,6 +2,7 @@
 
 import { useId } from "react";
 import type { ReactNode } from "react";
+import { SHOW_PLACEHOLDERS } from "@/lib/flags";
 import { Button } from "./Button";
 import { cx } from "./cx";
 
@@ -11,7 +12,7 @@ type NewsletterSignupProps = {
   label?: string;
   /** Keep the label for screen readers only (e.g. when a headline introduces the form). */
   hideLabel?: boolean;
-  /** Line under the field (default "[ Frequency ] · unsubscribe anytime"). */
+  /** Line under the field (default "Unsubscribe anytime"; "[ Frequency ] · unsubscribe anytime" with SHOW_PLACEHOLDERS). */
   helper?: ReactNode;
   /** Centre the label, row and helper (The Brief page). */
   centered?: boolean;
@@ -25,7 +26,7 @@ export function NewsletterSignup({
   className,
   label = "Get The Brief in your inbox",
   hideLabel,
-  helper = "[ Frequency ] · unsubscribe anytime",
+  helper = SHOW_PLACEHOLDERS ? "[ Frequency ] · unsubscribe anytime" : "Unsubscribe anytime",
   centered,
 }: NewsletterSignupProps) {
   const id = useId();

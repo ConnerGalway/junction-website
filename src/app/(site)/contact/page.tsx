@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Button, Container, Section, TextLink } from "@/components";
+import { SHOW_PLACEHOLDERS } from "@/lib/flags";
 import { CALENDLY_URL } from "@/lib/constants";
 import { ContactForm } from "./ContactForm";
 
@@ -55,13 +56,16 @@ export default function ContactPage() {
           </aside>
         </div>
 
-        {/* Existing learners and subscribers go to support, not the form. */}
-        <p className="type-small m-0 mt-16 border-t border-carbon pt-5">
-          Already an eLearningU learner or Industry Scan subscriber? For courses,
-          sign-in, certificates or your subscription, email support.{" "}
-          {/* TODO: the team's support address (mailto:) and label. */}
-          <TextLink href="mailto:" arrow>[ support email ]</TextLink>
-        </p>
+        {/* Existing learners and subscribers go to support, not the form.
+            Hidden until the support address exists (it's a placeholder). */}
+        {SHOW_PLACEHOLDERS && (
+          <p className="type-small m-0 mt-16 border-t border-carbon pt-5">
+            Already an eLearningU learner or Industry Scan subscriber? For courses,
+            sign-in, certificates or your subscription, email support.{" "}
+            {/* TODO: the team's support address (mailto:) and label. */}
+            <TextLink href="mailto:" arrow>[ support email ]</TextLink>
+          </p>
+        )}
       </Container>
     </Section>
   );

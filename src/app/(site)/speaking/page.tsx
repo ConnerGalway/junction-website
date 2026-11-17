@@ -13,7 +13,7 @@ import {
   cx,
 } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
-import { SHOW_SPEAKING_REEL } from "@/lib/flags";
+import { SHOW_PLACEHOLDERS, SHOW_SPEAKING_REEL } from "@/lib/flags";
 import { AvailabilityForm } from "./AvailabilityForm";
 import { ReelPill } from "./ReelPill";
 import { SpotlightHero } from "./SpotlightHero";
@@ -163,11 +163,14 @@ export default function SpeakingPage() {
           <ol className="m-0 list-none p-0">
             {topics.map((t, i) => {
               const image = talkImage(i + 1);
+              // Without a poster image (and with placeholders off) the talk takes the full row.
+              const media = !!image || SHOW_PLACEHOLDERS;
               return (
                 <li
                   key={t.num}
                   className={cx(
-                    "grid items-start gap-x-12 gap-y-8 py-10 md:grid-cols-[minmax(0,1fr)_minmax(0,360px)]",
+                    "grid items-start gap-x-12 gap-y-8 py-10",
+                    media && "md:grid-cols-[minmax(0,1fr)_minmax(0,360px)]",
                     i === 0 ? "border-t-2 border-(--tone-rule)" : "border-t border-hairline"
                   )}
                 >
@@ -186,7 +189,7 @@ export default function SpeakingPage() {
                       <Image src={image} alt="" fill sizes="(min-width: 768px) 360px, 100vw" className="object-cover" />
                     </div>
                   ) : (
-                    <Placeholder aspectRatio="16/9">[ talk poster ]</Placeholder>
+                    SHOW_PLACEHOLDERS && <Placeholder aspectRatio="16/9">[ talk poster ]</Placeholder>
                   )}
                 </li>
               );
@@ -238,7 +241,7 @@ export default function SpeakingPage() {
                 <Stat value="2,000+" label="people trained" maxSize="clamp(56px, 6vw, 88px)" />
               </div>
             </div>
-            <Placeholder className="mt-10">[ Event organizer testimonial ]</Placeholder>
+            {SHOW_PLACEHOLDERS && <Placeholder className="mt-10">[ Event organizer testimonial ]</Placeholder>}
           </div>
         </Container>
       </Section>

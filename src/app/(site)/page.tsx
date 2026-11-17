@@ -12,6 +12,7 @@ import {
   Section,
   TextLink,
   LogoWall,
+  cx,
 } from "@/components";
 import { HeroWordmark } from "@/components/HeroWordmark";
 import { CASE_AREAS, CASE_INTRO, CASE_META, CASE_TITLE, CASE_TOOLS } from "@/lib/buildingSupplyCase";
@@ -286,7 +287,7 @@ export default function HomePage() {
         {/* Without the placeholder cards, the quote takes the full width. */}
         <Container className={SHOW_PLACEHOLDERS ? "grid gap-6 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]" : undefined}>
           <QuoteCard
-            className="flex min-h-[340px] flex-col justify-between"
+            className={cx("flex flex-col justify-between", SHOW_PLACEHOLDERS ? "min-h-[340px]" : "gap-10")}
             quote={
               <>
                 &quot;We are a stronger, smarter organization today thanks to

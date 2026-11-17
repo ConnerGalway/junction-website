@@ -100,7 +100,8 @@ export default function MarketingStrategyPage() {
               );
             })}
           </ol>
-          <p className="type-price m-0 mt-14 text-[28px]">{ENGAGEMENT_LINE}</p>
+          {/* "[ TYPICAL LENGTH ] · SCOPED TO YOU": the whole line waits for the length. */}
+          {SHOW_PLACEHOLDERS && <p className="type-price m-0 mt-14 text-[28px]">{ENGAGEMENT_LINE}</p>}
         </Container>
       </Section>
 

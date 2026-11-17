@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { SHOW_PLACEHOLDERS } from "@/lib/flags";
 import { JU_SCAN_URL } from "@/lib/junctionu";
 import { JU_SCAN_THUMBNAIL } from "@/lib/junctionuImages";
 import { JuButton } from "./JuButton";
@@ -24,7 +25,8 @@ export function ScanTeaser() {
           />
           <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-ju-deep/80 to-transparent" />
           {/* The thumbnail already says "Tourism Industry Scan": just the byline beside the play button */}
-          <PlayBadge label="Conner Galway · [ Month Year ]" />
+          {/* TODO: the issue's month and year ("[ Month Year ]" shows only with SHOW_PLACEHOLDERS). */}
+          <PlayBadge label={SHOW_PLACEHOLDERS ? "Conner Galway · [ Month Year ]" : "Conner Galway"} />
           <span className="sr-only">This month&apos;s Industry Scan</span>
         </a>
         <div>
