@@ -1,5 +1,5 @@
 /**
- * Tourism Industry Scan: the landing page (/junctionu/industry-scan) and its
+ * Tourism Industry Scan: the landing page (/elearningu/industry-scan) and its
  * ScanPreview. Content is from the August 2026 issue. The Scan itself is
  * being redesigned, so the preview will be updated later; everything it
  * shows lives here.
@@ -8,6 +8,9 @@
  * PLACEHOLDERS: "[ … ]" FAQ answers; the subscription link and team
  * pricing are TODOs.
  */
+
+import { SHOW_PLACEHOLDERS } from "./flags";
+import { isPlaceholder } from "./placeholders";
 
 /** TODO: fill with the current Industry Scan sign-up page. */
 export const SCAN_SIGNUP_URL = "";
@@ -100,6 +103,10 @@ export const SCAN_FEATURES = [
 ];
 
 /** FAQ. Answers are placeholders. */
+/**
+ * Questions. Items still answered "[ Answer to come ]" show only with
+ * SHOW_PLACEHOLDERS (see SCAN_FAQ_VISIBLE); with none left, the section goes.
+ */
 export const SCAN_FAQ = [
   { q: "Who is the Scan for?", a: "[ Answer to come ]" },
   { q: "What sources do you use?", a: "[ Answer to come ]" },
@@ -107,3 +114,6 @@ export const SCAN_FAQ = [
   { q: "Can my whole team read it?", a: "[ Answer to come ]" },
   { q: "How do I cancel?", a: "[ Answer to come ]" },
 ];
+
+/** The questions to show: answered ones, plus placeholders with SHOW_PLACEHOLDERS. */
+export const SCAN_FAQ_VISIBLE = SCAN_FAQ.filter((item) => SHOW_PLACEHOLDERS || !isPlaceholder(item.a));

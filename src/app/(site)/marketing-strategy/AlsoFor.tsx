@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { SubBrandWordmark } from "@/components";
+import { EluWordmark } from "@/components/junctionu";
+import { ELU_LOGO } from "@/lib/junctionuImages";
 
 /**
  * "Also for destinations": three linked items under 2px Canopy rules, each
@@ -21,12 +22,18 @@ const ITEMS: { href: string; title: string; line: string; thumb: ReactNode }[] =
     ),
   },
   {
-    href: "/junctionu",
-    title: "JunctionU",
+    href: "/elearningu",
+    title: "eLearningU",
     line: "Self-paced courses and free Tourism Talks for operators.",
     thumb: (
       <span className="ju flex size-full items-end p-3">
-        <SubBrandWordmark suffix="U" className="text-[13px] text-newsprint" />
+        {/* Oswald loads on eLearningU pages only, so the name is set in Epilogue
+            (main-site display face) rather than loading a font for one thumbnail. */}
+        <EluWordmark
+          logo={ELU_LOGO}
+          fontClassName="font-display font-semibold tracking-[-0.015em]"
+          className="text-[13px] text-newsprint"
+        />
       </span>
     ),
   },

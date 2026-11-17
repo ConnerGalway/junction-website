@@ -1,18 +1,21 @@
 import type { Metadata } from "next";
 import { CourseCard, DmoPanel, EmailBand, JuHero, ScanTeaser, Shelf, TalkCard, WorkshopCard } from "@/components/junctionu";
 import { COURSES, JU_SEE_ALL, WORKSHOPS } from "@/lib/junctionu";
+import { SHOW_ELU_EMAIL_BAND } from "@/lib/flags";
 import { withStills } from "@/lib/junctionuImages";
 import { getTalks } from "@/lib/junctionuTalks";
 
 export const metadata: Metadata = {
-  title: "JunctionU",
+  title: "eLearningU",
   description:
-    "Certificate courses, workshops and free Tourism Talks, built for tourism professionals. Lessons run under an hour and every one ends in something you can do today. 2,000+ people are in.",
+    "eLearningU is Junction's online school for tourism: certificate courses, workshops and free Tourism Talks, built for tourism professionals. Lessons run under an hour and every one ends in something you can do today.",
 };
 
 /**
- * JunctionU (sub-brand; see DESIGN_SYSTEM.md "JunctionU sub-brand").
+ * eLearningU storefront (/elearningu; sub-brand, see DESIGN_SYSTEM.md
+ * "eLearningU sub-brand"). Every product links out to its eLearningU page.
  * One Mint button on the page (Start free); every other section has one action.
+ * Code names (JunctionUPage, Ju* components, ju-* tokens) stay.
  */
 export default async function JunctionUPage() {
   const talks = await getTalks();
@@ -54,7 +57,8 @@ export default async function JunctionUPage() {
 
       <DmoPanel />
       <ScanTeaser />
-      <EmailBand />
+      {/* Hidden: SHOW_ELU_EMAIL_BAND (its signup isn't wired to a list yet) */}
+      {SHOW_ELU_EMAIL_BAND && <EmailBand />}
     </>
   );
 }

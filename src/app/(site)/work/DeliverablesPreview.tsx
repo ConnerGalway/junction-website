@@ -89,7 +89,8 @@ function Spread({ figure, redacted }: { figure: string; redacted?: boolean }) {
   );
   const chart = (
     <div className={cx("flex h-full flex-col justify-between p-[5cqw]", redacted && "blur-[2px]")}>
-      <span className="font-wordmark text-[11cqw] leading-none text-accent-1-on-light">{figure}</span>
+      {/* No figure yet: the bars keep their place at the bottom. */}
+      <span className="font-wordmark text-[11cqw] leading-none text-accent-1-on-light">{figure || "\u00a0"}</span>
       <div className="flex h-[38%] items-end gap-[2cqw]">
         {[45, 70, 55, 100].map((h, i) => (
           <span key={i} className={cx("flex-1 rounded-t-[1cqw]", i === 3 ? "bg-canopy" : "bg-sage")} style={{ height: `${h}%` }} />

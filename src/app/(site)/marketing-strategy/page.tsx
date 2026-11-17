@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { Button, Container, Eyebrow, LogoWall, Section, TextLink } from "@/components";
+import { Button, Container, Eyebrow, LogoWall, Section, Stat, TextLink, cx } from "@/components";
 import { JuButton } from "@/components/junctionu";
 import { CALENDLY_URL } from "@/lib/constants";
 import { JU_SCAN_THUMBNAIL } from "@/lib/junctionuImages";
+import { SHOW_PLACEHOLDERS, SHOW_STRATEGY_PROOF } from "@/lib/flags";
 import { dmoLogos } from "@/lib/logos";
-import { ENGAGEMENT_LINE, MONTHS, PHASES, YEAR_LEGEND, type YearPhase } from "@/lib/marketingStrategy";
+import { ENGAGEMENT_LINE, MONTHS, PHASES, PROOF, YEAR_LEGEND, type YearPhase } from "@/lib/marketingStrategy";
 import { AlsoFor } from "./AlsoFor";
 import { DeliverablesShelf } from "./DeliverablesShelf";
 
@@ -27,6 +28,9 @@ const phaseColor: Record<YearPhase, string> = {
  * Marketing strategy: the DMO-facing program page, sister of Custom
  * Training (same hero and section family). Content: src/lib/marketingStrategy.ts.
  */
+/** Proof cards still waiting on a number are placeholders (SHOW_PLACEHOLDERS). */
+const visibleProof = PROOF.filter((p) => SHOW_PLACEHOLDERS || !("placeholder" in p && p.placeholder));
+
 export default function MarketingStrategyPage() {
   return (
     <>
@@ -96,7 +100,8 @@ export default function MarketingStrategyPage() {
               );
             })}
           </ol>
-          <p className="type-price m-0 mt-14 text-[28px]">{ENGAGEMENT_LINE}</p>
+          {/* "[ TYPICAL LENGTH ] · SCOPED TO YOU": the whole line waits for the length. */}
+          {SHOW_PLACEHOLDERS && <p className="type-price m-0 mt-14 text-[28px]">{ENGAGEMENT_LINE}</p>}
         </Container>
       </Section>
 
@@ -131,8 +136,36 @@ export default function MarketingStrategyPage() {
         </Container>
       </Section>
 
-      {/* Scan entry: a pointer to JunctionU's Industry Scan, in the JunctionU colours (.ju) with main-site type */}
-      <Section spacing="tight">
+      {/* Real regions. Real numbers. (hidden: SHOW_STRATEGY_PROOF; unboxed stat list: no boxes, no ghost numbers) */}
+      {SHOW_STRATEGY_PROOF && (
+        <Section>
+          <Container>
+            <div className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
+              <h2 className="type-h2 m-0">Real regions. Real numbers.</h2>
+              <TextLink href="/work">All our work →</TextLink>
+            </div>
+            <ul
+              className={cx(
+                "m-0 mt-12 grid list-none gap-x-12 gap-y-12 p-0",
+                visibleProof.length >= 3 ? "md:grid-cols-3" : "md:grid-cols-2"
+              )}
+            >
+              {visibleProof.map((p) => (
+                <li key={p.meta} className="min-w-0">
+                  <Eyebrow className="m-0 mb-4">{p.meta}</Eyebrow>
+                  <Stat value={p.value} label={p.line} maxSize="120px" />
+                  <TextLink href={p.href} className="mt-4 inline-block">
+                    Read the case →
+                  </TextLink>
+                </li>
+              ))}
+            </ul>
+          </Container>
+        </Section>
+      )}
+
+      {/* Scan entry: a pointer to eLearningU's Industry Scan, in the eLearningU colours (.ju) with main-site type */}
+      <Section spacing="tight" flush={SHOW_STRATEGY_PROOF ? "top" : undefined}>
         <Container>
           <div className="ju grid items-center gap-x-12 gap-y-8 rounded-[18px] p-[clamp(24px,4vw,56px)] md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
             <div className="relative aspect-video overflow-hidden rounded-[12px]">
@@ -144,7 +177,7 @@ export default function MarketingStrategyPage() {
               <p className="type-body mt-5 mb-7 max-w-[46ch] text-newsprint-muted">
                 A monthly briefing for DMO leaders: the trends, stats and actions worth taking. First month free.
               </p>
-              <JuButton variant="outline" href="/junctionu/industry-scan">
+              <JuButton variant="outline" href="/elearningu/industry-scan">
                 Try a month free
               </JuButton>
             </div>

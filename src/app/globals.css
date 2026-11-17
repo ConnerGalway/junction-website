@@ -66,10 +66,10 @@
   --font-display: var(--nf-epilogue), ui-sans-serif, system-ui, sans-serif;
   --font-quote: var(--nf-fraunces), ui-serif, Georgia, serif;
   --font-wordmark: var(--nf-bebas), ui-sans-serif, system-ui, sans-serif;
-  /* JunctionU's lead font (loaded by the JunctionU layout only). */
+  /* eLearningU's lead font (loaded by the eLearningU layout only). */
   --font-ju: var(--nf-oswald), "Arial Narrow", ui-sans-serif, sans-serif;
 
-  /* JunctionU sub-brand colours. The values live on .ju (the JunctionU layout),
+  /* eLearningU sub-brand colours. The values live on .ju (the eLearningU layout),
      so these utilities only resolve inside it. */
   --color-ju-ground: var(--ju-ground);
   --color-ju-moss: var(--ju-moss);
@@ -310,7 +310,7 @@
     --tone-price: var(--color-forest);
   }
 
-  /* JunctionU sub-brand (the (junctionu) layout): its own ground and colours,
+  /* eLearningU sub-brand (the (junctionu) layout): its own ground and colours,
      with the tone variables set so shared components (links, inputs, focus
      rings) read correctly on it. */
   .ju {
@@ -1236,7 +1236,7 @@
     display: none;
   }
 
-  /* JunctionU type: Oswald 700. ju-display is capitals (headlines and big
+  /* eLearningU type: Oswald 700. ju-display is capitals (headlines and big
      statements); ju-title is sentence case (card and row titles). Size each
      use with a text-* class. */
   .ju-display {
@@ -1254,7 +1254,7 @@
     letter-spacing: 0;
   }
 
-  /* JunctionU nav: the active link gets a 2px Fern underline. */
+  /* eLearningU nav: the active link gets a 2px Fern underline. */
   .ju-nav-link {
     text-decoration-line: none;
   }
@@ -1266,7 +1266,7 @@
     text-underline-offset: 8px;
   }
 
-  /* JunctionU shelves: the row starts at the content edge and bleeds off the
+  /* eLearningU shelves: the row starts at the content edge and bleeds off the
      right edge of the viewport; scroll-snap, no scrollbar. */
   .ju-shelf {
     --ju-inset: max(var(--spacing-gutter), (100% - var(--container-wide)) / 2);
@@ -1286,7 +1286,7 @@
     scroll-snap-align: start;
   }
 
-  /* JunctionU cards (links): lift 5px, a 2px Fern outline and (in each card) a
+  /* eLearningU cards (links): lift 5px, a 2px Fern outline and (in each card) a
      pink title on hover and keyboard focus. */
   .ju-card {
     outline: 2px solid transparent;
@@ -1334,8 +1334,8 @@
     text-shadow: 0 1px 10px color-mix(in srgb, var(--ju-deep) 80%, transparent);
   }
 
-  /* JunctionU glass panel (For DMOs). The 1px top highlight is white at 35%:
-     a JunctionU-only exception to the no-white rule. */
+  /* eLearningU glass panel (For DMOs). The 1px top highlight is white at 35%:
+     an eLearningU-only exception to the no-white rule. */
   .ju-glass {
     background-color: color-mix(in srgb, var(--color-newsprint) 7%, transparent);
     -webkit-backdrop-filter: blur(14px) saturate(160%);
@@ -1346,7 +1346,7 @@
       0 30px 70px -30px color-mix(in srgb, var(--ju-deep) 85%, transparent);
   }
 
-  /* JunctionU video cards: the image brightens slightly on hover and focus
+  /* eLearningU video cards: the image brightens slightly on hover and focus
      (with PlayBadge's circle scaling to 1.08). */
   .ju-video-image {
     transition: filter 200ms ease-out;

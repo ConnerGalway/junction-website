@@ -85,3 +85,14 @@ export const YEAR_LEGEND: { phase: YearPhase; title: string; line: string }[] = 
   { phase: "season", title: "Season in market", line: "Support while your campaigns run." },
   { phase: "funding", title: "Funding and RFPs", line: "We help you scope, apply and respond." },
 ];
+
+/**
+ * Real regions. Real numbers. (hidden: SHOW_STRATEGY_PROOF). Numbers match
+ * the Work page chapters (src/lib/workCases.ts).
+ */
+export const PROOF = [
+  { meta: "Travel Yukon · Training", value: "300+", line: "Businesses through Travel Yukon's Go Digital program in four years.", href: "/work#case-yukon" },
+  { meta: "Ontario's Southwest · Research", value: "2026", line: "Ontario's Southwest tourism strategy, driven by our traveller research.", href: "/work#case-osw" },
+  // TODO: the Kootenay Rockies number. Until then this card is a placeholder (SHOW_PLACEHOLDERS).
+  { meta: "Kootenay Rockies · Strategy", value: "[ # ]", line: "Kootenay Rockies: marketing operations rebuilt around what works.", href: "/work#case-kootenay", placeholder: true },
+];

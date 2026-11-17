@@ -14,6 +14,7 @@ import {
   LogoWall,
 } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
+import { SHOW_PLACEHOLDERS, SHOW_TRAINING_SKETCHER } from "@/lib/flags";
 import { clientLogos } from "@/lib/logos";
 import { COURSES } from "@/lib/customCourses";
 import { CourseShelf } from "./CourseShelf";
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
 };
 
 const dmoFeatures = [
-  "Courses on JunctionU, branded for your region",
+  "Courses on eLearningU, branded for your region",
   "Live workshops and webinar series",
   "Delivery, learner support and progress reporting",
   "You fund 25% to 100% of seats",
@@ -60,7 +61,7 @@ const formats: Format[] = [
     id: "course",
     name: "Custom course",
     duration: "Self-paced",
-    description: "Self-paced on JunctionU, with certificates and reporting.",
+    description: "Self-paced on eLearningU, with certificates and reporting.",
   },
   {
     id: "leadership",
@@ -123,7 +124,7 @@ export default function CustomTrainingPage() {
                     features={dmoFeatures}
                     button={{ label: "Scope a course program", href: "/contact?type=training" }}
                     photo={{ src: "/images/custom-training/who-dmos.jpg", alt: "A Junction workshop for tourism operators" }}
-                    cardMeta="Custom courses · on JunctionU"
+                    cardMeta="Custom courses · on eLearningU"
                     cardRows={COURSES.map((title) => ({ title }))}
                     cardNote="Over 2,000 tourism operators trained."
                   />
@@ -176,7 +177,7 @@ export default function CustomTrainingPage() {
         <Container>
           <div className="mb-10 flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
             <h2 className="type-h2 m-0">Formats.</h2>
-            <TextLink href="/junctionu" className="whitespace-nowrap">
+            <TextLink href="/elearningu" className="whitespace-nowrap">
               See how we teach first: watch free →
             </TextLink>
           </div>
@@ -220,18 +221,35 @@ export default function CustomTrainingPage() {
               }
               caption="Avery Bramadat, Travel Yukon"
             />
-            <Placeholder>[ Leadership training testimonial ]</Placeholder>
+            {SHOW_PLACEHOLDERS && <Placeholder>[ Leadership training testimonial ]</Placeholder>}
           </div>
         </Container>
       </Section>
 
-      {/* Program sketcher */}
+      {/* Closing CTA. The program sketcher is hidden (SHOW_TRAINING_SKETCHER);
+          its Contact pre-fill (/contact?type=training&…) still works for when
+          it returns. */}
       <Section id="start" tone="forest" className="scroll-mt-24">
         <Container>
-          <h2 className="type-h2 m-0 mb-10 max-w-[22ch]">
-            Tell us who needs training. We&apos;ll sketch the program.
-          </h2>
-          <ProgramSketcher />
+          {SHOW_TRAINING_SKETCHER ? (
+            <>
+              <h2 className="type-h2 m-0 mb-10 max-w-[22ch]">
+                Tell us who needs training. We&apos;ll sketch the program.
+              </h2>
+              <ProgramSketcher />
+            </>
+          ) : (
+            <>
+              <h2 className="type-display m-0 max-w-[18ch]">
+                Tell us who needs training. We&apos;ll build the program around them.
+              </h2>
+              <div className="mt-10 flex flex-wrap items-center gap-7">
+                {/* Primary on Forest: Newsprint fill, Forest text */}
+                <Button href={CALENDLY_URL}>Book a 20-min call</Button>
+                <TextLink href="/contact?type=training">Or send us the details →</TextLink>
+              </div>
+            </>
+          )}
         </Container>
       </Section>
     </>

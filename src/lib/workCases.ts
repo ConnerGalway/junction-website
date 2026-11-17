@@ -9,6 +9,9 @@
  * spread 2); they fill the same slots.
  */
 
+import { CASE_AREAS, CASE_META, CASE_SUMMARY, CASE_TITLE } from "./buildingSupplyCase";
+import { SHOW_AI_CASE_STUDY, SHOW_PLACEHOLDERS, SHOW_WORK_SUPPLIER_CASE } from "./flags";
+
 export const SERVICES = ["Training", "Accelerator", "Research", "Strategy"] as const;
 export type Service = (typeof SERVICES)[number];
 
@@ -32,6 +35,29 @@ export type WorkCase = {
   };
 };
 
+const collections = CASE_AREAS.find((a) => a.id === "collections")!;
+
+/**
+ * The building-supply chapter (hidden: SHOW_WORK_SUPPLIER_CASE). Its "full
+ * story" link points at the AI Training case study, so it shows only while
+ * SHOW_AI_CASE_STUDY is on too.
+ */
+const SUPPLIER_CASE: WorkCase = {
+  id: "case-supplier",
+  service: "Accelerator",
+  meta: CASE_META,
+  stat: { value: collections.number, label: `${collections.numberLabel}, before` },
+  title: CASE_TITLE,
+  description: CASE_SUMMARY,
+  link: SHOW_AI_CASE_STUDY ? { label: "See the full story →", href: "/ai-accelerator#case-study" } : undefined,
+  deliverables: { figure: collections.number },
+};
+
+/**
+ * Chapter grounds and sides come from each chapter's visible position
+ * (<ChapterList>), so they alternate correctly with the supplier chapter
+ * on or off.
+ */
 export const WORK_CASES: WorkCase[] = [
   {
     id: "case-yukon",
@@ -59,6 +85,7 @@ export const WORK_CASES: WorkCase[] = [
     link: { label: "About the Accelerator →", href: "/accelerator" },
     deliverables: { figure: "+300%" },
   },
+  ...(SHOW_WORK_SUPPLIER_CASE ? [SUPPLIER_CASE] : []),
   {
     id: "case-osw",
     service: "Research",
@@ -84,6 +111,8 @@ export const WORK_CASES: WorkCase[] = [
       text: '"We are a stronger, smarter tourism organization today thanks to the work we did with Junction."',
       caption: "Kathy Cooper, CEO, Kootenay Rockies Tourism",
     },
-    deliverables: { figure: "[ # ]" },
+    // TODO: the Kootenay Rockies number. "[ # ]" shows only with SHOW_PLACEHOLDERS;
+    // otherwise the sample spread drops its figure.
+    deliverables: { figure: SHOW_PLACEHOLDERS ? "[ # ]" : "" },
   },
 ];

@@ -18,8 +18,8 @@ export function VideoPlayer({
 }: {
   src?: string;
   poster?: string;
-  /** Running time, e.g. "2:40". */
-  duration: string;
+  /** Running time, e.g. "2:40". Optional: without it the label is left out. */
+  duration?: string;
   /** What the video is, for the play button's accessible name. */
   label: string;
 }) {
@@ -55,7 +55,7 @@ export function VideoPlayer({
           <path d="M8 4.5v17l14-8.5z" fill="currentColor" />
         </svg>
       </button>
-      <span className="type-price absolute right-5 bottom-4 text-[28px]">{duration}</span>
+      {duration && <span className="type-price absolute right-5 bottom-4 text-[28px]">{duration}</span>}
     </div>
   );
 }

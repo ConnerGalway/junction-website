@@ -1,30 +1,34 @@
 /**
- * JunctionU content: nav, courses, workshops and Tourism Talks.
+ * eLearningU storefront content (/elearningu): nav, courses, workshops and
+ * Tourism Talks. The learning brand on this site is eLearningU (JunctionU is
+ * on hold); code names (this file, JU_*, Ju* components, ju-* tokens) stay.
  *
- * Courses and workshops still live on eLearningU; when they move to
- * JunctionU's own platform, change `url` here (and the sign-in link).
- * PLACEHOLDERS for team review: course prices ("[ $ ]"), course lengths
- * (all "6 HRS" for now) and workshop lengths ("[ x HRS ]").
+ * Every course and workshop links out to its own eLearningU (LearnWorlds)
+ * landing page via `url`.
+ * PLACEHOLDERS for team review (shown only with SHOW_PLACEHOLDERS): course
+ * prices ("[ $ ]") and workshop lengths ("[ x HRS ]"). Course lengths are
+ * all "6 HRS" for now.
  */
 
-const ELEARNINGU = "https://elearningu.com";
+export const ELEARNINGU_URL = "https://www.elearningu.com";
+const ELEARNINGU = ELEARNINGU_URL;
 
-/** TODO: confirm the eLearningU sign-in URL; replace with JunctionU's own platform. */
+/** "Sign in": the eLearningU sign-in page. TODO: confirm the URL (still a guess). */
 export const JU_SIGN_IN_URL = `${ELEARNINGU}/login`;
 
-/** Industry Scan page (TODO: build it; for now a placeholder page). */
-export const JU_SCAN_URL = "/junctionu/industry-scan";
+/** The Industry Scan landing page on this site. */
+export const JU_SCAN_URL = "/elearningu/industry-scan";
 
-/** "Start free": the existing target (the catalogue). */
-export const JU_START_URL = "/junctionu#catalogue";
+/** "Start free": eLearningU itself. */
+export const JU_START_URL = ELEARNINGU;
 
-/** Nav links (top bar and footer). Section anchors are absolute so they work from any JunctionU page. */
+/** Nav links (top bar and footer). Section anchors are absolute so they work from any eLearningU page. */
 export const JU_NAV = [
-  { label: "Browse", href: "/junctionu#catalogue", section: "catalogue" },
-  { label: "Courses", href: "/junctionu#courses", section: "courses" },
-  { label: "Workshops", href: "/junctionu#workshops", section: "workshops" },
-  { label: "Tourism Talks", href: "/junctionu#talks", section: "talks" },
-  { label: "For DMOs", href: "/junctionu#dmos", section: "dmos" },
+  { label: "Browse", href: "/elearningu#catalogue", section: "catalogue" },
+  { label: "Courses", href: "/elearningu#courses", section: "courses" },
+  { label: "Workshops", href: "/elearningu#workshops", section: "workshops" },
+  { label: "Tourism Talks", href: "/elearningu#talks", section: "talks" },
+  { label: "For DMOs", href: "/elearningu#dmos", section: "dmos" },
   { label: "Industry Scan", href: JU_SCAN_URL, section: null },
 ] as const;
 
@@ -36,6 +40,7 @@ export type JuCourse = {
   modules?: number;
   /** Price, set in Bebas. */
   price: string;
+  /** The product's eLearningU landing page (the card links out to it). */
   url: string;
   /**
    * Courses: the still's filename, public/images/junctionu/courses/<slug>.jpg
@@ -46,7 +51,7 @@ export type JuCourse = {
 };
 
 export const COURSES: JuCourse[] = [
-  // TODO: link each course to its own page (eLearningU for now, then JunctionU's platform).
+  // TODO: Andrea to provide the five course landing page URLs. Until set, each links to eLearningU's home.
   { title: "Elevated Tourism Marketing Masterclass", slug: "elevated-tourism-marketing-masterclass", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: ELEARNINGU },
   { title: "Tourism Digital Marketing Essentials", slug: "tourism-digital-marketing-essentials", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: ELEARNINGU },
   { title: "Idea to Experience", slug: "idea-to-experience", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: ELEARNINGU },
@@ -64,7 +69,7 @@ export const WORKSHOPS: JuCourse[] = [
 /** Tourism Talks: YouTube video IDs. Titles and thumbnails come from YouTube's oEmbed at build time. */
 export const TALK_IDS = ["KVe_7-ov7yI", "Z4Co4xD436I", "c8OyR70XEJg", "1eaLkk6s1TU"];
 
-/** TODO: the JunctionU trailer (shown when SHOW_JU_TRAILER is on). */
+/** TODO: the trailer (shown when SHOW_JU_TRAILER is on). */
 export const JU_TRAILER_URL = "#";
 
 /** "See all →" for each shelf; each goes somewhere different. TODO: confirm the eLearningU catalogue URLs. */

@@ -4,6 +4,7 @@
  * latitude]. Destination BC and the Vancouver clients sit at the hub.
  */
 
+import { SHOW_PLACEHOLDERS } from "./flags";
 import { WORK_CASES } from "./workCases";
 
 export type LonLat = [number, number];
@@ -28,8 +29,9 @@ export const CASE_STOPS: {
   { caseId: "case-yukon", name: "Travel Yukon", coords: [-135.06, 60.72], number: statOf("case-yukon")!, placement: "above-left" },
   // Central BC: deliberately north of Vancouver so it doesn't crowd the hub.
   { caseId: "case-itbc", name: "Indigenous Tourism BC", coords: [-122.14, 52.13], number: statOf("case-itbc")!, placement: "right-above" },
-  // TODO: Kootenay Rockies has no stat yet; the map number is a placeholder.
-  { caseId: "case-kootenay", name: "Kootenay Rockies", coords: [-115.77, 49.51], number: "[ # ]", placement: "below-right" },
+  // TODO: Kootenay Rockies has no stat yet. "[ # ]" shows only with SHOW_PLACEHOLDERS;
+  // otherwise the stop shows its name alone.
+  { caseId: "case-kootenay", name: "Kootenay Rockies", coords: [-115.77, 49.51], number: SHOW_PLACEHOLDERS ? "[ # ]" : "", placement: "below-right" },
   { caseId: "case-osw", name: "Ontario's Southwest", coords: [-81.25, 42.98], number: statOf("case-osw")!, placement: "right" },
 ];
 

@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties, FormEvent, ReactNode } from "react";
 import { Button, Eyebrow, Input, Stat, cx } from "@/components";
+import { shown } from "@/lib/placeholders";
 import { DEFAULTS, HOURS, JOBS, PEOPLE, RATE, WEEKS_PER_YEAR, yearlyHours, type Range } from "@/lib/timeBack";
 
 /*
@@ -144,7 +145,8 @@ export function TimeBackCalculator() {
           <p className="m-0 mt-1 font-display text-[22px] leading-tight font-black tracking-[-0.02em] text-newsprint">
             {current.build}
           </p>
-          <p className="type-small m-0 mt-1">{current.line}</p>
+          {/* Draft lines are "[ … ]" placeholders: shown only with SHOW_PLACEHOLDERS. */}
+          {shown(current.line) && <p className="type-small m-0 mt-1">{current.line}</p>}
         </div>
 
         <div className="mt-7 border-t border-hairline-dark pt-6">

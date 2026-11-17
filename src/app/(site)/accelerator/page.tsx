@@ -14,6 +14,8 @@ import {
 } from "@/components";
 import { DashboardPreview } from "@/components/DashboardPreview";
 import { CALENDLY_URL } from "@/lib/constants";
+import { SHOW_PLACEHOLDERS } from "@/lib/flags";
+import { shown } from "@/lib/placeholders";
 import { QuickScore } from "./QuickScore";
 import { TaskChecklist, type Task } from "./TaskChecklist";
 import { VideoPlayer } from "./VideoPlayer";
@@ -195,7 +197,7 @@ export default function AcceleratorPage() {
       <Section flush="top">
         <Container className="grid items-center gap-x-16 gap-y-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
           {/* TODO: pass src, poster and duration once the video is ready. */}
-          <VideoPlayer duration="[ 0:00 ]" label="See how it works" />
+          <VideoPlayer duration={shown("[ 0:00 ]")} label="See how it works" />
           <div>
             <h2 className="type-h3 m-0 mb-3">See how it works.</h2>
             <p className="type-body m-0">
@@ -333,10 +335,13 @@ export default function AcceleratorPage() {
               you want to go.
             </p>
           </Card>
-          <Placeholder className="min-h-[220px] flex-col gap-6">
-            <span>[ Testimonial ]</span>
-            <span>[ Name · business ]</span>
-          </Placeholder>
+          {/* Placeholder card: hidden for now; the auto-fit grid reflows to two cards. */}
+          {SHOW_PLACEHOLDERS && (
+            <Placeholder className="min-h-[220px] flex-col gap-6">
+              <span>[ Testimonial ]</span>
+              <span>[ Name · business ]</span>
+            </Placeholder>
+          )}
         </Container>
       </Section>
 
