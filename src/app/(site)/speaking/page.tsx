@@ -14,7 +14,7 @@ import {
   cx,
 } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
-import { SHOW_PLACEHOLDERS, SHOW_SPEAKING_REEL } from "@/lib/flags";
+import { SHOW_PLACEHOLDERS, SHOW_SPEAKING_AVAILABILITY, SHOW_SPEAKING_REEL } from "@/lib/flags";
 import { QUOTES, quoted } from "@/lib/testimonials";
 import { AvailabilityForm } from "./AvailabilityForm";
 import { ReelPill } from "./ReelPill";
@@ -126,11 +126,18 @@ export default function SpeakingPage() {
                   and tourism strategy. Every talk ends with actions people can take
                   that week.
                 </p>
+                {/* Every CTA is the call for now; the availability route is behind SHOW_SPEAKING_AVAILABILITY. */}
                 <div className="flex flex-wrap items-center gap-6">
-                  <Button href="/contact?type=speaking">Check availability for your date</Button>
-                  <TextLink href={CALENDLY_URL} className="whitespace-nowrap">
-                    Book a 20-min call →
-                  </TextLink>
+                  {SHOW_SPEAKING_AVAILABILITY ? (
+                    <>
+                      <Button href="/contact?type=speaking">Check availability for your date</Button>
+                      <TextLink href={CALENDLY_URL} className="whitespace-nowrap">
+                        Book a 20-min call →
+                      </TextLink>
+                    </>
+                  ) : (
+                    <Button href={CALENDLY_URL}>Book a 20-min call</Button>
+                  )}
                   {showReel && <ReelPill href={REEL} />}
                 </div>
               </div>
@@ -254,24 +261,40 @@ export default function SpeakingPage() {
         </Container>
       </Section>
 
-      {/* Got a date? */}
+      {/* Got a date? With SHOW_SPEAKING_AVAILABILITY: the line, the email link
+          and the availability form. Off (now): the line and one Calendly button. */}
       <Section id="start" className="scroll-mt-24">
-        <Container className="grid grid-cols-1 items-start gap-x-20 gap-y-12 lg:grid-cols-2">
-          <div>
+        {SHOW_SPEAKING_AVAILABILITY ? (
+          <Container className="grid grid-cols-1 items-start gap-x-20 gap-y-12 lg:grid-cols-2">
+            <div>
+              <h2 className="type-display m-0">
+                Got a date?
+                <br /> Let&apos;s check it.
+              </h2>
+              <p className="type-body mt-6 mb-0 max-w-[46ch]">
+                Send your event, date and audience. You&apos;ll hear back with availability
+                and a fee for your format.
+              </p>
+              <TextLink href="mailto:conner@wearejunction.com" className="mt-8 inline-block">
+                conner@wearejunction.com
+              </TextLink>
+            </div>
+            <AvailabilityForm />
+          </Container>
+        ) : (
+          <Container>
             <h2 className="type-display m-0">
               Got a date?
               <br /> Let&apos;s check it.
             </h2>
-            <p className="type-body mt-6 mb-0 max-w-[46ch]">
-              Send your event, date and audience. You&apos;ll hear back with availability
-              and a fee for your format.
+            <p className="type-lead mt-6 mb-0 max-w-[40ch]">
+              Tell us about your event and we&apos;ll check the date.
             </p>
-            <TextLink href="mailto:conner@wearejunction.com" className="mt-8 inline-block">
-              conner@wearejunction.com
-            </TextLink>
-          </div>
-          <AvailabilityForm />
-        </Container>
+            <Button href={CALENDLY_URL} className="mt-10">
+              Book a 20-min call
+            </Button>
+          </Container>
+        )}
       </Section>
     </>
   );

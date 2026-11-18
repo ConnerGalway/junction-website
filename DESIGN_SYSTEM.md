@@ -430,7 +430,9 @@ The program formerly called Offload. **"AI Training" is the only name users see*
 
 **Images are swappable by filename** in `public/images/speaking/`:
 - `hero-conner-stage.webp`: the hero cutout (transparent).
-- `talk-01.jpg` … `talk-03.jpg`: the talk images. Each one shows when its file exists (checked at build); otherwise the row shows a Placeholder.
+- `talk-01.jpg` (AI and the work only people can do), `talk-02.jpg` (Marketing trends worth acting on), `talk-03.jpg` (Tourism strategy and marketing): the talk images, 16:9 with `object-fit: cover`. Each one shows when its file exists (checked at build); otherwise the topic takes the full row (the "[ talk poster ]" Placeholder only with `SHOW_PLACEHOLDERS`).
+
+**Every CTA is "Book a 20-min call" (Calendly) for now.** The availability route (the hero's "Check availability for your date", the email link and the form) is behind `SHOW_SPEAKING_AVAILABILITY`.
 - `reel.mp4`: the speaking reel (see Reel below).
 
 Sections:
@@ -464,7 +466,8 @@ Sections:
   - the H2 and bio (Newsprint 88%);
   - two Newsprint `<Stat>`s under a Newsprint 18% rule ("14" years advising organizations, "2,000+" people trained);
   - a small quote card (`quote-adapt`, Newsprint on Forest): Kelly Josephson, Wines of BC.
-- **Got a date?** The display H2, the line and the email link sit on the left. On the right is `AvailabilityForm.tsx`, a Newsprint card with:
+- **Got a date?** (now): the display H2 "Got a date? Let's check it.", the line "Tell us about your event and we'll check the date." and one "Book a 20-min call" button (Calendly). With `SHOW_SPEAKING_AVAILABILITY` on, the original layout below returns.
+- **Got a date? (hidden layout)** The display H2, the line and the email link sit on the left. On the right is `AvailabilityForm.tsx`, a Newsprint card with:
   - the meta label "Check availability";
   - a 2×2 grid (stacked on mobile) of Event (required, with an inline error), Date, Format and Audience;
   - the button and a small line under it.
@@ -856,6 +859,7 @@ Everything removed or not ready is **hidden behind a flag in `src/lib/flags.ts`,
 | `SHOW_ACC_WEEK_ONE` | false | Accelerator "This is what week one looks like." (the plan demo, `#plan`); off, the touchpoints sit on Forest |
 | `SHOW_AI_PRICE` | false | AI Training's $5,000 price (hero and FAQ); off, "Get a quote" |
 | `SHOW_ALL_CUSTOM_PROGRAMS` | false | Custom Training: all six recent programs (hero shelf, DMO card, homepage thumbnail); off, the three featured ones |
+| `SHOW_SPEAKING_AVAILABILITY` | false | Speaking's availability route ("Check availability for your date", the email link and the form); off, every CTA is Book a 20-min call |
 | `SHOW_HOME_HERO_PHOTO` | false | The team photo in the homepage hero (on: the headline goes back to three lines) |
 
 The building-supply case data is one file, `src/lib/buildingSupplyCase.ts`, shared by the homepage teaser, the AI Training case study and the Work chapter.

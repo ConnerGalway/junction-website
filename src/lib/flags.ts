@@ -103,3 +103,10 @@ export const SHOW_AI_PRICE = false;
 
 /** Custom Training: all six recent programs (hero shelf, DMO card, homepage thumbnail). Off: the three featured ones. */
 export const SHOW_ALL_CUSTOM_PROGRAMS = false;
+
+/**
+ * Speaking: the availability route (the "Check availability for your date"
+ * hero button, the email link and AvailabilityForm in "Got a date?"). Off:
+ * every CTA is "Book a 20-min call" (Calendly).
+ */
+export const SHOW_SPEAKING_AVAILABILITY = false;
