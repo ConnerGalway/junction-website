@@ -116,3 +116,6 @@ export const SHOW_WORK_DELIVERABLES = false;
 
 /** Work: the "More case studies are on the way…" banner (and its eLearningU-list link). */
 export const SHOW_WORK_MORE_CASES = false;
+
+/** The Brief: "Read this issue →" and the archive rows as links (the issues have no web pages yet). Off: plain rows. */
+export const SHOW_BRIEF_READ_LINKS = false;

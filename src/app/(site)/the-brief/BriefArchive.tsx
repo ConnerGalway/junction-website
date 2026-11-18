@@ -4,11 +4,15 @@ import { useId, useRef, useState } from "react";
 import type { CSSProperties, KeyboardEvent } from "react";
 import { Button, cx } from "@/components";
 import type { Issue } from "@/lib/brief";
+import { SHOW_BRIEF_READ_LINKS } from "@/lib/flags";
 import { formatDay, formatMonth, issueHref } from "./format";
 
 /** Margin number size (px) and the length of a number set sideways in Bebas (digits are 0.4em wide). */
 const MARGIN_NUM_PX = 56;
 const numberLength = (n: number) => `${Math.ceil(String(n).length * 0.4 * MARGIN_NUM_PX) + 2}px`;
+
+/** Archive rows link to their issue only while the read links show. */
+const Row = SHOW_BRIEF_READ_LINKS ? "a" : "div";
 
 /** Issues shown before "Older issues" (when no filter or search is active). */
 const PAGE = 10;
@@ -74,6 +78,10 @@ export function BriefArchive({ issues, topics }: { issues: Issue[]; topics: stri
   return (
     <section aria-labelledby={`${id}-heading`}>
       {/* Header row, sitting on the 2px Carbon rule */}
+      {/* Tabs never scroll from 768px (they wrap); on phones the row scrolls
+          sideways only if it really overflows. The active underline sits
+          inside the tab (bottom-0) and the tablist overlaps the 2px rule
+          (-mb-[2px]), so nothing spills vertically and nothing scrolls. */}
       <div className="flex items-end gap-x-6 border-b-2 border-carbon max-md:flex-wrap">
         <h2 id={`${id}-heading`} className="type-eyebrow m-0 shrink-0 pb-3 text-carbon">
           Archive
@@ -82,7 +90,7 @@ export function BriefArchive({ issues, topics }: { issues: Issue[]; topics: stri
         <div
           role="tablist"
           aria-label="Filter the archive by topic"
-          className="brief-tabs flex min-w-0 flex-1 gap-x-5 overflow-x-auto md:justify-center-safe max-md:order-3 max-md:basis-full"
+          className="brief-tabs -mb-[2px] flex min-w-0 flex-1 gap-x-4 md:gap-x-5 md:flex-wrap md:justify-center-safe max-md:order-3 max-md:basis-full max-md:overflow-x-auto max-md:overflow-y-hidden"
         >
           {tabs.map((t, i) => {
             const active = t === topic;
@@ -107,7 +115,7 @@ export function BriefArchive({ issues, topics }: { issues: Issue[]; topics: stri
               >
                 {t}
                 {/* The active underline sits on the rule */}
-                {active && <span aria-hidden="true" className="absolute inset-x-0 -bottom-[2px] h-[3px] bg-canopy" />}
+                {active && <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[3px] bg-canopy" />}
               </button>
             );
           })}
@@ -166,9 +174,10 @@ export function BriefArchive({ issues, topics }: { issues: Issue[]; topics: stri
               <ul className="m-0 list-none p-0">
                 {month.issues.map((issue) => (
                   <li key={`${issue.number}-${issue.date}`}>
-                    <a
-                      href={issueHref(issue.url)}
-                      className="brief-row group relative block py-7"
+                    {/* A link only with SHOW_BRIEF_READ_LINKS; otherwise a plain row (no hover). */}
+                    <Row
+                      {...(SHOW_BRIEF_READ_LINKS ? { href: issueHref(issue.url) } : {})}
+                      className={cx("relative block py-7", SHOW_BRIEF_READ_LINKS && "brief-row group")}
                       style={issue.number !== null ? { "--num-len": numberLength(issue.number) } as CSSProperties : undefined}
                     >
                       {issue.number !== null && (
@@ -191,7 +200,7 @@ export function BriefArchive({ issues, topics }: { issues: Issue[]; topics: stri
                       <span className="sr-only">
                         {issue.number !== null ? `, issue ${issue.number}` : ""}, {formatDay(issue.date)}
                       </span>
-                    </a>
+                    </Row>
                   </li>
                 ))}
               </ul>

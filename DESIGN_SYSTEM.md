@@ -542,6 +542,7 @@ Sections:
 
 `src/app/the-brief/`. One centred reading column (720px) on Newsprint, with issue numbers in the left margin. There are no cards or boxes, and every rule is Carbon (see Section dividers).
 
+- **The Brief now runs on MailerLite, not Mailchimp.** The live feed below is still the Mailchimp one and gets switched to MailerLite later. Until then the page shows the real issues, entered by hand in `src/lib/brief.ts` (549 back to 532; headlines in sentence case, brand names and months capitalized; taglines for 549–545, section headlines for 549–543, "This week" shows 549's).
 - **Data** (`src/lib/brief.ts`, the page's only data source): `getIssues()` and `getLatestIssue()` return `{ number, date, feature, tagline?, sections?, topics, url }`, newest first.
   - **Mailchimp:** when the three server-only env vars are set, it reads sent campaigns for The Brief's audience from the Marketing API (`GET /3.0/campaigns?status=sent&list_id=…&sort_field=send_time&sort_dir=DESC`, 100 per page). The feature is `settings.subject_line` (never rewritten), the date is `send_time` (Vancouver time) and the link is `archive_url`.
     - **Issue number:** the number after "Brief" in `settings.title`, else the first 3–4 digit number there. With none, the issue shows no number.
@@ -551,7 +552,7 @@ Sections:
     - `MAILCHIMP_API_KEY`
     - `MAILCHIMP_SERVER_PREFIX` (e.g. `us21`)
     - `MAILCHIMP_BRIEF_LIST_ID`
-  - **Without them:** `SAMPLE_ISSUES` (marked SAMPLE CONTENT), whose links go to the signup (`#subscribe`).
+  - **Without them:** `SAMPLE_ISSUES`, now the hand-entered real issues (no web pages, so `url` is null).
   - **Refresh:** `"use cache"` with an hourly revalidate, so new issues appear on their own. A failed refresh serves the last good result held by that server instance, or the sample, and retries within minutes. The page never breaks on a Mailchimp error.
   - **Topics:** `TOPIC_RULES`, keyword patterns per topic (AI, Search, Social, Advertising, Tourism), matched case-insensitively against the feature and section headlines. An issue can have several topics. Topics with no issues are hidden from the tabs.
 - **Top (centred):** "THE BRIEF" wordmark (see Hard rules), the H1 "Ideas you can use this week." (display, up to 88px, two lines from 1024px), the lead (34ch) and the centred `NewsletterSignup` (520px, label for screen readers only, helper "Free · award-winning · 500+ articles · unsubscribe anytime" in Flint). These form the subscribe block (`#subscribe`); there's no box.
@@ -560,16 +561,16 @@ Sections:
   - the feature (Epilogue 900, up to 54px);
   - the tagline as a lead line (`type-lead`, ink-soft, 52ch), when there is one;
   - when there are sections, a 1px Carbon rule and two columns, each with "Also in this issue" (copper) over the headline (Epilogue 600, 21px);
-  - "Read this issue →".
+  - "Read this issue →" (hidden: `SHOW_BRIEF_READ_LINKS`; the issues have no web pages yet).
 - **Margin numbers** (`.brief-margin-num`): the issue number set sideways (`writing-mode: vertical-rl`, rotated 180° so it reads bottom to top), 28px left of the column and top-aligned with its block. It's Bebas, Carbon 7%, `aria-hidden`. This week shows "Nº 544" at up to 150px (110px at 1024); archive rows show the number alone at 56px. Shown from 1024px.
 - **Archive** (`BriefArchive.tsx`, every issue but the latest):
-  - **Header row on a 2px Carbon rule:** "Archive" (meta), then the topic tabs: All plus the topics in use. They're a real tablist (← → Home End) in 16px text; active is Carbon 600 with a 3px Canopy underline sitting on the rule, inactive is Flint 400 with a pink hover. Then "⌕ Search", which opens an inline field matching the feature headline and the tagline (case-insensitive; Escape or × closes and clears it). Topic and search combine.
+  - **Header row on a 2px Carbon rule:** "Archive" (meta), then the topic tabs: All plus the topics in use. They're a real tablist (← → Home End) in 16px text; active is Carbon 600 with a 3px Canopy underline sitting on the rule (inside the tab, with the tablist overlapping the rule by 2px, so nothing spills and the bar never scrolls vertically), inactive is Flint 400 with a pink hover. From 768px the tabs never scroll (they wrap if they ever need to); on phones the row scrolls sideways only if it genuinely overflows (16px gaps there, so the current six fit at 390). Then "⌕ Search", which opens an inline field matching the feature headline and the tagline (case-insensitive; Escape or × closes and clears it). Topic and search combine.
   - **Month groups:** a copper small caps month heading ("October 2026", not Bebas) over a 1px Carbon rule. Months with no matches are hidden.
-  - **Rows:** the feature headline (Epilogue 900, up to 26px) and, 8px below it, the tagline (body, ink-soft, 60ch) when there is one. The whole row is the link.
+  - **Rows:** the feature headline (Epilogue 900, up to 26px) and, 8px below it, the tagline (body, ink-soft, 60ch) when there is one. The whole row is the link only with `SHOW_BRIEF_READ_LINKS`; off (now), rows are plain text with no hover (pink means clickable).
   - **Margin numbers never overlap.** From 1024px each row is at least as tall as its sideways number: `--num-len` is digits × 0.4em at 56px, plus the row's 28px top and bottom padding. The number also sits in a clip box (`.brief-margin-clip`) that spans exactly its row in the left margin. It stays top-aligned with the headline. On hover and focus the headline turns pink and the margin number goes to 50% (see Pink means clickable).
   - **Paging:** the newest 10 issues, then "Older issues" (secondary button) loads 10 more. With a filter or search active, every match shows. With none: "No issues match that yet." and a "Clear filters" link.
 - **Below 1024px:** archive numbers move inline above each headline ("Nº 543", Bebas 28px, Carbon 30%, `aria-hidden`; the link text carries the number and date for screen readers). This week keeps its number beside the date.
-- **Phones:** the column is full width. The header row wraps, with Archive and Search on the first line and the tabs on a sideways-scrolling line below.
+- **Phones:** the column is full width. The header row wraps, with Archive and Search on the first line and the tabs on their own line below.
 
 ## eLearningU sub-brand
 
@@ -862,6 +863,7 @@ Everything removed or not ready is **hidden behind a flag in `src/lib/flags.ts`,
 | `SHOW_SPEAKING_AVAILABILITY` | false | Speaking's availability route ("Check availability for your date", the email link and the form); off, every CTA is Book a 20-min call |
 | `SHOW_WORK_DELIVERABLES` | false | Work: the sample deliverable pages and caption in every chapter (and the hero's "flip through the deliverables" line) |
 | `SHOW_WORK_MORE_CASES` | false | Work: the "More case studies are on the way…" banner |
+| `SHOW_BRIEF_READ_LINKS` | false | The Brief: "Read this issue →" and archive rows as links |
 | `SHOW_HOME_HERO_PHOTO` | false | The team photo in the homepage hero (on: the headline goes back to three lines) |
 
 The building-supply case data is one file, `src/lib/buildingSupplyCase.ts`, shared by the homepage teaser, the AI Training case study and the Work chapter.
