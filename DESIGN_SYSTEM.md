@@ -856,6 +856,17 @@ New CTAs get a row here.
 - `prefers-reduced-motion` disables transitions.
 - **framer-motion** (pinned) is used only for the hero wordmark's slower scroll and the quick score card swap. Everything else is CSS or small scroll handlers (the AI Training calendar).
 
+## Redirects, sitemap and robots
+
+- **Redirects** live in `src/lib/redirects.ts` (used by `next.config.ts`). All permanent; every one reaches its destination in **one hop**: `skipTrailingSlashRedirect` is on, each rule matches "/x" and "/x/", and a last rule strips the slash from real routes ("/about/" → "/about", 308).
+  - **Old WordPress pages** (301): /about-us → /about, /our-services → /programs, /our-clients → /work, /articles → /the-brief, /contact-us → /contact.
+  - **WordPress leftovers** (301): /category/*, /tag/*, /page/*, /feed, /*/feed, /comments/feed → /the-brief; /author/* → /about; /wp-login.php, /wp-admin/*, /xmlrpc.php → /. /wp-content/* isn't redirected (it 404s).
+  - **Old blog posts** (301): any other single path segment, with or without the slash, that isn't a route on the new site → /the-brief. The list of real top-level routes is read from `src/app` at build (through route groups) plus `public/`'s entries, /api and /_next, so **a new top-level page is protected automatically**. Anything with a file extension (images, fonts, favicon.ico, robots.txt, sitemap.xml, `__forms.html`) is never redirected.
+  - **Earlier renames** (308): /services → /programs, /ideas → /the-brief, /junctionu → /elearningu, /junctionu/industry-scan → /elearningu/industry-scan.
+  - **Check:** `npm run check:redirects -- <base URL>` (default localhost:3000) runs the spot-check list against a running site, including the deploy preview.
+- **Sitemap** (`src/app/sitemap.ts` → /sitemap.xml): every public page, on `SITE_URL` (`https://wearejunction.com`). Hidden sections are parts of pages, so nothing hidden is listed. **Add a new page there.**
+- **Robots** (`src/app/robots.ts` → /robots.txt): everything allowed except /api/ and `__forms.html`; points to the sitemap.
+
 ## Forms
 
 Every form submits for real. **Netlify Forms** handles the site's forms; **MailerLite** handles The Brief signup.

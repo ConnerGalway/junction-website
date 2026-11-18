@@ -29,6 +29,10 @@ npm run dev
 - **`content/privacy-policy.md`**: the privacy policy text, rendered at `/privacy-policy`; edit it there.
 - **`docs/archive/`**: old design references, kept for history; not used by the site.
 
+## Redirects and SEO
+
+Redirects from the old WordPress site (pages, ~350 posts, WordPress leftovers) live in `src/lib/redirects.ts`; check them with `npm run check:redirects -- <base URL>`. `/sitemap.xml` and `/robots.txt` come from `src/app/sitemap.ts` and `src/app/robots.ts` (add new pages to the sitemap).
+
 ## Forms and environment variables
 
 - **Forms** go to **Netlify Forms** (declared in `public/__forms.html`; submissions in Netlify → Forms). See "Forms" in DESIGN_SYSTEM.md.
