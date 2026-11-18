@@ -1357,6 +1357,14 @@
     filter: brightness(1.08);
   }
 
+  /* Clip sideways overflow without making a scroll container: overflow-x
+     clip, with hidden first as the fallback where clip isn't supported
+     (Safari before 16), so the page never scrolls sideways there either. */
+  .clip-x {
+    overflow-x: hidden;
+    overflow-x: clip;
+  }
+
   /* Homepage hero background (one-off, homepage only). One radial gradient,
      darkest (--home-hero-glow) at the hero's bottom-right corner, fading to
      transparent, so plain Newsprint (the body) shows. The layer runs 60vh

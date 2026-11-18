@@ -305,6 +305,10 @@ Toggle pills are `<button aria-pressed>` elements inside a labelled `role="group
   - **1024px and wider:** text and photo sit side by side with a 56px gap (48px minimum, plus room for the tilt). The photo is at most 220px wide (300px from 1280px), and shrinks rather than overlapping the headline.
   - **Below 1024px:** the photo sits in the page flow under the buttons, right-aligned.
 
+### No sideways scroll
+
+Sections whose decoration reaches the viewport edge use `.clip-x` (`overflow-x: hidden`, then `overflow-x: clip`), so the page can't scroll sideways even where `clip` isn't supported (Safari before 16). Use it rather than a bare `overflow-x-clip` for anything that can overhang.
+
 ### Homepage hero background
 
 **One-off, homepage only** (`.home-hero-bg` in `globals.css`, a layer inside the hero in `src/app/(site)/page.tsx`).

@@ -19,8 +19,9 @@ export default function WorkPage() {
   return (
     <WorkFilterProvider services={Object.fromEntries(WORK_CASES.map((c) => [c.id, c.service]))}>
       {/* Hero: headline and intro, with the route map */}
-      {/* overflow-x-clip: the map's land reaches the viewport edge without a sideways scroll */}
-      <Section spacing="tight" flush="bottom" className="overflow-x-clip">
+      {/* clip-x: the map's land reaches the viewport edge without a sideways scroll
+          (overflow-x: clip, with hidden as the fallback for Safari before 16) */}
+      <Section spacing="tight" flush="bottom" className="clip-x">
         <Container className="grid items-center gap-x-12 gap-y-10 lg:grid-cols-[minmax(0,45fr)_minmax(0,55fr)]">
           <div data-map-avoid className="relative z-10">
             {/* Exactly two lines from 1024px (explicit break) */}
