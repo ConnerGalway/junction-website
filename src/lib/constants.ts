@@ -16,3 +16,6 @@ export const ELEARNINGU_SOCIALS = [
   { network: "tiktok", href: "https://www.tiktok.com/@elearningu", label: "eLearningU on TikTok" },
   { network: "linkedin", href: "https://www.linkedin.com/company/elearningu", label: "eLearningU on LinkedIn" },
 ] as const;
+
+/** The live site (sitemap.xml, robots.txt). */
+export const SITE_URL = "https://wearejunction.com";

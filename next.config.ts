@@ -1,8 +1,12 @@
 import type { NextConfig } from "next";
+import { siteRedirects } from "./src/lib/redirects";
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
+  // Trailing slashes are handled by our own redirects (src/lib/redirects.ts),
+  // so every old URL ("/about-us/") reaches its page in one hop.
+  skipTrailingSlashRedirect: true,
   images: {
     // Tourism Talk thumbnails (eLearningU page), served through next/image so the
     // browser loads nothing from YouTube before a talk is played.
@@ -12,14 +16,10 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "i.vimeocdn.com", pathname: "/video/**" },
     ],
   },
+  // All redirects (the old WordPress site, earlier renames, trailing slashes)
+  // live in src/lib/redirects.ts.
   async redirects() {
-    return [
-      { source: "/services", destination: "/programs", permanent: true },
-      { source: "/ideas", destination: "/the-brief", permanent: true },
-      // The learning brand on this site is eLearningU (JunctionU is on hold).
-      { source: "/junctionu", destination: "/elearningu", permanent: true },
-      { source: "/junctionu/industry-scan", destination: "/elearningu/industry-scan", permanent: true },
-    ];
+    return siteRedirects();
   },
   turbopack: {
     rules: {
