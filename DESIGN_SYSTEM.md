@@ -646,15 +646,16 @@ A new course gets a `slug` and its still the same way.
 **Nav and footer**
 
 - **Top bar** (`JuNav`, ju-ground, sticky, 1px Fern-20% rule under it):
-  - **left:** the eLearningU name (`EluWordmark`, to `/elearningu`) and "← Junction" (to `/`);
+  - **left:** the eLearningU name (`EluWordmark`, to `/elearningu`) and "← Back to Junction" (to `/`): a quiet text link in the nav's type (15px, Newsprint 70%, Fern on hover and focus, a small ←), no pill or box; on phones it reads "← Junction";
   - **centre:** Browse · Courses · Workshops · Tourism Talks · For DMOs · Industry Scan, which are anchors on the page except Industry Scan (`/elearningu/industry-scan`, see Industry Scan page). The active link (section in view, or current page) is Newsprint with a 2px Fern underline;
-  - **right:** "Sign in" (the eLearningU sign-in page; TODO: confirm the URL);
+  - **right:** "Sign in" (https://www.elearningu.com/login; TODO: confirm it's the right LearnWorlds path);
   - **under 1024px:** a Menu button.
 - **Footer** (`JuFooter`, ju-deep): the eLearningU name with the eLearningU social icons under it (YouTube, Instagram, TikTok, LinkedIn; see Navigation and footer), the same links, and "Part of Junction →" to the main site.
 
 **Page sections** (in order)
 
 - **Hero** (`JuHero`, about 600px tall):
+  - **Background video** (`HeroVideo`): https://vimeo.com/1237666578 (`JU_HERO_VIDEO`) in Vimeo's background-player mode (muted, looping, autoplay, no controls, `dnt=1`), covering the still's frame like `object-fit: cover`. The still is the poster and the fallback: the video fades in only when Vimeo reports it's playing, so if Vimeo can't be reached the still stays. With reduced motion the player isn't loaded at all. A small round unmute toggle (44px, bottom-left of the video; above the headline overlap on phones) has an accessible label ("Unmute the background video" / "Mute …", `aria-pressed`) and uses the Vimeo player API.
   - **Still:** the course still on the right 64%, faded into the ground (solid to 36% of the width, clear by 82%, plus a bottom fade) and kept clear of the copy, which is capped at 46vw.
   - **Copy:** the H1 in Oswald capitals (up to 80px, three lines), the lead ("eLearningU is Junction's online school for tourism: …"), "Start free" (Mint, to eLearningU), "▶ Watch the trailer" (glass; hidden behind `SHOW_JU_TRAILER` until the trailer exists) and the small line (no "Formerly eLearningU").
   - **Phones:** the still sits on top, faded at the bottom.
@@ -670,11 +671,11 @@ A new course gets a `slug` and its still the same way.
     - the length in Fern Bebas (the "[ x HRS ]" placeholders only with `SHOW_PLACEHOLDERS`) and a Workshop tag, always top right;
     - a ghost number (Bebas 180px, Fern 10%) behind;
     - the title in Oswald capitals at the bottom, over a Fern-35% rule with "Workshop" and the price.
-  - **Tourism Talks · free:** four YouTube talks (`TALK_IDS`).
-    - Titles and thumbnails come from YouTube's oEmbed on the server, cached a week; if YouTube can't be reached the card shows "Tourism Talk" and the standard thumbnail.
+  - **Tourism Talks · free** (`#tourism-talks`): every video in the playlist `TALKS_PLAYLIST_ID` (`src/lib/junctionuTalks.ts`), read from YouTube's public playlist RSS feed at build time and revalidated daily (titles from the feed, thumbnails from i.ytimg.com). The feed lists at most the 15 most recent videos. If it's unreachable, the four original talks (`TALK_IDS`).
+    - In the fallback, titles come from YouTube's oEmbed on the server; if YouTube can't be reached the card shows "Tourism Talk" and the standard thumbnail.
     - Thumbnails are served through next/image (`i.ytimg.com` is allowed in next.config). The card is a lite embed with the corner play button: pressing play swaps the thumbnail for the youtube-nocookie player in place (autoplay), so nothing loads from YouTube before that.
 - **For DMOs** (`DmoPanel`):
-  - **Map:** the Work RouteMap's land layer (`src/lib/routeMapGeometry.ts`; no dots or arcs), with Canada Fern 38% and the US Fern 16%. It's larger than the section and spills above and below it, faded by a closest-side radial mask (solid to 55%) so it's never cut on a straight line. It drifts at 0.15 like the HeroWordmark: anchored where the section is centred and kept within 160px of that; static with reduced motion. It sits behind the page content (the layout is `isolate`).
+  - **Map** (clipped by its own box, half a section past each edge, so phones can't scroll sideways even without `overflow-x: clip`): the Work RouteMap's land layer (`src/lib/routeMapGeometry.ts`; no dots or arcs), with Canada Fern 38% and the US Fern 16%. It's larger than the section and spills above and below it, faded by a closest-side radial mask (solid to 55%) so it's never cut on a straight line. It drifts at 0.15 like the HeroWordmark: anchored where the section is centred and kept within 160px of that; static with reduced motion. It sits behind the page content (the layout is `isolate`).
   - **Glass panel** (`.ju-glass`): radius 20, Newsprint 7%, `backdrop-filter: blur(14px) saturate(160%)`, an inset 1px Newsprint-18% border, the white top highlight (see Hard rules) and a soft shadow.
   - **Two columns:** "For DMOs and associations" (Fern), the H2 in Oswald capitals, the copy and the Fern outline "Talk to us about a region" (`/contact?type=training&from=region`). Then, after a thin divider, "300+" in Fern Bebas (up to 116px) and its line. They stack on phones.
 - **Industry Scan teaser** (`ScanTeaser`): the Scan thumbnail (`industry-scan-thumbnail.<ext>`) as a linked card, with the corner play button and "Conner Galway" beside it ("· [ Month Year ]" with `SHOW_PLACEHOLDERS`). There's no title caption, because the thumbnail already says it. Beside it, the pitch and one Fern outline action, "Try a month free". Both go to the Scan page. The month is a placeholder.
@@ -695,7 +696,7 @@ A new course gets a `slug` and its still the same way.
   - **Colours:** as a product mock it keeps its own colour coding: Forest Bebas numbers on sage-25 tiles, a Canopy tab underline.
   - **Under 768px:** the Overview only, with no tabs.
 - **The briefing** (`BriefingVideo`): a 16:9 card on the Scan thumbnail (`JU_SCAN_THUMBNAIL`) with the corner play button and "Conner Galway · latest issue". Pressing it swaps in the Descript embed (`SCAN_VIDEO.embed`) in place; nothing loads from Descript before that. Beside it: "Executive briefing", "Short on time? Watch it." and the line. No action.
-- **Built for the boardroom:** the H2 and four columns, each under a 1px Fern-35% rule, with a mark, a title (Oswald 700, 22px) and a line. Marks are Fern: the symbols (⌘K, ●●○, →) in Oswald 700, the numeral (2025) in Bebas, all in a fixed-height box so the titles line up.
+- **Built for the boardroom:** the H2 and four columns (from 640px each is a subgrid over three shared rows, so the marks share a baseline and the titles and text start on shared lines), each under a 1px Fern-35% rule, with a mark, a title (Oswald 700, 22px) and a line. Marks are Fern: the symbols (⌘K, ●●○, →) in Oswald 700, the numeral (2025) in Bebas, all in a fixed-height box so the titles line up.
 - **Pricing** (ju-moss panel, radius 18, no eyebrow):
   - **left:** "First month free." (Oswald capitals, up to 56px) and the line;
   - **right:** "$30" (Bebas, up to 96px) with "/ MONTH" (Bebas, 60%), the same Mint action, and "Buying for a team or association? Talk to us →" (`/contact?type=other&topic=scan-team`; team pricing is a TODO).

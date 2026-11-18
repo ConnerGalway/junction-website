@@ -13,11 +13,14 @@
 export const ELEARNINGU_URL = "https://www.elearningu.com";
 const ELEARNINGU = ELEARNINGU_URL;
 
-/** "Sign in": the eLearningU sign-in page. TODO: confirm the URL (still a guess). */
+/** "Sign in": the eLearningU sign-in page. TODO: confirm /login is the right LearnWorlds sign-in path. */
 export const JU_SIGN_IN_URL = `${ELEARNINGU}/login`;
 
 /** The Industry Scan landing page on this site. */
 export const JU_SCAN_URL = "/elearningu/industry-scan";
+
+/** Hero background video (Vimeo, background-player mode; the hero still is its poster). */
+export const JU_HERO_VIDEO = { id: "1237666578", url: "https://vimeo.com/1237666578", title: "eLearningU" };
 
 /** "Start free": eLearningU itself. */
 export const JU_START_URL = ELEARNINGU;
@@ -65,7 +68,7 @@ export const WORKSHOPS: JuCourse[] = [
   { title: "How to Install and Use Google Analytics 4", kind: "workshop", length: "[ x HRS ]", price: "$29 CAD", url: `${ELEARNINGU}/course/how-to-install-use-google-analytics-4` },
 ];
 
-/** Tourism Talks: YouTube video IDs. Titles and thumbnails come from YouTube's oEmbed at build time. */
+/** Tourism Talks fallback (if the playlist feed is unreachable): YouTube video IDs. The playlist itself is TALKS_PLAYLIST_ID in src/lib/junctionuTalks.ts. */
 export const TALK_IDS = ["KVe_7-ov7yI", "Z4Co4xD436I", "c8OyR70XEJg", "1eaLkk6s1TU"];
 
 /** TODO: the trailer (shown when SHOW_JU_TRAILER is on). */

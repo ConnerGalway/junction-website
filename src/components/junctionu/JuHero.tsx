@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { SHOW_JU_TRAILER } from "@/lib/flags";
-import { JU_START_URL, JU_TRAILER_URL } from "@/lib/junctionu";
+import { JU_HERO_VIDEO, JU_START_URL, JU_TRAILER_URL } from "@/lib/junctionu";
 import { JU_HERO_IMAGE } from "@/lib/junctionuImages";
+import { HeroVideo } from "./HeroVideo";
 import { JuButton } from "./JuButton";
 
 /**
@@ -13,8 +14,9 @@ import { JuButton } from "./JuButton";
 export function JuHero() {
   return (
     <section className="relative overflow-hidden lg:flex lg:min-h-[600px] lg:items-center">
-      {/* The still */}
-      <div aria-hidden="true" className="relative aspect-[16/10] w-full lg:absolute lg:inset-y-0 lg:right-0 lg:aspect-auto lg:w-[64%]">
+      {/* The still is the video's poster and fallback; the Vimeo background
+          video plays over it (HeroVideo), with its unmute toggle bottom-left. */}
+      <div className="relative aspect-[16/10] w-full lg:absolute lg:inset-y-0 lg:right-0 lg:aspect-auto lg:w-[64%]">
         <Image
           src={JU_HERO_IMAGE}
           alt=""
@@ -23,6 +25,7 @@ export function JuHero() {
           sizes="(min-width: 1024px) 64vw, 100vw"
           className="object-cover object-[60%_30%]"
         />
+        <HeroVideo videoId={JU_HERO_VIDEO.id} title={JU_HERO_VIDEO.title} />
         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-ju-ground to-transparent lg:h-1/3" />
       </div>
       {/* Left-to-right fade across the whole hero: ground solid to 36%, clear by 82% */}
