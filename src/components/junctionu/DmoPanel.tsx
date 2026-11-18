@@ -13,7 +13,13 @@ export function DmoPanel() {
   const { l, t, r, b } = geo.landPad;
   return (
     <section id="dmos" aria-labelledby="dmos-heading" className="relative scroll-mt-16 px-gutter py-[clamp(96px,12vw,170px)]">
-      <DriftMap viewBox={`${-l} ${-t} ${geo.width + l + r} ${geo.height + t + b}`} canada={geo.canada} usa={geo.usa} />
+      {/* The map is wider than phones (190vw) and spills above and below the
+          section. Clip it here, sideways only in effect (the box runs half a
+          section past each edge), so the page can't scroll sideways even in
+          browsers without overflow-x: clip (Safari before 16). */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -inset-y-1/2 -z-10 overflow-hidden">
+        <DriftMap viewBox={`${-l} ${-t} ${geo.width + l + r} ${geo.height + t + b}`} canada={geo.canada} usa={geo.usa} />
+      </div>
       <div className="ju-glass mx-auto grid max-w-wide gap-x-14 gap-y-10 rounded-[20px] p-[clamp(28px,4.5vw,64px)] lg:grid-cols-[minmax(0,1.5fr)_1px_minmax(0,1fr)] lg:items-center">
         <div>
           <p className="type-eyebrow m-0 text-fern">For DMOs and associations</p>

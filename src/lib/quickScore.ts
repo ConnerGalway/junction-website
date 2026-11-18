@@ -2,19 +2,20 @@
  * Quick score: questions, answers, weights and grade bands for the
  * Accelerator page's free quick check (src/app/accelerator/QuickScore.tsx).
  *
- * PLACEHOLDER CONTENT: Conner will replace the questions, answers and
- * scoring. Everything that decides the score lives in this file.
+ * Questions written for any small business (review round). Conner may still
+ * refine the questions, answers and scoring; everything that decides the
+ * score lives in this file.
  *
  * Front-end demo only. Nothing is stored or sent (see QuickScore.tsx).
  */
 
 export const AREAS = [
-  "Website",
-  "Reviews",
-  "Booking",
-  "Social",
-  "Customer experience",
-  "Local visibility",
+  "Marketing plan",
+  "Channels",
+  "Consistency",
+  "Email list",
+  "Tracking",
+  "Time",
 ] as const;
 
 export type Area = (typeof AREAS)[number];
@@ -35,82 +36,86 @@ export type Question = {
 /** Added to every scored question. */
 export const NOT_SURE: Answer = { label: "I'm not sure", points: 0 };
 
+/**
+ * Written for any small business (no rooms, guests or bookings): two context
+ * questions and six scored ones, each worth 100 / 66 / 33 / 0.
+ */
 export const QUESTIONS: Question[] = [
   {
     text: "What kind of business are you?",
     answers: [
-      { label: "Accommodation" },
-      { label: "Food and drink" },
-      { label: "Tours and activities" },
-      { label: "Retail or services" },
+      { label: "Retail or online store" },
+      { label: "Food, drink or hospitality" },
+      { label: "Trades or professional services" },
+      { label: "Something else" },
     ],
   },
   {
-    text: "How does your website look on a phone?",
-    area: "Website",
+    text: "Do you have a written marketing plan?",
+    area: "Marketing plan",
     answers: [
-      { label: "Great: fast and easy to use", points: 100 },
-      { label: "Fine, but a bit slow or fiddly", points: 66 },
-      { label: "Hard to use on a phone", points: 33 },
-      { label: "We don't have a website", points: 0 },
+      { label: "Yes, and we follow it", points: 100 },
+      { label: "Yes, but we rarely look at it", points: 66 },
+      { label: "It's in my head", points: 33 },
+      { label: "No plan yet", points: 0 },
     ],
   },
   {
-    text: "How do most customers book with you today?",
-    area: "Booking",
+    text: "Do you know which channels bring you customers?",
+    area: "Channels",
     answers: [
-      { label: "Online, in a few clicks", points: 100 },
-      { label: "Online, but it takes a few steps", points: 66 },
-      { label: "By phone or email", points: 33 },
-      { label: "There's no clear way to book", points: 0 },
+      { label: "Yes, we know where each customer comes from", points: 100 },
+      { label: "We have a good idea", points: 66 },
+      { label: "We're mostly guessing", points: 33 },
+      { label: "No idea", points: 0 },
     ],
   },
   {
-    text: "How often do you ask customers for a review?",
-    area: "Reviews",
+    text: "How consistently do you post or share updates?",
+    area: "Consistency",
     answers: [
-      { label: "After every visit", points: 100 },
+      { label: "Every week, on a schedule", points: 100 },
+      { label: "Most weeks", points: 66 },
+      { label: "When someone has a spare minute", points: 33 },
+      { label: "Hardly ever", points: 0 },
+    ],
+  },
+  {
+    text: "Do you collect customers' email addresses?",
+    area: "Email list",
+    answers: [
+      { label: "Yes, and we email them regularly", points: 100 },
+      { label: "Yes, but we rarely send anything", points: 66 },
+      { label: "Only now and then", points: 33 },
+      { label: "No", points: 0 },
+    ],
+  },
+  {
+    text: "Do you track the results of your marketing?",
+    area: "Tracking",
+    answers: [
+      { label: "Yes, every month, with clear numbers", points: 100 },
       { label: "Now and then", points: 66 },
-      { label: "Rarely", points: 33 },
-      { label: "Never", points: 0 },
+      { label: "We only look at sales", points: 33 },
+      { label: "Not really", points: 0 },
     ],
   },
   {
-    text: "How often do you post on social media?",
-    area: "Social",
+    text: "How much time does marketing get each week?",
+    area: "Time",
     answers: [
-      { label: "Several times a week", points: 100 },
-      { label: "About once a week", points: 66 },
-      { label: "Once a month or less", points: 33 },
-      { label: "We don't post", points: 0 },
-    ],
-  },
-  {
-    text: "Do you follow up with customers after they visit?",
-    area: "Customer experience",
-    answers: [
-      { label: "Always, with a thank-you", points: 100 },
-      { label: "Sometimes", points: 66 },
-      { label: "Rarely", points: 33 },
-      { label: "Never", points: 0 },
-    ],
-  },
-  {
-    text: "Is your Google profile complete and up to date?",
-    area: "Local visibility",
-    answers: [
-      { label: "Yes, complete and current", points: 100 },
-      { label: "Mostly", points: 66 },
-      { label: "It's out of date", points: 33 },
-      { label: "We don't have one", points: 0 },
+      { label: "A set block of time every week", points: 100 },
+      { label: "A few hours, when we can", points: 66 },
+      { label: "Whatever's left over", points: 33 },
+      { label: "Almost none", points: 0 },
     ],
   },
   {
     text: "What do you most want from the next 90 days?",
     answers: [
-      { label: "More bookings" },
-      { label: "Busier quiet seasons" },
-      { label: "Less time on marketing" },
+      { label: "More customers" },
+      { label: "Steadier sales through the year" },
+      { label: "Less time spent on marketing" },
       { label: "A clear plan to follow" },
     ],
   },

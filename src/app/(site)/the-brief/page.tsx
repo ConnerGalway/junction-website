@@ -3,6 +3,7 @@ import { Eyebrow, NewsletterSignup, TextLink } from "@/components";
 import { getIssues, topicsIn, type Issue } from "@/lib/brief";
 import { BriefArchive } from "./BriefArchive";
 import { formatDay, issueHref } from "./format";
+import { SHOW_BRIEF_READ_LINKS } from "@/lib/flags";
 
 export const metadata: Metadata = {
   title: "The Brief",
@@ -84,9 +85,12 @@ function ThisWeek({ issue }: { issue: Issue }) {
           ))}
         </div>
       )}
-      <TextLink href={issueHref(issue.url)} className="mt-8 inline-block">
-        Read this issue →
-      </TextLink>
+      {/* Hidden: SHOW_BRIEF_READ_LINKS (the issues have no web pages yet) */}
+      {SHOW_BRIEF_READ_LINKS && (
+        <TextLink href={issueHref(issue.url)} className="mt-8 inline-block">
+          Read this issue →
+        </TextLink>
+      )}
     </section>
   );
 }

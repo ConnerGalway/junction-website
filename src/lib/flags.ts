@@ -90,3 +90,32 @@ export const SHOW_UNVERIFIED_QUOTES = false;
 
 /** Homepage hero: the team photo beside the headline. Off: the headline runs on two lines from 1280px. */
 export const SHOW_HOME_HERO_PHOTO = false;
+
+/* ------------------------------------------------------------------ *
+ * Review round (Andrea's notes).
+ * ------------------------------------------------------------------ */
+
+/** Accelerator: "This is what week one looks like." (the plan demo, #plan). Off: the touchpoints move onto Forest. */
+export const SHOW_ACC_WEEK_ONE = false;
+
+/** AI Training: the $5,000 price (hero price line and the FAQ). Off: "Get a quote". */
+export const SHOW_AI_PRICE = false;
+
+/** Custom Training: all six recent programs (hero shelf, DMO card, homepage thumbnail). Off: the three featured ones. */
+export const SHOW_ALL_CUSTOM_PROGRAMS = false;
+
+/**
+ * Speaking: the availability route (the "Check availability for your date"
+ * hero button, the email link and AvailabilityForm in "Got a date?"). Off:
+ * every CTA is "Book a 20-min call" (Calendly).
+ */
+export const SHOW_SPEAKING_AVAILABILITY = false;
+
+/** Work: the sample deliverable pages (and their caption) in every chapter. Off: chapters show stat/quote and story only. */
+export const SHOW_WORK_DELIVERABLES = false;
+
+/** Work: the "More case studies are on the way…" banner (and its eLearningU-list link). */
+export const SHOW_WORK_MORE_CASES = false;
+
+/** The Brief: "Read this issue →" and the archive rows as links (the issues have no web pages yet). Off: plain rows. */
+export const SHOW_BRIEF_READ_LINKS = false;

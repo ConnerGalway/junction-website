@@ -39,7 +39,7 @@ export default async function JunctionUPage() {
           ))}
         </Shelf>
         <Shelf
-          id="talks"
+          id="tourism-talks"
           title={
             <>
               Tourism Talks <span className="text-sage">· free</span>

@@ -77,11 +77,13 @@ export default function IndustryScanPage() {
           <h2 id="boardroom-heading" className="ju-display m-0 text-[clamp(32px,3.6vw,50px)]">
             Built for the boardroom
           </h2>
+          {/* From 640px each column is a subgrid over three shared rows (mark,
+              title, text): the marks sit on one baseline (Oswald and Bebas
+              alike), and titles and text start on shared lines however they wrap. */}
           <ul className="m-0 mt-10 grid list-none gap-x-10 gap-y-10 p-0 sm:grid-cols-2 lg:grid-cols-4">
             {SCAN_FEATURES.map((f) => (
-              <li key={f.title} className="border-t border-fern/35 pt-5">
-                {/* Same box for every mark, so the titles line up */}
-                <span aria-hidden="true" className="flex h-9 items-end">
+              <li key={f.title} className="border-t border-fern/35 pt-5 sm:row-span-3 sm:grid sm:grid-rows-subgrid sm:gap-y-0">
+                <span aria-hidden="true" className="flex h-9 items-end sm:h-auto sm:self-baseline">
                   <span
                     className={
                       f.numeric

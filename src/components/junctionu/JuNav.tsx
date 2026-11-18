@@ -8,7 +8,7 @@ import { JU_NAV, JU_SIGN_IN_URL } from "@/lib/junctionu";
 import { EluWordmark } from "./EluWordmark";
 
 /**
- * eLearningU top bar: the eLearningU name (EluWordmark) and "← Junction" on the left, the section
+ * eLearningU top bar: the eLearningU name (EluWordmark) and "← Back to Junction" on the left, the section
  * links in the middle, Sign in on the right; a 1px Fern-20% rule under it.
  * The link for the section in view (or the current page) is Newsprint with a
  * 2px Fern underline. Under 1024px the links collapse into a menu button.
@@ -62,8 +62,15 @@ export function JuNav({ logo }: { logo?: string | null }) {
           <Link href="/elearningu" aria-label="eLearningU home" className="text-newsprint no-underline">
             <EluWordmark logo={logo} className="text-[26px]" />
           </Link>
-          <Link href="/" className="text-[13px] text-newsprint-muted no-underline hover:text-break-on-dark">
-            ← Junction
+          {/* A quiet text link in the nav's type: Newsprint 70%, Fern on hover; no box. */}
+          <Link
+            href="/"
+            className="flex items-center gap-1.5 text-[15px] whitespace-nowrap text-newsprint/70 no-underline transition-colors duration-150 hover:text-fern focus-visible:text-fern"
+          >
+            <span aria-hidden="true" className="text-[13px]">←</span>
+            <span>
+              <span className="max-sm:sr-only">Back to </span>Junction
+            </span>
           </Link>
         </div>
 

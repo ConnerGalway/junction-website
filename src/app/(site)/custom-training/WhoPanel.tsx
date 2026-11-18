@@ -66,7 +66,8 @@ export function WhoPanel({
           (at 1024 the six-row DMO card would cover most of the photo) */}
       <div className="relative xl:pt-[70px] xl:pr-[40px]">
         <div className="relative aspect-[4/3] overflow-hidden rounded-card">
-          <Image src={photo.src} alt={photo.alt} fill sizes="(min-width: 1024px) 560px, 90vw" className="object-cover" />
+          {/* Portrait sources (photos of Conner): 50% 30% keeps the face in the landscape frame. */}
+          <Image src={photo.src} alt={photo.alt} fill sizes="(min-width: 1024px) 560px, 90vw" className="object-cover object-[50%_30%]" />
         </div>
         <div className="tone-newsprint relative mt-4 rounded-card px-5 py-4 shadow-card-hover xl:absolute xl:top-0 xl:right-0 xl:mt-0 xl:w-[300px]">
           <Eyebrow className="m-0 text-[11px] whitespace-nowrap">{cardMeta}</Eyebrow>

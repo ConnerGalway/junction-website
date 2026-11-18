@@ -3,6 +3,10 @@ import { cacheLife } from "next/cache";
 /**
  * The Brief: the only data source for /the-brief.
  *
+ * NOTE: The Brief now runs on MailerLite (not Mailchimp). The live feed here
+ * is still the Mailchimp one and gets switched later; for now the page shows
+ * the hand-entered real issues (SAMPLE_ISSUES).
+ *
  * Issues come from Mailchimp when three SERVER-ONLY env vars are set (never
  * read them in client code; nothing here is NEXT_PUBLIC_):
  *   MAILCHIMP_API_KEY         an API key (Account → Extras → API keys)
@@ -87,34 +91,47 @@ export function topicsIn(issues: Issue[]): string[] {
   return TOPIC_RULES.map((r) => r.topic).filter((t) => used.has(t));
 }
 
-/* ─── Sample ─────────────────────────────────────────────────────────────── */
+/* ─── Issues ─────────────────────────────────────────────────────────────── */
 
 /*
- * SAMPLE CONTENT — replaced automatically once the Mailchimp env vars are set.
- * Newest first. Sections are kept for every issue, though only the latest
- * one's are shown.
+ * THE REAL ISSUES, entered by hand (newest first). The Brief now runs on
+ * MailerLite, not Mailchimp; the live feed below is still the Mailchimp
+ * one and gets switched to MailerLite later. Until then (no env vars) the
+ * page shows these.
+ *
+ * Headlines are in sentence case (brand names and months keep their
+ * capitals). Taglines for 549–545 only; section headlines for 549–543.
+ * [number, date, feature, tagline?, sections?]
  */
-const SAMPLE: [number, string, string, string, string, string?][] = [
-  [544, "2026-10-12", "Someone else is buying ads on your name", "Apple just made your iPhone customers harder to see", "The Russian bots didn't disappear", "1.1 million ads hijacked hotel searches in one month. Here's the 30-second check."],
-  [543, "2026-10-05", "McDonald's is getting ready for the recommendation era", "Wyndham made 15x more ads with AI", "Influencer agencies are taking 30% off the top", "Why the best-marketed brand on earth is backing away from promos."],
-  [542, "2026-09-28", "The robots want to do your customers' shopping. Amazon just slammed the door.", "ChatGPT isn't the only AI you need to worry about anymore", "You're spending more on Meta ads. Are you getting more?", "The first real fight over who gets to shop for your customers."],
-  [541, "2026-09-21", "The link in your bio now costs $50 a month", "Content marketing just posted its worst year in twelve", "People will take a robot's recommendation, if a human is behind it", "$50 a month to put a link in your own post."],
-  [538, "2026-08-31", "The AI traffic \"trade\" isn't a trade at all", "LinkedIn's \"AI slop\" button got a million clicks in two weeks", "Google called its August update routine. The ranking data disagrees.", "54 advertisers lost 10.5% of their organic search traffic. AI search sent back 1.3% of it."],
-  [536, "2026-08-17", "Aéropostale made a six-episode show for less than one commercial costs", "Turning your staff into creators is harder than the LinkedIn posts make it sound", "Instagram redesigned its wordmark and everyone read it as Instagzam", "And the reason it worked was sitting in their HR department."],
-  [535, "2026-08-10", "I've spent two years telling clients not to build their website with AI. Last month I changed my mind.", "AI shopping assistants just got their ads, and way faster than anyone expected", "Four holiday-shopping reports just told me four different stories about AI", "What actually changed my mind, and where I'd still pump the brakes."],
-  // 534–532 have no tagline: the line is simply omitted.
-  [534, "2026-08-03", "Meta just let ChatGPT and Claude into your ad account — here's what to actually try first.", "LinkedIn just added a \"seems like AI slop\" button, and honestly, take my money", "2x. That's the number AI skeptics have been waiting for."],
-  [533, "2026-07-27", "Nobody's won AI search yet — but someone will", "The AI backlash isn't coming. It's already here.", "Reddit built you a free analytics dashboard. Most brands don't know it exists."],
-  [532, "2026-07-20", "The simplest way to increase your sales", "Do people care if your content is AI-generated?", "Google and Meta are hiding AI labels on ads"],
+const ISSUES: [number, string, string, string?, [string, string]?][] = [
+  [549, "2026-11-16", "You don't have to love AI. Your customers are using it anyway.", "ChatGPT now lets businesses claim their profile. Here's how I think about AI, even if you don't love it. Plus, Carnival turned a cruise ship into a video game.", ["Carnival turned a cruise ship into a video game", "Google is testing local listings with no call button"]],
+  [548, "2026-11-09", "This year's hottest holiday ad feature: \"No AI was used\"", "The best holiday ads this year are bragging about being handmade. Plus, Reddit is putting up a wall.", ["Lands' End wants three or four big moments a year", "Reddit is putting up a wall"]],
+  [547, "2026-11-02", "Instagram wants to be your TV", "A new 90-minute video format, and why the first accounts to use it get a head start. Plus, Lush hasn't posted on Instagram in five years.", ["Google is putting ads inside AI answers, everywhere", "Lush hasn't posted on Instagram in five years. Its content is still everywhere."]],
+  [546, "2026-10-26", "One brand moved $1 million out of Meta. Here's what happened next.", "One brand pulled $1 million out of Meta and says its creator sales tripled in three months. Plus, your holiday shopper is already here.", ["Your holiday shopper showed up in October", "ChatGPT sends almost no traffic. The few visitors it sends actually buy."]],
+  [545, "2026-10-19", "The best thing your marketing can do is let people go", "Pinterest's strangest advice this year might be its best. Plus, your ChatGPT traffic just went undercover.", ["Your customers will pay extra to change their minds", "Your ChatGPT traffic didn't disappear. It went undercover."]],
+  [544, "2026-10-12", "Someone else is buying ads on your name", undefined, ["Apple just made your iPhone customers harder to see", "The Russian bots didn't disappear"]],
+  [543, "2026-10-05", "McDonald's is getting ready for the recommendation era", undefined, ["Wyndham made 15x more ads with AI", "Influencer agencies are taking 30% off the top"]],
+  [542, "2026-09-28", "The robots want to do your customers' shopping. Amazon just slammed the door."],
+  [541, "2026-09-21", "The link in your bio now costs $50 a month"],
+  [540, "2026-09-14", "Meta just launched the AI agent that nobody asked for"],
+  [539, "2026-09-08", "Brands' new solution to anti-AI sentiment is to go older"],
+  [538, "2026-08-31", "The AI traffic \"trade\" isn't a trade at all"],
+  [537, "2026-08-24", "YouTube just made \"views\" a much weaker number"],
+  [536, "2026-08-17", "Aéropostale made a six-episode show for less than one commercial costs"],
+  [535, "2026-08-10", "I've spent two years telling clients not to build their website with AI. Last month I changed my mind."],
+  [534, "2026-08-03", "Meta just let ChatGPT and Claude into your ad account. Here's what to actually try first."],
+  [533, "2026-07-27", "Nobody's won AI search yet, but someone will"],
+  [532, "2026-07-20", "The simplest way to increase your sales"],
 ];
 
-export const SAMPLE_ISSUES: Issue[] = SAMPLE.map(([number, date, feature, a, b, tagline]) => ({
+/** The hand-entered issues (name kept from the sample era: the page's fallback list). */
+export const SAMPLE_ISSUES: Issue[] = ISSUES.map(([number, date, feature, tagline, sections]) => ({
   number,
   date,
   feature,
   ...(tagline ? { tagline } : {}),
-  sections: [a, b],
-  topics: tagTopics([feature, a, b]),
+  ...(sections ? { sections } : {}),
+  topics: tagTopics([feature, ...(sections ?? [])]),
   url: null,
 }));
 

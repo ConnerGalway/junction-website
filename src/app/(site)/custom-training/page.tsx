@@ -70,6 +70,8 @@ const formats: Format[] = [
     duration: "Multi-session",
     description: "Multi-session, built on your strategy and real decisions.",
     image: "/images/custom-training/formats-leadership-program.jpg",
+    // Portrait photo of Conner: keep the face in frame.
+    imagePosition: "50% 30%",
   },
 ];
 
@@ -178,7 +180,7 @@ export default function CustomTrainingPage() {
         <Container>
           <div className="mb-10 flex flex-wrap items-end justify-between gap-x-8 gap-y-4">
             <h2 className="type-h2 m-0">Formats.</h2>
-            <TextLink href="/elearningu" className="whitespace-nowrap">
+            <TextLink href="/elearningu#tourism-talks" className="whitespace-nowrap">
               See how we teach first: watch free →
             </TextLink>
           </div>
