@@ -399,7 +399,7 @@ The program formerly called Offload. **"AI Training" is the only name users see*
 
 ### Dashboard preview
 
-`src/components/DashboardPreview/` is a port of the approved product prototype, `design/redesign/accelerator-dashboard-prototype-v3.html`. Change the prototype first, then the port.
+`src/components/DashboardPreview/` is a port of the approved product prototype, `docs/archive/design/redesign/accelerator-dashboard-prototype-v3.html`. Change the prototype first, then the port.
 
 - **It's the product's UI, not the site's:** its own small type sizes and layout, drawn at its design size (1280×760) and scaled to its container's width with a CSS transform. Colours, fonts and radii map to site tokens (`.dp-*` in globals.css). As a product mock-up it keeps the product's own colour coding (gold and copper grades and metrics, Bebas metric values) and its own subtle hovers, never the site's pink.
 - **Display only:** the sidebar and the tactic tabs switch views; nothing navigates, nothing saves, and the checkboxes aren't interactive.
@@ -547,7 +547,7 @@ Sections:
 `src/app/the-brief/`. One centred reading column (720px) on Newsprint, with issue numbers in the left margin. There are no cards or boxes, and every rule is Carbon (see Section dividers).
 
 - **The Brief now runs on MailerLite, not Mailchimp.** The live feed below is still the Mailchimp one and gets switched to MailerLite later. Until then the page shows the real issues, entered by hand in `src/lib/brief.ts` (549 back to 532; headlines in sentence case, brand names and months capitalized; taglines for 549–545, section headlines for 549–543, "This week" shows 549's).
-- **Data** (`src/lib/brief.ts`, the page's only data source): `getIssues()` and `getLatestIssue()` return `{ number, date, feature, tagline?, sections?, topics, url }`, newest first.
+- **Data** (`src/lib/brief.ts`, the page's only data source): `getIssues()` returns `{ number, date, feature, tagline?, sections?, topics, url }`, newest first (the first is "This week").
   - **Mailchimp:** when the three server-only env vars are set, it reads sent campaigns for The Brief's audience from the Marketing API (`GET /3.0/campaigns?status=sent&list_id=…&sort_field=send_time&sort_dir=DESC`, 100 per page). The feature is `settings.subject_line` (never rewritten), the date is `send_time` (Vancouver time) and the link is `archive_url`.
     - **Issue number:** the number after "Brief" in `settings.title`, else the first 3–4 digit number there. With none, the issue shows no number.
     - **Tagline:** the campaign's `settings.preview_text`. If it's empty, the first sentence of the feature's body: the text between the feature heading and the next heading in the campaign HTML, cut at a word with "…" past 180 characters (`SECTION_PARSER.leadMaxLength`). Those HTML fetches run five at a time and are optional: a failure only drops that tagline. In sample mode, 534–532 have none, so the line is simply omitted.

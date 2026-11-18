@@ -12,7 +12,7 @@ Logos used by `LogoWall` (`src/components/ui/LogoWall.tsx`, data in `src/lib/log
 | `travel-yukon.svg` | Travel Yukon | Existing repo asset `public/uploads/yukon logo.svg`, unchanged | 2026-10-08 |
 | `ontarios-southwest.png` | Ontario's Southwest (Southwest Ontario Tourism Corporation) | Supplied manually, 2026-10-08 (one-colour version, replacing the earlier 300px repo asset). Cropped; the white line art inside the emblem circle is converted to transparency so it shows as a knock-out under the mask (the birds stay solid). | 2026-10-08 |
 | `kootenay-rockies-tourism.png` | Kootenay Rockies Tourism | Existing repo asset `public/uploads/kootenay rockies logo.png` (145×136), cropped | 2026-10-08 |
-| `indigenous-tourism-bc.png` | Indigenous Tourism BC | Existing repo asset `public/assets/logo-itbc.png` (495×102), cropped. Not currently used in a wall. | 2026-10-08 |
+| ~~`indigenous-tourism-bc.png`~~ | Indigenous Tourism BC | Removed in the repo tidy-up (never used in a wall). Restore it from git history if a wall needs it. | 2026-10-08 |
 | `twin-lions-contracting.png` | Twin Lions Contracting | Supplied manually, 2026-10-08; cropped | 2026-10-08 |
 | `smr-plumbing-heating.png` | SMR Plumbing & Heating | Supplied manually, 2026-10-08; cropped | 2026-10-08 |
 | `travel-maine.png` | Travel Maine (Maine Office of Tourism) | Supplied manually, 2026-10-08; cropped | 2026-10-08 |

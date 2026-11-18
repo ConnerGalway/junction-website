@@ -332,12 +332,4 @@ export async function getIssues(): Promise<Issue[]> {
   }
 }
 
-/** The newest issue (shown as "This week"). */
-export async function getLatestIssue(): Promise<Issue | undefined> {
-  return (await getIssues())[0];
-}
 
-/** True when the page is showing SAMPLE_ISSUES (Mailchimp not configured). */
-export function isSampleMode() {
-  return mailchimpConfig() === null;
-}

@@ -12,4 +12,4 @@ Pages:
 
 Every style is inline, so exact values can be read from the markup. Colours and type match `src/app/globals.css`.
 
-See `CLAUDE_CODE_PROMPT.md` at the repo root for the implementation brief.
+(Archived: these were the references for the first lead-gen build; the current site is documented in DESIGN_SYSTEM.md at the repo root.)
