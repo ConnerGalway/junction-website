@@ -119,3 +119,11 @@ export const SHOW_WORK_MORE_CASES = false;
 
 /** The Brief: "Read this issue →" and the archive rows as links (the issues have no web pages yet). Off: plain rows. */
 export const SHOW_BRIEF_READ_LINKS = false;
+
+/**
+ * The Brief: build the archive from MailerLite's sent campaigns (plus the
+ * hand-entered issues). Off: the archive and "This week" are the hand-entered
+ * issues in src/lib/brief.ts only, and no MailerLite call is made. The
+ * signup uses MailerLite either way.
+ */
+export const USE_MAILERLITE_ARCHIVE = false;

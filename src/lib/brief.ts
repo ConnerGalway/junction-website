@@ -1,29 +1,23 @@
 import { cacheLife } from "next/cache";
 import { issueNumberFrom, numberCampaigns } from "./briefNumbers";
+import { USE_MAILERLITE_ARCHIVE } from "./flags";
 
 /**
- * The Brief: the only data source for /the-brief. The Brief runs on
- * MailerLite.
+ * The Brief: the only data source for /the-brief.
  *
- * Issues = the hand-entered issues below (549 back to 532) plus any newer
- * ones from MailerLite: sent campaigns whose NAME contains "Brief". The
- * issue number is a 3-digit number right after "Brief", "Nº", "No." or "#"
- * ("Brief 549", "The Brief #550", "Brief Nº 551"); never a year or a date.
- * A campaign without one is numbered by send date (the next number after the
- * issue sent before it); see src/lib/briefNumbers.ts. A
- * hand-entered issue keeps its curated headline, tagline and sections; a
- * MailerLite issue the list doesn't have is added from the campaign (subject
- * as the headline, the first sentence of its content as the tagline, and,
- * for the newest, its next two headings as sections).
+ * THE ARCHIVE AND "THIS WEEK" ARE THE HAND-ENTERED ISSUES BELOW (ISSUES),
+ * added by hand, roughly weekly, from Conner's Google Doc (the site may run a
+ * week behind). "This week" is the newest by date; the archive is sorted by
+ * date, newest first. MailerLite is used only for the signup
+ * (/api/brief-subscribe), not for the archive.
  *
- * MailerLite is read server side with MAILERLITE_API_KEY (src/lib/mailerlite.ts).
- * Without the key, if the API fails, or if no campaign matches, the page
- * shows the hand-entered issues. It never breaks on a MailerLite error.
- *
- * Refresh: getIssues() is cached ("use cache") and revalidates hourly, so a
- * newly sent campaign appears on its own. A failed refresh serves the last
- * good result this server holds (or the hand-entered list) and retries
- * within minutes.
+ * Kept for later, off: with USE_MAILERLITE_ARCHIVE (src/lib/flags.ts) on and
+ * MAILERLITE_API_KEY set, newer issues are added from MailerLite: sent
+ * campaigns whose NAME contains "Brief", numbered by src/lib/briefNumbers.ts
+ * (a 3-digit number after "Brief", "Nº", "No." or "#", else by send date);
+ * hand-entered issues keep their curated copy; any MailerLite error falls
+ * back to the hand-entered list. With the flag off, no MailerLite call is
+ * made at all.
  */
 
 export type Issue = {
@@ -100,12 +94,24 @@ export function topicsIn(issues: Issue[]): string[] {
 /* ─── Issues ─────────────────────────────────────────────────────────────── */
 
 /*
- * THE REAL ISSUES, entered by hand (newest first). They're always shown,
- * and win over MailerLite for the same issue number (curated copy). Newer
- * issues come from MailerLite (see the header comment).
+ * THE ISSUES, entered by hand from Conner's Google Doc. NEWEST GOES AT THE TOP.
  *
- * Headlines are in sentence case (brand names and months keep their
- * capitals). Taglines for 549–545 only; section headlines for 549–543.
+ * To add an issue, copy this line to the top of the list and fill it in:
+ *
+ *   [550, "2026-11-23", "Feature headline in sentence case", "Optional one-line tagline.", ["First section headline", "Second section headline"]],
+ *
+ *   - number: the issue number (3 digits);
+ *   - date: the send date, yyyy-mm-dd;
+ *   - feature: the headline, in sentence case (keep brand names and months capitalized);
+ *   - tagline (optional): one line; leave it out (or use undefined) if there isn't one;
+ *   - sections (optional): the two "Also in this issue" headlines; only the newest issue shows them.
+ *
+ * Without a tagline or sections, stop after the headline:
+ *   [550, "2026-11-23", "Feature headline in sentence case"],
+ * Sections without a tagline:
+ *   [550, "2026-11-23", "Feature headline in sentence case", undefined, ["First section", "Second section"]],
+ *
+ * Quotation marks inside a headline need a backslash: "This year's \"No AI was used\" ads".
  * [number, date, feature, tagline?, sections?]
  */
 const ISSUES: [number, string, string, string?, [string, string]?][] = [
@@ -129,7 +135,7 @@ const ISSUES: [number, string, string, string?, [string, string]?][] = [
   [532, "2026-07-20", "The simplest way to increase your sales"],
 ];
 
-/** The hand-entered issues (the name is from the sample era; also the page's fallback list). */
+/** The hand-entered issues, newest first: the archive and "This week" (the name is from the sample era). */
 export const SAMPLE_ISSUES: Issue[] = ISSUES.map(([number, date, feature, tagline, sections]) => ({
   number,
   date,
@@ -138,7 +144,9 @@ export const SAMPLE_ISSUES: Issue[] = ISSUES.map(([number, date, feature, taglin
   ...(sections ? { sections } : {}),
   topics: tagTopics([feature, ...(sections ?? [])]),
   url: null,
-}));
+}))
+  // Newest first by date (then number), whatever order the list is in.
+  .sort((a, b) => b.date.localeCompare(a.date) || (b.number ?? 0) - (a.number ?? 0));
 
 /* ─── Parsing a campaign ─────────────────────────────────────────────────── */
 
@@ -316,18 +324,22 @@ async function fetchFromMailerLite(): Promise<Issue[]> {
   );
 }
 
-/** Hand-entered and MailerLite issues together, newest first. */
+/** Hand-entered and MailerLite issues together, newest first by date (only with USE_MAILERLITE_ARCHIVE). */
 function merged(fromMailerLite: Issue[]): Issue[] {
-  return [...fromMailerLite, ...SAMPLE_ISSUES].sort((a, b) => (b.number ?? 0) - (a.number ?? 0) || b.date.localeCompare(a.date));
+  return [...fromMailerLite, ...SAMPLE_ISSUES].sort((a, b) => b.date.localeCompare(a.date) || (b.number ?? 0) - (a.number ?? 0));
 }
 
 /** The last good MailerLite result this server instance fetched (fallback for failed refreshes). */
 let lastGood: Issue[] | null = null;
 
-/** Every issue, newest first. Cached; revalidates hourly. */
+/**
+ * Every issue, newest first by date. Now: the hand-entered issues only, with
+ * no MailerLite call. With USE_MAILERLITE_ARCHIVE on (and the key set), newer
+ * MailerLite issues are merged in; cached and revalidated hourly.
+ */
 export async function getIssues(): Promise<Issue[]> {
   "use cache";
-  if (!process.env.MAILERLITE_API_KEY?.trim()) {
+  if (!USE_MAILERLITE_ARCHIVE || !process.env.MAILERLITE_API_KEY?.trim()) {
     cacheLife("hours");
     return SAMPLE_ISSUES;
   }
