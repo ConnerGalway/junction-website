@@ -75,8 +75,8 @@ const programs: OrbitProgram[] = [
   {
     title: "The Accelerator",
     description: "For small businesses that need a marketing plan they'll work.",
-    // Price line hidden for now (SHOW_CAROUSEL_PRICES); the price stays here.
-    price: SHOW_CAROUSEL_PRICES ? "$2,500 · 90 days" : undefined,
+    // The price line shows "90-DAY PLAN"; the price itself is behind SHOW_CAROUSEL_PRICES.
+    price: SHOW_CAROUSEL_PRICES ? "$2,500 · 90 days" : "90-DAY PLAN",
     href: "/accelerator",
     media: "Accelerator dashboard",
     thumbnail: "dashboard",
@@ -84,7 +84,7 @@ const programs: OrbitProgram[] = [
   {
     title: "AI Training",
     description: "For any business losing hours to admin.",
-    price: SHOW_CAROUSEL_PRICES ? "$5,000 · 30 days" : undefined,
+    price: SHOW_CAROUSEL_PRICES ? "$5,000 · 30 days" : "30-DAY BUILD",
     href: "/ai-accelerator",
     media: "AI Training mockup",
     thumbnail: "offload",
@@ -215,7 +215,8 @@ export default function HomePage() {
           <p className="type-lead m-0 mt-4 max-w-[44ch]">
             Usually, it&apos;s technology that isn&apos;t pulling its weight yet.
           </p>
-          <ol className="mt-9 mb-0 grid list-none gap-x-8 gap-y-10 border-t-2 border-(--tone-rule) p-0 pt-9 sm:grid-cols-2 lg:grid-cols-3">
+          <ol className="mt-9 mb-0 grid list-none gap-x-8 gap-y-10 border-t-2 border-(--tone-rule) p-0 pt-9 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 xl:gap-x-6">
+            {/* 1 column on phones, 2 from 640px, 3 × 2 from 768px, one row of six from 1280px */}
             {stuckItems.map((item) => (
               <li key={item.num}>
                 <span className="type-numeral">{item.num}</span>

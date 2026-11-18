@@ -315,6 +315,10 @@ Toggle pills are `<button aria-pressed>` elements inside a labelled `role="group
 - **Phones:** the dark corner sits behind the lower part of the hero (the buttons), right side.
 - **Contrast:** text sits on Newsprint or the lightest part of the gradient. Body copy (ink-soft) stays above 9:1 even at the darkest point.
 
+### Where organizations get stuck
+
+Six numbered items: one row of six from 1280px, 3 × 2 from 768px, two columns from 640px, one on phones.
+
 ### Hero wordmark
 
 `src/components/HeroWordmark.tsx`, rendered by the homepage with one line and switched by `SHOW_HERO_WORDMARK` in `src/lib/flags.ts` (default `true`).
@@ -341,7 +345,7 @@ Toggle pills are `<button aria-pressed>` elements inside a labelled `role="group
 - **Arrows:** previous and next sit at either end of the program-name stops row under the stage, 12px from the names. They're thin chevrons (20px, 1.6px stroke, rounded ends) with no box or border, in Newsprint at 70%; hover and focus turn them break-on-dark pink, with the tone's focus ring. They're labelled "Previous program" / "Next program".
 - **Input:** one stop per input, with a 520ms lock between steps. Inputs are the arrow buttons, the stop labels, the ← → keys, horizontal wheel or trackpad (accumulated `deltaX`, one step past 40px; mostly-vertical scrolls are ignored) and touch or drag (one step past 50px).
 - **Mobile:** one card at a time, with the same stops and swipe.
-- **Cards:** the price line (`price`) is optional. The Accelerator and AI Training cards have none, and the space stays empty (no stand-in copy). With `SHOW_CAROUSEL_PRICES` on they show "$2,500 · 90 days" and "$5,000 · 30 days".
+- **Cards:** the price line (`price`, Bebas in the price colour) is optional. The Accelerator shows "90-DAY PLAN" and AI Training "30-DAY BUILD" in that slot; with `SHOW_CAROUSEL_PRICES` on they show "$2,500 · 90 days" and "$5,000 · 30 days" instead.
 
 ## Accelerator page
 
