@@ -31,8 +31,9 @@ npm run dev
 ## Forms and environment variables
 
 - **Forms** go to **Netlify Forms** (declared in `public/__forms.html`; submissions in Netlify → Forms). See "Forms" in DESIGN_SYSTEM.md.
-- **The Brief** (signup and archive) runs on **MailerLite**, server side. Environment variables, set in Netlify (never in code):
-  - `MAILERLITE_API_KEY`: required for the signup and the live archive. Without it the site still builds; the archive shows the hand-entered issues and the signup shows its error state.
+- **The Brief archive** ("This week" and past issues) is the list of issues entered by hand in `src/lib/brief.ts`, updated roughly weekly from Conner's Google Doc: copy the template line in the comment above the list to the top and fill it in (newest goes at the top). The flag `USE_MAILERLITE_ARCHIVE` (`src/lib/flags.ts`, off) can switch the archive to MailerLite later.
+- **The Brief signup** runs on **MailerLite**, server side. Environment variables, set in Netlify (never in code):
+  - `MAILERLITE_API_KEY`: required for the signup. Without it the site still builds and the signup shows its error state.
   - `MAILERLITE_BRIEF_GROUP_ID`: optional; the group new subscribers join. Without it, the group named "The Brief" is used if it exists.
 
 ## Flags
