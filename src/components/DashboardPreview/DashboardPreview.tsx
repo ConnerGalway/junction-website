@@ -8,7 +8,7 @@ import { areas, phases, tactics, weeks, type GradeTone } from "./data";
 /**
  * Interactive preview of the Accelerator dashboard (an example business).
  * A port of the approved prototype,
- * design/redesign/accelerator-dashboard-prototype-v3.html: same layout,
+ * docs/archive/design/redesign/accelerator-dashboard-prototype-v3.html: same layout,
  * content and behaviour, with colours, fonts and radii mapped to the site
  * tokens (`.dp-*` in globals.css).
  *

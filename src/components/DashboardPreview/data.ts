@@ -1,7 +1,7 @@
 /**
  * Example content for the Accelerator dashboard preview (an example
  * business, Conner's Cabins). Copied from the approved prototype,
- * design/redesign/accelerator-dashboard-prototype-v3.html.
+ * docs/archive/design/redesign/accelerator-dashboard-prototype-v3.html.
  */
 
 export type Tactic = {
