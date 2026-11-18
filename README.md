@@ -28,6 +28,13 @@ npm run dev
 - **`public/images/README.md`**: which image goes where, with the exact filenames to upload.
 - **`docs/archive/`**: old design references, kept for history; not used by the site.
 
+## Forms and environment variables
+
+- **Forms** go to **Netlify Forms** (declared in `public/__forms.html`; submissions in Netlify → Forms). See "Forms" in DESIGN_SYSTEM.md.
+- **The Brief** (signup and archive) runs on **MailerLite**, server side. Environment variables, set in Netlify (never in code):
+  - `MAILERLITE_API_KEY`: required for the signup and the live archive. Without it the site still builds; the archive shows the hand-entered issues and the signup shows its error state.
+  - `MAILERLITE_BRIEF_GROUP_ID`: optional; the group new subscribers join. Without it, the group named "The Brief" is used if it exists.
+
 ## Flags
 
 Hidden sections and soft-launch switches live in **`src/lib/flags.ts`**. Nothing is deleted: removed sections stay behind a flag (default `false`). Each flag is described there and in DESIGN_SYSTEM.md ("Flags and hidden sections").
