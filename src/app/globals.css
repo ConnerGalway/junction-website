@@ -1227,9 +1227,11 @@
     }
   }
 
-  /* The Brief archive rows: hover and focus lift the margin number to 50%. */
-  .brief-row:hover .brief-margin-num,
-  .brief-row:focus-visible .brief-margin-num {
+  /* The Brief archive rows that are links (SHOW_BRIEF_READ_LINKS): hover and
+     focus lift the margin number to 50%. Every row keeps .brief-row (its
+     min-height), link or not, so the sideways number is never cut off. */
+  .brief-row-link:hover .brief-margin-num,
+  .brief-row-link:focus-visible .brief-margin-num {
     color: color-mix(in srgb, var(--color-carbon) 50%, transparent);
   }
 
@@ -1388,6 +1390,15 @@
   .group:hover .ju-video-image,
   .group:focus-visible .ju-video-image {
     filter: brightness(1.08);
+  }
+
+  /* Privacy policy: the "On this page" disclosure (below 1024px). */
+  .policy-toc-mobile > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .policy-toc-mobile[open] .policy-toc-chevron {
+    transform: rotate(180deg);
   }
 
   /* Clip sideways overflow without making a scroll container: overflow-x

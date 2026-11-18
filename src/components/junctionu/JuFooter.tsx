@@ -20,9 +20,14 @@ export function JuFooter({ logo }: { logo?: string | null }) {
             </Link>
           ))}
         </nav>
-        <Link href="/" className="text-[15px] font-medium text-fern hover:text-break-on-dark">
-          Part of Junction →
-        </Link>
+        <div className="flex flex-col items-start gap-2">
+          <Link href="/" className="text-[15px] font-medium text-fern hover:text-break-on-dark">
+            Part of Junction →
+          </Link>
+          <Link href="/privacy-policy" className="text-[13px] text-newsprint-muted hover:text-break-on-dark">
+            Privacy policy
+          </Link>
+        </div>
       </div>
     </footer>
   );

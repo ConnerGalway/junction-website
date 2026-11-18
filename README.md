@@ -26,6 +26,7 @@ npm run dev
 - **`AGENTS.md`**: rules for anyone (or any agent) changing the code. Read it first.
 - **`DESIGN_SYSTEM.md`**: colours, type, components and every page's structure, plus the content-to-supply list.
 - **`public/images/README.md`**: which image goes where, with the exact filenames to upload.
+- **`content/privacy-policy.md`**: the privacy policy text, rendered at `/privacy-policy`; edit it there.
 - **`docs/archive/`**: old design references, kept for history; not used by the site.
 
 ## Forms and environment variables
