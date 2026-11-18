@@ -712,7 +712,7 @@ A new course gets a `slug` and its still the same way.
   - **Inside spreads** (420 × 290, Newsprint), alternating with the covers: the left page has a copper meta, a title and text lines; the right page has a small bar chart or a big gold-on-light Bebas figure.
   - **Swappable:** `public/images/marketing-strategy/<n>.jpg` (n = position, from 1) replaces item n with a designed image (checked at build time).
 - **Logo wall:** "Destinations we work with", the shared `LogoWall` (`auto`) with `dmoLogos`.
-- **How a strategy engagement works:** a four-phase timeline under a 2px Canopy line, with a stop per phase: a Newsprint dot with a Canopy ring, and the last stop copper.
+- **How a strategy engagement works:** a four-phase timeline under a 2px Canopy line, with a stop per phase: a Newsprint dot with a Canopy ring, and the last stop copper. From 768px each phase is a CSS subgrid over four shared rows (label, title, text, Output), so titles, text and the Output boxes line up across columns whatever the text length, and the boxes are the same height.
   - **Each phase:** "PHASE N" (Bebas price style, 60%), the title (h4), one line and an Output box (sage-25, radius 10, a Forest small caps "Output" label and the output in Forest).
   - **Below it:** the engagement line in the price style ("[ TYPICAL LENGTH ] · SCOPED TO YOU", a placeholder; shown only with `SHOW_PLACEHOLDERS`).
   - **Phones:** the timeline turns vertical, with the line on the left.
