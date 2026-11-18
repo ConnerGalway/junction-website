@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Button, Callout, Container, Section, TextLink } from "@/components";
-import { SHOW_ELU_EMAIL_BAND } from "@/lib/flags";
+import { SHOW_ELU_EMAIL_BAND, SHOW_WORK_DELIVERABLES, SHOW_WORK_MORE_CASES } from "@/lib/flags";
 import { WORK_CASES } from "@/lib/workCases";
 import { CaseChapter } from "./CaseChapter";
 import { RouteMap } from "./RouteMap";
@@ -10,7 +10,7 @@ import { ChapterList, ServiceFilter, WorkFilterProvider } from "./WorkFilter";
 export const metadata: Metadata = {
   title: "Work",
   description:
-    "Four engagements, told with the actual results. Each one links to the service that produced it. Soon you'll be able to flip through the deliverables too.",
+    "Four engagements, told with the actual results. Each one links to the service that produced it.",
 };
 
 const routeMap = buildRouteMap();
@@ -30,8 +30,9 @@ export default function WorkPage() {
             </h1>
             <p className="type-lead mt-7 mb-0">
               Four engagements, told with the actual results. Each one links to
-              the service that produced it. Soon you&apos;ll be able to flip through
-              the deliverables too.
+              the service that produced it.
+              {/* The deliverables line goes with the sample pages (SHOW_WORK_DELIVERABLES). */}
+              {SHOW_WORK_DELIVERABLES && <> Soon you&apos;ll be able to flip through the deliverables too.</>}
             </p>
           </div>
           {/* From 1024px the map overflows its column to the left: its column's
@@ -56,7 +57,8 @@ export default function WorkPage() {
         chapters={WORK_CASES.map((item) => ({ id: item.id, node: <CaseChapter item={item} /> }))}
       />
 
-      {/* More on the way */}
+      {/* More on the way (hidden: SHOW_WORK_MORE_CASES) */}
+      {SHOW_WORK_MORE_CASES && (
       <Section spacing="tight">
         <Container>
           <Callout className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-3">
@@ -74,6 +76,7 @@ export default function WorkPage() {
           </Callout>
         </Container>
       </Section>
+      )}
 
       {/* Closing CTA */}
       <Section id="start" tone="forest" className="scroll-mt-24">

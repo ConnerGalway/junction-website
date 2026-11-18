@@ -110,3 +110,9 @@ export const SHOW_ALL_CUSTOM_PROGRAMS = false;
  * every CTA is "Book a 20-min call" (Calendly).
  */
 export const SHOW_SPEAKING_AVAILABILITY = false;
+
+/** Work: the sample deliverable pages (and their caption) in every chapter. Off: chapters show stat/quote and story only. */
+export const SHOW_WORK_DELIVERABLES = false;
+
+/** Work: the "More case studies are on the way…" banner (and its eLearningU-list link). */
+export const SHOW_WORK_MORE_CASES = false;

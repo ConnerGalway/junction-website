@@ -507,12 +507,12 @@ Sections:
   - **Story side:** meta label (copper on Newsprint, Fern on dark), title (h2 at up to 44px), description, the quote card where there is one (`quote-adapt`: Sage on Newsprint and Carbon, Newsprint card on Forest), the service link, then the DeliverablesPreview.
   - **No stat (Kootenay Rockies):** the quote leads on the stat side (Fraunces 900 italic, up to 36px, tone text, caption under it) and isn't repeated in the story. Its quote is unverified (`SHOW_UNVERIFIED_QUOTES`); with neither a stat nor a quote, the sample pages take the lead side, so the chapter is pages, title and description and still reads as two balanced columns.
   - **Quotes:** Travel Yukon has Robyn Gillespie (Big Bear Donair), Ontario's Southwest has Joanne Wolnik's long quote; with `SHOW_UNVERIFIED_QUOTES` the old quotes follow (`moreQuotes`).
-- **DeliverablesPreview** (`DeliverablesPreview.tsx`): three sample pages in a row with equal heights, `aria-hidden`:
+- **DeliverablesPreview** (hidden: `SHOW_WORK_DELIVERABLES`, with its caption and the hero's "Soon you'll be able to flip through the deliverables too." line; off, each chapter is its stat or quote plus the story, and a chapter with neither, Kootenay Rockies, is one column: title and a larger description) (`DeliverablesPreview.tsx`): three sample pages in a row with equal heights, `aria-hidden`:
   - a report cover (3:4, Forest, small JUNCTION_ wordmark, a Fern rule and the case title);
   - two inside spreads (3:2, Newsprint, with abstract text lines, a Bebas figure and a few bars). On the second spread the figure and bars are blurred and one line is a solid redaction bar.
 
   Pages are drawn with container units, so they scale with the column. They have radius 10 and the tone's card shadow or border. Caption: "Sample pages · client details changed for privacy · flip through →". As a mock document it keeps its own colours (a small gold figure). **Swappable:** set `deliverables.images` (cover, spread, spread) in `workCases.ts` and real images fill the same slots. **Not interactive yet. Planned:** clicking "flip through" expands the pages in place to fill the chapter (no modal, no new page); to be designed.
-- **Note:** a `Callout` with the Okotoks line. Its link, "Get them first: join the eLearningU list →" (to the eLearningU email band, `/elearningu#email`; the signup isn't wired to a list yet, TODO), shows only with `SHOW_ELU_EMAIL_BAND`.
+- **Note** (hidden: `SHOW_WORK_MORE_CASES`): a `Callout` with the Okotoks line. Its link, "Get them first: join the eLearningU list →" (to the eLearningU email band, `/elearningu#email`; the signup isn't wired to a list yet, TODO), shows only with `SHOW_ELU_EMAIL_BAND`.
 - **Building-supply chapter** (hidden: `SHOW_WORK_SUPPLIER_CASE`): from `src/lib/buildingSupplyCase.ts`, after ITBC. Grounds and sides come from visible position, so they alternate with it on or off. Its "See the full story →" shows only while `SHOW_AI_CASE_STUDY` is on.
 - **Kootenay Rockies** has no number yet: without `SHOW_PLACEHOLDERS` its map stop shows the name alone and its sample spread has no figure.
 - **Closing CTA (Forest):** display H2 and the existing "Start a conversation" button (`/contact`).
@@ -860,6 +860,8 @@ Everything removed or not ready is **hidden behind a flag in `src/lib/flags.ts`,
 | `SHOW_AI_PRICE` | false | AI Training's $5,000 price (hero and FAQ); off, "Get a quote" |
 | `SHOW_ALL_CUSTOM_PROGRAMS` | false | Custom Training: all six recent programs (hero shelf, DMO card, homepage thumbnail); off, the three featured ones |
 | `SHOW_SPEAKING_AVAILABILITY` | false | Speaking's availability route ("Check availability for your date", the email link and the form); off, every CTA is Book a 20-min call |
+| `SHOW_WORK_DELIVERABLES` | false | Work: the sample deliverable pages and caption in every chapter (and the hero's "flip through the deliverables" line) |
+| `SHOW_WORK_MORE_CASES` | false | Work: the "More case studies are on the way…" banner |
 | `SHOW_HOME_HERO_PHOTO` | false | The team photo in the homepage hero (on: the headline goes back to three lines) |
 
 The building-supply case data is one file, `src/lib/buildingSupplyCase.ts`, shared by the homepage teaser, the AI Training case study and the Work chapter.
