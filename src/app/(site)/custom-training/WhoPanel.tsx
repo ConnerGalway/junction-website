@@ -38,7 +38,7 @@ export function WhoPanel({
         "grid items-start gap-x-12 gap-y-10 rounded-card p-[clamp(24px,4vw,48px)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]"
       )}
     >
-      <div className="flex h-full flex-col">
+      <div className="flex h-full min-w-0 flex-col">
         <h3 className="type-h3 m-0">{title}</h3>
         <p className="type-body m-0 mt-4 max-w-[46ch]">{line}</p>
         <ul className="m-0 mt-8 grid list-none gap-x-8 gap-y-4 p-0 sm:grid-cols-2">
@@ -64,13 +64,14 @@ export function WhoPanel({
 
       {/* 1280px+: the card overlaps the photo's top-right corner; below, it sits under the photo
           (at 1024 the six-row DMO card would cover most of the photo) */}
-      <div className="relative xl:pt-[70px] xl:pr-[40px]">
+      <div className="relative min-w-0 xl:pt-[70px] xl:pr-[40px]">
         <div className="relative aspect-[4/3] overflow-hidden rounded-card">
           {/* Portrait sources (photos of Conner): 50% 30% keeps the face in the landscape frame. */}
           <Image src={photo.src} alt={photo.alt} fill sizes="(min-width: 1024px) 560px, 90vw" className="object-cover object-[50%_30%]" />
         </div>
         <div className="tone-newsprint relative mt-4 rounded-card px-5 py-4 shadow-card-hover xl:absolute xl:top-0 xl:right-0 xl:mt-0 xl:w-[300px]">
-          <Eyebrow className="m-0 text-[11px] whitespace-nowrap">{cardMeta}</Eyebrow>
+          {/* One line from 640px; it may wrap on the narrowest phones rather than widen the panel. */}
+          <Eyebrow className="m-0 text-[11px] sm:whitespace-nowrap">{cardMeta}</Eyebrow>
           <ol className="m-0 mt-2.5 flex list-none flex-col gap-2 p-0">
             {cardRows.map((row, i) => (
               <li key={row.title} className="grid grid-cols-[32px_minmax(0,1fr)] gap-x-2">

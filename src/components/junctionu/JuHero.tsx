@@ -1,30 +1,32 @@
 import Image from "next/image";
 import { SHOW_JU_TRAILER } from "@/lib/flags";
 import { JU_HERO_VIDEO, JU_START_URL, JU_TRAILER_URL } from "@/lib/junctionu";
-import { JU_HERO_IMAGE } from "@/lib/junctionuImages";
+import { getVimeoThumbnail } from "@/lib/vimeo";
 import { HeroVideo } from "./HeroVideo";
 import { JuButton } from "./JuButton";
 
 /**
- * eLearningU hero (cinematic): the hero still (public/images/junctionu/hero.jpg
- * if it exists, else the custom course still) on the right 64%, faded into
- * the ground (solid to 36% of the width, clear by 82%, plus a bottom fade),
- * never behind the copy. On phones the still sits on top, faded at the bottom.
+ * eLearningU hero (cinematic): the Vimeo background video on the right 64%,
+ * faded into the ground (solid to 36% of the width, clear by 82%, plus a
+ * bottom fade), never behind the copy. On phones it sits on top, faded at
+ * the bottom.
+ *
+ * Before the video plays (and with reduced motion, which loads no video) the
+ * frame shows the video's own Vimeo thumbnail, fetched at build time; if
+ * that can't be fetched, the plain eLearningU ground. The old course still
+ * (images/junctionu/hero.png) is no longer used here.
  */
-export function JuHero() {
+export async function JuHero() {
+  const poster = await getVimeoThumbnail(JU_HERO_VIDEO.url);
   return (
     <section className="relative overflow-hidden lg:flex lg:min-h-[600px] lg:items-center">
-      {/* The still is the video's poster and fallback; the Vimeo background
-          video plays over it (HeroVideo), with its unmute toggle bottom-left. */}
-      <div className="relative aspect-[16/10] w-full lg:absolute lg:inset-y-0 lg:right-0 lg:aspect-auto lg:w-[64%]">
-        <Image
-          src={JU_HERO_IMAGE}
-          alt=""
-          fill
-          priority
-          sizes="(min-width: 1024px) 64vw, 100vw"
-          className="object-cover object-[60%_30%]"
-        />
+      {/* The video's thumbnail (or the plain ground) is the poster; the Vimeo
+          background video fades in over it once playing (HeroVideo), with its
+          unmute toggle bottom-left. */}
+      <div className="relative aspect-[16/10] w-full bg-ju-ground lg:absolute lg:inset-y-0 lg:right-0 lg:aspect-auto lg:w-[64%]">
+        {poster && (
+          <Image src={poster} alt="" fill priority sizes="(min-width: 1024px) 64vw, 100vw" className="object-cover" />
+        )}
         <HeroVideo videoId={JU_HERO_VIDEO.id} title={JU_HERO_VIDEO.title} />
         <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-ju-ground to-transparent lg:h-1/3" />
       </div>

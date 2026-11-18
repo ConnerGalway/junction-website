@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { CSSProperties, ReactNode } from "react";
 import { Eyebrow, LeadCapture, Stat, cx } from "@/components";
 import { FORM_NAMES } from "@/lib/forms";
@@ -160,10 +161,34 @@ export function TimeBackCalculator() {
   );
 }
 
+/** Under 640px the value popovers open as a bottom sheet. */
+const SHEET_QUERY = "(max-width: 639.98px)";
+/** Popover width and the gap it keeps from the viewport edges. */
+const POP_WIDTH = 280;
+const EDGE = 16;
+
+function useIsSheet() {
+  const [sheet, setSheet] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia(SHEET_QUERY);
+    const update = () => setSheet(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+  return sheet;
+}
+
 /**
  * An editable value in the sentence: copper (an approved one-off for this
  * calculator), pink while its popover is open. The popover closes on
  * Escape or an outside click, and focus returns to the value.
+ *
+ * Placement: from 640px a 280px popover under its word, shifted so it always
+ * stays 16px inside the viewport, and flipped above the word when there's
+ * no room below. Under 640px a bottom sheet instead (full width, Newsprint,
+ * rounded top, a dimmed backdrop; closes on select, a tap outside or
+ * Escape), rendered in a portal so nothing on the page can clip it.
  */
 function Value({
   field,
@@ -184,7 +209,8 @@ function Value({
 }) {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const popRef = useRef<HTMLDivElement>(null);
-  const [alignRight, setAlignRight] = useState(false);
+  const [place, setPlace] = useState<{ left: number; up: boolean }>({ left: 0, up: false });
+  const sheet = useIsSheet();
   const popId = useId();
 
   // Focus returns to the value whenever its popover closes.
@@ -193,6 +219,26 @@ function Value({
     if (wasOpen.current && !open) buttonRef.current?.focus();
     wasOpen.current = open;
   }, [open]);
+
+  // Keep the popover inside the viewport: shift it sideways, flip it above if needed.
+  useLayoutEffect(() => {
+    if (!open || sheet) return;
+    function measure() {
+      const btn = buttonRef.current?.getBoundingClientRect();
+      const pop = popRef.current;
+      if (!btn || !pop) return;
+      const vw = document.documentElement.clientWidth;
+      const width = Math.min(POP_WIDTH, vw - EDGE * 2);
+      const viewportLeft = Math.min(Math.max(btn.left, EDGE), vw - EDGE - width);
+      const height = pop.offsetHeight;
+      const below = window.innerHeight - btn.bottom;
+      const up = below < height + 12 + EDGE && btn.top > below;
+      setPlace({ left: viewportLeft - btn.left, up });
+    }
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [open, sheet]);
 
   useEffect(() => {
     if (!open) return;
@@ -221,7 +267,9 @@ function Value({
       document.removeEventListener("click", onOutside);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open]);
+  }, [open, sheet]);
+
+  const panelClass = "rounded-card bg-newsprint p-5 font-sans text-[16px] leading-normal font-normal tracking-normal";
 
   return (
     <span className="relative inline-block">
@@ -238,8 +286,7 @@ function Value({
             onClose();
             return;
           }
-          const rect = buttonRef.current?.getBoundingClientRect();
-          setAlignRight(!!rect && rect.left + 300 > window.innerWidth - 16);
+          setPlace({ left: 0, up: false });
           onOpen();
         }}
         className={cx(
@@ -249,20 +296,41 @@ function Value({
       >
         {label}
       </button>
-      {open && (
-        <div
-          ref={popRef}
-          id={popId}
-          role="dialog"
-          aria-label={title}
-          className={cx(
-            "absolute top-full z-30 mt-3 w-[280px] max-w-[calc(100vw-40px)] rounded-card bg-newsprint p-5 font-sans text-[16px] leading-normal font-normal tracking-normal shadow-card-hover",
-            alignRight ? "right-0" : "left-0"
-          )}
-        >
-          {children}
-        </div>
-      )}
+      {open &&
+        (sheet ? (
+          createPortal(
+            <>
+              <div aria-hidden="true" className="fixed inset-0 z-[60] bg-carbon/45" />
+              <div
+                ref={popRef}
+                id={popId}
+                role="dialog"
+                aria-modal="true"
+                aria-label={title}
+                className={cx(
+                  panelClass,
+                  "fixed inset-x-0 bottom-0 z-[61] max-h-[80vh] overflow-y-auto rounded-b-none px-5 pt-3 pb-[max(20px,env(safe-area-inset-bottom))] text-carbon shadow-card-hover"
+                )}
+              >
+                <span aria-hidden="true" className="mx-auto mb-4 block h-1 w-10 rounded-full bg-carbon/20" />
+                <p className="m-0 mb-3 text-[14px] font-medium text-flint">{title}</p>
+                {children}
+              </div>
+            </>,
+            document.body
+          )
+        ) : (
+          <div
+            ref={popRef}
+            id={popId}
+            role="dialog"
+            aria-label={title}
+            style={{ left: place.left, width: `min(${POP_WIDTH}px, calc(100vw - ${EDGE * 2}px))` }}
+            className={cx(panelClass, "absolute z-30 shadow-card-hover", place.up ? "bottom-full mb-3" : "top-full mt-3")}
+          >
+            {children}
+          </div>
+        ))}
     </span>
   );
 }

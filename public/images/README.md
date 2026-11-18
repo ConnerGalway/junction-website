@@ -32,7 +32,7 @@ Any of `.jpg`, `.jpeg`, `.png` or `.webp` works (first match wins, in that order
 
 | File | Where | Shape |
 |---|---|---|
-| `hero.<ext>` | eLearningU hero still (also the background video's poster) | Landscape, subject right of centre. |
+| `hero.<ext>` | Not used any more: the eLearningU hero shows its Vimeo video's own thumbnail. `hero.png` is kept. | — |
 | `industry-scan-thumbnail.<ext>` | Industry Scan teaser card, the Scan briefing poster, the Marketing strategy Scan panel | 16:9. |
 | `courses/<slug>.<ext>` | Course card stills (real course screengrabs). Until a course has one, its card shows a designed title card. | 16:9. |
 

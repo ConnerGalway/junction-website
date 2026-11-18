@@ -57,8 +57,9 @@ export function JuNav({ logo }: { logo?: string | null }) {
 
   return (
     <header className="sticky top-0 z-40 border-b border-fern/20 bg-ju-ground px-gutter">
-      <div className="mx-auto flex h-16 max-w-wide items-center gap-6">
-        <div className="flex shrink-0 items-baseline gap-4">
+      {/* Tighter gaps under 640px so the name, the back link and Menu fit at 320. */}
+      <div className="mx-auto flex h-16 max-w-wide items-center gap-3 sm:gap-6">
+        <div className="flex shrink-0 items-baseline gap-3 sm:gap-4">
           <Link href="/elearningu" aria-label="eLearningU home" className="text-newsprint no-underline">
             <EluWordmark logo={logo} className="text-[26px]" />
           </Link>

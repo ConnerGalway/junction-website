@@ -37,6 +37,11 @@ export const ELU_LOGO = fs.existsSync(path.join(process.cwd(), "public/images/el
   ? "/images/elearningu/logo.svg"
   : null;
 
+/**
+ * The old eLearningU hero still (hero.<ext>). NOT USED: the hero now shows
+ * the Vimeo video's own thumbnail (JuHero). Kept with the file in case it's
+ * wanted again.
+ */
 export const JU_HERO_IMAGE = findImage("hero") ?? FALLBACK_STILL;
 
 /** The Industry Scan's thumbnail: the ScanTeaser card, and the video poster on the Scan page once it's built. */

@@ -146,20 +146,17 @@ export default function SpeakingPage() {
 
           {/* Recent stages, pinned to the bottom of the hero */}
           <div className="relative z-10 border-t border-newsprint/10 bg-gradient-to-t from-stage to-stage/70 px-gutter py-5">
-            <Container className="flex flex-wrap items-baseline gap-x-6 gap-y-2">
-              <span className="text-[12px] font-medium tracking-[0.14em] text-newsprint/55 uppercase">Recent stages</span>
-              <ul className="m-0 flex list-none flex-wrap items-baseline gap-x-3 gap-y-1 p-0 text-[16px] font-medium text-newsprint">
-                {stages.map((s, i) => (
-                  <li key={s} className="flex items-baseline gap-3">
-                    {i > 0 && (
-                      <span aria-hidden="true" className="text-newsprint/40">
-                        ·
-                      </span>
-                    )}
-                    {s}
-                  </li>
-                ))}
-              </ul>
+            {/* Phones: the label, then one stage per line. From 768px: one wrapping
+                row, with dots only between stages on the same line (.stage-list). */}
+            <Container className="flex flex-col gap-2 md:flex-row md:flex-wrap md:items-baseline md:gap-x-6">
+              <span className="shrink-0 text-[12px] font-medium tracking-[0.14em] text-newsprint/55 uppercase">Recent stages</span>
+              <div className="stage-clip md:min-w-0 md:flex-1">
+                <ul className="stage-list m-0 flex list-none md:-ml-7 flex-col gap-1 p-0 font-sans text-[15px] leading-snug font-normal text-newsprint md:flex-row md:flex-wrap md:gap-y-1 md:text-[17px]">
+                  {stages.map((s) => (
+                    <li key={s}>{s}</li>
+                  ))}
+                </ul>
+              </div>
             </Container>
           </div>
         </SpotlightHero>
