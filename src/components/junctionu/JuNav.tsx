@@ -4,12 +4,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cx } from "@/components";
+import { SHOW_ELU_SIGN_IN } from "@/lib/flags";
 import { JU_NAV, JU_SIGN_IN_URL } from "@/lib/junctionu";
 import { EluWordmark } from "./EluWordmark";
 
 /**
  * eLearningU top bar: the eLearningU name (EluWordmark) and "← Back to Junction" on the left, the section
- * links in the middle, Sign in on the right; a 1px Fern-20% rule under it.
+ * links in the middle and Sign in on the right (Sign in is hidden behind
+ * SHOW_ELU_SIGN_IN; without it the links sit on the right, so there's no
+ * empty gap); a 1px Fern-20% rule under it.
  * The link for the section in view (or the current page) is Newsprint with a
  * 2px Fern underline. Under 1024px the links collapse into a menu button.
  */
@@ -75,13 +78,19 @@ export function JuNav({ logo }: { logo?: string | null }) {
           </Link>
         </div>
 
-        <nav aria-label="eLearningU" className="mx-auto hidden items-center gap-7 text-[15px] lg:flex">
+        <nav
+          aria-label="eLearningU"
+          className={cx("hidden items-center gap-7 text-[15px] lg:flex", SHOW_ELU_SIGN_IN ? "mx-auto" : "ml-auto")}
+        >
           {links()}
         </nav>
 
-        <a href={JU_SIGN_IN_URL} className="ml-auto hidden text-[15px] font-medium text-newsprint no-underline hover:text-break-on-dark lg:ml-0 lg:inline">
-          Sign in<span className="sr-only"> to eLearningU</span>
-        </a>
+        {/* Hidden: SHOW_ELU_SIGN_IN (the sign-in URL still leads to an error). */}
+        {SHOW_ELU_SIGN_IN && (
+          <a href={JU_SIGN_IN_URL} className="ml-auto hidden text-[15px] font-medium text-newsprint no-underline hover:text-break-on-dark lg:ml-0 lg:inline">
+            Sign in<span className="sr-only"> to eLearningU</span>
+          </a>
+        )}
 
         <button
           type="button"
@@ -97,9 +106,11 @@ export function JuNav({ logo }: { logo?: string | null }) {
       {open && (
         <nav id="ju-menu" aria-label="eLearningU" className="mx-auto flex max-w-wide flex-col gap-4 pt-2 pb-6 text-[18px] lg:hidden">
           {links(() => setOpen(false))}
-          <a href={JU_SIGN_IN_URL} className="font-medium text-newsprint no-underline hover:text-break-on-dark">
-            Sign in<span className="sr-only"> to eLearningU</span>
-          </a>
+          {SHOW_ELU_SIGN_IN && (
+            <a href={JU_SIGN_IN_URL} className="font-medium text-newsprint no-underline hover:text-break-on-dark">
+              Sign in<span className="sr-only"> to eLearningU</span>
+            </a>
+          )}
         </nav>
       )}
     </header>

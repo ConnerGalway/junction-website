@@ -661,7 +661,7 @@ A new course gets a `slug` and its still the same way.
 - **Top bar** (`JuNav`, ju-ground, sticky, 1px Fern-20% rule under it):
   - **left:** the eLearningU name (`EluWordmark`, to `/elearningu`) and "← Back to Junction" (to `/`): a quiet text link in the nav's type (15px, Newsprint 70%, Fern on hover and focus, a small ←), no pill or box; on phones it reads "← Junction";
   - **centre:** Browse · Courses · Workshops · Tourism Talks · For DMOs · Industry Scan, which are anchors on the page except Industry Scan (`/elearningu/industry-scan`, see Industry Scan page). The active link (section in view, or current page) is Newsprint with a 2px Fern underline;
-  - **right:** "Sign in" (https://www.elearningu.com/login; TODO: confirm it's the right LearnWorlds path);
+  - **right:** "Sign in" (https://www.elearningu.com/login; TODO: confirm it's the right LearnWorlds path). **Hidden** behind `SHOW_ELU_SIGN_IN` (the link leads to an error); without it the section links sit on the right instead of centred;
   - **under 1024px:** a Menu button.
 - **Footer** (`JuFooter`, ju-deep): the eLearningU name with the eLearningU social icons under it (YouTube, Instagram, TikTok, LinkedIn; see Navigation and footer), the same links, and "Part of Junction →" to the main site.
 
@@ -911,6 +911,7 @@ Everything removed or not ready is **hidden behind a flag in `src/lib/flags.ts`,
 | `SHOW_WORK_MORE_CASES` | false | Work: the "More case studies are on the way…" banner |
 | `USE_MAILERLITE_ARCHIVE` | false | The Brief: build the archive from MailerLite's sent campaigns (plus the hand-entered issues). Off: hand-entered issues only, no MailerLite calls; the signup uses MailerLite either way |
 | `SHOW_BRIEF_READ_LINKS` | false | The Brief: "Read this issue →" and archive rows as links |
+| `SHOW_ELU_SIGN_IN` | false | eLearningU nav: the "Sign in" link (desktop and mobile menu); the URL still leads to an error. Off, the section links sit on the right |
 | `SHOW_HOME_HERO_PHOTO` | false | The team photo in the homepage hero (on: the headline goes back to three lines) |
 
 The building-supply case data is one file, `src/lib/buildingSupplyCase.ts`, shared by the homepage teaser, the AI Training case study and the Work chapter.
