@@ -349,14 +349,15 @@ Six numbered items: one row of six from 1280px, 3 × 2 from 768px, two columns f
 
 ## Accelerator page
 
-`src/app/accelerator/`. Order: hero, video, steps + quick score (`#quick-score`), week one (Forest), touchpoints, proof, questions, closing CTA (Forest).
+`src/app/accelerator/`. Order: hero, video, steps + quick score (`#quick-score`), week one (Forest; hidden: `SHOW_ACC_WEEK_ONE`), touchpoints (Forest while week one is hidden), proof, questions, closing CTA (Forest).
 
 - **Hero:** headline, lead, price row (`$2,500` and "90 days · small businesses", see Numerals), caption, then the Calendly button and "Get your free score in 3 minutes ↓". On the right, the dashboard preview bleeds off the right edge with a bottom fade (1024px+); from 768 to 1023px it sits under the text at full width; below 768px it's hidden.
 - **Video:** `VideoPlayer` is a lite embed of the Vimeo video (`src/lib/acceleratorVideo.ts`): a 16:9 card (radius 14) with the poster, a soft bottom fade and the corner play button (`PlayBadge`) with "4:05". The poster is Vimeo's thumbnail from oEmbed, fetched at build time and cached a week, served through next/image (`i.vimeocdn.com` is allowed in next.config); if Vimeo can't be reached, the team photo. Pressing play swaps in the Vimeo player in place (autoplay, `dnt=1`), so nothing is requested from Vimeo before that. Accessible name: "Play: See how it works (4 minutes 5 seconds)".
 - **Steps:** a 2px divider, then `.dim-row` rows with Bebas numerals; step 01 carries the six area chips.
-- **Touchpoints:** three equal cards (two Newsprint cards, one Carbon), each with a ghost numeral and a Bebas day label (Day 1, Day 45, Day 90) in the tone's numeral colour.
-- **Proof:** two Carbon proof cards in the original proof-card style (a full-size gold `<Stat>`, an h4 title and a small line: "15%" Increase in bookings, "95%" Completion rate; don't shrink the numbers), then a small Sage quote card (Savannah Swaisland, Grape Savvy).
-- **Questions:** the H2 on the left; the `Accordion` on the right.
+- **Touchpoints:** on Forest (so the page isn't Newsprint top to bottom while week one is hidden; with `SHOW_ACC_WEEK_ONE` on it goes back to Newsprint, so two Forest sections don't touch). Three equal cards: two default cards with the dark-ground treatment (hairline border, Fern top rule) and one Carbon, each with a ghost numeral (Newsprint 7%) and a Bebas day label (Day 1, Day 45, Day 90) in the tone's numeral colour (Newsprint on Forest).
+- **Proof:** two Carbon proof cards in the original proof-card style (a full-size gold `<Stat>`, an h4 title and a small line: "15%" Increase in bookings, "95%" Completion rate; don't shrink the numbers), then a small Sage quote card. "15%" uses proportional figures (`font-variant-numeric: proportional-nums`): Bebas's tabular "1" carries extra space on its left, which pushed the number in from the text below (Savannah Swaisland, Grape Savvy).
+- **Video:** nothing loads or plays until the visitor presses play.
+- **Questions:** the H2 on the left; the `Accordion` on the right. Four questions: Who will be my Coach? · What's included in the Implementation Plan? · How do I talk to my Coach? · What are Destination Partnerships?
 
 ## AI Training page
 
@@ -388,6 +389,7 @@ The program formerly called Offload. **"AI Training" is the only name users see*
 - **Question card:** a meta label and "About 3 minutes", an 8-segment progress bar (Canopy done, sage-25 to do), the question (`type-h3`) and answer tiles: newsprint-hover fill with no outline; selected = Sage fill, Forest text and a filled radio. "← Back" and "Next". Next with no answer shows "Pick an answer to continue" (the button is never disabled).
 - **Score card:** a Canopy donut on a sage-25 track, six area rows coloured by score band (see Accent hierarchy), the two biggest gaps, then the email row. The email is format-checked in the browser only.
 - **Inbox card:** Carbon, "Report sent" in Fern, and "Retake the check" (a secondary button) back to question 1.
+- **Questions:** written for any small business (no rooms, guests, occupancy or OTAs): business type (context), then six scored areas: Marketing plan (a written plan), Channels (which channels bring customers), Consistency (posting), Email list (collecting emails), Tracking (results), Time (for marketing); then the 90-day goal (context).
 - **Scoring:** scored questions have four answers worth 100, 66, 33 and 0, plus "I'm not sure" (0). The overall score is the average of the six areas. Grades: 85+ A, 75+ B+, 65+ B, 55+ B−, 45+ C, 35+ D+, 25+ D, under 25 F.
 - **Motion:** the outgoing card slides down and fades as the next one rises into place (400ms, `--ease-orbit` curve, framer-motion). With `prefers-reduced-motion` the swap is instant. Focus moves to the new card's title.
 
@@ -850,6 +852,7 @@ Everything removed or not ready is **hidden behind a flag in `src/lib/flags.ts`,
 | `SHOW_ELU_EMAIL_BAND` | false | The eLearningU email band and the Work page's link to it |
 | `SHOW_PLACEHOLDERS` | false | Every user-visible placeholder (below) |
 | `SHOW_UNVERIFIED_QUOTES` | false | Unverified testimonials (Kathy Cooper on the homepage and Kootenay chapter, Avery Bramadat on Custom Training and Travel Yukon, Joanne Wolnik's short "Invaluable support…" line on Ontario's Southwest). On, each returns in its original place, after any verified quote that took it. |
+| `SHOW_ACC_WEEK_ONE` | false | Accelerator "This is what week one looks like." (the plan demo, `#plan`); off, the touchpoints sit on Forest |
 | `SHOW_HOME_HERO_PHOTO` | false | The team photo in the homepage hero (on: the headline goes back to three lines) |
 
 The building-supply case data is one file, `src/lib/buildingSupplyCase.ts`, shared by the homepage teaser, the AI Training case study and the Work chapter.

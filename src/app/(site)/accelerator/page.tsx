@@ -15,6 +15,7 @@ import {
 import { DashboardPreview } from "@/components/DashboardPreview";
 import { ACCELERATOR_VIDEO, getAcceleratorPoster } from "@/lib/acceleratorVideo";
 import { CALENDLY_URL } from "@/lib/constants";
+import { SHOW_ACC_WEEK_ONE } from "@/lib/flags";
 import { QUOTES, quoted } from "@/lib/testimonials";
 import { QuickScore } from "./QuickScore";
 import { TaskChecklist, type Task } from "./TaskChecklist";
@@ -105,16 +106,20 @@ const touchpoints = [
 
 const faqs = [
   {
-    q: "Who is it for?",
-    a: "Small businesses in any industry with a website, real customers, and no marketing team.",
+    q: "Who will be my Coach?",
+    a: "We will review your application and match you with a Coach who has extensive experience in your areas of focus.",
   },
   {
-    q: "How much time does it take?",
-    a: "Plan on two to three hours a week. Each task tells you how long it takes and who should do it.",
+    q: "What's included in the Implementation Plan?",
+    a: "Plans vary depending on your focus area. Together, we will determine the most impactful strategy for your business, and share a 3-page action plan including recommendations and step-by-step guidance so you can get started immediately.",
   },
   {
-    q: "What happens after day 90?",
-    a: "You keep the plan, the guides and your progress. Many teams follow it with AI Training.",
+    q: "How do I talk to my Coach?",
+    a: "Zoom meetings will be scheduled at your convenience, and you may always connect directly via email.",
+  },
+  {
+    q: "What are Destination Partnerships?",
+    a: "We partner with select destinations who offer subsidized access to eLearningU resources to their members. To determine if you are eligible for reduced pricing, please submit your application and we will confirm with you.",
   },
 ];
 
@@ -262,7 +267,8 @@ export default async function AcceleratorPage() {
         </Container>
       </Section>
 
-      {/* Plan Demo */}
+      {/* Plan demo: "This is what week one looks like." (hidden: SHOW_ACC_WEEK_ONE) */}
+      {SHOW_ACC_WEEK_ONE && (
       <Section id="plan" tone="forest" className="scroll-mt-24">
         <Container className="grid items-center gap-[clamp(32px,5vw,80px)] [grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr))]">
           <div>
@@ -291,9 +297,13 @@ export default async function AcceleratorPage() {
           <TaskChecklist tasks={taskData} />
         </Container>
       </Section>
+      )}
 
-      {/* Touchpoints */}
-      <Section>
+      {/* Touchpoints on Forest (the page's dark band while week one is hidden;
+          with it on, Newsprint so two Forest sections don't touch). Cards use
+          the dark-ground treatment: hairline border, Fern top rule; the third
+          is Carbon. */}
+      <Section tone={SHOW_ACC_WEEK_ONE ? "newsprint" : "forest"}>
         <Container>
           <h2 className="type-h2 mt-0 mb-9">Three touchpoints along the way.</h2>
           <ol className="m-0 grid list-none gap-6 p-0 md:grid-cols-3">
@@ -309,7 +319,7 @@ export default async function AcceleratorPage() {
                     n={i + 1}
                     className={cx(
                       "absolute top-4 right-4 h-[70%]",
-                      i === 2 ? "fill-newsprint/7" : "fill-carbon/6"
+                      i === 2 || !SHOW_ACC_WEEK_ONE ? "fill-newsprint/7" : "fill-carbon/6"
                     )}
                   />
                   <p className="type-numeral relative m-0 text-[40px]">{tp.day}</p>
@@ -322,11 +332,13 @@ export default async function AcceleratorPage() {
         </Container>
       </Section>
 
-      {/* Proof */}
-      <Section flush="top">
+      {/* Proof (full top padding after the Forest touchpoints) */}
+      <Section flush={SHOW_ACC_WEEK_ONE ? "top" : undefined}>
         <Container className="grid gap-6 [grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))]">
           <Card tone="carbon" className="flex flex-col gap-2.5">
-            <Stat value="15%" />
+            {/* Proportional figures: Bebas's tabular "1" carries extra space on
+                its left, so "15%" would sit in from the text below. */}
+            <Stat value="15%" valueClassName="[font-variant-numeric:proportional-nums]" />
             <p className="type-h4 m-0">Increase in bookings</p>
             <p className="type-small m-0">
               Businesses that complete the Accelerator program report a 15%

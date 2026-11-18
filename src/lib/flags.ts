@@ -90,3 +90,10 @@ export const SHOW_UNVERIFIED_QUOTES = false;
 
 /** Homepage hero: the team photo beside the headline. Off: the headline runs on two lines from 1280px. */
 export const SHOW_HOME_HERO_PHOTO = false;
+
+/* ------------------------------------------------------------------ *
+ * Review round (Andrea's notes).
+ * ------------------------------------------------------------------ */
+
+/** Accelerator: "This is what week one looks like." (the plan demo, #plan). Off: the touchpoints move onto Forest. */
+export const SHOW_ACC_WEEK_ONE = false;
