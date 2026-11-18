@@ -7,7 +7,7 @@ import { shown } from "@/lib/placeholders";
 import { DEFAULTS, HOURS, JOBS, PEOPLE, RATE, WEEKS_PER_YEAR, yearlyHours, type Range } from "@/lib/timeBack";
 
 /*
- * "What is that job costing you?" calculator.
+ * Time-back calculator ("See how many hours a week you could get back.").
  *
  * TODO (before going live): FRONT-END DEMO ONLY. The email is only
  * format-checked in the browser; nothing is stored or sent. Needs approval,
@@ -83,7 +83,7 @@ export function TimeBackCalculator() {
   return (
     <div className="grid items-start gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
       <div>
-        <h2 className="type-h2 m-0">What is that job costing you?</h2>
+        <h2 className="type-h2 m-0">See how many hours a week you could get back.</h2>
         {/* A div, not a <p>: the popovers inside are block content. */}
         <div className="mt-8 font-display text-[clamp(26px,3.1vw,44px)] leading-[1.4] font-semibold tracking-[-0.025em] text-carbon">
           My team spends{" "}

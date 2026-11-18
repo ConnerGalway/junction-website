@@ -97,3 +97,6 @@ export const SHOW_HOME_HERO_PHOTO = false;
 
 /** Accelerator: "This is what week one looks like." (the plan demo, #plan). Off: the touchpoints move onto Forest. */
 export const SHOW_ACC_WEEK_ONE = false;
+
+/** AI Training: the $5,000 price (hero price line and the FAQ). Off: "Get a quote". */
+export const SHOW_AI_PRICE = false;

@@ -16,7 +16,7 @@ import {
 import { OffloadPreview } from "@/components/OffloadPreview";
 import { CALENDLY_URL } from "@/lib/constants";
 import { CASE_INTRO, CASE_MEASURES, CASE_META } from "@/lib/buildingSupplyCase";
-import { SHOW_AI_CASE_STUDY, SHOW_AI_TESTIMONIALS, SHOW_PLACEHOLDERS } from "@/lib/flags";
+import { SHOW_AI_CASE_STUDY, SHOW_AI_TESTIMONIALS, SHOW_PLACEHOLDERS, SHOW_AI_PRICE } from "@/lib/flags";
 import { teamLogos } from "@/lib/logos";
 import { CaseSwitcher } from "./CaseSwitcher";
 import {
@@ -106,11 +106,14 @@ const faqs: AccordionItem[] = [
   },
   {
     q: "On site or remote?",
-    a: "Session 1 runs on site where possible. Sessions 2 to 4 run on site or on Zoom, whichever suits your team.",
+    a: "Sessions are remote, on Zoom. If you'd like, we can hold the first session on-site with your team.",
   },
   {
     q: "What does it cost?",
-    a: "$5,000 per team for the 30 days, including the dashboard, prompt library and roadmap.",
+    // The price is behind SHOW_AI_PRICE; until then every team gets a quote.
+    a: SHOW_AI_PRICE
+      ? "$5,000 per team for the 30 days, including the dashboard, prompt library and roadmap."
+      : "Every team gets a quote, based on the bottleneck and the size of your team. It includes the dashboard, prompt library and roadmap. Book a 20-min call and we'll give you a number.",
   },
 ];
 
@@ -136,11 +139,14 @@ export default function AIAcceleratorPage() {
               Your team learns AI by building with it on the jobs that eat their
               week: quotes, collections, paperwork, admin.
             </p>
+            {/* Price line: "Get a quote" in the price slot (the $5,000 price is behind SHOW_AI_PRICE). */}
             <div className="flex flex-wrap items-baseline gap-x-5 gap-y-1">
-              <p className="type-price m-0 text-[56px]">$5,000</p>
+              <p className="type-price m-0 text-[56px]">{SHOW_AI_PRICE ? "$5,000" : "Get a quote"}</p>
               <p className="type-price m-0 text-[28px]">30 days · any industry</p>
             </div>
-            <p className="type-small mt-3 mb-8">Per team · on site or Zoom.</p>
+            <p className="type-small mt-3 mb-8">
+              {SHOW_AI_PRICE ? "Per team · on site or Zoom." : "Per team · remote, with the first session on-site if you like."}
+            </p>
             <div className="flex flex-wrap items-center gap-6">
               <Button href={CALENDLY_URL}>Book a 20-min call</Button>
               {SHOW_AI_CASE_STUDY && (
