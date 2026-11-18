@@ -2,9 +2,10 @@
 
 import { Suspense, useId, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Button, ProgramThumb, type ProgramKey } from "@/components";
+import { Button, FormError, Honeypot, ProgramThumb, type ProgramKey } from "@/components";
 import { CALENDLY_URL } from "@/lib/constants";
 import { SHOW_CONTACT_TILE_ART } from "@/lib/flags";
+import { FORM_NAMES, pageUrl, submitNetlifyForm } from "@/lib/forms";
 import { EdInput, EdSelect, EdTextarea } from "./fields";
 
 type FormType = "accelerator" | "ai" | "training" | "strategy" | "speaking" | "other";
@@ -38,6 +39,8 @@ type Prefill = {
   message?: string;
   /** The note at the top of step 2, e.g. "We've filled this in from your program sketch." */
   note2?: string;
+  /** Where the pre-fill came from, sent with the form ("Custom Training program sketch" …). */
+  source?: string;
 };
 
 const speakingFormats = ["Keynote", "Workshop", "Panel or fireside", "Virtual", "Not sure yet"];
@@ -65,16 +68,31 @@ function ContactFormFields({ initialType, prefill }: { initialType: FormType | n
   const typeLabelId = useId();
   const detailsLabelId = useId();
   const [selectedType, setSelectedType] = useState<FormType | null>(initialType);
-  const [sent, setSent] = useState(false);
-  const [firstName, setFirstName] = useState("");
+  const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [bot, setBot] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  // Submits to the Netlify form "contact" (see src/lib/forms.ts and public/__forms.html).
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: wire up contact form submission
     const formData = new FormData(e.currentTarget);
-    const name = formData.get("name") as string;
-    setFirstName(name?.split(" ")[0] || "there");
-    setSent(true);
+    const fields: Record<string, string> = {};
+    for (const [key, value] of formData.entries()) {
+      if (key === "type" || key === "bot-field" || typeof value !== "string") continue;
+      fields[key] = key === "partner" ? "Yes" : value.trim();
+    }
+    setState("sending");
+    try {
+      await submitNetlifyForm(FORM_NAMES.contact, {
+        ...fields,
+        program: PROGRAMS.find((p) => p.type === selectedType)?.title ?? "",
+        source: prefill?.source ?? "Contact page",
+        page: pageUrl(),
+        "bot-field": bot,
+      });
+      setState("sent");
+    } catch {
+      setState("error");
+    }
   };
 
   const orgLabel =
@@ -88,24 +106,20 @@ function ContactFormFields({ initialType, prefill }: { initialType: FormType | n
     <>
       {/* Live region stays mounted so the confirmation is announced. */}
       <div role="status" aria-live="polite">
-        {sent && (
+        {state === "sent" && (
           <div className="flex flex-col gap-4 py-3">
-            <h2 className="type-h3 m-0">
-              Thanks, {firstName}. Want to skip the back-and-forth?
-            </h2>
-            <p className="type-body m-0">
-              Conner will reply by email. If you&apos;d like to move faster, pick a
-              time for a 20-minute call now.
-            </p>
-            <Button href={CALENDLY_URL} className="self-start">
+            <h2 className="type-h3 m-0">Thanks — it&apos;s with us. We&apos;ll reply soon.</h2>
+            <p className="type-body m-0">If you&apos;d like to talk sooner, pick a time for a 20-minute call.</p>
+            <Button variant="secondary" href={CALENDLY_URL} className="self-start">
               Book a 20-min call
             </Button>
           </div>
         )}
       </div>
 
-      {!sent && (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      {state !== "sent" && (
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5" aria-busy={state === "sending"}>
+          <Honeypot value={bot} onChange={setBot} />
 
           {/* 1 · Program tiles: a radio group (arrow keys move between them), required */}
           <fieldset className="m-0 min-w-0 border-0 p-0">
@@ -263,8 +277,9 @@ function ContactFormFields({ initialType, prefill }: { initialType: FormType | n
             </div>
           </section>
 
-          <Button type="submit" className="mt-4 self-start">
-            Send
+          <div aria-live="polite">{state === "error" && <FormError />}</div>
+          <Button type="submit" disabled={state === "sending"} className="mt-4 self-start">
+            {state === "sending" ? "Sending…" : "Send"}
           </Button>
         </form>
       )}
@@ -287,17 +302,24 @@ function ContactFormFromParams() {
       format: format && speakingFormats.includes(format) ? format : undefined,
       size: get("audience"),
       note: format && !speakingFormats.includes(format) ? `Format: ${format}` : undefined,
+      source: "Speaking availability check",
     };
   } else if (initialType === "training" && get("from") === "region") {
-    prefill = { audience: sketchAudience.operators, note2: "Funded seats for your region." };
+    prefill = {
+      audience: sketchAudience.operators,
+      note2: "Funded seats for your region.",
+      source: "eLearningU: talk to us about a region",
+    };
   } else if (initialType === "training") {
     prefill = {
       audience: sketchAudience[get("who") ?? ""],
       learners: sketchLearners[get("size") ?? ""],
       sketch: get("sketch"),
+      source: get("sketch") ? "Custom Training program sketch" : undefined,
     };
   } else if (initialType === "other") {
-    prefill = { message: otherTopics[get("topic") ?? ""] };
+    const topic = otherTopics[get("topic") ?? ""];
+    prefill = { message: topic, source: topic };
   }
   // The source note shows only when something was actually filled in.
   if (initialType === "speaking" && (prefill.org || prefill.date || prefill.format || prefill.size || prefill.note)) {

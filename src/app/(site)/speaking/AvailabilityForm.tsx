@@ -1,54 +1,82 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useId, useState } from "react";
 import type { FormEvent } from "react";
-import { Button, Eyebrow, Input, Select } from "@/components";
+import { Button, Eyebrow, FormError, Honeypot, Input, Select } from "@/components";
+import { CALENDLY_URL } from "@/lib/constants";
+import { EMAIL_RE, FORM_NAMES, pageUrl, submitNetlifyForm } from "@/lib/forms";
 
 const FORMATS = ["Keynote", "Workshop", "Panel or fireside", "Virtual", "Not sure yet"];
 const AUDIENCES = ["Under 50", "50–100", "100–300", "300+"];
 
 /**
- * "Check availability" card. A 2×2 form (event, date, format, audience);
- * submitting opens /contact?type=speaking with the answers in the URL,
- * which pre-fill the speaking form. The event name is required (checked
- * in the browser).
+ * "Check availability" card (hidden while SHOW_SPEAKING_AVAILABILITY is off).
+ * Event, date, format, audience, name and email in a 2-column grid; submits
+ * to the Netlify form "speaking-availability" (see src/lib/forms.ts). The
+ * event name and a valid email are required (checked in the browser and
+ * announced). States: sending, thanks (with a call link), error (mailto).
  */
 export function AvailabilityForm() {
-  const router = useRouter();
-  const [missing, setMissing] = useState(false);
   const id = useId();
+  const [errors, setErrors] = useState<{ event?: boolean; email?: boolean }>({});
+  const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [bot, setBot] = useState("");
 
-  function submit(event: FormEvent<HTMLFormElement>) {
+  async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const name = String(data.get("event") ?? "").trim();
-    if (!name) {
-      setMissing(true);
-      (event.currentTarget.elements.namedItem("event") as HTMLInputElement | null)?.focus();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const get = (key: string) => String(data.get(key) ?? "").trim();
+    const next = { event: !get("event"), email: !EMAIL_RE.test(get("email")) };
+    setErrors(next);
+    if (next.event || next.email) {
+      (form.elements.namedItem(next.event ? "event" : "email") as HTMLInputElement | null)?.focus();
       return;
     }
-    const params = new URLSearchParams({ type: "speaking", event: name });
-    for (const key of ["date", "format", "audience"]) {
-      const value = String(data.get(key) ?? "");
-      if (value) params.set(key, value);
+    setState("sending");
+    try {
+      await submitNetlifyForm(FORM_NAMES.speaking, {
+        event: get("event"),
+        date: get("date"),
+        format: get("format"),
+        audience: get("audience"),
+        name: get("name"),
+        email: get("email"),
+        page: pageUrl(),
+        "bot-field": bot,
+      });
+      setState("sent");
+    } catch {
+      setState("error");
     }
-    router.push(`/contact?${params.toString()}`);
+  }
+
+  if (state === "sent") {
+    return (
+      <div className="card card-pad" role="status" aria-live="polite">
+        <Eyebrow className="m-0">Check availability</Eyebrow>
+        <p className="type-h3 m-0 mt-4">Thanks — it&apos;s with us. We&apos;ll reply soon.</p>
+        <Button variant="secondary" href={CALENDLY_URL} className="mt-6">
+          Book a 20-min call
+        </Button>
+      </div>
+    );
   }
 
   return (
     <div className="card card-pad">
       <Eyebrow className="m-0">Check availability</Eyebrow>
-      <form noValidate onSubmit={submit} className="mt-5">
+      <form noValidate onSubmit={submit} className="mt-5" aria-busy={state === "sending"}>
+        <Honeypot value={bot} onChange={setBot} />
         <div className="grid gap-4 sm:grid-cols-2">
           <Input
             label="Event"
             name="event"
             required
             aria-required="true"
-            aria-invalid={missing || undefined}
-            aria-describedby={missing ? `${id}-missing` : undefined}
-            onChange={() => missing && setMissing(false)}
+            aria-invalid={errors.event || undefined}
+            aria-describedby={errors.event ? `${id}-event` : undefined}
+            onChange={() => errors.event && setErrors((e) => ({ ...e, event: false }))}
           />
           <Input label="Date" name="date" type="date" />
           <Select label="Format" name="format" defaultValue="Keynote">
@@ -61,14 +89,34 @@ export function AvailabilityForm() {
               <option key={a}>{a}</option>
             ))}
           </Select>
+          <Input label="Your name" name="name" autoComplete="name" />
+          <Input
+            label="Email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            required
+            aria-required="true"
+            aria-invalid={errors.email || undefined}
+            aria-describedby={errors.email ? `${id}-email` : undefined}
+            onChange={() => errors.email && setErrors((e) => ({ ...e, email: false }))}
+          />
         </div>
-        {missing && (
-          <p id={`${id}-missing`} role="alert" className="type-small mt-3 mb-0 font-medium text-carbon">
-            Add the event name so we know what to check.
-          </p>
-        )}
-        <Button type="submit" className="mt-6">
-          Check availability
+        <div aria-live="polite">
+          {errors.event && (
+            <p id={`${id}-event`} role="alert" className="type-small mt-3 mb-0 font-medium text-carbon">
+              Add the event name so we know what to check.
+            </p>
+          )}
+          {errors.email && (
+            <p id={`${id}-email`} role="alert" className="type-small mt-3 mb-0 font-medium text-carbon">
+              Enter a valid email address, like name@business.com
+            </p>
+          )}
+          {state === "error" && <FormError className="mt-3" />}
+        </div>
+        <Button type="submit" disabled={state === "sending"} className="mt-6">
+          {state === "sending" ? "Sending…" : "Check availability"}
         </Button>
         <p className="type-small m-0 mt-3">You&apos;ll hear back with availability and a fee for your format.</p>
       </form>

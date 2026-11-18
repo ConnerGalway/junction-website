@@ -6,7 +6,8 @@
  * refine the questions, answers and scoring; everything that decides the
  * score lives in this file.
  *
- * Front-end demo only. Nothing is stored or sent (see QuickScore.tsx).
+ * The score is shown in the browser; the lead form sends it with the answers
+ * to the Netlify form "lead-quick-score" (see QuickScore.tsx).
  */
 
 export const AREAS = [

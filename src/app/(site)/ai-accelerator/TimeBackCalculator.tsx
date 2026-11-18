@@ -1,23 +1,23 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import type { CSSProperties, FormEvent, ReactNode } from "react";
-import { Button, Eyebrow, Input, Stat, cx } from "@/components";
+import type { CSSProperties, ReactNode } from "react";
+import { Eyebrow, LeadCapture, Stat, cx } from "@/components";
+import { FORM_NAMES } from "@/lib/forms";
 import { shown } from "@/lib/placeholders";
 import { DEFAULTS, HOURS, JOBS, PEOPLE, RATE, WEEKS_PER_YEAR, yearlyHours, type Range } from "@/lib/timeBack";
 
 /*
  * Time-back calculator ("See how many hours a week you could get back.").
  *
- * TODO (before going live): FRONT-END DEMO ONLY. The email is only
- * format-checked in the browser; nothing is stored or sent. Needs approval,
- * a backend, the estimate email and a CASL check. Jobs and copy live in
- * src/lib/timeBack.ts (placeholders pending team approval).
+ * The result is worked out and shown in the browser. The result card ends
+ * with an email capture (LeadCapture) that submits every input and figure
+ * to the Netlify form "lead-time-back"; we reply by hand. Jobs and copy live
+ * in src/lib/timeBack.ts.
  */
 
 type Field = "hours" | "job" | "people" | "rate";
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 const whole = new Intl.NumberFormat("en-US");
 
@@ -53,9 +53,6 @@ export function TimeBackCalculator() {
   const [rate, setRate] = useState(DEFAULTS.rate);
   const [job, setJob] = useState(DEFAULTS.job);
   const [open, setOpen] = useState<Field | null>(null);
-  const [email, setEmail] = useState("");
-  const [emailState, setEmailState] = useState<"idle" | "error" | "sent">("idle");
-  const id = useId();
 
   const totalHours = yearlyHours(hours, people);
   const totalCost = totalHours * rate;
@@ -63,15 +60,17 @@ export function TimeBackCalculator() {
   const shownCost = useCountTo(totalCost);
   const current = JOBS[job];
 
-  function submit(event: FormEvent) {
-    event.preventDefault();
-    if (!EMAIL_RE.test(email.trim())) {
-      setEmailState("error");
-      return;
-    }
-    // TODO: send to the (not yet approved) backend. Nothing is stored or sent.
-    setEmailState("sent");
-  }
+  /** Everything the lead form sends: each input and every figure shown. */
+  const leadData = () => ({
+    job: current.label,
+    hours_per_week_per_person: String(hours),
+    people: String(people),
+    hourly_cost: "$" + rate,
+    hours_per_week_total: String(hours * people),
+    hours_per_year: whole.format(totalHours),
+    cost_per_year: money.format(totalCost),
+    what_we_would_build: current.build,
+  });
 
   const valueProps = (field: Field) => ({
     field,
@@ -149,43 +148,13 @@ export function TimeBackCalculator() {
           {shown(current.line) && <p className="type-small m-0 mt-1">{current.line}</p>}
         </div>
 
-        <div className="mt-7 border-t border-hairline-dark pt-6">
-          {emailState === "sent" ? (
-            <div>
-              <Eyebrow className="m-0">Sent</Eyebrow>
-              <p className="type-h4 m-0 mt-2">Check your inbox.</p>
-            </div>
-          ) : (
-            <form noValidate onSubmit={submit}>
-              <p className="type-h4 m-0 mb-3">Email me this estimate.</p>
-              <div className="flex flex-wrap items-start gap-2.5 sm:flex-nowrap">
-                <Input
-                  label="Email address"
-                  hideLabel
-                  type="email"
-                  autoComplete="email"
-                  placeholder="you@business.com"
-                  value={email}
-                  onChange={(event) => {
-                    setEmail(event.target.value);
-                    if (emailState === "error") setEmailState("idle");
-                  }}
-                  aria-invalid={emailState === "error" || undefined}
-                  aria-describedby={emailState === "error" ? `${id}-error` : undefined}
-                  className="min-w-0 flex-1 basis-56"
-                />
-                <Button type="submit" className="shrink-0">
-                  Send
-                </Button>
-              </div>
-              {emailState === "error" && (
-                <p id={`${id}-error`} role="alert" className="type-small mt-2 mb-0 font-medium text-newsprint">
-                  Enter a valid email address, like name@business.com
-                </p>
-              )}
-            </form>
-          )}
-        </div>
+        <LeadCapture
+          formName={FORM_NAMES.timeBack}
+          leadMagnet="Time-back calculator"
+          prompt="Want to see what we'd build for you? Leave your email and we'll get back to you personally."
+          data={leadData}
+          className="mt-7 border-t border-hairline-dark pt-6"
+        />
       </div>
     </div>
   );

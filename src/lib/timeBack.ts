@@ -5,7 +5,8 @@
  * PLACEHOLDERS: the jobs, defaults, ranges and "what we'd build" lines are
  * pending team approval. Everything the calculator shows lives here.
  *
- * Front-end demo only. Nothing is stored or sent.
+ * The result is shown in the browser; the lead form sends it to the Netlify
+ * form "lead-time-back" (see TimeBackCalculator.tsx).
  */
 
 export type Job = {
