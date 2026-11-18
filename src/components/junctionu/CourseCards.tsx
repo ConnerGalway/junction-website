@@ -17,43 +17,80 @@ function Tag({ children }: { children: string }) {
 }
 
 /**
- * Course card ("Start here"): a 16:9 still (courses/<slug>.jpg, resolved by
- * withStills; a placeholder gradient until the file exists) with its length in Bebas, then the Certificate tag and the
- * price, the title and the module count. The whole card is the link, out to
- * the course's eLearningU landing page. Placeholder labels ("[ $ ]") show only
- * with SHOW_PLACEHOLDERS.
+ * Course card ("Start here"), linking out to the course's eLearningU page.
+ *
+ * Image slot (16:9): the still from courses/<slug>.<ext> when one exists
+ * (resolved at build by withStills), otherwise a designed title card
+ * (TitleCard). Either way the course type sits top-left in Fern small caps.
+ * Under the slot: the length and price in Bebas (each only when set), then
+ * the title.
  */
 export function CourseCard({ course, index }: { course: JuCourse & { still?: string }; index: number }) {
   const length = shown(course.length);
   const price = shown(course.price);
   return (
     <a href={course.url} className="ju-card group relative block w-[min(400px,78vw)] no-underline">
-      <div className="ju-still relative aspect-video overflow-hidden rounded-card" data-variant={index % 3}>
-        {course.still && (
-          <Image
-            src={course.still}
-            alt=""
-            fill
-            sizes="400px"
-            className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04] motion-reduce:transition-none"
-          />
-        )}
-        {length && (
-          <span className="ju-still-label absolute top-3 left-4 font-wordmark text-[22px] leading-none text-newsprint">
-            {length}
-          </span>
+      <div className="relative aspect-video overflow-hidden rounded-card">
+        {course.still ? (
+          <>
+            <Image
+              src={course.still}
+              alt=""
+              fill
+              sizes="400px"
+              className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04] motion-reduce:transition-none"
+            />
+            {course.type && (
+              <span className="ju-still-label absolute top-4 left-5 text-[11px] leading-none font-medium tracking-[0.12em] text-fern uppercase">
+                {course.type}
+              </span>
+            )}
+          </>
+        ) : (
+          <TitleCard title={course.title} type={course.type} variant={index % 3} />
         )}
       </div>
-      <div className="mt-4 flex items-center justify-between gap-4">
-        <Tag>Certificate</Tag>
-        {price && <span className="font-wordmark text-[22px] leading-none text-newsprint">{price}</span>}
-      </div>
+      {(length || price) && (
+        <div className="mt-4 flex items-center justify-between gap-4">
+          {length ? <span className="font-wordmark text-[22px] leading-none text-fern">{length}</span> : <span />}
+          {price && <span className="font-wordmark text-[22px] leading-none text-newsprint">{price}</span>}
+        </div>
+      )}
       <h3 className="ju-title mt-3 mb-0 text-[24px] text-newsprint transition-colors duration-150 group-hover:text-break-on-dark group-focus-visible:text-break-on-dark">
         {course.title}
         <ExternalNote />
       </h3>
-      {course.modules && <p className="type-small mt-1.5 mb-0 text-newsprint-muted">{course.modules} modules</p>}
     </a>
+  );
+}
+
+/**
+ * The designed title card for a course without a still (decorative; the
+ * card's h3 carries the title). Three grounds by position (data-variant):
+ * ju-moss, ju-deep, and ju-ground with a soft Fern glow from the top-right.
+ * The type top-left in Fern small caps; at the bottom-left a Fern bar
+ * (28 × 4, the eLearningU mark's bar) over the title in Oswald capitals,
+ * Newsprint, sized to the card (container units, up to 34px) and held to
+ * three lines. No ghost numbers, photo or play icon, so it never reads as a
+ * Workshop poster.
+ */
+function TitleCard({ title, type, variant }: { title: string; type?: string; variant: number }) {
+  return (
+    <div
+      aria-hidden="true"
+      data-variant={variant}
+      className="ju-title-card absolute inset-0 flex flex-col justify-between p-[clamp(16px,5.5cqw,24px)] [container-type:inline-size]"
+    >
+      {type ? (
+        <span className="text-[11px] leading-none font-medium tracking-[0.12em] text-fern uppercase">{type}</span>
+      ) : (
+        <span />
+      )}
+      <div>
+        <span className="mb-3 block h-1 w-7 rounded-full bg-fern" />
+        <p className="ju-display m-0 line-clamp-3 text-[clamp(18px,9.6cqw,34px)] leading-none text-newsprint">{title}</p>
+      </div>
+    </div>
   );
 }
 

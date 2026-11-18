@@ -11,7 +11,7 @@ import type { JuCourse } from "./junctionu";
  *
  *   hero.<ext>                      hero still (fallback: the custom course still)
  *   industry-scan-thumbnail.<ext>   Industry Scan thumbnail / video poster (same fallback)
- *   courses/<slug>.<ext>            course stills, 16:9 (fallback: the placeholder gradient);
+ *   courses/<slug>.<ext>            course stills, 16:9 (fallback: the designed title card; courses/_old/ is ignored);
  *                                   also found directly in junctionu/, but courses/ wins
  */
 const DIR = "/images/junctionu";
@@ -42,7 +42,7 @@ export const JU_HERO_IMAGE = findImage("hero") ?? FALLBACK_STILL;
 /** The Industry Scan's thumbnail: the ScanTeaser card, and the video poster on the Scan page once it's built. */
 export const JU_SCAN_THUMBNAIL = findImage("industry-scan-thumbnail") ?? FALLBACK_STILL;
 
-/** Courses with their still resolved from courses/<slug>.<ext> (none: the card shows the placeholder gradient). */
+/** Courses with their still resolved from courses/<slug>.<ext> (none: the card shows its designed title card). */
 export function withStills(courses: JuCourse[]): (JuCourse & { still?: string })[] {
   return courses.map((c) => ({ ...c, still: c.slug ? findImage(c.slug, [`${DIR}/courses`, DIR]) : undefined }));
 }

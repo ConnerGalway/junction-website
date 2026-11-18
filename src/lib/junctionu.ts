@@ -5,9 +5,9 @@
  *
  * Every course and workshop links out to its own eLearningU (LearnWorlds)
  * landing page via `url`.
- * PLACEHOLDERS for team review (shown only with SHOW_PLACEHOLDERS): course
- * prices ("[ $ ]") and workshop lengths ("[ x HRS ]"). Course lengths are
- * all "6 HRS" for now.
+ * Course types, lengths and prices are real (Idea to Experience's length and
+ * price are still to confirm, so it shows neither). PLACEHOLDERS for team
+ * review (shown only with SHOW_PLACEHOLDERS): workshop lengths ("[ x HRS ]").
  */
 
 export const ELEARNINGU_URL = "https://www.elearningu.com";
@@ -38,27 +38,29 @@ export const JU_NAV = [
 export type JuCourse = {
   title: string;
   kind: "course" | "workshop";
-  /** Length label, set in Bebas ("6 HRS"). */
-  length: string;
-  modules?: number;
-  /** Price, set in Bebas. */
-  price: string;
+  /** Courses: the type label (small caps, top-left of the card's image slot), e.g. "CERTIFICATE COURSE". */
+  type?: string;
+  /** Length label, set in Bebas ("6 WEEKS"). Omitted: no label. */
+  length?: string;
+  /** Price, set in Bebas ("$995 CAD", "Free"). Omitted: no label. */
+  price?: string;
   /** The product's eLearningU landing page (the card links out to it). */
   url: string;
   /**
-   * Courses: the still's filename, public/images/junctionu/courses/<slug>.jpg
-   * (checked at build time; without the file the card shows a placeholder
-   * gradient). See src/lib/junctionuImages.ts.
+   * Courses: the still's filename, public/images/junctionu/courses/<slug>.<ext>
+   * (checked at build time). Without the file the card shows a designed
+   * title card. See src/lib/junctionuImages.ts.
    */
   slug?: string;
 };
 
 export const COURSES: JuCourse[] = [
-  { title: "Elevated Tourism Marketing Masterclass", slug: "elevated-tourism-marketing-masterclass", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: `${ELEARNINGU}/course/elevated-tourism-marketing` },
-  { title: "Tourism Digital Marketing Essentials", slug: "tourism-digital-marketing-essentials", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: `${ELEARNINGU}/course/tourism-digital-marketing-essentials` },
-  { title: "Idea to Experience", slug: "idea-to-experience", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: `${ELEARNINGU}/course/idea-to-experience-development-cohort-2` },
-  { title: "Trailhead: Tourism & Culture Bootcamp for Entrepreneurs", slug: "trailhead-tourism-culture-bootcamp", kind: "course", length: "6 HRS", modules: 6, price: "[ $ ]", url: `${ELEARNINGU}/course/trailhead` },
-  { title: "Sustainable Tourism", slug: "sustainable-tourism", kind: "course", length: "6 HRS", modules: 8, price: "[ $ ]", url: `${ELEARNINGU}/course/sustainable-tourism-course` },
+  { title: "Elevated Tourism Marketing Masterclass", slug: "elevated-tourism-marketing-masterclass", kind: "course", type: "Masterclass", length: "6 WEEKS", price: "$2,500 CAD", url: `${ELEARNINGU}/course/elevated-tourism-marketing` },
+  { title: "Tourism Digital Marketing Essentials", slug: "tourism-digital-marketing-essentials", kind: "course", type: "Certificate course", length: "60 LESSONS", price: "$995 CAD", url: `${ELEARNINGU}/course/tourism-digital-marketing-essentials` },
+  // TODO: Andrea to confirm Idea to Experience's length and price (no labels until then).
+  { title: "Idea to Experience", slug: "idea-to-experience", kind: "course", type: "Cohort program", url: `${ELEARNINGU}/course/idea-to-experience-development-cohort-2` },
+  { title: "Trailhead: Tourism & Culture Bootcamp for Entrepreneurs", slug: "trailhead-tourism-culture-bootcamp", kind: "course", type: "Free · Yukon entrepreneurs", length: "6 MODULES", price: "Free", url: `${ELEARNINGU}/course/trailhead` },
+  { title: "Sustainable Tourism", slug: "sustainable-tourism", kind: "course", type: "Certificate course", length: "8 MODULES", price: "$495 CAD", url: `${ELEARNINGU}/course/sustainable-tourism-course` },
 ];
 
 export const WORKSHOPS: JuCourse[] = [
