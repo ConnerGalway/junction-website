@@ -127,3 +127,6 @@ export const SHOW_BRIEF_READ_LINKS = false;
  * signup uses MailerLite either way.
  */
 export const USE_MAILERLITE_ARCHIVE = false;
+
+/** eLearningU nav: the "Sign in" link (desktop and the mobile menu). Off while JU_SIGN_IN_URL leads to an error; the URL is kept. */
+export const SHOW_ELU_SIGN_IN = false;
