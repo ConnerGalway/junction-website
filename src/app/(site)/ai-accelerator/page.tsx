@@ -157,8 +157,9 @@ export default function AIAcceleratorPage() {
             </div>
           </div>
 
-          {/* Badge row (about 50px) + two display lines + a gap */}
-          <div className="xl:mt-[calc(var(--hero-line)*2+74px)]">
+          {/* Badge row (about 50px) + two display lines + a gap. Hidden below
+              768px, as on the Accelerator page. */}
+          <div className="hidden md:block xl:mt-[calc(var(--hero-line)*2+74px)]">
             <OffloadPreview />
           </div>
         </Container>

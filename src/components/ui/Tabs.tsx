@@ -36,7 +36,7 @@ export function Tabs({ items, label, className }: { items: TabItem[]; label: str
       <div
         role="tablist"
         aria-label={label}
-        className="-mx-gutter flex gap-10 overflow-x-auto border-b border-hairline px-gutter [scrollbar-width:none] md:mx-0 md:px-0"
+        className="-mx-gutter flex gap-6 overflow-x-auto sm:gap-10 border-b border-hairline px-gutter [scrollbar-width:none] md:mx-0 md:px-0"
       >
         {items.map((item, i) => {
           const selected = i === active;
@@ -55,7 +55,7 @@ export function Tabs({ items, label, className }: { items: TabItem[]; label: str
               onClick={() => setActive(i)}
               onKeyDown={(event) => onKeyDown(event, i)}
               className={cx(
-                "shrink-0 cursor-pointer border-0 border-b-[3px] border-solid bg-transparent px-0 pt-1 pb-4 text-left font-display text-[22px] leading-tight font-semibold tracking-[-0.015em] whitespace-nowrap transition-colors duration-150",
+                "shrink-0 cursor-pointer border-0 border-b-[3px] border-solid bg-transparent px-0 pt-1 pb-4 text-left font-display text-[17px] leading-tight sm:text-[22px] font-semibold tracking-[-0.015em] whitespace-nowrap transition-colors duration-150",
                 selected ? "border-canopy text-carbon" : "border-transparent text-flint hover:text-break-on-light"
               )}
             >

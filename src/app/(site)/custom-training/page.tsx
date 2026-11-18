@@ -118,7 +118,7 @@ export default function CustomTrainingPage() {
             items={[
               {
                 id: "dmos",
-                label: "For DMOs and tourism organizations",
+                label: "For DMOs",
                 panel: (
                   <WhoPanel
                     tone="carbon"

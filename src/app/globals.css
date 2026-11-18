@@ -1392,6 +1392,31 @@
     filter: brightness(1.08);
   }
 
+  /* Speaking "Recent stages" from 768px: one wrapping row with a dot before
+     every stage, set in a 28px lead-in. The list is pulled 28px left inside
+     a wrapper that clips its overflow, so the dot at the start of each line
+     falls outside and is cut away: dots only ever sit between stages on the
+     same line. */
+  @media (min-width: 768px) {
+    .stage-clip {
+      overflow: hidden;
+    }
+
+    /* The 28px pull is the list's md:-ml-7 utility (a utility, so m-0 can't override it). */
+
+    .stage-list > li {
+      position: relative;
+      padding-left: 28px;
+    }
+
+    .stage-list > li::before {
+      content: "·";
+      position: absolute;
+      left: 11px;
+      color: color-mix(in srgb, var(--color-newsprint) 40%, transparent);
+    }
+  }
+
   /* Privacy policy: the "On this page" disclosure (below 1024px). */
   .policy-toc-mobile > summary::-webkit-details-marker {
     display: none;
