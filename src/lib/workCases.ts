@@ -1,0 +1,119 @@
+/**
+ * Work page case chapters (src/app/work/). One entry per chapter, in page
+ * order. The RouteMap's case stops link to these ids; the service filter
+ * reads `service`.
+ *
+ * Deliverables: each chapter shows three sample pages (a cover and two
+ * spreads), drawn in code until real images are added. To swap them, set
+ * `deliverables.images` to three paths under /public (cover, spread 1,
+ * spread 2); they fill the same slots.
+ */
+
+import { CASE_AREAS, CASE_META, CASE_SUMMARY, CASE_TITLE } from "./buildingSupplyCase";
+import { SHOW_AI_CASE_STUDY, SHOW_PLACEHOLDERS, SHOW_UNVERIFIED_QUOTES, SHOW_WORK_SUPPLIER_CASE } from "./flags";
+import { QUOTES, UNVERIFIED, quoted, type Testimonial } from "./testimonials";
+
+/** A quote as the chapter shows it (text already in quotation marks). */
+const q = (t: Testimonial) => ({ text: quoted(t), caption: t.caption });
+
+export const SERVICES = ["Training", "Accelerator", "Research", "Strategy"] as const;
+export type Service = (typeof SERVICES)[number];
+
+export type WorkCase = {
+  /** Chapter anchor (#case-…). */
+  id: string;
+  service: Service;
+  /** Meta line, e.g. "Travel Yukon · Training · 4 years". */
+  meta: string;
+  /** The big number and its label. Without one, the quote leads the chapter. */
+  stat?: { value: string; label: string };
+  title: string;
+  description: string;
+  quote?: { text: string; caption: string };
+  /** Further quotes under the first one (the unverified ones, with SHOW_UNVERIFIED_QUOTES). */
+  moreQuotes?: { text: string; caption: string }[];
+  link?: { label: string; href: string };
+  deliverables: {
+    /** The figure set in Bebas on the first sample spread. */
+    figure: string;
+    /** Real page images (cover, spread, spread). Optional. */
+    images?: [string, string, string];
+  };
+};
+
+const collections = CASE_AREAS.find((a) => a.id === "collections")!;
+
+/**
+ * The building-supply chapter (hidden: SHOW_WORK_SUPPLIER_CASE). Its "full
+ * story" link points at the AI Training case study, so it shows only while
+ * SHOW_AI_CASE_STUDY is on too.
+ */
+const SUPPLIER_CASE: WorkCase = {
+  id: "case-supplier",
+  service: "Accelerator",
+  meta: CASE_META,
+  stat: { value: collections.number, label: `${collections.numberLabel}, before` },
+  title: CASE_TITLE,
+  description: CASE_SUMMARY,
+  link: SHOW_AI_CASE_STUDY ? { label: "See the full story →", href: "/ai-accelerator#case-study" } : undefined,
+  deliverables: { figure: collections.number },
+};
+
+/**
+ * Chapter grounds and sides come from each chapter's visible position
+ * (<ChapterList>), so they alternate correctly with the supplier chapter
+ * on or off.
+ */
+export const WORK_CASES: WorkCase[] = [
+  {
+    id: "case-yukon",
+    service: "Training",
+    meta: "Travel Yukon · Training · 4 years",
+    stat: { value: "300+", label: "Businesses through the Go Digital program" },
+    title: "Go Digital program",
+    description:
+      "A territory-wide digital capacity program, from Whitehorse to Dawson City. 300+ businesses came through in four years, and alumni now lead the program themselves.",
+    quote: q(QUOTES.robynGillespie),
+    moreQuotes: SHOW_UNVERIFIED_QUOTES ? [q(UNVERIFIED.averyWork)] : [],
+    link: { label: "About Custom Training →", href: "/custom-training" },
+    deliverables: { figure: "300+" },
+  },
+  {
+    id: "case-itbc",
+    service: "Accelerator",
+    meta: "Indigenous Tourism BC · Accelerator · 3 months",
+    stat: { value: "+300%", label: "Past engagement goal" },
+    title: "Accelerator across ITBC members",
+    description:
+      "Assessments, one-to-one coaching and implementation plans, subsidised by ITBC for its member businesses. Engagement landed 300% past goal, with bookings up across the province inside three months.",
+    link: { label: "About the Accelerator →", href: "/accelerator" },
+    deliverables: { figure: "+300%" },
+  },
+  ...(SHOW_WORK_SUPPLIER_CASE ? [SUPPLIER_CASE] : []),
+  {
+    id: "case-osw",
+    service: "Research",
+    meta: "Ontario's Southwest · Research · 2025–26",
+    stat: { value: "2026", label: "Tourism strategy driven by our findings" },
+    title: "Traveller Insights Study",
+    description:
+      "Region-wide research into who visits Southwest Ontario, why they come, and what brings them back. The findings now drive the region's 2026 tourism strategy.",
+    quote: q(QUOTES.joanneWolnik),
+    moreQuotes: SHOW_UNVERIFIED_QUOTES ? [q(UNVERIFIED.joanneShort)] : [],
+    deliverables: { figure: "2026" },
+  },
+  {
+    id: "case-kootenay",
+    service: "Strategy",
+    meta: "Kootenay Rockies · Strategy",
+    title: "A region running its own playbook",
+    description:
+      "Destination marketing strategy. Marketing operations restructured around the activities with the most impact, with new investment redirected into responsible travel.",
+    // Unverified quote (SHOW_UNVERIFIED_QUOTES). Without it the chapter has no
+    // lead, so its sample pages take the lead side (see CaseChapter).
+    quote: SHOW_UNVERIFIED_QUOTES ? q(UNVERIFIED.kathyCooperWork) : undefined,
+    // TODO: the Kootenay Rockies number. "[ # ]" shows only with SHOW_PLACEHOLDERS;
+    // otherwise the sample spread drops its figure.
+    deliverables: { figure: SHOW_PLACEHOLDERS ? "[ # ]" : "" },
+  },
+];
