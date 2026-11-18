@@ -3,7 +3,7 @@ import path from "node:path";
 import Image from "next/image";
 import { cx } from "@/components";
 import { ThumbnailFrame } from "@/components/ThumbnailFrame";
-import { SHELF, type Course, type CourseVariant } from "@/lib/customCourses";
+import { SHELF, SHELF_ROW, type Course, type CourseVariant } from "@/lib/customCourses";
 
 const variantStyle: Record<CourseVariant, { card: string; bar: string; meta: string }> = {
   newsprint: { card: "bg-newsprint text-carbon", bar: "bg-canopy", meta: "text-flint" },
@@ -55,7 +55,7 @@ function CoursePoster({ course }: { course: Course }) {
  */
 export function CourseShelf({ className }: { className?: string }) {
   const set = (hidden?: boolean) =>
-    SHELF.map((course, i) => (
+    SHELF_ROW.map((course, i) => (
       <li key={`${hidden ? "b" : "a"}-${i}`} className="shrink-0 pr-5">
         <CoursePoster course={course} />
       </li>

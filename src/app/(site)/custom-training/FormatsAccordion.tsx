@@ -14,6 +14,8 @@ export type Format = {
   description: string;
   /** Photo for the open state; omit for the course player. */
   image?: string;
+  /** object-position for the photo (default centre), e.g. "50% 30%" for a portrait source. */
+  imagePosition?: string;
 };
 
 /**
@@ -62,7 +64,7 @@ export function FormatsAccordion({ formats, videoSrc }: { formats: Format[]; vid
                 )}
               >
                 {f.image ? (
-                  <Image src={f.image} alt="" fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover" />
+                  <Image src={f.image} alt="" fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover" style={{ objectPosition: f.imagePosition }} />
                 ) : (
                   <div className="absolute inset-x-12 top-12">
                     <CoursePlayer videoSrc={videoSrc} />
@@ -128,7 +130,7 @@ export function FormatsAccordion({ formats, videoSrc }: { formats: Format[]; vid
               <div id={`${baseId}-m-${f.id}`} hidden={!isOpen}>
                 <div className={cx("relative h-[220px]", !f.image && "flex items-center bg-forest px-5")}>
                   {f.image ? (
-                    <Image src={f.image} alt="" fill sizes="100vw" className="object-cover" />
+                    <Image src={f.image} alt="" fill sizes="100vw" className="object-cover" style={{ objectPosition: f.imagePosition }} />
                   ) : (
                     <CoursePlayer videoSrc={videoSrc} />
                   )}

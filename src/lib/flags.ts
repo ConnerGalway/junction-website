@@ -100,3 +100,6 @@ export const SHOW_ACC_WEEK_ONE = false;
 
 /** AI Training: the $5,000 price (hero price line and the FAQ). Off: "Get a quote". */
 export const SHOW_AI_PRICE = false;
+
+/** Custom Training: all six recent programs (hero shelf, DMO card, homepage thumbnail). Off: the three featured ones. */
+export const SHOW_ALL_CUSTOM_PROGRAMS = false;

@@ -27,7 +27,7 @@ export const JU_NAV = [
   { label: "Browse", href: "/elearningu#catalogue", section: "catalogue" },
   { label: "Courses", href: "/elearningu#courses", section: "courses" },
   { label: "Workshops", href: "/elearningu#workshops", section: "workshops" },
-  { label: "Tourism Talks", href: "/elearningu#talks", section: "talks" },
+  { label: "Tourism Talks", href: "/elearningu#tourism-talks", section: "tourism-talks" },
   { label: "For DMOs", href: "/elearningu#dmos", section: "dmos" },
   { label: "Industry Scan", href: JU_SCAN_URL, section: null },
 ] as const;
