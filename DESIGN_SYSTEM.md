@@ -594,7 +594,7 @@ Sections:
 |---|---|---|
 | `hero.<ext>` | The hero still (landscape; the subject sits right of centre) | The custom course still |
 | `industry-scan-thumbnail.<ext>` | The Industry Scan thumbnail: the ScanTeaser card, and the video poster on the Scan page once it's built (`JU_SCAN_THUMBNAIL`) | The custom course still |
-| `courses/<slug>.<ext>` | A course card's 16:9 still. A file directly in `junctionu/` is found too, but `courses/` wins; keep course stills in `courses/`. | The placeholder gradient |
+| `courses/<slug>.<ext>` | A course card's 16:9 still (a real course screengrab). A file directly in `junctionu/` is found too, but `courses/` wins; keep course stills in `courses/`. Files in `courses/_old/` are ignored (the retired temporary stills). | The designed title card |
 
 Course slugs (set in `src/lib/junctionu.ts`):
 - `elevated-tourism-marketing-masterclass`
@@ -667,10 +667,11 @@ A new course gets a `slug` and its still the same way.
   - **Header row:** the title (Oswald 700, up to 30px), then ‹ › (Fern circles; they scroll one page and dim at the ends) and "See all →".
   - **The row:** it starts at the content edge and bleeds off the right edge of the viewport (`.ju-shelf`), with scroll-snap and no scrollbar. Touch and trackpads scroll natively; keyboard focus brings a card fully into view.
   - **Start here:** courses only. Thumbnail cards (400px):
-    - a 16:9 still (`courses/<slug>.<ext>`, see Images by filename), or a placeholder gradient (`.ju-still`, three variants) until the file exists;
-    - the length in Bebas 22px top-left, with a soft shadow;
-    - a Certificate tag and the price in Bebas (the "[ $ ]" placeholders only with `SHOW_PLACEHOLDERS`);
-    - the title (Oswald, 24px) and the module count.
+    - **the 16:9 image slot** (radius 14): the still `courses/<slug>.<ext>` when it exists (see Images by filename), otherwise a **designed title card** (below). Either way the course **type** sits top-left in Fern small caps (11px, +0.12em; with a soft shadow on a still);
+    - under it, the **length** (Bebas 22px, Fern) and the **price** (Bebas 22px, Newsprint), each only when set;
+    - the title (Oswald, 24px).
+  - **Course title card** (`TitleCard` in `CourseCards.tsx`, `.ju-title-card`): shown when a course has no still; decorative (`aria-hidden`; the h3 carries the title). Grounds by position (`data-variant`, index mod 3): **0 ju-moss, 1 ju-deep, 2 ju-ground** with a soft Fern radial glow from the top-right (12%) and a faint Fern edge (it's the page's own colour). Top-left: the type. Bottom-left: a Fern bar (28 × 4, the eLearningU mark's bar) 12px above the title in Oswald display capitals, Newsprint, line-height 1, at most three lines, sized with the card (`clamp(18px, 9.6cqw, 34px)`: 34px at desktop, about 25px at 390), so it never overflows. No ghost numbers, photo or play icon: it must never read as a Workshop poster. **A still replaces it** as soon as `courses/<slug>.<ext>` is uploaded (checked at build; no code change).
+  - **Course details** (`COURSES` in `src/lib/junctionu.ts`; `type`, `length`, `price`; a label shows only when its value is set): Elevated Tourism Marketing Masterclass (Masterclass · 6 WEEKS · $2,500 CAD), Tourism Digital Marketing Essentials (Certificate course · 60 LESSONS · $995 CAD), Sustainable Tourism (Certificate course · 8 MODULES · $495 CAD), Trailhead: Tourism & Culture Bootcamp for Entrepreneurs (Free · Yukon entrepreneurs · 6 MODULES · Free), Idea to Experience (Cohort program; length and price TODO, so neither shows).
   - **Workshops:** workshops only. Poster cards (240 × 360, ju-moss):
     - the length in Fern Bebas (the "[ x HRS ]" placeholders only with `SHOW_PLACEHOLDERS`) and a Workshop tag, always top right;
     - a ghost number (Bebas 180px, Fern 10%) behind;
@@ -684,7 +685,7 @@ A new course gets a `slug` and its still the same way.
   - **Two columns:** "For DMOs and associations" (Fern), the H2 in Oswald capitals, the copy and the Fern outline "Talk to us about a region" (`/contact?type=training&from=region`). Then, after a thin divider, "300+" in Fern Bebas (up to 116px) and its line. They stack on phones.
 - **Industry Scan teaser** (`ScanTeaser`): the Scan thumbnail (`industry-scan-thumbnail.<ext>`) as a linked card, with the corner play button and "Conner Galway" beside it ("· [ Month Year ]" with `SHOW_PLACEHOLDERS`). There's no title caption, because the thumbnail already says it. Beside it, the pitch and one Fern outline action, "Try a month free". Both go to the Scan page. The month is a placeholder.
 - **The eLearningU email** (`EmailBand`, `#email`; hidden: `SHOW_ELU_EMAIL_BAND`): a Sage band (radius 18) with the headline (Oswald capitals, ground text), the line (Forest), an email field (Newsprint) and Subscribe (`ground`). This is the list the Work page links to. TODO: wire it to the eLearningU list (none exists in the codebase).
-- **Open items for team review:** course prices "[ $ ]", course lengths (all "6 HRS"), workshop lengths "[ x HRS ]", "See all" catalogue URLs, the sign-in URL and the Scan teaser month.
+- **Open items for team review:** Idea to Experience's length and price, real course stills, workshop lengths "[ x HRS ]", "See all" catalogue URLs, the sign-in URL and the Scan teaser month.
 
 ### Industry Scan page
 
@@ -874,7 +875,7 @@ Everything removed or not ready is **hidden behind a flag in `src/lib/flags.ts`,
 The building-supply case data is one file, `src/lib/buildingSupplyCase.ts`, shared by the homepage teaser, the AI Training case study and the Work chapter.
 
 **`SHOW_PLACEHOLDERS`** (off for the soft launch). `isPlaceholder()` and `shown()` in `src/lib/placeholders.ts` recognise "[ … ]" labels.
-- **Label only** (the rest still works): eLearningU course prices "[ $ ]" and workshop lengths "[ x HRS ]", the Scan teaser's "[ Month Year ]", the AI Training calculator's draft "What we'd build" lines, the footer signup's "[ Frequency ]" (it reads "Unsubscribe anytime"), the case switcher's "After [ result ]" and the Kootenay "[ # ]" on the Work map and sample spread.
+- **Label only** (the rest still works): eLearningU workshop lengths "[ x HRS ]", the Scan teaser's "[ Month Year ]", the AI Training calculator's draft "What we'd build" lines, the footer signup's "[ Frequency ]" (it reads "Unsubscribe anytime"), the case switcher's "After [ result ]" and the Kootenay "[ # ]" on the Work map and sample spread.
 - **Whole element:** the Custom Training leadership-training testimonial card, Speaking talk posters (the topic takes the full row until `talk-0N.jpg` exists), the Quick Score "what they'll receive" line, the Marketing strategy "[ TYPICAL LENGTH ]" line and Kootenay proof card, the AI Training "What we measured" results, and the Scan FAQ items answered "[ Answer to come ]" (with none left, the section goes).
 - New placeholders go behind this flag too.
 
@@ -895,7 +896,7 @@ Every user-visible placeholder, hidden while `SHOW_PLACEHOLDERS` is off. This is
 | Marketing strategy | Engagement line "[ TYPICAL LENGTH ] · SCOPED TO YOU" | The typical engagement length | Element: the whole line under the timeline | `src/lib/marketingStrategy.ts` (`ENGAGEMENT_LINE`) |
 | Marketing strategy (hidden: `SHOW_STRATEGY_PROOF`) | Kootenay Rockies proof stat "[ # ]" | The Kootenay Rockies headline number | Element: the card; two cards remain | `src/lib/marketingStrategy.ts` (`PROOF`) |
 | Work | Kootenay Rockies number "[ # ]": the route-map stop and the chapter's sample spread | The same Kootenay Rockies number | Label: the map stop shows the name only; the spread has no figure | `src/lib/routeMap.ts`, `src/lib/workCases.ts` |
-| eLearningU | Course prices "[ $ ]" on all five courses | Each course's price | Label: the card shows the Certificate tag without a price | `src/lib/junctionu.ts` (`COURSES`) |
+| eLearningU | Idea to Experience's length and price (not placeholders: the labels are simply left out until set) | The course's length and price | Label: none shows | `src/lib/junctionu.ts` (`COURSES`) |
 | eLearningU | Workshop lengths "[ x HRS ]" on all four workshops | Each workshop's length | Label: the Workshop tag stays top right | `src/lib/junctionu.ts` (`WORKSHOPS`) |
 | eLearningU | Scan teaser byline "Conner Galway · [ Month Year ]" | The current issue's month and year | Label: reads "Conner Galway" | `src/components/junctionu/ScanTeaser.tsx` |
 | Industry Scan | FAQ answers "[ Answer to come ]": Who is the Scan for? · What sources do you use? · When does each issue come out? · Can my whole team read it? · How do I cancel? | Five answers | Element: each unanswered item; with none answered, the whole Questions section | `src/lib/industryScan.ts` (`SCAN_FAQ`) |
@@ -903,7 +904,7 @@ Every user-visible placeholder, hidden while `SHOW_PLACEHOLDERS` is off. This is
 **Also needed, not visible on the page** (links and assets with stand-ins):
 - The official eLearningU logo (`public/images/elearningu/logo.svg`).
 - The eLearningU sign-in URL (a guess) and the "See all" catalogue URLs.
-- Course lengths are all "6 HRS" for now (not bracketed, so they show).
+- Real course screengrabs for the five course cards (`public/images/junctionu/courses/<slug>.<ext>`); until then each shows its title card.
 - Industry Scan team pricing; the guarantee terms link.
 
 **Supplied this round** (no longer placeholders): the homepage testimonials (Genevieve Huneault, Chris Tait, Monica Frost; the Twin Lions Contracting and West Coast Homes placeholder cards are replaced), the Accelerator video and its 4:05, the Accelerator proof quote (Savannah Swaisland), the Speaking organizer quote (Kelly Josephson), the support email, the five course URLs and the Scan sign-up page.

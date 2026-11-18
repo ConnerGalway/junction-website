@@ -1312,22 +1312,23 @@
 
   /* Course still placeholders (until each course has a still) and the length
      label on a still. */
-  .ju-still {
-    background:
-      radial-gradient(120% 90% at 85% 15%, color-mix(in srgb, var(--color-fern) 28%, transparent), transparent 60%),
-      linear-gradient(135deg, var(--ju-moss), var(--ju-deep));
+  /* eLearningU course title cards (a course without a still): three grounds
+     by position. 0 ju-moss, 1 ju-deep, 2 ju-ground with a soft Fern glow
+     from the top-right (12%) and a faint Fern edge. */
+  .ju-title-card {
+    background-color: var(--ju-moss);
   }
 
-  .ju-still[data-variant="1"] {
-    background:
-      radial-gradient(110% 90% at 15% 85%, color-mix(in srgb, var(--color-sage) 22%, transparent), transparent 60%),
-      linear-gradient(160deg, var(--ju-deep), var(--ju-moss));
+  .ju-title-card[data-variant="1"] {
+    background-color: var(--ju-deep);
   }
 
-  .ju-still[data-variant="2"] {
+  .ju-title-card[data-variant="2"] {
     background:
-      radial-gradient(100% 80% at 50% 0%, color-mix(in srgb, var(--color-fern) 22%, transparent), transparent 65%),
-      linear-gradient(200deg, var(--ju-moss), var(--ju-ground));
+      radial-gradient(90% 110% at 100% 0%, color-mix(in srgb, var(--color-fern) 12%, transparent), transparent 70%),
+      var(--ju-ground);
+    /* Same colour as the page: a faint Fern edge keeps the card's shape. */
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color-fern) 18%, transparent);
   }
 
   .ju-still-label {
