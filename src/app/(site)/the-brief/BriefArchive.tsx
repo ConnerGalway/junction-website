@@ -177,7 +177,7 @@ export function BriefArchive({ issues, topics }: { issues: Issue[]; topics: stri
                     {/* A link only with SHOW_BRIEF_READ_LINKS; otherwise a plain row (no hover). */}
                     <Row
                       {...(SHOW_BRIEF_READ_LINKS ? { href: issueHref(issue.url) } : {})}
-                      className={cx("relative block py-7", SHOW_BRIEF_READ_LINKS && "brief-row group")}
+                      className={cx("brief-row relative block py-7", SHOW_BRIEF_READ_LINKS && "brief-row-link group")}
                       style={issue.number !== null ? { "--num-len": numberLength(issue.number) } as CSSProperties : undefined}
                     >
                       {issue.number !== null && (

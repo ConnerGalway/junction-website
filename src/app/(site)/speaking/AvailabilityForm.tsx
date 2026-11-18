@@ -118,7 +118,12 @@ export function AvailabilityForm() {
         <Button type="submit" disabled={state === "sending"} className="mt-6">
           {state === "sending" ? "Sending…" : "Check availability"}
         </Button>
-        <p className="type-small m-0 mt-3">You&apos;ll hear back with availability and a fee for your format.</p>
+        <p className="type-small m-0 mt-3">
+          You&apos;ll hear back with availability and a fee for your format.{" "}
+          <a href="/privacy-policy" className="link">
+            Privacy policy
+          </a>
+        </p>
       </form>
     </div>
   );

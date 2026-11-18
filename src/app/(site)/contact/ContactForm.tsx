@@ -281,6 +281,11 @@ function ContactFormFields({ initialType, prefill }: { initialType: FormType | n
           <Button type="submit" disabled={state === "sending"} className="mt-4 self-start">
             {state === "sending" ? "Sending…" : "Send"}
           </Button>
+          <p className="type-small m-0">
+            <a href="/privacy-policy" className="link">
+              Privacy policy
+            </a>
+          </p>
         </form>
       )}
     </>

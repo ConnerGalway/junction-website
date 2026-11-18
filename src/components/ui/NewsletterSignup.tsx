@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useId, useState } from "react";
 import type { ReactNode } from "react";
 import { Button } from "./Button";
@@ -119,7 +120,12 @@ export function NewsletterSignup({ className, label = "Get The Brief in your inb
       </div>
       <div id={helperId} className="flex flex-col gap-1">
         {helper && <p className="type-small m-0">{helper}</p>}
-        <p className="type-small m-0">{BRIEF_CONSENT}</p>
+        <p className="type-small m-0">
+          {BRIEF_CONSENT}{" "}
+          <Link href="/privacy-policy" className="link">
+            Privacy policy
+          </Link>
+        </p>
       </div>
     </form>
   );

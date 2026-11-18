@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useId, useState } from "react";
 import type { FormEvent } from "react";
 import { CALENDLY_URL } from "@/lib/constants";
@@ -107,7 +108,10 @@ export function LeadCapture({
         />
       </div>
       <p id={`${id}-consent`} className="type-small m-0 mt-2.5">
-        {LEAD_CONSENT}
+        {LEAD_CONSENT}{" "}
+        <Link href="/privacy-policy" className="link">
+          Privacy policy
+        </Link>
       </p>
       <div aria-live="polite">
         {state === "invalid" && (

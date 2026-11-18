@@ -86,10 +86,9 @@ export function Footer() {
 
         <div className="type-small flex flex-wrap justify-between gap-4 border-t border-hairline-dark pt-5">
           <span>© Junction Consulting 2026</span>
-          {/* TODO: link the privacy policy once it exists. */}
-          <a href="#" className="link-plain">
-            Privacy
-          </a>
+          <Link href="/privacy-policy" className="link-plain">
+            Privacy policy
+          </Link>
         </div>
       </Container>
     </footer>

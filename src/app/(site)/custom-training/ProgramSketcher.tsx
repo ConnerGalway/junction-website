@@ -169,6 +169,11 @@ export function ProgramSketcher() {
               </Button>
               <TextLink href={href}>Or add more details →</TextLink>
             </div>
+            <p className="type-small m-0 mt-3">
+              <a href="/privacy-policy" className="link">
+                Privacy policy
+              </a>
+            </p>
           </form>
         )}
       </div>
