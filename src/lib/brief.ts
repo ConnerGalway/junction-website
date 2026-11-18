@@ -1,12 +1,16 @@
 import { cacheLife } from "next/cache";
+import { issueNumberFrom, numberCampaigns } from "./briefNumbers";
 
 /**
  * The Brief: the only data source for /the-brief. The Brief runs on
  * MailerLite.
  *
  * Issues = the hand-entered issues below (549 back to 532) plus any newer
- * ones from MailerLite: sent campaigns whose NAME contains "Brief" and an
- * issue number ("Brief 549", "The Brief #550", "Brief Nº 551"). A
+ * ones from MailerLite: sent campaigns whose NAME contains "Brief". The
+ * issue number is a 3-digit number right after "Brief", "Nº", "No." or "#"
+ * ("Brief 549", "The Brief #550", "Brief Nº 551"); never a year or a date.
+ * A campaign without one is numbered by send date (the next number after the
+ * issue sent before it); see src/lib/briefNumbers.ts. A
  * hand-entered issue keeps its curated headline, tagline and sections; a
  * MailerLite issue the list doesn't have is added from the campaign (subject
  * as the headline, the first sentence of its content as the tagline, and,
@@ -155,17 +159,8 @@ export const SECTION_PARSER = {
   leadMaxLength: 180,
 };
 
-/**
- * "Brief 544" → 544. Prefers the number right after "Brief" (so a year
- * elsewhere in the name isn't taken for it), else the first 3–4 digit number.
- */
-export function issueNumberFrom(name: string): number | null {
-  const m = name.match(/brief\s*(?:n[ºo.]?\s*)?#?\s*(\d{3,4})(?!\d)/i) ?? name.match(/(?<!\d)(\d{3,4})(?!\d)/);
-  return m ? Number(m[1]) : null;
-}
-
-/** A campaign is an issue of The Brief when its name says "Brief" and carries an issue number. */
-const isBriefName = (name: string) => /\bbrief\b/i.test(name) && issueNumberFrom(name) !== null;
+/** A campaign is an issue of The Brief when its name says "Brief" (its number comes from briefNumbers.ts). */
+const isBriefName = (name: string) => /\bbrief\b/i.test(name);
 
 /**
  * A MailerLite date → yyyy-mm-dd. MailerLite sends "2026-11-16 13:00:00"
@@ -269,7 +264,7 @@ async function briefCampaigns(): Promise<MailerLiteCampaign[]> {
   }
   return all
     .filter((c) => isBriefName(c.name ?? ""))
-    .sort((a, b) => (issueNumberFrom(b.name) ?? 0) - (issueNumberFrom(a.name) ?? 0) || sentAt(b).localeCompare(sentAt(a)));
+    .sort((a, b) => sentAt(b).localeCompare(sentAt(a)));
 }
 
 /** One campaign's email HTML (the list doesn't always include it). Optional: "" on any failure. */
@@ -285,17 +280,22 @@ async function campaignHtml(c: MailerLiteCampaign): Promise<string> {
 }
 
 /**
- * The issues MailerLite adds: campaigns whose number isn't hand-entered.
- * Each needs a subject; the tagline is the email's preview text if the API
+ * The issues MailerLite adds, newest first: campaigns that aren't already
+ * hand-entered, numbered by numberCampaigns (a valid number from the name,
+ * else by send date; never a duplicate). Each needs a subject; the tagline is the email's preview text if the API
  * gives one, else the first sentence of its content; the newest gets its
  * sections. Content fetches are optional: a failure only drops a tagline or
  * the sections.
  */
 async function fetchFromMailerLite(): Promise<Issue[]> {
-  const known = new Set(SAMPLE_ISSUES.map((i) => i.number));
-  const campaigns = (await briefCampaigns()).filter((c) => !known.has(issueNumberFrom(c.name)) && c.emails?.[0]?.subject);
+  const all = (await briefCampaigns()).filter((c) => c.emails?.[0]?.subject);
+  const numbers = numberCampaigns(
+    SAMPLE_ISSUES,
+    all.map((c) => ({ number: issueNumberFrom(c.name), date: sendDate(sentAt(c)) }))
+  );
+  const campaigns = all.map((c, i) => ({ c, number: numbers[i] })).filter((x): x is { c: MailerLiteCampaign; number: number } => x.number !== null);
   return Promise.all(
-    campaigns.map(async (c, i) => {
+    campaigns.map(async ({ c, number }, i) => {
       const email = c.emails![0];
       const subject = email.subject!.trim();
       const preview = (email.preheader ?? email.preview_text ?? "").trim();
@@ -304,7 +304,7 @@ async function fetchFromMailerLite(): Promise<Issue[]> {
       const tagline = preview || (html ? extractLead(html, subject) : undefined);
       const sections = i === 0 && html ? extractSections(html, subject) : undefined;
       return {
-        number: issueNumberFrom(c.name),
+        number,
         date: sendDate(sentAt(c)),
         feature: subject,
         ...(tagline ? { tagline } : {}),
