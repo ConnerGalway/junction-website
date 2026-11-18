@@ -22,7 +22,7 @@ export function BriefingVideo({
 }) {
   const [playing, setPlaying] = useState(false);
   return (
-    <div className="relative aspect-video overflow-hidden rounded-card bg-ju-deep">
+    <div className="ju-card-frame relative aspect-video overflow-hidden rounded-card bg-ju-deep">
       {playing ? (
         <iframe
           src={embed}

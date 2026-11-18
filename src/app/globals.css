@@ -1286,26 +1286,52 @@
     scroll-snap-align: start;
   }
 
-  /* eLearningU cards (links): lift 5px, a 2px Fern outline and (in each card) a
-     pink title on hover and keyboard focus. */
-  .ju-card {
-    outline: 2px solid transparent;
-    outline-offset: 4px;
-    border-radius: var(--radius-card);
-    transition:
-      transform 200ms ease-out,
-      outline-color 200ms ease-out;
+  /*
+   * eLearningU cards (links and play buttons). The card never changes size
+   * or reaches into its neighbours:
+   * - hover: no outline; the frame (.ju-card-frame: the image / title card /
+   *   poster) lifts 2px and the card's title turns break-on-dark;
+   * - keyboard focus only (:focus-visible): a 2px Fern ring around the frame
+   *   (not the text below), the frame's radius, 3px out: well inside the
+   *   shelf's 20px gap. A mouse click leaves no ring.
+   * The frame can be inside the card (course cards), be the card (workshop
+   * posters, the Scan teaser) or contain it (Talk and briefing play buttons).
+   */
+  .ju-card,
+  .ju-card:focus {
+    outline: none;
   }
 
-  .ju-card:hover,
-  .ju-card:focus-visible {
-    outline-color: var(--color-fern);
-    transform: translateY(-5px);
+  .ju-card-frame {
+    border-radius: var(--radius-card);
+    outline: 2px solid transparent;
+    outline-offset: 3px;
+    transition:
+      transform 200ms ease-out,
+      outline-color 150ms ease-out;
+  }
+
+  .ju-card:hover .ju-card-frame,
+  .ju-card.ju-card-frame:hover,
+  .ju-card-frame:has(.ju-card:hover) {
+    transform: translateY(-2px);
+  }
+
+  .ju-card:focus-visible .ju-card-frame,
+  .ju-card.ju-card-frame:focus-visible,
+  .ju-card-frame:has(.ju-card:focus-visible) {
+    outline: 2px solid var(--color-fern);
+    outline-offset: 3px;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .ju-card:hover,
-    .ju-card:focus-visible {
+    .ju-card-frame {
+      transition: none;
+    }
+
+    .ju-card:hover .ju-card-frame,
+    .ju-card.ju-card-frame:hover,
+    .ju-card-frame:has(.ju-card:hover) {
       transform: none;
     }
   }
