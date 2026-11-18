@@ -1,29 +1,31 @@
 import { cacheLife } from "next/cache";
 
 /**
- * The Brief: the only data source for /the-brief.
+ * The Brief: the only data source for /the-brief. The Brief runs on
+ * MailerLite.
  *
- * NOTE: The Brief now runs on MailerLite (not Mailchimp). The live feed here
- * is still the Mailchimp one and gets switched later; for now the page shows
- * the hand-entered real issues (SAMPLE_ISSUES).
+ * Issues = the hand-entered issues below (549 back to 532) plus any newer
+ * ones from MailerLite: sent campaigns whose NAME contains "Brief" and an
+ * issue number ("Brief 549", "The Brief #550", "Brief Nº 551"). A
+ * hand-entered issue keeps its curated headline, tagline and sections; a
+ * MailerLite issue the list doesn't have is added from the campaign (subject
+ * as the headline, the first sentence of its content as the tagline, and,
+ * for the newest, its next two headings as sections).
  *
- * Issues come from Mailchimp when three SERVER-ONLY env vars are set (never
- * read them in client code; nothing here is NEXT_PUBLIC_):
- *   MAILCHIMP_API_KEY         an API key (Account → Extras → API keys)
- *   MAILCHIMP_SERVER_PREFIX   the data centre, e.g. "us21" (the key's suffix)
- *   MAILCHIMP_BRIEF_LIST_ID   The Brief's audience ID
- * Without them (or if Mailchimp can't be reached and nothing was fetched
- * before) the page uses SAMPLE_ISSUES below.
+ * MailerLite is read server side with MAILERLITE_API_KEY (src/lib/mailerlite.ts).
+ * Without the key, if the API fails, or if no campaign matches, the page
+ * shows the hand-entered issues. It never breaks on a MailerLite error.
  *
  * Refresh: getIssues() is cached ("use cache") and revalidates hourly, so a
  * newly sent campaign appears on its own. A failed refresh serves the last
- * good result this server holds (or the sample) and retries within minutes.
+ * good result this server holds (or the hand-entered list) and retries
+ * within minutes.
  */
 
 export type Issue = {
-  /** Issue number parsed from the campaign title ("Brief 544"); null hides the margin number. */
+  /** Issue number parsed from the campaign name ("Brief 544"); null hides the margin number. */
   number: number | null;
-  /** Send date, ISO yyyy-mm-dd (Vancouver time). */
+  /** Send date, ISO yyyy-mm-dd. */
   date: string;
   /** The feature headline (the campaign subject line; never rewritten). */
   feature: string;
@@ -94,10 +96,9 @@ export function topicsIn(issues: Issue[]): string[] {
 /* ─── Issues ─────────────────────────────────────────────────────────────── */
 
 /*
- * THE REAL ISSUES, entered by hand (newest first). The Brief now runs on
- * MailerLite, not Mailchimp; the live feed below is still the Mailchimp
- * one and gets switched to MailerLite later. Until then (no env vars) the
- * page shows these.
+ * THE REAL ISSUES, entered by hand (newest first). They're always shown,
+ * and win over MailerLite for the same issue number (curated copy). Newer
+ * issues come from MailerLite (see the header comment).
  *
  * Headlines are in sentence case (brand names and months keep their
  * capitals). Taglines for 549–545 only; section headlines for 549–543.
@@ -124,7 +125,7 @@ const ISSUES: [number, string, string, string?, [string, string]?][] = [
   [532, "2026-07-20", "The simplest way to increase your sales"],
 ];
 
-/** The hand-entered issues (name kept from the sample era: the page's fallback list). */
+/** The hand-entered issues (the name is from the sample era; also the page's fallback list). */
 export const SAMPLE_ISSUES: Issue[] = ISSUES.map(([number, date, feature, tagline, sections]) => ({
   number,
   date,
@@ -135,7 +136,7 @@ export const SAMPLE_ISSUES: Issue[] = ISSUES.map(([number, date, feature, taglin
   url: null,
 }));
 
-/* ─── Mailchimp ──────────────────────────────────────────────────────────── */
+/* ─── Parsing a campaign ─────────────────────────────────────────────────── */
 
 /**
  * Where the two section headlines sit in a campaign's HTML. The parser
@@ -154,43 +155,28 @@ export const SECTION_PARSER = {
   leadMaxLength: 180,
 };
 
-type MailchimpCampaign = {
-  id: string;
-  send_time: string;
-  archive_url: string;
-  settings: { subject_line: string; title: string; preview_text?: string };
-};
-
-const PAGE_SIZE = 100;
-const MAX_CAMPAIGNS = 1000;
-
-function mailchimpConfig() {
-  const key = process.env.MAILCHIMP_API_KEY;
-  const prefix = process.env.MAILCHIMP_SERVER_PREFIX;
-  const list = process.env.MAILCHIMP_BRIEF_LIST_ID;
-  return key && prefix && list ? { key, prefix, list } : null;
-}
-
-async function mailchimpGet<T>(cfg: { key: string; prefix: string }, path: string): Promise<T> {
-  const res = await fetch(`https://${cfg.prefix}.api.mailchimp.com/3.0${path}`, {
-    headers: { Authorization: `Basic ${Buffer.from(`brief:${cfg.key}`).toString("base64")}` },
-  });
-  if (!res.ok) throw new Error(`Mailchimp ${path.split("?")[0]} responded ${res.status}`);
-  return (await res.json()) as T;
-}
-
 /**
  * "Brief 544" → 544. Prefers the number right after "Brief" (so a year
- * elsewhere in the title isn't taken for it), else the first 3–4 digit number.
+ * elsewhere in the name isn't taken for it), else the first 3–4 digit number.
  */
-export function issueNumberFrom(title: string): number | null {
-  const m = title.match(/brief\s*(?:n[ºo.]?\s*)?#?\s*(\d{3,4})(?!\d)/i) ?? title.match(/(?<!\d)(\d{3,4})(?!\d)/);
+export function issueNumberFrom(name: string): number | null {
+  const m = name.match(/brief\s*(?:n[ºo.]?\s*)?#?\s*(\d{3,4})(?!\d)/i) ?? name.match(/(?<!\d)(\d{3,4})(?!\d)/);
   return m ? Number(m[1]) : null;
 }
 
-/** Send time → yyyy-mm-dd in Vancouver time (so a Monday send stays Monday). */
-function sendDate(iso: string) {
-  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/Vancouver", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(iso));
+/** A campaign is an issue of The Brief when its name says "Brief" and carries an issue number. */
+const isBriefName = (name: string) => /\bbrief\b/i.test(name) && issueNumberFrom(name) !== null;
+
+/**
+ * A MailerLite date → yyyy-mm-dd. MailerLite sends "2026-11-16 13:00:00"
+ * (the account's time zone): take the date as written. A full ISO time with
+ * a zone is converted to Vancouver time so a Monday send stays Monday.
+ */
+function sendDate(value: string) {
+  if (/^\d{4}-\d{2}-\d{2}(?:[ T]\d{2}:\d{2}(?::\d{2})?)?$/.test(value)) return value.slice(0, 10);
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return value.slice(0, 10);
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/Vancouver", year: "numeric", month: "2-digit", day: "2-digit" }).format(d);
 }
 
 const ENTITIES: Record<string, string> = {
@@ -251,81 +237,107 @@ export function extractLead(html: string, subject: string): string | undefined {
   return body ? firstSentence(body, SECTION_PARSER.leadMaxLength) : undefined;
 }
 
-/** Run `fn` over `items`, at most `limit` at a time. */
-async function mapLimit<T>(items: T[], limit: number, fn: (item: T) => Promise<void>) {
-  let next = 0;
-  await Promise.all(
-    Array.from({ length: Math.min(limit, items.length) }, async () => {
-      while (next < items.length) await fn(items[next++]);
+/* ─── MailerLite ─────────────────────────────────────────────────────────── */
+
+type MailerLiteEmail = { subject?: string; content?: string; preheader?: string; preview_text?: string };
+type MailerLiteCampaign = {
+  id: string;
+  name: string;
+  status?: string;
+  finished_at?: string | null;
+  started_at?: string | null;
+  scheduled_for?: string | null;
+  queued_at?: string | null;
+  created_at?: string | null;
+  emails?: MailerLiteEmail[];
+};
+
+const MAX_PAGES = 20;
+
+const sentAt = (c: MailerLiteCampaign) => c.finished_at ?? c.started_at ?? c.scheduled_for ?? c.queued_at ?? c.created_at ?? "";
+
+/** Every sent campaign that is an issue of The Brief, newest first. Throws on an API error. */
+async function briefCampaigns(): Promise<MailerLiteCampaign[]> {
+  const { mailerlite } = await import("./mailerlite");
+  const all: MailerLiteCampaign[] = [];
+  for (let page = 1; page <= MAX_PAGES; page++) {
+    const res = await mailerlite<{ data: MailerLiteCampaign[]; meta?: { last_page?: number } }>(
+      `/campaigns?filter[status]=sent&limit=100&page=${page}`
+    );
+    all.push(...res.data);
+    if (!res.meta?.last_page || page >= res.meta.last_page || res.data.length === 0) break;
+  }
+  return all
+    .filter((c) => isBriefName(c.name ?? ""))
+    .sort((a, b) => (issueNumberFrom(b.name) ?? 0) - (issueNumberFrom(a.name) ?? 0) || sentAt(b).localeCompare(sentAt(a)));
+}
+
+/** One campaign's email HTML (the list doesn't always include it). Optional: "" on any failure. */
+async function campaignHtml(c: MailerLiteCampaign): Promise<string> {
+  if (c.emails?.[0]?.content) return c.emails[0].content;
+  try {
+    const { mailerlite } = await import("./mailerlite");
+    const res = await mailerlite<{ data: MailerLiteCampaign }>(`/campaigns/${encodeURIComponent(c.id)}`);
+    return res.data.emails?.[0]?.content ?? "";
+  } catch {
+    return "";
+  }
+}
+
+/**
+ * The issues MailerLite adds: campaigns whose number isn't hand-entered.
+ * Each needs a subject; the tagline is the email's preview text if the API
+ * gives one, else the first sentence of its content; the newest gets its
+ * sections. Content fetches are optional: a failure only drops a tagline or
+ * the sections.
+ */
+async function fetchFromMailerLite(): Promise<Issue[]> {
+  const known = new Set(SAMPLE_ISSUES.map((i) => i.number));
+  const campaigns = (await briefCampaigns()).filter((c) => !known.has(issueNumberFrom(c.name)) && c.emails?.[0]?.subject);
+  return Promise.all(
+    campaigns.map(async (c, i) => {
+      const email = c.emails![0];
+      const subject = email.subject!.trim();
+      const preview = (email.preheader ?? email.preview_text ?? "").trim();
+      const needsHtml = i === 0 || !preview;
+      const html = needsHtml ? await campaignHtml(c) : "";
+      const tagline = preview || (html ? extractLead(html, subject) : undefined);
+      const sections = i === 0 && html ? extractSections(html, subject) : undefined;
+      return {
+        number: issueNumberFrom(c.name),
+        date: sendDate(sentAt(c)),
+        feature: subject,
+        ...(tagline ? { tagline } : {}),
+        ...(sections ? { sections } : {}),
+        topics: tagTopics([subject, ...(sections ?? [])]),
+        url: null,
+      } satisfies Issue;
     })
   );
 }
 
-/** All sent campaigns for The Brief's audience, newest first. Throws on any API error. */
-async function fetchFromMailchimp(cfg: { key: string; prefix: string; list: string }): Promise<Issue[]> {
-  const campaigns: MailchimpCampaign[] = [];
-  const fields =
-    "campaigns.id,campaigns.send_time,campaigns.archive_url,campaigns.settings.subject_line,campaigns.settings.title,campaigns.settings.preview_text,total_items";
-  for (let offset = 0; offset < MAX_CAMPAIGNS; offset += PAGE_SIZE) {
-    const page = await mailchimpGet<{ campaigns: MailchimpCampaign[]; total_items: number }>(
-      cfg,
-      `/campaigns?status=sent&list_id=${encodeURIComponent(cfg.list)}&sort_field=send_time&sort_dir=DESC&count=${PAGE_SIZE}&offset=${offset}&fields=${fields}`
-    );
-    campaigns.push(...page.campaigns);
-    if (page.campaigns.length < PAGE_SIZE || campaigns.length >= page.total_items) break;
-  }
-
-  const issues: Issue[] = campaigns.map((c) => ({
-    number: issueNumberFrom(c.settings.title ?? ""),
-    date: sendDate(c.send_time),
-    feature: c.settings.subject_line,
-    ...(c.settings.preview_text?.trim() ? { tagline: c.settings.preview_text.trim() } : {}),
-    topics: [],
-    url: c.archive_url || null,
-  }));
-
-  // Campaign HTML: for the latest issue's sections, and for the tagline of any
-  // issue without preview text. Each fetch is optional: a failure only drops
-  // that issue's sections or tagline, never the page.
-  const content = (id: string) =>
-    mailchimpGet<{ html?: string }>(cfg, `/campaigns/${id}/content?fields=html`).then((c) => c.html ?? "", () => "");
-  await mapLimit(
-    campaigns.map((c, i) => ({ c, i })).filter(({ i }) => i === 0 || !issues[i].tagline),
-    5,
-    async ({ c, i }) => {
-      const html = await content(c.id);
-      if (!html) return;
-      if (i === 0) issues[0].sections = extractSections(html, c.settings.subject_line);
-      if (!issues[i].tagline) {
-        const lead = extractLead(html, c.settings.subject_line);
-        if (lead) issues[i].tagline = lead;
-      }
-    }
-  );
-
-  for (const issue of issues) issue.topics = tagTopics([issue.feature, ...(issue.sections ?? [])]);
-  return issues;
+/** Hand-entered and MailerLite issues together, newest first. */
+function merged(fromMailerLite: Issue[]): Issue[] {
+  return [...fromMailerLite, ...SAMPLE_ISSUES].sort((a, b) => (b.number ?? 0) - (a.number ?? 0) || b.date.localeCompare(a.date));
 }
 
-/** The last good Mailchimp result this server instance fetched (fallback for failed refreshes). */
+/** The last good MailerLite result this server instance fetched (fallback for failed refreshes). */
 let lastGood: Issue[] | null = null;
 
 /** Every issue, newest first. Cached; revalidates hourly. */
 export async function getIssues(): Promise<Issue[]> {
   "use cache";
-  const cfg = mailchimpConfig();
-  if (!cfg) {
+  if (!process.env.MAILERLITE_API_KEY?.trim()) {
     cacheLife("hours");
     return SAMPLE_ISSUES;
   }
   try {
-    const issues = await fetchFromMailchimp(cfg);
-    if (issues.length === 0) throw new Error("Mailchimp returned no sent campaigns");
+    const issues = merged(await fetchFromMailerLite());
     lastGood = issues;
     cacheLife({ stale: 300, revalidate: 3600, expire: 86400 });
     return issues;
   } catch (error) {
-    console.error("[the-brief] Mailchimp fetch failed; serving cached or sample issues.", error);
+    console.error("[the-brief] MailerLite fetch failed; serving cached or hand-entered issues.", String(error));
     // Retry soon rather than holding the fallback for an hour.
     cacheLife("minutes");
     return lastGood ?? SAMPLE_ISSUES;

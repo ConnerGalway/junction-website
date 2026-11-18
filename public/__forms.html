@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex" />
+    <title>Junction forms</title>
+  </head>
+  <body>
+    <!--
+      Netlify Forms declarations (read by Netlify at deploy time; never shown).
+      The site's React forms post here with fetch (application/x-www-form-urlencoded)
+      including form-name; see src/lib/forms.ts. Every field a form sends must be
+      listed in its form below, or Netlify drops it.
+    -->
+
+    <!-- Contact page: the program tile, every per-program field and where a pre-fill came from. -->
+    <form name="contact" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="contact" />
+      <input name="bot-field" />
+      <input name="program" />
+      <input name="name" />
+      <input type="email" name="email" />
+      <input name="org" />
+      <input name="team" />
+      <textarea name="bottleneck"></textarea>
+      <input name="website" />
+      <textarea name="goal"></textarea>
+      <input name="partner" />
+      <input name="sketch" />
+      <input name="audience" />
+      <input name="learners" />
+      <input name="timing" />
+      <input name="date" />
+      <input name="location" />
+      <input name="size" />
+      <input name="format" />
+      <input name="topic" />
+      <input name="note" />
+      <input name="region" />
+      <input name="budget" />
+      <textarea name="message"></textarea>
+      <input name="source" />
+      <input name="page" />
+    </form>
+
+    <!-- Accelerator: Quick Score lead magnet. -->
+    <form name="lead-quick-score" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="lead-quick-score" />
+      <input name="bot-field" />
+      <input name="lead_magnet" />
+      <input name="name" />
+      <input type="email" name="email" />
+      <input name="score" />
+      <textarea name="area_scores"></textarea>
+      <input name="biggest_gaps" />
+      <textarea name="answers"></textarea>
+      <input name="page" />
+    </form>
+
+    <!-- AI Training: time-back calculator lead magnet. -->
+    <form name="lead-time-back" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="lead-time-back" />
+      <input name="bot-field" />
+      <input name="lead_magnet" />
+      <input name="name" />
+      <input type="email" name="email" />
+      <input name="job" />
+      <input name="hours_per_week_per_person" />
+      <input name="people" />
+      <input name="hourly_cost" />
+      <input name="hours_per_week_total" />
+      <input name="hours_per_year" />
+      <input name="cost_per_year" />
+      <input name="what_we_would_build" />
+      <input name="page" />
+    </form>
+
+    <!-- Speaking: availability check (hidden on the site while SHOW_SPEAKING_AVAILABILITY is off). -->
+    <form name="speaking-availability" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="speaking-availability" />
+      <input name="bot-field" />
+      <input name="name" />
+      <input type="email" name="email" />
+      <input name="event" />
+      <input name="date" />
+      <input name="format" />
+      <input name="audience" />
+      <input name="page" />
+    </form>
+
+    <!-- Custom Training: program sketch (hidden on the site while SHOW_TRAINING_SKETCHER is off). -->
+    <form name="training-sketch" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="training-sketch" />
+      <input name="bot-field" />
+      <input name="name" />
+      <input type="email" name="email" />
+      <input name="org" />
+      <input name="who" />
+      <input name="how" />
+      <input name="size" />
+      <input name="sketch" />
+      <input name="sketch_summary" />
+      <input name="page" />
+    </form>
+  </body>
+</html>

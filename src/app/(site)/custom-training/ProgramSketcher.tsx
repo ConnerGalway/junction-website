@@ -1,7 +1,9 @@
 "use client";
 
 import { useId, useState } from "react";
-import { Button, Eyebrow, TextLink, cx } from "@/components";
+import type { FormEvent } from "react";
+import { Button, Eyebrow, FormError, Honeypot, Input, TextLink, cx } from "@/components";
+import { EMAIL_RE, FORM_NAMES, pageUrl, submitNetlifyForm } from "@/lib/forms";
 import { CALENDLY_URL } from "@/lib/constants";
 import { DEFAULTS, HOW, SIZE, WHO, sketchProgram, sketchSummary, type How, type Size, type Who } from "@/lib/programSketch";
 
@@ -49,8 +51,10 @@ function SketchSelect<T extends string>({
 
 /**
  * Program sketcher (on Forest): three answers and a result card that
- * updates instantly (a soft 200ms fade on the text). "Send this sketch to
- * us" opens the contact page with the answers and the sketch in the URL.
+ * updates instantly (a soft 200ms fade on the text). Under it, name, email
+ * and organization send the sketch to the Netlify form "training-sketch"
+ * (see src/lib/forms.ts); "add more details" still opens the contact page
+ * pre-filled with the answers and the sketch.
  * Rules live in src/lib/programSketch.ts (placeholders).
  */
 export function ProgramSketcher() {
@@ -63,6 +67,38 @@ export function ProgramSketcher() {
 
   const params = new URLSearchParams({ type: "training", who, how, size, sketch: sketch.title });
   const href = `/contact?${params.toString()}`;
+
+  const id = useId();
+  const [state, setState] = useState<"idle" | "invalid" | "sending" | "sent" | "error">("idle");
+  const [bot, setBot] = useState("");
+
+  async function send(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const get = (k: string) => String(data.get(k) ?? "").trim();
+    if (!EMAIL_RE.test(get("email"))) {
+      setState("invalid");
+      return;
+    }
+    setState("sending");
+    try {
+      await submitNetlifyForm(FORM_NAMES.trainingSketch, {
+        name: get("name"),
+        email: get("email"),
+        org: get("org"),
+        who: WHO.find((w) => w.id === who)?.label ?? who,
+        how: HOW.find((h) => h.id === how)?.label ?? how,
+        size: SIZE.find((z) => z.id === size)?.label ?? size,
+        sketch: sketch.title,
+        sketch_summary: summary,
+        page: pageUrl(),
+        "bot-field": bot,
+      });
+      setState("sent");
+    } catch {
+      setState("error");
+    }
+  }
 
   return (
     <div>
@@ -96,9 +132,45 @@ export function ProgramSketcher() {
           </ol>
           <p className="type-small m-0 mt-3">{summary}</p>
         </div>
-        <Button href={href} className="mt-7">
-          Send this sketch to us
-        </Button>
+        {state === "sent" ? (
+          <p role="status" className="type-h4 m-0 mt-7 border-t border-hairline pt-6">
+            Thanks — it&apos;s with us. We&apos;ll reply soon.
+          </p>
+        ) : (
+          <form noValidate onSubmit={send} className="mt-7 border-t border-hairline pt-6" aria-busy={state === "sending"}>
+            <p className="type-h4 m-0 mb-4">Send this sketch to us</p>
+            <Honeypot value={bot} onChange={setBot} />
+            <div className="grid gap-3 sm:grid-cols-3">
+              <Input label="Name" name="name" autoComplete="name" />
+              <Input
+                label="Email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                aria-required="true"
+                aria-invalid={state === "invalid" || undefined}
+                aria-describedby={state === "invalid" ? `${id}-email` : undefined}
+                onChange={() => state === "invalid" && setState("idle")}
+              />
+              <Input label="Organization" name="org" autoComplete="organization" />
+            </div>
+            <div aria-live="polite">
+              {state === "invalid" && (
+                <p id={`${id}-email`} role="alert" className="type-small mt-2 mb-0 font-medium text-carbon">
+                  Enter a valid email address, like name@business.com
+                </p>
+              )}
+              {state === "error" && <FormError className="mt-2" />}
+            </div>
+            <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3">
+              <Button type="submit" disabled={state === "sending"}>
+                {state === "sending" ? "Sending…" : "Send this sketch to us"}
+              </Button>
+              <TextLink href={href}>Or add more details →</TextLink>
+            </div>
+          </form>
+        )}
       </div>
 
       <TextLink href={CALENDLY_URL} className="mt-8 inline-block">

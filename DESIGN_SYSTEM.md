@@ -288,7 +288,7 @@ Controls:
 | `Chip` | `sage` (sage fill, Forest text), `outline` (1.5px Forest) or `fern-outline` (1.5px Fern border and text, for dark grounds). Radius 10. |
 | `Input`, `Select`, `Textarea` | Always labelled. 48px, with a Flint border and a canopy-text focus. The contact form alone uses the editorial fields instead (see Contact page). |
 | `ProgramThumb` | `program="accelerator" \| "offload" \| "training" \| "strategy" \| "speaking" \| "other"`. A 56px designed SVG thumbnail (radius 8, `aria-hidden`, no faces or text): Accelerator sage with a Canopy progress ring; AI Training Carbon with a row of gold dots; Training Forest with three course cards; Strategy Newsprint with Canopy bars; Speaking the stage with a soft glow and a tiny slide; Something else sage with a Forest Fraunces "?". Used by the contact form's program tiles. |
-| `NewsletterSignup` | One row (email and Subscribe), labelled "Get The Brief in your inbox", with the helper line "[ Frequency ] · unsubscribe anytime". Optional `label`, `hideLabel` (screen readers only), `helper` and `centered` (The Brief page). Submission is a TODO. |
+| `NewsletterSignup` | The Brief signup: one row (email and Subscribe), labelled "Get The Brief in your inbox", then the consent line "We'll email you The Brief every Monday. Unsubscribe anytime." (CASL). Optional `label`, `hideLabel` (screen readers only), `helper` (an extra line above the consent, e.g. The Brief page's "Free · award-winning · 500+ articles") and `centered`. Posts to `/api/brief-subscribe` (MailerLite, see The Brief page). States: "Sending…" (button disabled), "You're in. Check your inbox.", an error with "Try again"; a honeypot field; messages announced. |
 | `Placeholder` | Dashed stand-in for missing media or content |
 | `Wordmark` | `JUNCTION_` in Bebas with a Canopy underscore. The underscore is part of the logo. |
 | `LogoLockup` | Wordmark, a 1px divider (20% of the text colour, 34px tall) and the tagline "Strategy & / Capacity Building" (DM Sans 400, 14px, muted, .04em). Links to `/`. With `collapseOnSmall`, the divider and tagline are dropped under 420px. |
@@ -381,18 +381,18 @@ The program formerly called Offload. **"AI Training" is the only name users see*
   - **Exception:** the calendar's "Day N" labels use the small caps label style rather than Bebas (unlike other number-led lines); the empty-day numbers stay Bebas.
 - **Guarantee:** its own section; see Pink means clickable. No terms link until the terms are approved.
 
-> **Calculator: front-end demo only.** The email is format-checked in the browser; nothing is stored or sent. Needs approval, a backend, the estimate email and a CASL check before going live (like the quick score).
+> **Calculator: lead capture.** The result is worked out and shown in the browser. Under it, `LeadCapture`: "Want to see what we'd build for you? Leave your email and we'll get back to you personally.", Name (optional), Email, the consent line, Send. It submits every input and figure to the Netlify form `lead-time-back` (see Forms). We reply by hand; there's no automated estimate email.
 
 ### Quick score
 
 `QuickScore.tsx`, with every question, answer, weight and band in `src/lib/quickScore.ts`.
 
-> **Quick score: front-end demo only.** Needs approval, real questions and scoring from Conner, backend scoring and storage, a report email and a CASL check before going live.
+> **Quick score: lead capture.** The score is worked out and shown in the browser. The score card ends with `LeadCapture`: "Want the full breakdown? Leave your email and we'll send it to you personally.", Name (optional), Email, the consent line, Send. It submits every answer (question and chosen option), the total, the score per area and the biggest gaps to the Netlify form `lead-quick-score` (see Forms). We reply by hand; there's no automated or instant report.
 
 - **Deck:** three cards, right-aligned, up to 500px wide. Only the front card is fully visible; two plain shells peek out above it (16px and 32px up, inset 18px and 36px, soft shadow). The shell directly behind hints at the next card: Carbon when the inbox card is next, newsprint-hover otherwise.
 - **Question card:** a meta label and "About 3 minutes", an 8-segment progress bar (Canopy done, sage-25 to do), the question (`type-h3`) and answer tiles: newsprint-hover fill with no outline; selected = Sage fill, Forest text and a filled radio. "← Back" and "Next". Next with no answer shows "Pick an answer to continue" (the button is never disabled).
-- **Score card:** a Canopy donut on a sage-25 track, six area rows coloured by score band (see Accent hierarchy), the two biggest gaps, then the email row. The email is format-checked in the browser only.
-- **Inbox card:** Carbon, "Report sent" in Fern, and "Retake the check" (a secondary button) back to question 1.
+- **Score card:** a Canopy donut on a sage-25 track, six area rows coloured by score band (see Accent hierarchy), the two biggest gaps, then the lead capture.
+- **Thanks card:** Carbon, "Got it" in Fern, "Thanks — we've got it. We'll be in touch with your results.", a secondary "Book a 20-min call" (Calendly) and "Retake the check" back to question 1.
 - **Questions:** written for any small business (no rooms, guests, occupancy or OTAs): business type (context), then six scored areas: Marketing plan (a written plan), Channels (which channels bring customers), Consistency (posting), Email list (collecting emails), Tracking (results), Time (for marketing); then the 90-day goal (context).
 - **Scoring:** scored questions have four answers worth 100, 66, 33 and 0, plus "I'm not sure" (0). The overall score is the average of the six areas. Grades: 85+ A, 75+ B+, 65+ B, 55+ B−, 45+ C, 35+ D+, 25+ D, under 25 F.
 - **Motion:** the outgoing card slides down and fades as the next one rises into place (400ms, `--ease-orbit` curve, framer-motion). With `prefers-reduced-motion` the swap is instant. Focus moves to the new card's title.
@@ -426,7 +426,7 @@ The program formerly called Offload. **"AI Training" is the only name users see*
 - **CoursePlayer** (`CoursePlayer.tsx`, decorative, `aria-hidden`): the custom course's open state on Forest, inset 48px: a Newsprint frame with a 220px sidebar (Forest header: "Course", "Export readiness", a thin Fern progress bar; Modules 1–6 with Bebas gold-on-light numbers, module 2 on sage-25) and a video area with a slim control bar (Newsprint play button, Fern progress, Bebas time). Drawn at 600 × 340 and scaled to fit. If `formats-custom-course.mp4` exists it plays muted, looped and inline with the jpg as poster; reduced motion shows the still.
 - **Proof:** a copper meta label, the two stats as `<Stat maxSize="112px">` (gold-on-light, they fit their column), the Sage quote card (Joanne Wolnik, Ontario's Southwest Tourism Association; Avery Bramadat's card follows with `SHOW_UNVERIFIED_QUOTES`) and the leadership-training placeholder (`SHOW_PLACEHOLDERS`).
 - **Closing CTA (Forest, `#start`):** with `SHOW_TRAINING_SKETCHER` off (default), the display H2 "Tell us who needs training. We'll build the program around them.", "Book a 20-min call" (Newsprint fill, Forest text, Calendly) and "Or send us the details →" (`/contact?type=training`). With it on, the sketcher below replaces them.
-- **Program sketcher** (hidden: `SHOW_TRAINING_SKETCHER`; `ProgramSketcher.tsx`, rules in `src/lib/programSketch.ts`, placeholders): three selects in a row (stacked on mobile), styled for Forest over native `<select>`s: Newsprint 8% fill, 1px Newsprint 16% border, radius 10 (the control token), small caps label (Newsprint 60%) above the value (Epilogue 600, 18px), Fern chevron, Fern border on focus. Under them a Newsprint result card: "Your program, sketched", the program (Epilogue 900, 28px), a week strip (live weeks Canopy, others Sage) and a summary line, updating instantly with a 200ms text fade. "Send this sketch to us" opens `/contact?type=training&who=…&how=…&size=…&sketch=…`, which pre-fills the training audience and learners (the sketch title has no field yet: TODO).
+- **Program sketcher** (hidden: `SHOW_TRAINING_SKETCHER`; `ProgramSketcher.tsx`, rules in `src/lib/programSketch.ts`, placeholders): three selects in a row (stacked on mobile), styled for Forest over native `<select>`s: Newsprint 8% fill, 1px Newsprint 16% border, radius 10 (the control token), small caps label (Newsprint 60%) above the value (Epilogue 600, 18px), Fern chevron, Fern border on focus. Under them a Newsprint result card: "Your program, sketched", the program (Epilogue 900, 28px), a week strip (live weeks Canopy, others Sage) and a summary line, updating instantly with a 200ms text fade. Under the result: "Send this sketch to us" with Name, Email (required) and Organization, submitting the answers, the sketch and its summary to the Netlify form `training-sketch` (see Forms); "Or add more details →" still opens `/contact?type=training&who=…&how=…&size=…&sketch=…`, which pre-fills the training audience, learners and the sketch.
 
 ## Speaking page
 
@@ -473,10 +473,10 @@ Sections:
 - **Got a date?** (now): the display H2 "Got a date? Let's check it.", the line "Tell us about your event and we'll check the date." and one "Book a 20-min call" button (Calendly). With `SHOW_SPEAKING_AVAILABILITY` on, the original layout below returns.
 - **Got a date? (hidden layout)** The display H2, the line and the email link sit on the left. On the right is `AvailabilityForm.tsx`, a Newsprint card with:
   - the meta label "Check availability";
-  - a 2×2 grid (stacked on mobile) of Event (required, with an inline error), Date, Format and Audience;
+  - a two-column grid (stacked on mobile) of Event (required), Date, Format, Audience, Your name and Email (required), with inline errors;
   - the button and a small line under it.
 
-  Submitting opens `/contact?type=speaking&event=…&date=…&format=…&audience=…`. The contact form pre-fills organization/event, date, format and audience size from it. Its Format list matches the availability form's, including "Not sure yet". A format it doesn't list would go into a hidden `note` field (TODO: a visible notes field).
+  It submits to the Netlify form `speaking-availability` (see Forms) and thanks the visitor in place, with a call link. The contact page still accepts `/contact?type=speaking&event=…&date=…&format=…&audience=…` and pre-fills organization/event, date, format and audience size from it. Its Format list matches the availability form's, including "Not sure yet". A format it doesn't list would go into a hidden `note` field (TODO: a visible notes field).
 - **Stage thumbnail** (`StageThumbnail.tsx`, the Speaking card in the homepage orbit): the stage ground, a `.spot-pool` at half size (150px radius) upper-right of centre near his face, and the cutout at 80%, bottom-anchored and right-aligned, slightly cropped by the right and bottom edges. No text, static. See program thumbnails under Components.
 - **Reel:** no video player is shown. A frosted "Watch the reel" pill (`ReelPill.tsx`, round Newsprint play button) sits after the hero buttons. It appears only when `SHOW_SPEAKING_REEL` in `src/lib/flags.ts` is `true` **and** `public/images/speaking/reel.mp4` exists, and it opens the file in a new tab.
 
@@ -546,20 +546,17 @@ Sections:
 
 `src/app/the-brief/`. One centred reading column (720px) on Newsprint, with issue numbers in the left margin. There are no cards or boxes, and every rule is Carbon (see Section dividers).
 
-- **The Brief now runs on MailerLite, not Mailchimp.** The live feed below is still the Mailchimp one and gets switched to MailerLite later. Until then the page shows the real issues, entered by hand in `src/lib/brief.ts` (549 back to 532; headlines in sentence case, brand names and months capitalized; taglines for 549–545, section headlines for 549–543, "This week" shows 549's).
+- **The Brief runs on MailerLite.** The page's issues are the real issues entered by hand in `src/lib/brief.ts` (549 back to 532; headlines in sentence case, brand names and months capitalized; taglines for 549–545, section headlines for 549–543) plus any newer issues from MailerLite.
 - **Data** (`src/lib/brief.ts`, the page's only data source): `getIssues()` returns `{ number, date, feature, tagline?, sections?, topics, url }`, newest first (the first is "This week").
-  - **Mailchimp:** when the three server-only env vars are set, it reads sent campaigns for The Brief's audience from the Marketing API (`GET /3.0/campaigns?status=sent&list_id=…&sort_field=send_time&sort_dir=DESC`, 100 per page). The feature is `settings.subject_line` (never rewritten), the date is `send_time` (Vancouver time) and the link is `archive_url`.
-    - **Issue number:** the number after "Brief" in `settings.title`, else the first 3–4 digit number there. With none, the issue shows no number.
-    - **Tagline:** the campaign's `settings.preview_text`. If it's empty, the first sentence of the feature's body: the text between the feature heading and the next heading in the campaign HTML, cut at a word with "…" past 180 characters (`SECTION_PARSER.leadMaxLength`). Those HTML fetches run five at a time and are optional: a failure only drops that tagline. In sample mode, 534–532 have none, so the line is simply omitted.
-    - **Sections:** for the latest issue only, two headlines parsed from its HTML (`GET /3.0/campaigns/{id}/content`). The rules live in `SECTION_PARSER` (heading tags, ignore patterns), so they can be tuned to the real template. If extraction fails, This week shows no "Also in this issue" row.
-  - **Env vars** (set in Netlify, never exposed to the client):
-    - `MAILCHIMP_API_KEY`
-    - `MAILCHIMP_SERVER_PREFIX` (e.g. `us21`)
-    - `MAILCHIMP_BRIEF_LIST_ID`
-  - **Without them:** `SAMPLE_ISSUES`, now the hand-entered real issues (no web pages, so `url` is null).
-  - **Refresh:** `"use cache"` with an hourly revalidate, so new issues appear on their own. A failed refresh serves the last good result held by that server instance, or the sample, and retries within minutes. The page never breaks on a Mailchimp error.
+  - **MailerLite archive:** with `MAILERLITE_API_KEY` set, it reads every sent campaign (`GET connect.mailerlite.com/api/campaigns?filter[status]=sent`, 100 per page) and keeps those whose **campaign name** contains "Brief" and an issue number: "Brief 549", "The Brief #550" and "Brief Nº 551" all work. Name each campaign "Brief <number>" (a 4-digit year in the name before the number would be read as the number). Other campaigns are ignored.
+    - **Hand-entered wins:** an issue number that's in the hand-entered list keeps its curated headline, tagline, sections and date. MailerLite only adds the issues the list doesn't have.
+    - **An added issue:** the headline is the email's subject (never rewritten), the date is when it finished sending (the date as MailerLite gives it), the tagline is the email's preview text if the API returns one, else the first sentence of the feature's body: the text between the feature heading and the next heading in the campaign HTML, cut at a word with "…" past 180 characters (`SECTION_PARSER.leadMaxLength`). The newest added issue also gets its two section headlines from its HTML (`SECTION_PARSER`: heading tags and ignore patterns, tunable to the real template). Content fetches are optional: a failure only drops a tagline or the sections. Links (`url`) stay null: the read links are hidden (`SHOW_BRIEF_READ_LINKS`).
+  - **Fallback:** without the key, or if the API fails or no campaign matches, the page shows the hand-entered issues. It never breaks or shows an error.
+  - **Refresh:** `"use cache"` with an hourly revalidate, so new issues appear on their own. A failed refresh serves the last good result held by that server instance (or the hand-entered list) and retries within minutes.
+  - **Signup** (`NewsletterSignup`, here and in the footer): posts to `/api/brief-subscribe` (`src/app/api/brief-subscribe/route.ts`), which validates the email, drops honeypot hits, rate-limits (5 per IP per 10 minutes, per server instance) and adds the subscriber through MailerLite's API (`POST /api/subscribers`). Group: `MAILERLITE_BRIEF_GROUP_ID` if set, otherwise the group named exactly "The Brief" (case-insensitive), looked up once and cached for an hour. If there's no such group the subscriber is still added, without a group, and a warning is logged. Responses: 200 ok, 400 invalid email, 429 too many tries, 503 key missing, 502 MailerLite error.
+  - **Env vars** (Netlify; server only, never `NEXT_PUBLIC_`, never in code or logs): `MAILERLITE_API_KEY` (required for the signup and the archive), `MAILERLITE_BRIEF_GROUP_ID` (optional). `src/lib/mailerlite.ts` is `server-only`.
   - **Topics:** `TOPIC_RULES`, keyword patterns per topic (AI, Search, Social, Advertising, Tourism), matched case-insensitively against the feature and section headlines. An issue can have several topics. Topics with no issues are hidden from the tabs.
-- **Top (centred):** "THE BRIEF" wordmark (see Hard rules), the H1 "Ideas you can use this week." (display, up to 88px, two lines from 1024px), the lead (34ch) and the centred `NewsletterSignup` (520px, label for screen readers only, helper "Free · award-winning · 500+ articles · unsubscribe anytime" in Flint). These form the subscribe block (`#subscribe`); there's no box.
+- **Top (centred):** "THE BRIEF" wordmark (see Hard rules), the H1 "Ideas you can use this week." (display, up to 88px, two lines from 1024px), the lead (34ch) and the centred `NewsletterSignup` (520px, label for screen readers only, helper "Free · award-winning · 500+ articles" in Flint, then the consent line). These form the subscribe block (`#subscribe`); there's no box.
 - **This week:**
   - a 2px Carbon rule, with "This week" (meta, Carbon) on the left and "Nº 544 · October 12, 2026" (small, Flint) on the right;
   - the feature (Epilogue 900, up to 54px);
@@ -762,7 +759,7 @@ A new course gets a `slug` and its still the same way.
 - **Step 2, "2 · A few details":** Name, Work email and the organization, then the chosen program's fields, in two columns from `md`; long text fields span both. Until a program is chosen, a Flint hint says the questions appear there.
   - **Editorial fields** (`fields.tsx`, `.contact-field`; **contact page only**, every other form keeps the boxed `Input`/`Select`/`Textarea`): a copper small caps label above; the value in Epilogue 600, 20px; no box, a 1.5px Carbon bottom rule; placeholders at Carbon 32%. On focus the rule turns Canopy and 2px. Selects use the same style with a Carbon chevron.
   - **Field sets:** The Accelerator (website, 90-day goal, the partner checkbox), AI Training (team size, bottleneck), Custom Training (audience, learners, timing), Marketing strategy (region, "What do you want your strategy to solve?", ideal timing, optional budget range), Speaking (date, city, size, format, topic), Something else (message).
-  - **Send:** the primary button. No reply-time promise anywhere on the page.
+  - **Send:** the primary button. It submits to the Netlify form `contact` (see Forms) with the program tile, every field shown, where a pre-fill came from (`source`) and the page URL. Sending: "Sending…", disabled. Sent: "Thanks — it's with us. We'll reply soon." and a secondary "Book a 20-min call" for anyone who wants to talk sooner. Error: "Something went wrong. Email hello@wearejunction.com instead." (mailto). No reply-time promise anywhere on the page.
 - **Aside:** a sage-25 box (radius 14) with "Rather just talk?" (Epilogue 600, 20px, Forest), "Twenty minutes with Conner, no pitch deck." and "Book a 20-min call" (`tone-sage`: Forest fill, Newsprint text). Under it, plain text: the email, phone and address.
 - **Support line:** under a 1px Carbon rule at the bottom, existing eLearningU learners and Industry Scan subscribers are sent to support. The address is support@elearningu.com (`SUPPORT_EMAIL` in `src/lib/constants.ts`), a mailto link.
 - **Pre-filled arrivals** (`?type=`): select the tile and fill fields. When something was filled from another page, a sage-25 note (radius 10, Forest) sits at the top of step 2 while that program stays selected.
@@ -825,8 +822,10 @@ Done means booked, sent, subscribed or purchased. Count the click on the CTA as 
 | Journey | Steps |
 |---|---|
 | Any "Book a 20-min call" → Calendly | 2 |
-| Speaking availability → Contact pre-filled → Send | 3 |
-| Custom Training sketch (hidden) → Contact pre-filled → Send | 3 |
+| Speaking availability (hidden) → Check availability | 1 |
+| Custom Training sketch (hidden) → Send this sketch to us | 1 |
+| Quick Score → answers → Send (lead) | 2 |
+| Time-back calculator → Send (lead) | 1 |
 | Custom Training "Or send us the details →" → Contact (training) → Send | 2 |
 | eLearningU course/workshop card → eLearningU landing page → buy | 3 |
 | Tourism Talk → plays in place | 1 |
@@ -844,6 +843,24 @@ New CTAs get a row here.
 - Buttons press down 1px when active.
 - `prefers-reduced-motion` disables transitions.
 - **framer-motion** (pinned) is used only for the hero wordmark's slower scroll and the quick score card swap. Everything else is CSS or small scroll handlers (the AI Training calendar).
+
+## Forms
+
+Every form submits for real. **Netlify Forms** handles the site's forms; **MailerLite** handles The Brief signup.
+
+- **Netlify Forms:** every form is declared in `public/__forms.html` (a static file Netlify reads at deploy: `data-netlify="true"`, the form name, a hidden `form-name`, the `bot-field` honeypot and every field the real form sends). The React forms post to `/__forms.html` with `fetch`, URL-encoded, including `form-name` (`submitNetlifyForm` in `src/lib/forms.ts`). **A new field must be added to both places**, or Netlify drops it.
+
+  | Netlify form | Where | Fields |
+  |---|---|---|
+  | `contact` | Contact page | program, name, email, org, every per-program field, source (where a pre-fill came from), page |
+  | `lead-quick-score` | Accelerator Quick Score | lead_magnet, name, email, score, area_scores, biggest_gaps, answers (one line per question: question — answer), page |
+  | `lead-time-back` | AI Training calculator | lead_magnet, name, email, job, hours_per_week_per_person, people, hourly_cost, hours_per_week_total, hours_per_year, cost_per_year, what_we_would_build, page |
+  | `speaking-availability` | Speaking (hidden: `SHOW_SPEAKING_AVAILABILITY`) | name, email, event, date, format, audience, page |
+  | `training-sketch` | Custom Training (hidden: `SHOW_TRAINING_SKETCHER`) | name, email, org, who, how, size, sketch, sketch_summary, page |
+
+- **Every form's states:** sending (button disabled, "Sending…"), success (per form), error: "Something went wrong. Email hello@wearejunction.com instead." with a mailto (`FormError`). Field errors and outcomes are announced (`aria-live` / `role="alert"`). Every form carries the honeypot (`Honeypot`).
+- **Lead magnets** (`LeadCapture` in `src/components/LeadCapture.tsx`): Name (optional) and Email, the consent line "We'll only use your email to reply about your results." (CASL), Send. Success: "Thanks — we've got it. We'll be in touch with your results." and a secondary "Book a 20-min call". **We answer every lead by hand:** never promise an instant or automated report.
+- **Notifications:** set email notifications in Netlify (Forms → Form notifications) at least for `contact`, `lead-quick-score` and `lead-time-back`.
 
 ## Flags and hidden sections
 
@@ -875,7 +892,7 @@ Everything removed or not ready is **hidden behind a flag in `src/lib/flags.ts`,
 The building-supply case data is one file, `src/lib/buildingSupplyCase.ts`, shared by the homepage teaser, the AI Training case study and the Work chapter.
 
 **`SHOW_PLACEHOLDERS`** (off for the soft launch). `isPlaceholder()` and `shown()` in `src/lib/placeholders.ts` recognise "[ … ]" labels.
-- **Label only** (the rest still works): eLearningU workshop lengths "[ x HRS ]", the Scan teaser's "[ Month Year ]", the AI Training calculator's draft "What we'd build" lines, the footer signup's "[ Frequency ]" (it reads "Unsubscribe anytime"), the case switcher's "After [ result ]" and the Kootenay "[ # ]" on the Work map and sample spread.
+- **Label only** (the rest still works): eLearningU workshop lengths "[ x HRS ]", the Scan teaser's "[ Month Year ]", the AI Training calculator's draft "What we'd build" lines, the case switcher's "After [ result ]" and the Kootenay "[ # ]" on the Work map and sample spread.
 - **Whole element:** the Custom Training leadership-training testimonial card, Speaking talk posters (the topic takes the full row until `talk-0N.jpg` exists), the Quick Score "what they'll receive" line, the Marketing strategy "[ TYPICAL LENGTH ]" line and Kootenay proof card, the AI Training "What we measured" results, and the Scan FAQ items answered "[ Answer to come ]" (with none left, the section goes).
 - New placeholders go behind this flag too.
 
@@ -885,7 +902,7 @@ Every user-visible placeholder, hidden while `SHOW_PLACEHOLDERS` is off. This is
 
 | Page | Placeholder | What it needs | Hidden | Where |
 |---|---|---|---|---|
-| Every page (footer) | "[ Frequency ] · unsubscribe anytime" under The Brief signup | How often The Brief goes out | Label: reads "Unsubscribe anytime" | `src/components/ui/NewsletterSignup.tsx` |
+| Every page (footer) | (supplied) The Brief goes out every Monday: the signup now says so | — | — | `src/components/ui/NewsletterSignup.tsx` |
 | Accelerator | Quick Score line "[ What they'll receive: the quick score report and info about the program ]" | One line on what the emailed report contains | Element: the line under the email field | `src/app/(site)/accelerator/QuickScore.tsx` |
 | AI Training | Calculator "What we'd build" lines, seven drafts in brackets: Quotes, Collections, Invoices, Scheduling, Follow-ups, Reporting, Something else | Approved one-liners for each build (drafts are in the file) | Label: the build's name shows, its line doesn't | `src/lib/timeBack.ts` |
 | AI Training (hidden: `SHOW_AI_CASE_STUDY`) | Case study "After [ result ]" for Collections, Quotes and Leadership | The result for each build | Label: the "After" column; the "What we built" box goes single-column | `src/app/(site)/ai-accelerator/CaseSwitcher.tsx` |

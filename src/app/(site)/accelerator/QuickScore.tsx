@@ -2,9 +2,9 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useId, useRef, useState } from "react";
-import type { FormEvent } from "react";
-import { Button, Eyebrow, Input, cx } from "@/components";
-import { SHOW_PLACEHOLDERS } from "@/lib/flags";
+import { Button, Eyebrow, LeadCapture, LEAD_SUCCESS, cx } from "@/components";
+import { CALENDLY_URL } from "@/lib/constants";
+import { FORM_NAMES } from "@/lib/forms";
 import {
   QUESTIONS,
   answersFor,
@@ -14,19 +14,17 @@ import {
 } from "@/lib/quickScore";
 
 /*
- * Free quick check: a deck of three cards (question → score → inbox).
+ * Free quick check: a deck of three cards (question → score → thanks).
  *
- * TODO (before going live): FRONT-END DEMO ONLY. Needs approval, the real
- * questions and scoring from Conner (src/lib/quickScore.ts), backend
- * scoring and storage, a report email and a CASL check. Right now the email
- * is only format-checked in the browser; nothing is stored or sent.
+ * The score is worked out and shown in the browser. The score card ends
+ * with an email capture (LeadCapture) that submits the answers and scores
+ * to the Netlify form "lead-quick-score"; we reply by hand (no automated
+ * report).
  */
 
 type Step = "question" | "score" | "inbox";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
-// Loose format check only (something@something.tld).
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 const bandBar: Record<ScoreBand, string> = {
   healthy: "bg-canopy",
@@ -46,8 +44,6 @@ export function QuickScore() {
   const [answers, setAnswers] = useState<(number | null)[]>(() => QUESTIONS.map(() => null));
   const [missing, setMissing] = useState(false);
   const [result, setResult] = useState<QuickScoreResult | null>(null);
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState(false);
   const reduceMotion = useReducedMotion();
   const titleRef = useRef<HTMLParagraphElement>(null);
   const firstRender = useRef(true);
@@ -84,15 +80,15 @@ export function QuickScore() {
     setIndex((i) => Math.max(0, i - 1));
   }
 
-  function submitEmail(event: FormEvent) {
-    event.preventDefault();
-    if (!EMAIL_RE.test(email.trim())) {
-      setEmailError(true);
-      return;
-    }
-    // TODO: send to the (not yet approved) backend. Nothing is stored or sent.
-    setEmailError(false);
-    setStep("inbox");
+  /** Everything the lead form sends: each question with the chosen answer, and the scores. */
+  function leadData(): Record<string, string> {
+    if (!result) return {};
+    return {
+      score: `${result.overall} / 100`,
+      area_scores: result.areas.map((a) => `${a.area}: ${a.score} / 100 (${a.grade})`).join("\n"),
+      biggest_gaps: result.gaps.join(", "),
+      answers: QUESTIONS.map((q, i) => `${q.text} — ${answersFor(q)[answers[i] ?? -1]?.label ?? "(no answer)"}`).join("\n"),
+    };
   }
 
   function retake() {
@@ -100,8 +96,6 @@ export function QuickScore() {
     setIndex(0);
     setMissing(false);
     setResult(null);
-    setEmail("");
-    setEmailError(false);
     setStep("question");
   }
 
@@ -140,31 +134,22 @@ export function QuickScore() {
             />
           )}
           {step === "score" && result && (
-            <ScoreCard
-              result={result}
-              titleRef={titleRef}
-              email={email}
-              emailError={emailError}
-              onEmail={(value) => {
-                setEmail(value);
-                setEmailError(false);
-              }}
-              onSubmit={submitEmail}
-            />
+            <ScoreCard result={result} titleRef={titleRef} leadData={leadData} onSent={() => setStep("inbox")} />
           )}
           {step === "inbox" && (
-            <div className="tone-carbon card-pad rounded-card">
-              <Eyebrow className="m-0">Report sent</Eyebrow>
+            <div className="tone-carbon card-pad rounded-card" role="status" aria-live="polite">
+              <Eyebrow className="m-0">Got it</Eyebrow>
               <p ref={titleRef} tabIndex={-1} className="type-h3 m-0 mt-3 focus:outline-none">
-                Check your inbox.
+                {LEAD_SUCCESS}
               </p>
-              <p className="type-body mt-3 mb-7">
-                Your quick score report is on its way to{" "}
-                <span className="font-medium text-newsprint [overflow-wrap:anywhere]">{email.trim()}</span>.
-              </p>
-              <Button variant="secondary" onClick={retake}>
-                Retake the check
-              </Button>
+              <div className="mt-7 flex flex-wrap items-center gap-x-6 gap-y-4">
+                <Button variant="secondary" href={CALENDLY_URL}>
+                  Book a 20-min call
+                </Button>
+                <button type="button" onClick={retake} className="link type-button cursor-pointer border-0 bg-transparent p-0">
+                  Retake the check
+                </button>
+              </div>
             </div>
           )}
         </motion.div>
@@ -270,19 +255,14 @@ function QuestionCard({
 function ScoreCard({
   result,
   titleRef,
-  email,
-  emailError,
-  onEmail,
-  onSubmit,
+  leadData,
+  onSent,
 }: {
   result: QuickScoreResult;
   titleRef: React.RefObject<HTMLParagraphElement | null>;
-  email: string;
-  emailError: boolean;
-  onEmail: (value: string) => void;
-  onSubmit: (event: FormEvent) => void;
+  leadData: () => Record<string, string>;
+  onSent: () => void;
 }) {
-  const id = useId();
   const size = 112;
   const stroke = 12;
   const r = (size - stroke) / 2;
@@ -340,36 +320,14 @@ function ScoreCard({
         <span className="font-medium text-accent-2">{result.gaps[1]}</span>
       </p>
 
-      <form noValidate onSubmit={onSubmit} className="mt-7 border-t border-hairline pt-6">
-        <p className="type-h4 m-0 mb-3">Get your quick score report by email</p>
-        <div className="flex flex-wrap items-start gap-2.5 sm:flex-nowrap">
-          <Input
-            label="Email address"
-            hideLabel
-            type="email"
-            autoComplete="email"
-            placeholder="you@business.com"
-            value={email}
-            onChange={(event) => onEmail(event.target.value)}
-            aria-invalid={emailError || undefined}
-            aria-describedby={emailError ? `${id}-email-error` : undefined}
-            className="min-w-0 flex-1 basis-56"
-          />
-          <Button type="submit" className="shrink-0">
-            Email my report
-          </Button>
-        </div>
-        {emailError && (
-          <p id={`${id}-email-error`} role="alert" className="type-small mt-2 mb-0 font-medium text-carbon">
-            Enter a valid email address, like name@business.com
-          </p>
-        )}
-        {SHOW_PLACEHOLDERS && (
-          <p className="type-small mt-3 mb-0">
-            [ What they&apos;ll receive: the quick score report and info about the program ]
-          </p>
-        )}
-      </form>
+      <LeadCapture
+        formName={FORM_NAMES.quickScore}
+        leadMagnet="Quick Score"
+        prompt="Want the full breakdown? Leave your email and we'll send it to you personally."
+        data={leadData}
+        onSent={onSent}
+        className="mt-7 border-t border-hairline pt-6"
+      />
     </div>
   );
 }

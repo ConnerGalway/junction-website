@@ -10,5 +10,5 @@ export const formatDay = (iso: string) => day.format(asDate(iso));
 /** "October 2026" */
 export const formatMonth = (iso: string) => month.format(asDate(iso));
 
-/** Where an issue links: its archive page, or the signup in sample mode. */
+/** Where an issue links: its web page, or the signup when it has none. */
 export const issueHref = (url: string | null) => url ?? "#subscribe";

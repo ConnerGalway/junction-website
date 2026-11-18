@@ -569,6 +569,12 @@
     color: var(--tone-bg);
   }
 
+  /* Sending: a disabled button reads as busy, not broken. */
+  .btn:disabled {
+    cursor: progress;
+    opacity: 0.65;
+  }
+
   .btn:active:not(:disabled) {
     transform: translateY(1px);
   }

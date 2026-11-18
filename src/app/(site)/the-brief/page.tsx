@@ -12,8 +12,8 @@ export const metadata: Metadata = {
 
 /**
  * The Brief: one centred reading column on Newsprint, issue numbers in the
- * left margin. All data comes from src/lib/brief.ts (Mailchimp, or sample
- * issues until it's configured).
+ * left margin. All data comes from src/lib/brief.ts (the hand-entered issues,
+ * plus newer ones from MailerLite).
  */
 export default async function TheBriefPage() {
   const issues = await getIssues();
@@ -34,7 +34,7 @@ export default async function TheBriefPage() {
           <NewsletterSignup
             centered
             hideLabel
-            helper={<span className="text-flint">Free · award-winning · 500+ articles · unsubscribe anytime</span>}
+            helper={<span className="text-flint">Free · award-winning · 500+ articles</span>}
           />
         </div>
       </header>
