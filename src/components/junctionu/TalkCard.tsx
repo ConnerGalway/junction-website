@@ -17,7 +17,7 @@ export function TalkCard({ talk }: { talk: Talk }) {
 
   return (
     <div className="w-[min(360px,78vw)]">
-      <div className="relative aspect-video overflow-hidden rounded-card bg-ju-deep">
+      <div className="ju-card-frame relative aspect-video overflow-hidden rounded-card bg-ju-deep">
         {playing ? (
           <iframe
             src={`https://www.youtube-nocookie.com/embed/${talk.id}?autoplay=1&rel=0`}

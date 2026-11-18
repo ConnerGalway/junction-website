@@ -56,9 +56,9 @@ export type JuCourse = {
 
 export const COURSES: JuCourse[] = [
   { title: "Elevated Tourism Marketing Masterclass", slug: "elevated-tourism-marketing-masterclass", kind: "course", type: "Masterclass", length: "6 WEEKS", price: "$2,500 CAD", url: `${ELEARNINGU}/course/elevated-tourism-marketing` },
-  { title: "Tourism Digital Marketing Essentials", slug: "tourism-digital-marketing-essentials", kind: "course", type: "Certificate course", length: "60 LESSONS", price: "$995 CAD", url: `${ELEARNINGU}/course/tourism-digital-marketing-essentials` },
-  // TODO: Andrea to confirm Idea to Experience's length and price (no labels until then).
-  { title: "Idea to Experience", slug: "idea-to-experience", kind: "course", type: "Cohort program", url: `${ELEARNINGU}/course/idea-to-experience-development-cohort-2` },
+  { title: "Tourism Digital Marketing Essentials", slug: "tourism-digital-marketing-essentials", kind: "course", type: "Certificate course", length: "12 MODULES", price: "$995 CAD", url: `${ELEARNINGU}/course/tourism-digital-marketing-essentials` },
+  // TODO: Andrea to confirm Idea to Experience's price (no price label until then).
+  { title: "Idea to Experience", slug: "idea-to-experience", kind: "course", type: "Cohort program", length: "7 MODULES", url: `${ELEARNINGU}/course/idea-to-experience-development-cohort-2` },
   { title: "Trailhead: Tourism & Culture Bootcamp for Entrepreneurs", slug: "trailhead-tourism-culture-bootcamp", kind: "course", type: "Free · Yukon entrepreneurs", length: "6 MODULES", price: "Free", url: `${ELEARNINGU}/course/trailhead` },
   { title: "Sustainable Tourism", slug: "sustainable-tourism", kind: "course", type: "Certificate course", length: "8 MODULES", price: "$495 CAD", url: `${ELEARNINGU}/course/sustainable-tourism-course` },
 ];

@@ -143,7 +143,7 @@ Pink appears only on things you can click. Non-clickable elements never get a pi
 
 - **Links:** pink text (and underline) on hover, as below.
 - **Clickable cards:** the whole card is the link (`<Card href>`), with no button or second link inside. On hover and keyboard focus it gets a 2px break-pink outline, offset 4px.
-  - **eLearningU cards** use a 2px Fern outline instead, with a 5px lift and a pink title (see eLearningU sub-brand).
+  - **eLearningU cards** never outline the whole card: hover lifts the image frame 2px and turns the title pink; keyboard focus puts a 2px Fern ring around the frame only (see eLearningU sub-brand).
 - **Clickable list rows:** the newsprint-hover highlight plus a pink title (see Surfaces).
   - **Exception: The Brief archive rows** have no fill. On hover and focus the headline turns break-on-light and the margin number goes from Carbon 7% to 50%.
 - **Exception: `Badge`** (outline and filled). A badge is a status label and isn't clickable, but it may be pink: the outline badge ("Quick check · a general snapshot" on the Accelerator page) and the filled badge ("New" on the AI Training hero). Badges are the only non-clickable pink component.
@@ -645,7 +645,7 @@ A new course gets a `slug` and its still the same way.
   - **hover:** the circle scales to 1.08 and the image brightens slightly (`.ju-video-image`);
   - the whole card is the click target, and there's never a centred play button.
 - **Accordion:** the site's `Accordion` with Fern chevrons (the eLearningU version of the gold-chevron rule), one open at a time.
-- **Cards** (`.ju-card`): on hover and focus they lift 5px (no lift with reduced motion) and get a 2px Fern outline (offset 4px); the title turns break-on-dark, and stills zoom to 1.04. Tags: Fern on Fern 18% (Certificate, Workshop) or Sage with ground text (Free); small caps, radius 10.
+- **Cards** (`.ju-card`, with the frame marked `.ju-card-frame`: the image or title card, the workshop poster, the Talk / briefing thumbnail, the Scan teaser). A card never changes size or reaches into its neighbours. **Hover:** no outline; the frame lifts 2px (none with reduced motion), no scaling; the card's title turns break-on-dark. **Keyboard focus only** (`:focus-visible`): a 2px Fern ring around the frame alone (not the text below), at the frame's radius, offset 3px, inside the shelf's 20px gap. A mouse click leaves no ring. Tags: Fern on Fern 18% (Certificate, Workshop) or Sage with ground text (Free); small caps, radius 10.
 
 **Nav and footer**
 
@@ -671,7 +671,7 @@ A new course gets a `slug` and its still the same way.
     - under it, the **length** (Bebas 22px, Fern) and the **price** (Bebas 22px, Newsprint), each only when set;
     - the title (Oswald, 24px).
   - **Course title card** (`TitleCard` in `CourseCards.tsx`, `.ju-title-card`): shown when a course has no still; decorative (`aria-hidden`; the h3 carries the title). Grounds by position (`data-variant`, index mod 3): **0 ju-moss, 1 ju-deep, 2 ju-ground** with a soft Fern radial glow from the top-right (12%) and a faint Fern edge (it's the page's own colour). Top-left: the type. Bottom-left: a Fern bar (28 × 4, the eLearningU mark's bar) 12px above the title in Oswald display capitals, Newsprint, line-height 1, at most three lines, sized with the card (`clamp(18px, 9.6cqw, 34px)`: 34px at desktop, about 25px at 390), so it never overflows. No ghost numbers, photo or play icon: it must never read as a Workshop poster. **A still replaces it** as soon as `courses/<slug>.<ext>` is uploaded (checked at build; no code change).
-  - **Course details** (`COURSES` in `src/lib/junctionu.ts`; `type`, `length`, `price`; a label shows only when its value is set): Elevated Tourism Marketing Masterclass (Masterclass · 6 WEEKS · $2,500 CAD), Tourism Digital Marketing Essentials (Certificate course · 60 LESSONS · $995 CAD), Sustainable Tourism (Certificate course · 8 MODULES · $495 CAD), Trailhead: Tourism & Culture Bootcamp for Entrepreneurs (Free · Yukon entrepreneurs · 6 MODULES · Free), Idea to Experience (Cohort program; length and price TODO, so neither shows).
+  - **Course details** (`COURSES` in `src/lib/junctionu.ts`; `type`, `length`, `price`; a label shows only when its value is set): Elevated Tourism Marketing Masterclass (Masterclass · 6 WEEKS · $2,500 CAD), Tourism Digital Marketing Essentials (Certificate course · 12 MODULES · $995 CAD), Sustainable Tourism (Certificate course · 8 MODULES · $495 CAD), Trailhead: Tourism & Culture Bootcamp for Entrepreneurs (Free · Yukon entrepreneurs · 6 MODULES · Free), Idea to Experience (Cohort program · 7 MODULES; price TODO, so it doesn't show).
   - **Workshops:** workshops only. Poster cards (240 × 360, ju-moss):
     - the length in Fern Bebas (the "[ x HRS ]" placeholders only with `SHOW_PLACEHOLDERS`) and a Workshop tag, always top right;
     - a ghost number (Bebas 180px, Fern 10%) behind;
@@ -685,7 +685,7 @@ A new course gets a `slug` and its still the same way.
   - **Two columns:** "For DMOs and associations" (Fern), the H2 in Oswald capitals, the copy and the Fern outline "Talk to us about a region" (`/contact?type=training&from=region`). Then, after a thin divider, "300+" in Fern Bebas (up to 116px) and its line. They stack on phones.
 - **Industry Scan teaser** (`ScanTeaser`): the Scan thumbnail (`industry-scan-thumbnail.<ext>`) as a linked card, with the corner play button and "Conner Galway" beside it ("· [ Month Year ]" with `SHOW_PLACEHOLDERS`). There's no title caption, because the thumbnail already says it. Beside it, the pitch and one Fern outline action, "Try a month free". Both go to the Scan page. The month is a placeholder.
 - **The eLearningU email** (`EmailBand`, `#email`; hidden: `SHOW_ELU_EMAIL_BAND`): a Sage band (radius 18) with the headline (Oswald capitals, ground text), the line (Forest), an email field (Newsprint) and Subscribe (`ground`). This is the list the Work page links to. TODO: wire it to the eLearningU list (none exists in the codebase).
-- **Open items for team review:** Idea to Experience's length and price, real course stills, workshop lengths "[ x HRS ]", "See all" catalogue URLs, the sign-in URL and the Scan teaser month.
+- **Open items for team review:** Idea to Experience's price, real course stills, workshop lengths "[ x HRS ]", "See all" catalogue URLs, the sign-in URL and the Scan teaser month.
 
 ### Industry Scan page
 
@@ -896,7 +896,7 @@ Every user-visible placeholder, hidden while `SHOW_PLACEHOLDERS` is off. This is
 | Marketing strategy | Engagement line "[ TYPICAL LENGTH ] · SCOPED TO YOU" | The typical engagement length | Element: the whole line under the timeline | `src/lib/marketingStrategy.ts` (`ENGAGEMENT_LINE`) |
 | Marketing strategy (hidden: `SHOW_STRATEGY_PROOF`) | Kootenay Rockies proof stat "[ # ]" | The Kootenay Rockies headline number | Element: the card; two cards remain | `src/lib/marketingStrategy.ts` (`PROOF`) |
 | Work | Kootenay Rockies number "[ # ]": the route-map stop and the chapter's sample spread | The same Kootenay Rockies number | Label: the map stop shows the name only; the spread has no figure | `src/lib/routeMap.ts`, `src/lib/workCases.ts` |
-| eLearningU | Idea to Experience's length and price (not placeholders: the labels are simply left out until set) | The course's length and price | Label: none shows | `src/lib/junctionu.ts` (`COURSES`) |
+| eLearningU | Idea to Experience's price (not a placeholder: the label is simply left out until set) | The course's price | Label: no price shows | `src/lib/junctionu.ts` (`COURSES`) |
 | eLearningU | Workshop lengths "[ x HRS ]" on all four workshops | Each workshop's length | Label: the Workshop tag stays top right | `src/lib/junctionu.ts` (`WORKSHOPS`) |
 | eLearningU | Scan teaser byline "Conner Galway · [ Month Year ]" | The current issue's month and year | Label: reads "Conner Galway" | `src/components/junctionu/ScanTeaser.tsx` |
 | Industry Scan | FAQ answers "[ Answer to come ]": Who is the Scan for? · What sources do you use? · When does each issue come out? · Can my whole team read it? · How do I cancel? | Five answers | Element: each unanswered item; with none answered, the whole Questions section | `src/lib/industryScan.ts` (`SCAN_FAQ`) |

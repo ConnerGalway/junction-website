@@ -30,7 +30,7 @@ export function CourseCard({ course, index }: { course: JuCourse & { still?: str
   const price = shown(course.price);
   return (
     <a href={course.url} className="ju-card group relative block w-[min(400px,78vw)] no-underline">
-      <div className="relative aspect-video overflow-hidden rounded-card">
+      <div className="ju-card-frame relative aspect-video overflow-hidden rounded-card">
         {course.still ? (
           <>
             <Image
@@ -38,7 +38,7 @@ export function CourseCard({ course, index }: { course: JuCourse & { still?: str
               alt=""
               fill
               sizes="400px"
-              className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04] motion-reduce:transition-none"
+              className="object-cover"
             />
             {course.type && (
               <span className="ju-still-label absolute top-4 left-5 text-[11px] leading-none font-medium tracking-[0.12em] text-fern uppercase">
@@ -107,7 +107,7 @@ export function WorkshopCard({ workshop, index }: { workshop: JuCourse; index: n
   return (
     <a
       href={workshop.url}
-      className="ju-card group relative flex h-[360px] w-[240px] flex-col overflow-hidden rounded-card bg-ju-moss p-5 no-underline"
+      className="ju-card ju-card-frame group relative flex h-[360px] w-[240px] flex-col overflow-hidden rounded-card bg-ju-moss p-5 no-underline"
     >
       <span aria-hidden="true" className="pointer-events-none absolute -right-2 top-14 font-wordmark text-[180px] leading-none text-fern/10">
         {String(index + 1).padStart(2, "0")}

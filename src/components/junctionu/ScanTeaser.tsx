@@ -15,7 +15,7 @@ export function ScanTeaser() {
   return (
     <section aria-labelledby="scan-heading" className="px-gutter py-[clamp(72px,9vw,128px)]">
       <div className="mx-auto grid max-w-wide items-center gap-x-16 gap-y-10 lg:grid-cols-2">
-        <a href={JU_SCAN_URL} className="ju-card group relative block aspect-video overflow-hidden rounded-card no-underline">
+        <a href={JU_SCAN_URL} className="ju-card ju-card-frame group relative block aspect-video overflow-hidden rounded-card no-underline">
           <Image
             src={JU_SCAN_THUMBNAIL}
             alt=""
